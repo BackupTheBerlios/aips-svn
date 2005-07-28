@@ -53,7 +53,8 @@
 #include <set> // std::set
 
 // AIPS includes
-#include "aipsnumeric.h"
+#include <boost/weak_ptr.hpp>
+#include "aipsdatatraits.h"
 #include "ctypeddata.h"
 #include "ctypedmap.h"
 #include "cmoduledialog.h"
@@ -126,7 +127,12 @@ protected:
       throw();		
 	};
   /** Port structure */
-  struct SPort
+  struct SIPort
+  {
+    EIOTypes portType;      ///< Port io type
+    boost::weak_ptr<CDataSet> portData;     ///< Data on port
+  };
+  struct SOPort
   {
     EIOTypes portType;      ///< Port io type
     TDataSetPtr portData;     ///< Data on port
@@ -134,7 +140,7 @@ protected:
   /** Connection structure */
   struct SConnection
   {
-  	TPipelineItemPtr outputItem;
+  	boost::weak_ptr<CPipelineItem> outputItem;
   	uint outputPort; // Imported port
   	SConnection() : outputPort(0)  { outputItem.reset(); }
   };
@@ -256,8 +262,7 @@ public:
   virtual CPipelineItem* newInstance( ulong ulID = 0 ) const
     throw() =0;
 	/// Checks one input pointer for existence and correctness
-	template<typename T> bool checkInput( T inputPtr, ushort usMinDim = 0, ushort usMaxDim = 0, 
-		ushort usMinDataDim = 0, ushort usMaxDataDim = 0) throw();
+	template<typename U, typename T> bool checkInput( T inputPtr, ushort usMinDim = 0, ushort usMaxDim = 0, ushort usMinDataDim = 0, ushort usMaxDataDim = 0) throw();
 	bool isOutputCached() const throw();
 	void cacheOutput( bool bCacheOutputs_ = true ) throw();
 /* Dialog member functions */
@@ -272,8 +277,8 @@ protected:
   void deleteOldOutput( ushort usOutputNumber = 0 )
     throw( OutOfRangeException );
 protected:
-  std::vector<SPort> inputsVec;     	 ///< Input dataset
-  std::vector<SPort> outputsVec; 			 ///< Output dataset
+  std::vector<SIPort> inputsVec;     	 ///< Input dataset
+  std::vector<SOPort> outputsVec; 			 ///< Output dataset
   CParameterMap parameters; 					 ///< Array of parameter names
   std::string sModuleID;               ///< Unique module ID
   std::string sDocumentation;          ///< Module documentation
@@ -288,7 +293,7 @@ private:
   ushort usFanOut;                              ///< Item fanout
   std::string sName;                            ///< Name of the pipeline module 
   std::vector<SConnection> connectionsPtrVec;   ///< Input connections of the module
-  std::vector<time_t> connectionsTimeStampsVec; ///< Time stamps of all connections
+  std::vector<ulong> connectionsTimeStampsVec; ///< Time stamps of all connections
   boost::shared_ptr<CModuleDialog> itemDialog;  ///< Item dialog
 	bool bRecompute; ///< Do we enforce a recomputation of all outputs?  
   struct itemCompareFunctor ///< Functor to compare two pipeline items

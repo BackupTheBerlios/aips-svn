@@ -196,5 +196,27 @@ template<typename T> inline bool checkType( const CDataSet& aDataSet ) throw()
 	return( aDataSet.getType() == typeid( dataTraits<T>::dataType ) );
 }
 
+/**
+ * Function to compare field/scalar types with a given dataset type
+ * Call with checkType<FieldType>( data )
+ * Overloaded function for pointer types
+ * \param aDataSet dataset to check
+ */
+template<typename T> inline bool checkType( const CDataSet* aDataSet ) throw()
+{
+	return( aDataSet->getType() == typeid( dataTraits<T>::dataType ) );
+}
+
+/**
+ * Function to compare field/scalar types with a given dataset type
+ * Call with checkType<FieldType>( data )
+ * Overloaded function for boost::shared_ptr pointer types
+ * \param aDataSet dataset to check
+ */
+template<typename T> inline bool checkType( const boost::shared_ptr<CDataSet> aDataSet ) throw()
+{
+	return( aDataSet->getType() == typeid( dataTraits<T>::dataType ) );
+}
+
 }
 #endif

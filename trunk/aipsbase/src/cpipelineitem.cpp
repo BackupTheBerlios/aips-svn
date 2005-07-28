@@ -127,8 +127,7 @@ bool CPipelineItem::itemCompareFunctor::operator() ( CPipelineItem* a, CPipeline
 CPipelineItem::CPipelineItem( ulong ulID_, ushort usFIn_, ushort usFOut_, const string &sClassName_, 
 		const string &sClassVersion_, const string &sDerivedFrom_ ) throw()
   : CSubject( sClassName_, sClassVersion_, sDerivedFrom_ ),
-  sModuleID(""), sDocumentation("No documentation available"), bModuleReady( false ), bCacheOutputs( true ),
-	iDepth( -1 ), ownTimeStamp ( 0 ), ulID( ulID_ ), usFanIn( usFIn_ ), usFanOut( usFOut_ ), connectionsPtrVec( usFanIn ),
+  sModuleID(""), sDocumentation("No documentation available"), bModuleReady( false ), ownTimeStamp ( 0 ), bCacheOutputs( true ),iDepth( -1 ), ulID( ulID_ ), usFanIn( usFIn_ ), usFanOut( usFOut_ ), connectionsPtrVec( usFanIn ),
 	connectionsTimeStampsVec( usFanIn ), bRecompute( false )
 {
   inputsVec.resize( usFanIn );
@@ -151,6 +150,8 @@ CPipelineItem::CPipelineItem( ulong ulID_, ushort usFIn_, ushort usFOut_, const 
  */
 CPipelineItem::~CPipelineItem() throw()
 {
+	inputsVec.clear();
+	outputsVec.clear();
 }
 
 /************************
@@ -165,7 +166,7 @@ TDataSetPtr CPipelineItem::getInput( ushort usInputNumber ) const throw( OutOfRa
 {
   if ( usInputNumber >= usFanIn )
     throw( OutOfRangeException( SERROR("Input port number too large"), CException::FATAL, ERR_RANGE ) );
-  return inputsVec[usInputNumber].portData;
+  return inputsVec[usInputNumber].portData.lock();
 }
 
 /** 
@@ -250,8 +251,8 @@ DBG1( "+++ CPipelineItem::update " << sName );
 	if ( iDepth_ > iDepth )
 		iDepth = iDepth_;
 	for( uint i = 0; i < connectionsPtrVec.size(); ++i )
-		if ( connectionsPtrVec[i].outputItem.get()  )
-			connectionsPtrVec[i].outputItem->update( iDepth + 1 );
+		if ( TPipelineItemPtr tmpPtr = connectionsPtrVec[i].outputItem.lock() )
+			tmpPtr->update( iDepth + 1 );
 	if ( iDepth_ == 0 )
 			iterate();
 DS( "--- CPipelineItem::update " << sName );
@@ -283,8 +284,8 @@ DBG1( "+++ CPipelineItem::execute" << sName );
 	{
 		for( uint i = 0; i < connectionsPtrVec.size(); ++i )
 		{
-			if ( connectionsPtrVec[i].outputItem.get()
-				&& connectionsPtrVec[i].outputItem->ownTimeStamp != connectionsTimeStampsVec[i] )
+			if ( TPipelineItemPtr tmpPtr = connectionsPtrVec[i].outputItem.lock() )
+				if ( tmpPtr->ownTimeStamp != connectionsTimeStampsVec[i] )
 			{
 				bUpdate = true; break;
 			}
@@ -299,18 +300,19 @@ DS("Upd: " << bUpdate);
 DS( "Updating " << ulID << " ... " );
 		for( uint i = 0; i < connectionsPtrVec.size(); ++i )
 		{
-			if ( connectionsPtrVec[i].outputItem.get() )
+			if ( TPipelineItemPtr tmpPtr = connectionsPtrVec[i].outputItem.lock() )			
 			{
-				connectionsTimeStampsVec[i] = connectionsPtrVec[i].outputItem->ownTimeStamp;
-				setInput( connectionsPtrVec[i].outputItem->getOutput( connectionsPtrVec[i].outputPort ), i );				
+				connectionsTimeStampsVec[i] = tmpPtr->ownTimeStamp;
+				setInput( tmpPtr->getOutput( connectionsPtrVec[i].outputPort ), i );				
 			}
 		}
 		this->apply();
 		for( uint i = 0; i < connectionsPtrVec.size(); ++i )
 		{
-			if ( connectionsPtrVec[i].outputItem.get() )
+			if ( TPipelineItemPtr tmpPtr = connectionsPtrVec[i].outputItem.lock() )
 			{
-				connectionsPtrVec[i].outputItem->clearCache();
+				tmpPtr->clearCache();
+				cerr << "<" << inputsVec[i].portData.use_count() << ">" << endl;
 				inputsVec[i].portData.reset();
 			}
 		}		

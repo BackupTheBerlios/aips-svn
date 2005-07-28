@@ -1,0 +1,2 @@
+#cmakedefine HAVE_IM
+#cmakedefine HAVE_VTK
