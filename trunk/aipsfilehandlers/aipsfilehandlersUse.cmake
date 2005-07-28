@@ -1,0 +1,7 @@
+INCLUDE(CMakeImportBuildSettings)
+
+CMAKE_IMPORT_BUILD_SETTINGS(${aipsfilehandlers_BUILD_SETTINGS_FILE})
+
+INCLUDE_DIRECTORIES(${aipsfilehandlers_INCLUDE_DIRS})
+
+LINK_DIRECTORIES(${aipsfilehandlers_LIBRARY_DIRS})

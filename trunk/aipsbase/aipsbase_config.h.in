@@ -1,0 +1,5 @@
+#cmakedefine USE_BLITZ
+#cmakedefine USE_STANDALONE
+#cmakedefine USE_XMLPP
+#cmakedefine DEBUG_MODE
+#cmakedefine BENCHMARK

@@ -1,0 +1,16 @@
+FILE(GLOB SRC_FILES *.cpp )
+FILE(GLOB HDR_FILES *.h )
+
+IF( ${DEBUG_LEVEL} GREATER 0 )
+SET_SOURCE_FILES_PROPERTIES(
+  ${SRC_FILES}
+  COMPILE_FLAGS -DDL${DEBUG_LEVEL})
+ENDIF( ${DEBUG_LEVEL} GREATER 0 )
+
+INCLUDE_DIRECTORIES( ${PROJECT_SOURCE_DIR}/src/sharedclasses 
+	${PROJECT_SOURCE_DIR}/src/basicsources )
+QT_WRAP_CPP(aipsbasicsources QT_MOC_SRCS ${HDR_FILES})
+ADD_LIBRARY(aipsbasicsources MODULE ${SRC_FILES} ${QT_MOC_SRCS} )
+INSTALL_TARGETS(/lib aipsbasicsources)
+TARGET_LINK_LIBRARIES( aipsbasicsources aipsfilehandlers )
+INSTALL_FILES(/include/aipsbasicsources .h ${HDR_FILES} )

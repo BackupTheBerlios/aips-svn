@@ -1,0 +1,17 @@
+SET(aipsfilehandlers_INCLUDE_DIRS
+	"@CMAKE_INSTALL_PREFIX@/include/aipsfilehandlers"
+)
+
+SET(aipsfilehandlers_LIBRARY_DIRS "@CMAKE_INSTALL_PREFIX@/lib")
+
+SET(aipsfilehandlers_BUILD_SETTINGS_FILE
+	"@CMAKE_INSTALL_PREFIX@/lib/aipsfilehandlers/aipsfilehandlersBuildSettings.cmake"
+)
+
+INCLUDE(
+	"@CMAKE_INSTALL_PREFIX@/lib/aipsfilehandlers/aipsfilehandlersLibraryDepends.cmake"
+)
+
+SET(aipsfilehandlers_USE_FILE
+	"@CMAKE_INSTALL_PREFIX@/lib/aipsfilehandlers/aipsfilehandlersUse.cmake"
+)

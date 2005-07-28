@@ -1,0 +1,15 @@
+FILE(GLOB SRC_FILES *.cpp )
+FILE(GLOB HDR_FILES *.h )
+
+IF( ${DEBUG_LEVEL} GREATER 0 )
+SET_SOURCE_FILES_PROPERTIES(
+  ${SRC_FILES}
+  COMPILE_FLAGS -DDL${DEBUG_LEVEL})
+ENDIF( ${DEBUG_LEVEL} GREATER 0 )
+
+INCLUDE_DIRECTORIES( ${PROJECT_SOURCE_DIR}/src/sharedclasses 		
+	${PROJECT_SOURCE_DIR}/src/imagefilters )
+ADD_LIBRARY( aipsimagefilters MODULE ${SRC_FILES})
+TARGET_LINK_LIBRARIES( aipsimagefilters aipssharedclasses )
+INSTALL_TARGETS(/lib aipsimagefilters)
+INSTALL_FILES(/include/aipsimagefilters .h ${HDR_FILES} )

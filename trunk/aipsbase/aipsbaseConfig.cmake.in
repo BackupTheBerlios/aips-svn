@@ -1,0 +1,17 @@
+SET(aipsbase_INCLUDE_DIRS
+	"@CMAKE_INSTALL_PREFIX@/include/aipsbase"
+)
+
+SET(aipsbase_LIBRARY_DIRS "@CMAKE_INSTALL_PREFIX@/lib")
+
+SET(aipsbase_BUILD_SETTINGS_FILE
+	"@CMAKE_INSTALL_PREFIX@/lib/aipsbase/aipsbaseBuildSettings.cmake"
+)
+
+INCLUDE(
+	"@CMAKE_INSTALL_PREFIX@/lib/aipsbase/aipsbaseLibraryDepends.cmake"
+)
+
+SET(aipsbase_USE_FILE
+	"@CMAKE_INSTALL_PREFIX@/lib/aipsbase/aipsbaseUse.cmake"
+)

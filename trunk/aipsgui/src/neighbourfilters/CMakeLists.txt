@@ -1,0 +1,14 @@
+FILE(GLOB SRC_FILES *.cpp )
+FILE(GLOB HDR_FILES *.h )
+
+IF( ${DEBUG_LEVEL} GREATER 0 )
+SET_SOURCE_FILES_PROPERTIES(
+  ${SRC_FILES}
+  COMPILE_FLAGS -DDL${DEBUG_LEVEL})
+ENDIF( ${DEBUG_LEVEL} GREATER 0 )
+
+INCLUDE_DIRECTORIES( ${PROJECT_SOURCE_DIR}/src/sharedclasses 		
+	${PROJECT_SOURCE_DIR}/src/neighbourfilters )
+ADD_LIBRARY(aipsneighbourfilters MODULE  ${SRC_FILES})
+INSTALL_TARGETS(/lib aipsneighbourfilters)
+INSTALL_FILES(/include/aipsneighbourfilters .h ${HDR_FILES} )
