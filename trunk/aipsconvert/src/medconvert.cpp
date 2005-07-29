@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
 		return EXIT_SUCCESS;
 	}
   
-	uint force = 0;
+//	uint force = 0;
 	bool bSwapEndianess = false;
 	bool ipset = false;
 	string input, output;

@@ -55,10 +55,25 @@ public:
     throw();
   /// Reimplemented from CPipelineItem
   virtual CPipelineItem* newInstance( ulong ulID = 0 ) const
-    throw();	
+    throw();
 private:
+	/// Functor for actual endianess swapping code
+	template<typename SetType, bool isNumeric> 
+	struct swapDataFunctor 
+	{};
+	/// Specialization of swapData for numerical types
+	template<typename SetType> 
+	struct swapDataFunctor<SetType, true> 
+	{
+		bool operator()() throw();
+	};
+	/// Specialization of swapData for non-numerical types
+	template<typename SetType> 
+	struct swapDataFunctor<SetType, false>
+	{
+		bool operator()() throw();
+	};	
 	/// Internal method template for the actual filter process
-	template<typename T> bool swapData() throw();
 	template<unsigned int index> void call() throw();
 };
 

@@ -48,9 +48,9 @@ LINK_DIRECTORIES( -L/usr/local/lib/vtk )
 
 SET( DEBUG_LEVEL 0 CACHE STRING "Level of debugging output (This is either 0 (no output) or 1,2,3)")
 
-CONFIGURE_FILE( ${PROJECT_SOURCE_DIR}/aipsgui_config.h.in 
-	${PROJECT_BINARY_DIR}/aipsgui_config.h)
-SUBDIRS( src )
+#CONFIGURE_FILE( ${PROJECT_SOURCE_DIR}/aipsgui_config.h.in 
+#	${PROJECT_BINARY_DIR}/aipsgui_config.h)
+#SUBDIRS( src )
 
 SUBDIRS( src/sharedclasses src/diffusionfilters src/edgedetectors src/fieldfilters
 	src/histogramfilters src/imagefilters src/neighbourfilters src/segment src/basicconverters 

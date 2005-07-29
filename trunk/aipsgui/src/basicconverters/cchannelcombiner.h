@@ -58,8 +58,7 @@ public:
 private:
 	template<typename T, bool compare> 
 	class combine
-	{
-	};
+	{};
 	template<typename T> 
 	class combine<T,true>
 	{

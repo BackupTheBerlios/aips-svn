@@ -23,14 +23,17 @@ using namespace boost;
 
 template<unsigned int index> void CSwapEndianess::call() throw()
 {	
-	if ( !swapData<typename TypeAt<datasetTL, index>::Result>() )
+	swapDataFunctor<TypeAt<datasetTL, index>::Result, 
+		dataTraits<TypeAt<datasetTL, index>::Result>::isNumeric> functor;
+	if ( !functor() )
 		call<index-1>();
 }
 
 template<> void CSwapEndianess::call<0>() throw()
 {
 	typedef TypeAt<datasetTL, 0>::Result TDataType;
-	if ( !swapData<TDataType>() )
+	swapDataFunctor<TDataType, dataTraits<TDataType>::isNumeric> functor;
+	if ( !functor() )
 		alog << LWARN << "Dataset type not supported by module" << endl;
 }
  
@@ -41,7 +44,8 @@ CSwapEndianess::CSwapEndianess( ulong ulID ) throw()
   setModuleID( sLibID );
   setModuleName("Data endianess swapper");
   
-  sDocumentation = "** Input ports:\n"
+  sDocumentation = "Swaps the endianess of the given data set\n"
+  								 "** Input ports:\n"
                    " 0: A data set\n"
                    "** Output ports:\n"
                    " 0: A data set";
@@ -72,42 +76,39 @@ CPipelineItem* CSwapEndianess::newInstance( ulong ulID ) const throw()
 	return new CSwapEndianess( ulID );
 }
 
-template<typename T> bool CSwapEndianess::swapData() throw()
-{
-	typedef typename dataTraits<T>::dataType TVoxel;
-	if ( !getInput() || getInput()->getType() != typeid( TVoxel ) )
-		return false;
+template<typename SetType> 
+bool swapDataFunctor<SetType, true>::operator()() throw()
+{	
+	if ( checkType<SetType>( getInput() ) )
+		return false
 
-	shared_ptr<T> imagePtr = static_pointer_cast<T>( getInput() );
-	if ( !checkInput( imagePtr ) ) // This is an image
-		return false;
+	// Define local data type 
+	typedef typename dataTraits<SetType>::dataType TVoxel;
+	shared_ptr<SetType> inputSPtr = static_pointer_cast<SetType>( getInput() );
 	
 	bModuleReady = true;
   deleteOldOutput();
-	shared_ptr<T> outputPtr ( new T( imagePtr->getDimension(), imagePtr->getExtents(),
+	
+	shared_ptr<SetType> outputSPtr ( new SetType( imagePtr->getDimension(), imagePtr->getExtents(),
 		imagePtr->getDataDimension() ) );
-	
-	
-	TVoxel maximum = imagePtr->getMaximum();
-	swapEndianess( maximum );
-	outputPtr->setMaximum( maximum );
-	TVoxel minimum = imagePtr->getMinimum();
-	swapEndianess( minimum );
-	outputPtr->setMinimum( minimum );
+	(*outputSPtr) = (*inputSPtr);
 		
-	typename T::iterator inputIt = imagePtr->begin();
-	typename T::iterator outputIt = outputPtr->begin();
-	PROG_MAX( imagePtr->getArraySize() );
+	TVoxel maximum = inputSPtr->getMaximum();
+	swapEndianess( maximum );
+	outputSPtr->setMaximum( maximum );
+	TVoxel minimum = inputSPtr->getMinimum();
+	swapEndianess( minimum );
+	outputSPtr->setMinimum( minimum );
+		
+	typename T::iterator outputIt = outputSPtr->begin();
+	PROG_MAX( outputSPtr->getArraySize() );
 	ulong cnt = 0;
-	while( inputIt != imagePtr->end() )
+	while( outputIt != outputSPtr->end() )
 	{
 		cnt++;
 		if ( cnt % 20000 == 0 ) 
 			PROG_VAL( cnt );
-		TVoxel value = (*inputIt);
-		swapEndianess( value );
-		(*outputIt) = value;
-		++inputIt;
+		swapEndianess( (*outputIt) );
 		++outputIt;
 	}
 	PROG_RESET();
@@ -115,7 +116,9 @@ template<typename T> bool CSwapEndianess::swapData() throw()
 	return true;
 }
 
-template<> bool CSwapEndianess::swapData<TStringField>() throw()
+template<typename SetType> 
+bool swapDataFunctor<SetType, true>::operator()() throw()
 {
+	alog << LWARN << "Unable to swap non-nnumerical data" << endl;
 	return false;
 }
