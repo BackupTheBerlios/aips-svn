@@ -5,7 +5,7 @@
  *                                                                      *
  * Author: Hendrik Belitz                                               *
  *                                                                      *
- * Version: 0.1                                                         *
+ * Version: 0.2                                                         *
  * Status : Alpha                                                       *
  * Created: 2004-09-17                                                  *
  * Changed: 2004-12-22 Moved inline members to cdatasetregion.tpp       *

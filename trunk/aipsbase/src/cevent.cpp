@@ -48,7 +48,7 @@ CEvent::~CEvent() throw()
 
 /** \param anEvent event to copy */
 CEvent::CEvent( const CEvent& anEvent ) throw()
-	: CBase( "CEvent", "0.1", "CBase" ), generator( anEvent.generator ), uiEventType( anEvent.uiEventType )
+	: CBase( "CEvent", "0.3", "CBase" ), generator( anEvent.generator ), uiEventType( anEvent.uiEventType )
 {
 }
 
@@ -175,7 +175,7 @@ const std::string CNewLogEvent::dump() const throw()
  * \throws NullException if generator_ is NULL since each event needs a generator
  */
 CDataChangedEvent::CDataChangedEvent( CSubject* generator_ ) throw( NullException )
-	: CEvent( generator_, EDataChangedEvent, "CDataChangedEvent", "0.1", "CEvent" )
+	: CEvent( generator_, EDataChangedEvent, "CDataChangedEvent", "0.3", "CEvent" )
 {
 	if( generator_ == NULL )
 		throw( NullException( SERROR("Generator subject is NULL"), CException::FATAL, ERR_CALLERNULL ) );
@@ -271,7 +271,7 @@ const std::string CProgressStartEvent::dump() const throw()
  * \throws NullException if generator_ is NULL since each event needs a generator
  */
 CProgressResetEvent::CProgressResetEvent( CSubject* generator_ ) throw( NullException )
-	: CEvent( generator_, EProgressResetEvent, "CProgressResetEvent", "0.1", "CEvent" )
+	: CEvent( generator_, EProgressResetEvent, "CProgressResetEvent", "0.3", "CEvent" )
 {
 	if( generator_ == NULL )
 		throw( NullException( SERROR("Generator subject is NULL"), CException::FATAL, ERR_CALLERNULL ) );
@@ -279,7 +279,7 @@ CProgressResetEvent::CProgressResetEvent( CSubject* generator_ ) throw( NullExce
 
 /** \param anEvent event to copy */
 CProgressResetEvent::CProgressResetEvent( const CProgressResetEvent& anEvent ) throw()
-	: CEvent( anEvent.getGenerator(), EProgressResetEvent, "CProgressResetEvent", "0.1", "CEvent" )
+	: CEvent( anEvent.getGenerator(), EProgressResetEvent, "CProgressResetEvent", "0.3", "CEvent" )
 {
 }
 

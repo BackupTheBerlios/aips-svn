@@ -19,7 +19,7 @@ using namespace std;
 using namespace aips;
 
 // Declaration of static data member
-std::vector<boost::shared_ptr<CFileHandler> > CDataFileServer::fileHandlerPtrVec;
+vector<boost::shared_ptr<CFileHandler> > CDataFileServer::fileHandlerSPtrVec;
 
 // Covenience typedef
 typedef vector<boost::shared_ptr<CFileHandler> > THandlerVec;
@@ -42,7 +42,7 @@ CDataFileServer::CDataFileServer() throw()
  */
 CDataFileServer::~CDataFileServer() throw()
 {
-	fileHandlerPtrVec.clear();
+	fileHandlerSPtrVec.clear();
 }
 
 /*****************
@@ -54,28 +54,28 @@ CDataFileServer::~CDataFileServer() throw()
  * termination so DO NOT try to do this by hand or to use non-dynamic objects here!
  * \exception NullException if aHandler is NULL
  */
-void CDataFileServer::addHandler( boost::shared_ptr<CFileHandler> handlerPtr ) throw( NullException )
+void CDataFileServer::addHandler( boost::shared_ptr<CFileHandler> handlerSPtr ) throw( NullException )
 {
-  if ( !handlerPtr )
+  if ( !handlerSPtr )
     throw( NullException( SERROR("Pointer to file handler is NULL"), CException::RECOVER, ERR_CALLERNULL ) );
-  fileHandlerPtrVec.push_back( handlerPtr );
+  fileHandlerSPtrVec.push_back( handlerSPtr );
 }
 
 /**
  * \param handlerPtr A new file handler. This instance will be deleted automatically.
  * \exception NullException if aHandler is NULL or handler wasn't found
  */
-void CDataFileServer::removeHandler( boost::shared_ptr<CFileHandler> handlerPtr ) throw( NullException )
+void CDataFileServer::removeHandler( boost::shared_ptr<CFileHandler> handlerSPtr ) throw( NullException )
 {
-  if ( handlerPtr.get() == NULL )
+  if ( !handlerSPtr )
     throw( NullException( SERROR("Pointer to file handler is NULL"), CException::RECOVER, ERR_CALLERNULL ) );
 		
-	THandlerVec::iterator it = find( fileHandlerPtrVec.begin(), fileHandlerPtrVec.end(), handlerPtr );
+	THandlerVec::iterator it = find( fileHandlerSPtrVec.begin(), fileHandlerSPtrVec.end(), handlerSPtr );
 	
-	if ( it == fileHandlerPtrVec.end() )
+	if ( it == fileHandlerSPtrVec.end() )
 		throw( NullException( SERROR("Handler not found"), CException::RECOVER, ERR_REQUESTNULL ) );
 		
-	fileHandlerPtrVec.erase( it );
+	fileHandlerSPtrVec.erase( it );
 }
 
 /**
@@ -89,9 +89,7 @@ TDataFile CDataFileServer::loadDataSet( const string& sFilename )
 {
   // Check filename for an extension
   if ( sFilename.find( ".", 1 ) == string::npos )
-  {
     throw ( FileException( SERROR( "No file extension specified" ), CException::RECOVER, ERR_ILLEGALFILENAME ) );
-  }  
 
   bool bSuccess = false;
   // This exception will be thrown if no appropiate file handler was found
@@ -101,7 +99,8 @@ TDataFile CDataFileServer::loadDataSet( const string& sFilename )
   theData.first.reset(); theData.second.reset();
 
   // Check all registered handlers if file type is supported and load the data
-  for ( THandlerVec::const_iterator it = fileHandlerPtrVec.begin(); it != fileHandlerPtrVec.end() && !bSuccess; ++it )
+  for ( THandlerVec::const_iterator it = fileHandlerSPtrVec.begin(); 
+  	it != fileHandlerSPtrVec.end() && !bSuccess; ++it )
   {
     if( (*it)->supports( sFilename ) )
     {
@@ -122,12 +121,9 @@ TDataFile CDataFileServer::loadDataSet( const string& sFilename )
   }
 
   // If we were not succesful, throw an exception
-  if ( !bSuccess ) throw( anException );
-	
-	/* FIXME I really don't know why we need the following line which was left over by a former
-	   debugging output. But deleting it makes the dynamic cast fail in CFileSource... */
-/*	dynamic_cast<TImage*>( theData.first.get() );*/
-	
+  if ( !bSuccess ) 
+  	throw( anException );
+		
   return theData;
 }
 
@@ -141,7 +137,7 @@ TDataFile CDataFileServer::loadDataSet( const string& sFilename )
 void CDataFileServer::saveDataSet( const string& sFilename, const TDataFile& theData )
   const throw( FileException, NullException )
 {
-  if ( theData.first.get() == NULL )
+  if ( !theData.first )
     throw( NullException( SERROR( "Given dataset is NULL" ), CException::RECOVER, ERR_CALLERNULL ) );
   
   // Check filename for an extension
@@ -156,7 +152,8 @@ void CDataFileServer::saveDataSet( const string& sFilename, const TDataFile& the
   FileException anException( SERROR("No appropiate file handler found"), CException::RECOVER );
 
   // Search for the correct file handler and write data to disk  
-  for ( THandlerVec::const_iterator it = fileHandlerPtrVec.begin(); it != fileHandlerPtrVec.end() && !bSuccess; ++it )
+  for ( THandlerVec::const_iterator it = fileHandlerSPtrVec.begin(); 
+  	it != fileHandlerSPtrVec.end() && !bSuccess; ++it )
   {
     if( (*it)->supports( sFilename ) )
     {
@@ -177,7 +174,8 @@ void CDataFileServer::saveDataSet( const string& sFilename, const TDataFile& the
   }
 
   // If we were not succesful, throw an exception
-  if ( !bSuccess ) throw( anException );
+  if ( !bSuccess ) 
+  	throw( anException );
 }
 
 /**
@@ -186,7 +184,7 @@ void CDataFileServer::saveDataSet( const string& sFilename, const TDataFile& the
 const string CDataFileServer::supportedFileTypes() const throw()
 {
   std::ostringstream os;
-  for ( THandlerVec::const_iterator it = fileHandlerPtrVec.begin(); it != fileHandlerPtrVec.end(); ++it )
+  for ( THandlerVec::const_iterator it = fileHandlerSPtrVec.begin(); it != fileHandlerSPtrVec.end(); ++it )
     os << (*it)->legalFileTypes();
   return os.str();
 }
@@ -194,7 +192,7 @@ const string CDataFileServer::supportedFileTypes() const throw()
 const string CDataFileServer::dump() const throw()
 {
   std::ostringstream os;
-  os << "\ntheFileHandlers size: " << fileHandlerPtrVec.size() << " ";
+  os << "\ntheFileHandlers size: " << fileHandlerSPtrVec.size() << " ";
   os << "\nsupportedFileType: " << supportedFileTypes() << " ";
   return CBase::dump() + os.str();
 }
@@ -218,11 +216,11 @@ boost::shared_ptr<CFileHandler> CDataFileServer::getHandler( uint uiIndex_ )
 {
 	if ( uiIndex_ > getNumberOfRegisteredHandlers() )
 		throw( OutOfRangeException( SERROR("Given index is too large"), CException::RECOVER ) );
-	return fileHandlerPtrVec[uiIndex_];
+	return fileHandlerSPtrVec[uiIndex_];
 }
 	
 /** \return the number of registered file handlers */
 uint CDataFileServer::getNumberOfRegisteredHandlers() throw()
 {
-	return fileHandlerPtrVec.size();
+	return fileHandlerSPtrVec.size();
 }

@@ -6,11 +6,14 @@
  *                                                                      *
  * Author: HendrikBelitz <hendrik@darkon.info>                          *
  *                                                                      *
- * Version: 0.2                                                         *
+ * Version: 0.4                                                         *
  * Status : Alpha                                                       *
  * Created: 2005-01-24                                                  *
  * Changed: 2005-01-25 Added templatized helper functions               *
  *          2005-07-07 Added exception handling                         *
+ *          2005-08-01 Added documentation                              *
+ *                     Correction of minor errors                       *
+ * TODO: Make this work for more than 3 dimensions                      *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -38,6 +41,7 @@ namespace aips {
  *    By using one, the pointer to the other is effectively rendered illegal
  * 3. Extents and data dimensions of the internal representation are NOT converted. They can be
  *    extracted directly from the corrsponding CDataSet object via the appropiate member functions.
+ * 4. If you are converting into external C Arrays, make sure that these are already allocated 
  */
 class CCArrayDataAdapter : public CStructuredDataAdapter
 {
@@ -59,11 +63,13 @@ public:
   	throw();  
 /* Accessors */
 	/// Sets the external data pointer to the given dataset (short input)
-	void setExternalData( short* dImagePtr = NULL, size_t dimension = 0, 
-		const size_t* const extents = NULL );  
+	void setExternalData( short* sImagePtr = NULL, size_t dimension = 0, 
+		const size_t* const extents = NULL )
+		throw( NullException ); 
 	/// Sets the external data pointer to the given dataset (double input)
   void setExternalData( double* dFieldPtr = NULL, size_t dimension  = 0, 
-		const size_t* const extents = NULL );
+		const size_t* const extents = NULL )
+		throw( NullException );
 /* Other methods */		
 	/// Converts the external data into an internal representation (always returns a integer dataset)
 	virtual TDataSetPtr convertToInternal()

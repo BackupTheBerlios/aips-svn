@@ -5,9 +5,9 @@
  *                                                                      *
  * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
  *                                                                      *
- * Version: 0.1.1                                                       *
- * Status : Pre-Alpha                                                   *
- * Created: 28.01.04                                                    *
+ * Version: 0.2                                                         *
+ * Status : Alpha                                                       *
+ * Created: 2004-01-28                                                  *
  * Changed:                                                             *
  *        2004-11-22 Removed setinfo. Updated constructor accordingly   *
  ************************************************************************

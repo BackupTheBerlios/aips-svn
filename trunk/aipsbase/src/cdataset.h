@@ -5,28 +5,30 @@
  *                                                                      *
  * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
  *                                                                      *
- * Version: 0.4                                                         *
+ * Version: 0.9                                                         *
  * Status : Beta                                                        *
- * Created: 25.11.03                                                    *
- * Changed: 27.11.03 Added class CSingleValue for zerodimensional       *
+ * Created: 2003-11-25                                                  *
+ * Changed:                                                             *
+ *        2003-11-27 Added class CSingleValue for zerodimensional       *
  *                   values like scalars and vectors                    *
  *                   Template methods are now seperated from            *
  *                   declarations                                       *
  *                   CDataSet is now derived from CBase                 *
- *          16.01.04 Corrected an error in CTypedData::operator=        *
- *                    This member also is no longer virtual             *
+ *        2004-01-16 Corrected an error in CTypedData::operator=        *
+ *                    this member also is no longer virtual             *
  *                   Moved CVector classes to aipsnumeric.h             *
- *          20.01.04 Virtual methods and structors are no longer inline *
+ *        2004-01-20 Virtual methods and structors are no longer inline *
  *                   Made the code simpler and look prettier            *
  *                   Deleted method convert() from CTypedData<>         *
  *                   File splitted up into the three files              *
  *                    cdataset.h csinglevalue.h and ctypeddata.h        *
- *          21.01.04 Moved inline members to cpp file                   *
- *          22.04.04 Removed unneccessary includes                      *
+ *        2004-01-21 Moved inline members to cpp file                   *
+ *        2004-04-22 Removed unneccessary includes                      *
  *        2005-03-23 Added data vector for base elements dimensions     *
  *                    (e.g. physical voxel size)                        *
  *        2005-05-23 Added constructor for 1D-datasets                  *
  *                   Added parameter default to getExtent()             *
+ *        2005-08-01 Minor code improvements                            *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -72,17 +74,17 @@ public:
   /// Constructor
   CDataSet( const ushort usDimension_, const size_t* extentArr_,
     const size_t dataDimensionSize_, const std::string &sClassName_ = "CDataSet", 
-		const std::string &sClassVersion_ = "0.4",
+		const std::string &sClassVersion_ = "0.8",
     const std::string &sDerivedFrom_ = "CBase") throw();
   /// Constructor (2nd argument overloaded)
   CDataSet( const ushort usDimension_, const std::vector<size_t> extentVec_,
     const size_t dataDimensionSize_, const std::string &sClassName_ = "CDataSet", 
-		const std::string &sClassVersion_ = "0.4",
+		const std::string &sClassVersion_ = "0.8",
     const std::string &sDerivedFrom_ = "CBase") throw();
   /// Constructor (for one-dimensional data sets)
   CDataSet( const size_t extent_, const size_t dataDimensionSize_,
   	const std::string &sClassName_ = "CDataSet",
-		const std::string &sClassVersion_ = "0.4",
+		const std::string &sClassVersion_ = "0.8",
     const std::string &sDerivedFrom_ = "CBase") throw();   
   /// Copy Constructor
   CDataSet( const CDataSet& aDataSet )

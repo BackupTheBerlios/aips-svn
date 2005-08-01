@@ -6,39 +6,39 @@
  *                                                                      *
  * Author: Hendrik Belitz                                               *
  *                                                                      *
- * Version: 0.6.1                                                       *
+ * Version: 0.16                                                        *
  * Status : Beta                                                        *
- * Created: 12.09.03                                                    *
+ * Created: 2003-09-12                                                  *
  * Based on: SDL++ exception.h                                          *
- * Changed: 13.09.03 Documentation, NotPresentException added           *
- *          15.09.03 NullException added, Class moved to qtvisbase      *
- *          16.09.03 Correction of default initialisations              *
- *                   Moved empty constructors/destructors to .h-file    *
- *          18.09.03 Added dump method to CException                    *
- *                   Added new exception AllocException                 *
- *          23.09.03 Added documentation of CException members          *
- *                   CException::AddTypePrefix now included in          *
- *                   CException constructor                             *
- *          29.09.03 Removed AllocException                             *
- *          30.09.03 Reorganized file structure, moved documentation    *
- *                   to cexception.cpp                                  *
- *                   Added error codes to the exception classes         *
- *          17.10.03 Added even more error codes :-)                    *
- *          09.11.03 Moved classes into namespace aips                  *
- *                   Moved inline members back to cexception.cpp        *
- *          13.11.03 Added new error codes                              *
- *          21.01.04 Moved error codes to aipserror.h                   *
- *                   Added copy constructors to exceptions              *
- *          22.04.04 Added more source documentation                    *
- *                   getErrorNumber() and getExceptionType() are no     *
- *                    longer virtual                                    *
- *                   Exception implementations moved to cpp file        *
- *                   All exception desctructors were made virtual       *
- *                   Removed unneccessary includes                      *
- *          26.04.04 Added missing documentation of                     *
- *                   CException::operator=                              *
- *        2004-11-22 Removed setinfo. Updated constructor accordingly   *
- *        2005-07-07 Added runtime type exception                       *
+ * Changed: 2003-09-13 Documentation, NotPresentException added         *
+ *          2003-09-15 NullException added, Class moved to qtvisbase    *
+ *          2003-09-16 Correction of default initialisations            *
+ *                     Moved empty constructors/destructors to .h-file  *
+ *          2003-09-18 Added dump method to CException                  *
+ *                     Added new exception AllocException               *
+ *          2003-09-23 Added documentation of CException members        *
+ *                     CException::AddTypePrefix now included in        *
+ *                     CException constructor                           *
+ *          2003-09-24 Removed AllocException                           *
+ *          2003-09-30 Reorganized file structure, moved documentation  *
+ *                     to cexception.cpp                                *
+ *                     Added error codes to the exception classes       *
+ *          2003-10-17 Added even more error codes :-)                  *
+ *          2003-11-09 Moved classes into namespace aips                *
+ *                     Moved inline members back to cexception.cpp      *
+ *          2003-11-13 Added new error codes                            *
+ *          2004-01-21 Moved error codes to aipserror.h                 *
+ *                     Added copy constructors to exceptions            *
+ *          2004-04-22 Added more source documentation                  *
+ *                     getErrorNumber() and getExceptionType() are no   *
+ *                      longer virtual                                  *
+ *                     Exception implementations moved to cpp file      *
+ *                     All exception desctructors were made virtual     *
+ *                     Removed unneccessary includes                    *
+ *          2004-04-26 Added missing documentation of                   *
+ *                     CException::operator=                            *
+ *          2004-11-22 Removed setinfo. Updated constructor accordingly *
+ *          2005-07-07 Added runtime type exception                     *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *

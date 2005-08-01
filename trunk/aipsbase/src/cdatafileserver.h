@@ -5,24 +5,27 @@
  *                                                                      *
  * Author: Hendrik Belitz                                               *
  *                                                                      *
- * Version: 0.5                                                         *
+ * Version: 0.10                                                        *
  * Status:  Beta                                                        *
- * Created: 24.10.03                                                    *
- * Changed: 24.10.03 Creation of class                                  *
- *          09.11.03 Moved code into namespace aips                     *
+ * Created: 2003-10-23                                                  *
+ * Changed:                                                             *
+ *        2003-03-24 Creation of class                                  *
+ *        2003-11-09 Moved code into namespace aips                     *
  *                   Moved inline members to cpp file                   *
- *          27.11.03 Removed unused implementations of private methods  *
- *          16.12.03 Load/save now also work with file header           *
+ *        2003-11-21 Removed unused implementations of private methods  *
+ *        2003-12-16 Load/save now also work with file header           *
  *                   information                                        *
  *                   Added error handling to load and save methods      *
  *                   saveDataSet now also throws NullException if the   *
  *                   given data set is a NULL pointer                   *
- *          08.01.04 Iteration loops now use ++it instead of it++       *
- *          20.01.04 Made the source code look prettier                 *
- *          26.04.04 Added method removeHandler()                       *
+ *        2004-01-08 Iteration loops now use ++it instead of it++       *
+ *        2004-01-20 Made the source code look prettier                 *
+ *        2004-04-26 Added method removeHandler()                       *
  *        2004-11-23 Now uses boost::shared_ptr to store file handlers  *
  *        2005-05-17 Method getNumberOfRegisteredHandlers() added       *
  *                   Method getHandler() added                          *
+ *        2005-08-01 Updated documentation                              *
+ *                   Minor code improvements                            *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -44,8 +47,9 @@ namespace aips {
  * CFileHandler at application startup to gain full functionality.
  *
  * The correct file handler to use for a specific file will be determined by
- * the file extension, so make sure all formats you are using have different
- * extensions. File loading is more robust in respect to this. If a file
+ * the file extension. If a extension matches for several handlers,
+ * all of these handlers will try to load the file until one of it succeeds.
+ * File loading is more robust in respect to this. If a file
  * handler produces an exception on reading a file, the file server tries to
  * use another handler. This mechanism does not work for file saving!
  */
@@ -72,10 +76,10 @@ public:
 		throw( OutOfRangeException );
 /* Other Methods */
   /// Adds a new fileHandler to the vector of available file handlers
-  void addHandler( boost::shared_ptr<CFileHandler> handlerPtr )
+  void addHandler( boost::shared_ptr<CFileHandler> handlerSPtr )
     throw( NullException );
 	/// Remove the given handler
-	void removeHandler( boost::shared_ptr<CFileHandler> handlerPtr )
+	void removeHandler( boost::shared_ptr<CFileHandler> handlerSPtr )
 		throw( NullException );
 	/// Returns the number of registered file handlers
 	uint getNumberOfRegisteredHandlers()
@@ -99,7 +103,7 @@ public:
     throw();
 private:
 	/// Vector of all registered file handlers 
-	static std::vector<boost::shared_ptr<CFileHandler> > fileHandlerPtrVec; 
+	static std::vector<boost::shared_ptr<CFileHandler> > fileHandlerSPtrVec; 
 };
 
 /// Function that returns a reference to the file server

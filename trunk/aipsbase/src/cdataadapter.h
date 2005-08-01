@@ -7,13 +7,14 @@
  *                                                                      *
  * Version: 0.2                                                         *
  * Status : Alpha                                                       *
- * Created: 22.01.04                                                    *
- * Changed: 26.01.04 saveData now throws an exception if given          *
+ * Created: 2004-01-22                                                  *
+ * Changed:                                                             *
+ *        2004-01-26 saveData now throws an exception if given          *
  *                   voxel size is greater than 2                       *
- *          27.01.04 Corrected wrong endianess on saving and loading    *
- *          24.04.04 Deleted unneccessary includes                      *
+ *        2004-01-27 Corrected wrong endianess on saving and loading    *
+ *        2004-04-24 Deleted unneccessary includes                      *
  *                   Added writing of big and little endianess files    *
- *          27.04.04 Updated docs and corrected minor errors            *
+ *        2004-04-27 Updated docs and corrected minor errors            *
  *        2004-11-22 load and save now handle multiple data types       *
  *        2004-11-24 Class now uses boost::shared_ptr                   *
  *        2004-11-25 Corrected some errors in load() and save()         *
@@ -41,7 +42,7 @@ namespace aips {
  * For specific data types and external libraries this class will be specialized.
  * 
  * This class provides a bidirectional interface. 
- * Through this it can be used to convert internal structures into external structures and vice versa.
+ * By this it can be used to convert internal structures into external structures and vice versa.
  */
 class CDataAdapter : public CBase
 {

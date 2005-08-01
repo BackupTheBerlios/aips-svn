@@ -6,7 +6,7 @@
  * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
  *                                                                      *
  * Version: 0.3                                                         *
- * Status:  Alpha                                                       *
+ * Status:  Beta                                                        *
  * Created: 2005-03-28                                                  *
  * Changed: 2005-03-30 Corrected some minor bugs.                       *
  *                     Added getType() method and supporting stuff      *
@@ -83,7 +83,7 @@ private:
 typedef boost::shared_ptr<CEvent> TEventPtr;
 
 /**
- * A class to represent a new logging event. This event gets emitted each time
+ * A class to represent a new logging event. This event is emitted each time
  * a new log string is written to the log buffer.
  */
 class CNewLogEvent : public CEvent

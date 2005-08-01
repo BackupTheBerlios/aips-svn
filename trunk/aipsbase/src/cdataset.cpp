@@ -32,10 +32,10 @@ using namespace aips;
  */
 CDataSet::CDataSet( const ushort usDimension_, const size_t* extentArr_,
   const size_t dataDimensionSize_, const std::string &sClassName_, 
-		const std::string &sClassVersion_ ,
-    const std::string &sDerivedFrom_ ) throw ()
+	const std::string &sClassVersion_,
+  const std::string &sDerivedFrom_ ) throw ()
   : CBase( sClassName_, sClassVersion_, sDerivedFrom_ ), usDimension( usDimension_ ),
-  extentVec( usDimension_ + 1 ), dataDimensionSize( dataDimensionSize_ ), baseElementDimensionsVec( usDimension_ )
+  extentVec( usDimension_ + 1 ), baseElementDimensionsVec( usDimension_ ), dataDimensionSize( dataDimensionSize_ )
 {
   for ( ushort i = 0; i < usDimension; i++ )
   {
@@ -58,22 +58,24 @@ CDataSet::CDataSet( const ushort usDimension_, const vector<size_t> extentVec_,
 	const std::string &sClassVersion_ ,
   const std::string &sDerivedFrom_ ) throw ()
   : CBase( sClassName_, sClassVersion_, sDerivedFrom_ ),
-  usDimension( usDimension_ ), extentVec( extentVec_ ), dataDimensionSize( dataDimensionSize_ ),
-  baseElementDimensionsVec( usDimension_ )
+  usDimension( usDimension_ ), extentVec( extentVec_ ), baseElementDimensionsVec( usDimension_ ),
+  dataDimensionSize( dataDimensionSize_ )  
 {
 	for ( ushort i = 0; i < usDimension; i++ )
   {
     baseElementDimensionsVec[i] = 1.0;
   }
+  extentVec.push_back( dataDimensionSize );
 }
 
 /// Constructor (for one-dimensional data sets)
 CDataSet::CDataSet( const size_t extent_, const size_t dataDimensionSize_,
 	const std::string &sClassName_, const std::string &sClassVersion_, const std::string &sDerivedFrom_ ) throw()
-  : CBase( sClassName_, sClassVersion_, sDerivedFrom_ ), usDimension( 1 ), extentVec( 1 ),
-  	dataDimensionSize( dataDimensionSize_ ), baseElementDimensionsVec( 1 )
+  : CBase( sClassName_, sClassVersion_, sDerivedFrom_ ), usDimension( 1 ), extentVec( 2 ),
+  	baseElementDimensionsVec( 1 ), dataDimensionSize( dataDimensionSize_ )
 {
 	extentVec[0] = extent_;
+	extentVec[1] = dataDimensionSize_;
 }
 
 CDataSet::CDataSet( const CDataSet& aDataSet ) throw()

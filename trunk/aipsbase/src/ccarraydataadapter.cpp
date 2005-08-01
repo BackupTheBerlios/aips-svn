@@ -51,13 +51,13 @@ CCArrayDataAdapter::~CCArrayDataAdapter() throw()
  * \param extents   C-style array containing the extents of the dataset 
  */
 void CCArrayDataAdapter::setExternalData( short* sImagePtr, size_t dimension, 
-	const size_t* const extents )
+	const size_t* const extents ) throw( NullException )
 {
+	if ( sImagePtr == NULL )
+		throw( NullException( "Input short input is NULL", CException::RECOVER, ERR_CALLERNULL ) );
 	externalShortDataPtr = sImagePtr;	
 	externalDoubleDataPtr = NULL;
 	dataExtents.clear();
-	if ( sImagePtr == NULL )
-		return;
 	for( ushort i = 0; i < dimension; i++ )
 		dataExtents.push_back( extents[i] );
 }
@@ -69,13 +69,13 @@ void CCArrayDataAdapter::setExternalData( short* sImagePtr, size_t dimension,
  * \param extents   C-style array containing the extents of the dataset 
  */
 void CCArrayDataAdapter::setExternalData( double* dFieldPtr, size_t dimension, 
-	const size_t* const extents )
+	const size_t* const extents ) throw ( NullException )
 {
+	if ( dFieldPtr == NULL )
+		throw( NullException( "Input field is NULL", CException::RECOVER, ERR_CALLERNULL ) );
 	externalDoubleDataPtr = dFieldPtr;
 	externalShortDataPtr = NULL;
 	dataExtents.clear();
-	if ( dFieldPtr == NULL )
-		return;
 	for( ushort i = 0; i < dimension; i++ )
 		dataExtents.push_back( extents[i] );
 }
@@ -115,6 +115,8 @@ TDataSetPtr CCArrayDataAdapter::convertToInternal( bool bConvertField ) throw( N
 /** \param shortData C-Array to write data into. The array needs to be already allocated! */
 void CCArrayDataAdapter::convertToExternal( short* shortData ) throw( NullException )
 {
+	if ( !shortData )
+		throw( NullException( "Target image not allocated", CException::RECOVER, ERR_CALLERNULL ) );
 	if ( !internalDataPtr )
 		throw( NullException( "No internal data present", CException::RECOVER, ERR_REQUESTNULL ) );
 	actualConversion( shortData );
@@ -123,6 +125,8 @@ void CCArrayDataAdapter::convertToExternal( short* shortData ) throw( NullExcept
 /** \param doubleData C-Array to write data into. The array needs to be already allocated! */
 void CCArrayDataAdapter::convertToExternal( double* doubleData ) throw( NullException )
 {
+	if ( !doubleData )
+		throw( NullException( "Target field not allocated", CException::RECOVER, ERR_CALLERNULL ) );
 	if ( !internalDataPtr )
 		throw( NullException( "No internal data present", CException::RECOVER, ERR_REQUESTNULL ) );	
 	actualConversion( doubleData );
@@ -132,15 +136,11 @@ void CCArrayDataAdapter::convertToExternal( double* doubleData ) throw( NullExce
 template<typename T> 
 void CCArrayDataAdapter::actualConversion( T* dataPtr )
 {
-	if ( internalDataPtr.get() == NULL )
-	{
-		alog << LWARN << "No internal data present" << endl;
-		return;
-	}
+FBEGIN;
 	if ( checkType<TImage>( *internalDataPtr ) )
 	{
 		TImagePtr imagePtr = static_pointer_cast<TImage>( internalDataPtr );
-		if ( imagePtr.get() != NULL )
+		if ( imagePtr )
 		{
 			uint maxZ = 1;
 			if ( imagePtr->getDimension() == 3 ) 
@@ -161,7 +161,7 @@ void CCArrayDataAdapter::actualConversion( T* dataPtr )
 	else if ( checkType<TField>( *internalDataPtr ) )
 	{
 	  TFieldPtr fieldPtr = static_pointer_cast<TField>( internalDataPtr );
-		if ( fieldPtr.get() != NULL )
+		if ( fieldPtr )
 		{
 		 	uint maxZ = 1;		 	
 			if ( fieldPtr->getDimension() == 3 ) maxZ = fieldPtr->getExtent( 2 );
@@ -179,10 +179,12 @@ void CCArrayDataAdapter::actualConversion( T* dataPtr )
 		}
 		else
 		{
+			FEND;
 			alog << LWARN << "Illegal internal data format" << endl;
 			return;
 		}
 	}
+	FEND;
 }
 
 /** \param inputPtr C-Array to read data from */

@@ -21,6 +21,11 @@ using namespace aips;
  * Structors *
  *************/
  
+/**
+ * \param sClassName_ name of the class (type information)
+ * \param sClassVersion_ version number of the class (type information)
+ * \param sDerivedFrom_ name of the classes this class is derived from (type information)
+ */
 CDataAdapter::CDataAdapter( const std::string &sClassName_, const std::string &sClassVersion_,
     const std::string &sDerivedFrom_ ) throw()
   : CBase( sClassName_, sClassVersion_, sDerivedFrom_ ) 

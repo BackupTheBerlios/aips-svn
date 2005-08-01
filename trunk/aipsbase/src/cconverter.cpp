@@ -18,7 +18,6 @@
 using namespace aips;
 
 /**
- * Constructor
  * \param ulID unique module id in pipeline
  * \param usFanIn number of input ports
  * \param usFanOut number of output ports
@@ -34,7 +33,6 @@ CConverter::CConverter( ulong ulID, ushort usFanIn, ushort usFanOut, const std::
   setType( ITypeConverter );
 }
 
-/** Destructor */
 CConverter::~CConverter() throw()
 {
 }
