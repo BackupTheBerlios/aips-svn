@@ -5,21 +5,22 @@
  *                                                                      *
  * Author: Hendrik Belitz                                               *
  *                                                                      *
- * Version: 0.6                                                         *
+ * Version: 0.13                                                        *
  * Status:  Beta                                                        *
- * Created: 09.09.03                                                    *
- * Changed: 13.09.03 Documentation                                      *
- *          18.09.03 Added dump() method                                *
- *          29.09.03 Reorganized file structure, documentation moved    *
- *                   to cbase.cpp                                       *
- *          09.11.03 Renamed parameters to new coding standard scheme.  *
- *                   get...-Methods are no longer inline                *
+ * Created: 2003-09-09                                                  *
+ * Changed:                                                             *
+ *        2003-09-13 Documentation                                      *
+ *        2003-09-18 Added dump() method                                *
+ *        2003-09-29 Reorganized file structure, documentation moved    *
+ *                    to cbase.cpp                                      *
+ *        2003-11-09 Renamed parameters to new coding standard scheme.  *
+ *                    get...-Methods are no longer inline               *
  *                   Added CBase to namespace aips                      *
- *          27.11.03 Removed implementation of private methods          *
- *          17.12.03 Added include statement for config.h               *
- *          21.01.04 Made the source code look prettier                 *
- *          26.01.04 Added private copy constructor to CBase            *
- *          28.04.04 Added include for aipsstring.h                     *
+ *        2003-11-27 Removed implementation of private methods          *
+ *        2003-12-17 Added include statement for config.h               *
+ *        2004-01-14 Made the source code look prettier                 *
+ *        2004-01-26 Added private copy constructor to CBase            *
+ *        2004-04-28 Added include for aipsstring.h                     *
  *        2004-11-22 Removed setinfo. Updated constructor accordingly   *
  *                   Made contructor protected                          *
  *        2004-11-25 Exchanged SigC++ for boost::signal                 *
@@ -34,7 +35,7 @@
 #ifndef CBASE_H
 #define CBASE_H
 
-// Include config.h (for USE_BLITZ or USE_STANDALONE, BENCHMARK and NOPROGRESS)
+// Include aipsbase_config.h (for USE_BLITZ or USE_STANDALONE, BENCHMARK and USE_FLOAT)
 #include "aipsbase_config.h"
 
 // AIPS includes

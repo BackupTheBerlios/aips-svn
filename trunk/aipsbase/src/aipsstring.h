@@ -5,8 +5,8 @@
  *                                                                      *
  * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
  *                                                                      *
- * Version: 0.2                                                         *
- * Status:  Alpha                                                       *
+ * Version: 0.3                                                         *
+ * Status:  Beta                                                        *
  * Created: 2004-04-28                                                  *
  * Changed: 2004-09-13 Removed unnecessary functions. Conversions and   *
  *                     tokenizing are now done via boost                *

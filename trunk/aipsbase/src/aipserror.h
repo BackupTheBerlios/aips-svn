@@ -6,10 +6,10 @@
  * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
  *                                                                      *
  * Version: 1.0                                                         *
- * Status : Final                                                       *
- * Created: 21.01.04                                                    *
- * Changed: 26.01.04 Macro SERROR moved to this file                    *
- *        2005-07-07 Added runtime type error codes                     *
+ * Status : Stable                                                      *
+ * Created: 2004-01-21                                                  *
+ * Changed: 2004-04-26 Macro SERROR moved to this file                  *
+ *          2005-07-07 Added runtime type error codes                   *
  * ToDo: Add more specific error codes                                  *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
@@ -26,12 +26,25 @@
 
 namespace aips {
 
+/// Produces a string containing signaling entering or leaving a function
+std::string functionString ( const char* sFunction, 
+	bool bEnter = true, const char* sErrorMsg = "" ) throw();
+
+/// Produces a short error string with line number
+std::string shortErrorString ( uint uiLine, const char* sErrorMsg ) throw();
+
 /// Produces an error string with line number, file and function name
 std::string errorString ( const char* sFile, uint uiLine, const char* sFunction,
-  const char* sErrorMsg );
+  const char* sErrorMsg ) throw();
+
+/** \def SSHORTERROR(s) A macro for simplified usage of the shortErrorString function */
+#define SSHORTERROR(s) errorString( __LINE__, s )
 
 /** \def SERROR(s) A macro for simplified usage of the errorString function */
-#define SERROR(s) errorString( __FILE__, __LINE__, __PRETTY_FUNCTION__, s )
+#define SERROR(s) errorString( __FILE__, __LINE__, __FUNCTION__, s )
+
+/** \def SFULLERROR(s) A macro for simplified usage of the errorString function */
+#define SFULLERROR(s) errorString( __FILE__, __LINE__, __PRETTY_FUNCTION__, s )
  
 // Generic error codes
 const uint ERR_NOERROR  =   0; ///< No error at all ( never use with exceptions ;-)

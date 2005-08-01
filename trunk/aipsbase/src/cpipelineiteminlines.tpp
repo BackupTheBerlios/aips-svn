@@ -155,14 +155,21 @@ inline bool CPipelineItem::isReady() const throw()
  * \param usMinDataDim Minimum required data dimension for dataset ( 0 == no minimum required )
  * \param usMaxDataDim Maximum required data dimension for dataset ( 0 == no maximum required )
  */
-template<typename T> 
+template<typename U, typename T> 
 inline bool CPipelineItem::checkInput( T inputPtr, ushort usMinDim, 
 	ushort usMaxDim, ushort usMinDataDim, ushort usMaxDataDim ) throw()
 {
-	if ( inputPtr.get() == NULL )
+	if ( !inputPtr )
 	{
-		alog << LWARN << "No input" << endl; return false;
-	}
+		alog << LWARN << "Input set error: <No input>" << endl; 
+		return false;
+	}	
+	typedef dataTraits<U> traits;
+	if ( inputPtr->getType() != typeid( typename traits::dataType ) )
+	{
+		alog << LWARN << "Input set error: <Type mismatch>" << endl;
+		return false;
+	}	
 	if ( ( usMinDim && inputPtr->getDimension() < usMinDim ) 
 		|| ( usMaxDim && inputPtr->getDimension() > usMaxDim ) )
 	{

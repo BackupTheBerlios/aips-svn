@@ -5,20 +5,21 @@
  *                                                                      *
  * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
  *                                                                      *
- * Version: 0.4                                                         *
- * Status: beta                                                         *
- * Created: 16.01.04                                                    *
- * Changed: 19.01.04 CVector implementation, dot and vecProd moved to   *
+ * Version: 0.12                                                        *
+ * Status: Beta                                                         *
+ * Created: 2004-01-16                                                  *
+ * Changed:                                                             *
+ *        2004-01-19 CVector implementation, dot and vecProd moved to   *
  *                    aipsnumericinlines.h                              *
- *          20.01.04 Added arithmetic operators and == to CVector2D     *
+ *        2004-01-20 Added arithmetic operators and == to CVector2D     *
  *                   Moved vecProd back to this file                    *
  *                   Added swapEndianess()                              *
  *                   Templatized CVector2D and CVector3D to CVector     *
  *                   Moved CVector to seperate file cvector.h           *
- *          21.01.04 Added function round()                             *
+ *        2004-01-21 Added function round()                             *
  *                   Moved definitions to aipsnumericinlines.cpp        *
- *          22.04.04 Added further documentation                        *
- *          06.05.04 Added specializations of abs() for int and long    *
+ *        2004-04-22 Added further documentation                        *
+ *        2004-05-06 Added specializations of abs() for int and long    *
  *                   Added function in()                                *
  *        2004-08-11 Added TPoint2D, TPoint3D and TField typedefs       *
  *        2004-11-14 TField is now of type double instead of float      *
@@ -29,6 +30,8 @@
  *        2005-07-06 Added new field type TStringField and pointer      *
  *                    types for all single value types                  *
  *        2005-07-07 Added new single value type TSingleString          *
+ *        2005-08-01 Added compile-dependent definition of standard     *
+ *                    floating point type                               *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -59,14 +62,20 @@
 #include "cvector.h"
 #endif
 
+#ifdef USE_DOUBLE
+typedef double TFloatType;
+#else
+typedef float TFloatType;
+#endif
+
 namespace aips {
 
 #ifdef USE_BLITZ
 /* Typedefs for vectors if AIPS get compiled with Blitz++ support */
-typedef blitz::TinyVector<double,2> TVector2D; ///< Typedef for a mathematical 2D vector
-typedef blitz::TinyVector<double,3> TVector3D; ///< Typedef for a mathematical 3D vector
-typedef blitz::TinyVector<int,2>    TPoint2D;  ///< Typedef for a discrete 2D point
-typedef blitz::TinyVector<int,3>    TPoint3D;  ///< Typedef for a discrete 3D point
+typedef blitz::TinyVector<TFloatType,2> TVector2D; ///< Typedef for a mathematical 2D vector
+typedef blitz::TinyVector<TFloatType,3> TVector3D; ///< Typedef for a mathematical 3D vector
+typedef blitz::TinyVector<int,2>    		TPoint2D;  ///< Typedef for a discrete 2D point
+typedef blitz::TinyVector<int,3>    		TPoint3D;  ///< Typedef for a discrete 3D point
 
 /**
  * Definition of our own storage format. Using x as the first index AND the fastest
@@ -94,10 +103,10 @@ public:
 };
 #else
 /* Typedefs for vectors if AIPS get compiled without Blitz++ support */
-typedef CVector<double,2> TVector2D; ///< Typedef for a mathematical 2D vector
-typedef CVector<double,3> TVector3D; ///< Typedef for a mathematical 3D vector
-typedef CVector<int, 2>   TPoint2D;  ///< Typedef for discrete 2D point
-typedef CVector<int, 3>   TPoint3D;  ///< Typedef for discrete 3D point
+typedef CVector<TFloatType,2> TVector2D; ///< Typedef for a mathematical 2D vector
+typedef CVector<TFloatType,3> TVector3D; ///< Typedef for a mathematical 3D vector
+typedef CVector<int,2>    		TPoint2D;  ///< Typedef for discrete 2D point
+typedef CVector<int,3>	   		TPoint3D;  ///< Typedef for discrete 3D point
 #endif
 
 /*******************
@@ -107,17 +116,17 @@ typedef CVector<int, 3>   TPoint3D;  ///< Typedef for discrete 3D point
 /// A single signed integer value for pipeline usage
 typedef CSingleValue<long> TInteger; 
 /// A single double value for pipeline usage
-typedef CSingleValue<double> TDouble;
+typedef CSingleValue<TFloatType> TDouble;
 /// A single complex value for pipeline usage
-typedef CSingleValue<std::complex<double> > TComplex;
+typedef CSingleValue<std::complex<TFloatType> > TComplex;
 /// A single string value for pipeline usage
 typedef CSingleValue<std::string> TSingleString;
 /// A scalar integer field for pipeline usage
 typedef CTypedData<short> TImage;
 /// A scalar floating point field for pipeline usage
-typedef CTypedData<double> TField;
+typedef CTypedData<TFloatType> TField;
 /// A complex field for pipeline usage
-typedef CTypedData<std::complex<double> > TComplexImage;
+typedef CTypedData<std::complex<TFloatType> > TComplexImage;
 /// A field of 2D vectors for pipeline usage
 typedef CTypedData<TVector2D> TField2D;
 /// A field of 3D vectors for pipeline usage

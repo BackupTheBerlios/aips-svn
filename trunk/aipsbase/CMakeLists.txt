@@ -24,6 +24,10 @@ OPTION(BUILD_DOC
 
 SET( DEBUG_LEVEL 0 CACHE STRING "Level of debugging output (This is either 0 (no output) or 1,2,3)")
 
+OPTION(USE_DOUBLE
+  "Wether to use double or float as the standard floating point type"
+  ON)
+
 OPTION(USE_BLITZ
   "Use the blitz++ library for numerical computations"
   ON)

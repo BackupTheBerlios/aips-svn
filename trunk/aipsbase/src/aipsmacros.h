@@ -7,10 +7,10 @@
  * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
  *                                                                      *
  * Version: 1.0                                                         *
- * Status : Final                                                       *
- * Created: 21.01.04                                                    *
- * Changed: 26.01.04 Macro SERROR moved to file aipserror.h             *
- *          28.04.04 Added macro DS                                     *
+ * Status : Stable                                                      *
+ * Created: 2004-01-21                                                  *
+ * Changed: 2004-01-26 Macro SERROR moved to file aipserror.h           *
+ *          2004-04-28 Added macro DS                                   *
  *          2004-09-14 Benchmarking now uses boost::timer. The aips     *
  *                     class CTimer is obsolete and was removed         *
  ************************************************************************
@@ -63,9 +63,9 @@
 #define DBG3(s) alog << LDEBUG << "[3]\n " << __PRETTY_FUNCTION__ << " line " << __LINE__ \
   << "\n " << s << std::endl
 /// Pretty print at function start
-#define FBEGIN alog << "(+++++)\n" << __PRETTY_FUNCTION__ << "\n(+++++)" << std::endl
+#define FBEGIN alog << functionString( __FUNCTION__, true ) << std::endl
 /// Pretty print at function end
-#define FEND alog << "(-----)\n" << __PRETTY_FUNCTION__ << "\n(-----)" << std::endl
+#define FEND alog << functionString( __FUNCTION__, false ) << std::endl
 #else
 #define DBG3(s)
 #define FBEGIN

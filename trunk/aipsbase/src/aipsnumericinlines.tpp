@@ -5,7 +5,7 @@
  *                                                                      *
  * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
  *                                                                      *
- * Created: 21.01.04                                                    *
+ * Created: 2004-01-21                                                  *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -93,7 +93,7 @@ inline long abs( const long value ) throw()
 {
   return std::labs( value );
 }
-#endif 
+#endif /* #ifndef __GLIBCPP__ */
 
 /** 
  * \param value value to check
@@ -126,7 +126,16 @@ template<typename T> inline T round( const T value ) throw()
 {
   return static_cast<T>( floor( value + 0.5f ) );
 }
-#endif
+
+/**
+ * \param aVector vector to compute norm from
+ * \return Norm of given vector
+ */
+template<typename T> inline double norm( const T& aVector )
+{
+  return sqrt( dot( aVector, aVector ) );
+}
+#endif /* #ifdef USE_STANDALONE */
 
 /**
  * \param lhs first value to compare
@@ -137,17 +146,6 @@ inline bool equal( const double lhs, const double rhs, const double epsilon ) th
 {
 	return ( fabs( lhs-rhs ) <= epsilon );
 }
-
-#ifdef USE_STANDALONE
-/**
- * \param aVector vector to compute norm from
- * \return Norm of given vector
- */
-template<typename T> inline double norm( const T& aVector )
-{
-  return sqrt( dot( aVector, aVector ) );
-}
-#endif
 
 /**
  * This is faster than a simple norm function since sqrt() is not used.

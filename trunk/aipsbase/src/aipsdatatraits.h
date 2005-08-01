@@ -5,15 +5,15 @@
  *                                                                      *
  * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
  *                                                                      *
- * Version: 0.1                                                         *
- * Status:  Alpha                                                       *
+ * Version: 0.4                                                         *
+ * Status:  Beta                                                        *
  * Created: 2005-01-14                                                  *
  * Changed: 2005-01-26 Added dataTraits for TComplexImage               *
  *                     Adapted dataTraits<TImage> for new type short    *
  *          2005-07-06 Added dataTraits for TInteger, TDouble, TComplex *
  *                      and TStringField                                *
  *          2005-07-07 Added traits for TSingleString                   *
- *                   Added function checkType                           * 
+ *                     Added function checkType                         * 
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -68,7 +68,7 @@ template<typename Head, typename Tail, unsigned int index> struct TypeAt<TypeLis
 
 
 /** Typelist of all supported field types */
-typedef TypeList<TImage, TypeList<TField, TypeList<TField2D, TypeList<TField3D, TypeList<TStringField, NullType> > > > > datasetTL;
+typedef TypeList<TImage, TypeList<TComplexImage, TypeList<TField, TypeList<TField2D, TypeList<TField3D, TypeList<TStringField, NullType> > > > > > datasetTL;
 
 /******************************
  * Trait classes for datasets *
@@ -81,11 +81,18 @@ typedef TypeList<TImage, TypeList<TField, TypeList<TField2D, TypeList<TField3D, 
  * increasedRangeType (typedef) type used to temporarely store the value of a single data member.
  *   This is usually of bigger range the voxelType
  */
-template<typename T> struct dataTraits
+template<typename T> 
+struct dataTraits
 {		
+	typedef NullType dataType;
+	typedef NullType increasedRangeType;
+	enum { isScalar = false };
+	enum { isComparable = false };
+	enum { isNumeric = false };
 };
 
 /** Data traits for ushort datasets */
+template<>
 struct dataTraits<TImage>
 {
 	typedef short dataType;
@@ -96,26 +103,29 @@ struct dataTraits<TImage>
 };
 
 /** Data traits for double datasets */
+template<>
 struct dataTraits<TField>
 {
-	typedef double dataType;
-	typedef double increasedRangeType;
+	typedef TFloatType dataType;
+	typedef TFloatType increasedRangeType;
 	enum { isScalar = true };
 	enum { isComparable = true };
 	enum { isNumeric = true };
 };
 
 /** Data traits for complex datasets */
+template<>
 struct dataTraits<TComplexImage>
 {
-	typedef std::complex<double> dataType;
-	typedef std::complex<double> increasedRangeType;
+	typedef std::complex<TFloatType> dataType;
+	typedef std::complex<TFloatType> increasedRangeType;
 	enum { isScalar = true };
 	enum { isComparable = false };
 	enum { isNumeric = true };
 };
 
 /** Data traits for 2D vector datasets */
+template<>
 struct dataTraits<TField2D>
 {
 	typedef TVector2D dataType;
@@ -137,6 +147,7 @@ struct dataTraits<TField3D>
 };
 
 /** Data traits for string array datasets */
+template<>
 struct dataTraits<TStringField>
 {
 	typedef std::string dataType;
@@ -147,6 +158,7 @@ struct dataTraits<TStringField>
 };
 
 /** Data traits for scalar integer data */
+template<>
 struct dataTraits<TInteger>
 {
 	typedef long dataType;
@@ -157,26 +169,29 @@ struct dataTraits<TInteger>
 };
 
 /** Data traits for scalar double data */
+template<>
 struct dataTraits<TDouble>
 {
-	typedef double dataType;
-	typedef double increasedRangeType;
+	typedef TFloatType dataType;
+	typedef TFloatType increasedRangeType;
 	enum { isScalar = true };
 	enum { isComparable = true };
 	enum { isNumeric = true };
 };
 
 /** Data traits for scalar complex data */
+template<>
 struct dataTraits<TComplex>
 {
-	typedef std::complex<double> dataType;
-	typedef std::complex<double> increasedRangeType;
+	typedef std::complex<TFloatType> dataType;
+	typedef std::complex<TFloatType> increasedRangeType;
 	enum { isScalar = true };
 	enum { isComparable = false };
 	enum { isNumeric = true };
 };
 
 /** Data traits for scalar string data */
+template<>
 struct dataTraits<TSingleString>
 {
 	typedef std::string dataType;
@@ -193,7 +208,7 @@ struct dataTraits<TSingleString>
  */
 template<typename T> inline bool checkType( const CDataSet& aDataSet ) throw()
 {
-	return( aDataSet.getType() == typeid( dataTraits<T>::dataType ) );
+	return( aDataSet.getType() == typeid( typename dataTraits<T>::dataType ) );
 }
 
 /**
@@ -204,7 +219,7 @@ template<typename T> inline bool checkType( const CDataSet& aDataSet ) throw()
  */
 template<typename T> inline bool checkType( const CDataSet* aDataSet ) throw()
 {
-	return( aDataSet->getType() == typeid( dataTraits<T>::dataType ) );
+	return( aDataSet->getType() == typeid( typename dataTraits<T>::dataType ) );
 }
 
 /**
@@ -215,7 +230,7 @@ template<typename T> inline bool checkType( const CDataSet* aDataSet ) throw()
  */
 template<typename T> inline bool checkType( const boost::shared_ptr<CDataSet> aDataSet ) throw()
 {
-	return( aDataSet->getType() == typeid( dataTraits<T>::dataType ) );
+	return( aDataSet->getType() == typeid( typename dataTraits<T>::dataType ) );
 }
 
 }
