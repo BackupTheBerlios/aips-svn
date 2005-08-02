@@ -7,7 +7,7 @@
  * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
  *                                                                      *
  * Version: 0.2                                                         *
- * Status:  Alpha                                                       *
+ * Status:  Beta                                                        *
  * Created: 2005-03-28                                                  *
  * Changed: 2005-03-31 Added documentation                              *
  ************************************************************************
@@ -15,6 +15,7 @@
  * it under the terms of the GNU General Public License as published by *
  * the Free Software Foundation; either version 2 of the License, or    *
  * (at your option) any later version.                                  *
+ 
  ************************************************************************/
 #ifndef AIPSCOBSERVER_H
 #define AIPSCOBSERVER_H
@@ -24,7 +25,8 @@
 // AIPS includes 
 #include <cevent.h>
 
-namespace aips {
+namespace aips 
+{
 
 /**
  * An abstract observer base class for the implementation of the Subject/Observer-Pattern
@@ -35,11 +37,12 @@ public:
 /* Structors */
 	/// Constructor
   CObserver( const std::string& className_ = "CObserver",
-		const std::string& classVersion_ =  "0.2", const std::string& derivedFrom_ = "CBase" ) throw();
+		const std::string& classVersion_ =  "0.2", 
+		const std::string& derivedFrom_ = "CBase" ) throw();
 	/// Destructor
   ~CObserver() throw();
 /* Other methods */
-	/// Execute is called by the observed subject if an suitable event was generated. Pure virtual method.  
+	/// Execute is called by the observed subject if a suitable event was generated. Pure virtual method.  
 	virtual void execute( TEventPtr anEvent ) = 0;
 };
 

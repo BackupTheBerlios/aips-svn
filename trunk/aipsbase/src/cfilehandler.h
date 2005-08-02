@@ -5,21 +5,21 @@
  *                                                                      *
  * Author: Hendrik Belitz                                               *
  *                                                                      *
- * Version: 0.4.1                                                       *
+ * Version: 0.12                                                        *
  * Status:  Beta                                                        * 
- * Created: 24.10.03                                                    *
- * Changed: 24.10.03 Creation of class                                  *
- *          09.11.03 Code is now conform with coding scheme             *
+ * Created: 2003-10-24                                                  *
+ * Changed:                                                             *
+ *        2003-11-09 Code is now conform with coding scheme             *
  *                   Moved code into namespace aips                     *
- *          16.12.03 Added support for header files                     *
- *          08.01.04 Added abbreviation type TDataFile                  *
- *          21.01.04 Added createProgressBar()                          *
+ *        2003-12.16 Added support for header files                     *
+ *        2004-01-08 Added abbreviation type TDataFile                  *
+ *        2004-01-21 Added createProgressBar()                          *
  *                   Added private copy constructor and operator=       *
- *          22.01.04 Added abstract methods loadData() and saveData()   *
- *					26.04.04 Corrected an error in supports() method:           *
+ *        2004-01-22 Added abstract methods loadData() and saveData()   *
+ *				2004-04-26 Corrected an error in supports() method:           *
  *                    File extensions are now extracted correctly from  *
  *                    the given filename.                               *
- *          27.04.04 Updated documentation.                             *
+ *        2004-04-27 Updated documentation.                             *
  *                   Removed method createProgressBar()                 *
  *        2004-11-22 Added enum type for data type identification       *
  *                   Provided class information constructor             *
@@ -101,10 +101,10 @@ protected:
 	EDataType getDataType( const std::string& sHeaderEntry ) const 
 		throw (NotPresentException);
   /// Load the data from a file. Pure virtual
-  virtual void loadData( TDataSetPtr theTargetDataAPtr, std::istream& theFile,
+  virtual void loadData( TDataSetPtr theTargetDataSPtr, std::istream& theFile,
     const EDataType theVoxelType, const bool bFileEndianess ) const throw( FileException, NullException ) =0;    
   /// Save the data to a file. Pure virtual
-  virtual void saveData( TDataSetPtr theSourceDataAPtr, std::ostream& theFile,
+  virtual void saveData( TDataSetPtr theSourceDataSPtr, std::ostream& theFile,
     const EDataType theVoxelType, const bool bFileEndianess ) 
 		const throw( FileException, NullException ) =0;
 /* Member variables */  

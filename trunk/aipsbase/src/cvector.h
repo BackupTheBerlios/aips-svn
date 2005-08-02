@@ -8,14 +8,14 @@
  *                                                                      *
  * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
  *                                                                      *
- * Version: 0.1                                                         *
- * Created: 20.01.04                                                    *
- * Changed: 19.04.04 Division operator added                            *
- *          20.04.04 CVector is no longer derived from CBase            *
- *                    (to save memory in large vector arrays)           *
- *                   Class now stores the correct data type             *
- *                   Method getType added                               *
- *          28.04.04 Updated documentation                              *
+ * Version: 0.4                                                         *
+ * Created: 2004-01-04                                                  *
+ * Changed: 2004-04-19 Division operator added                          *
+ *          2004-04-20 CVector is no longer derived from CBase          *
+ *                      (to save memory in large vector arrays)         *
+ *                     Class now stores the correct data type           *
+ *                     Method getType added                             *
+ *          2004-04-28 Updated documentation                            *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -26,9 +26,8 @@
 #ifndef CVECTOR_H
 #define CVECTOR_H
 
-#include "cbase.h"
-
-namespace aips {
+namespace aips 
+{
 
 /**
  * A class for the representation of mathematical vectors.
@@ -48,7 +47,7 @@ public:
   ~CVector() 
 		throw();
 /* Operators/Assignment */
-  /// Operator= for CVector2D
+  /// Operator= for CVector
   CVector<DataType, dimension>& operator=( const CVector<DataType, dimension>& aVector ) 
 		throw();
   /// Operator= for scalar type
@@ -84,23 +83,28 @@ private:
 
 /* Arithmetic operations for CVector */
 /// Addition of two vectors
-template<typename DataType, int dimension> inline CVector<DataType, dimension> operator+
+template<typename DataType, int dimension> inline 
+CVector<DataType, dimension> operator+
   ( const CVector<DataType, dimension>& aVector, const CVector<DataType, dimension>& bVector )
 	throw();
 /// Difference of two vectors
-template<typename DataType, int dimension> inline CVector<DataType, dimension> operator-
+template<typename DataType, int dimension> inline 
+CVector<DataType, dimension> operator-
   ( const CVector<DataType, dimension>& aVector, const CVector<DataType,dimension>& bVector ) 
 	throw();
 /// Multiplication of vector and scalar
-template<typename DataType, int dimension> inline CVector<DataType, dimension> operator*
+template<typename DataType, int dimension> inline 
+CVector<DataType, dimension> operator*
   ( const CVector<DataType, dimension>& aVector, const DataType aScalar ) 
 	throw();
 /// Division of vector and scalar
-template<typename DataType, int dimension> inline CVector<DataType, dimension> operator/
+template<typename DataType, int dimension> inline 
+CVector<DataType, dimension> operator/
   ( const CVector<DataType, dimension>& aVector, const DataType aScalar ) 
 	throw();
 /// Multiplication of scalar and vector
-template<typename DataType, int dimension> inline CVector<DataType, dimension> operator*
+template<typename DataType, int dimension> inline 
+CVector<DataType, dimension> operator*
   ( const DataType aScalar, const CVector<DataType, dimension>& aVector ) 
 	throw();
 

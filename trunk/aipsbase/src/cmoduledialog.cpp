@@ -37,7 +37,7 @@ CModuleDialog::~CModuleDialog() throw()
 /**
  * \returns true if a dialog is present (false is the default return value)
  */
-inline bool CModuleDialog::hasDialog() const throw()
+bool CModuleDialog::hasDialog() const throw()
 {
   return false;
 }
@@ -46,7 +46,7 @@ inline bool CModuleDialog::hasDialog() const throw()
  * \param sCaption The new window caption
  * \exception NotPresentException if no dialog exists
  */
-inline void CModuleDialog::setCaption ( const std::string ) throw( NotPresentException )
+void CModuleDialog::setCaption ( const std::string ) throw( NotPresentException )
 {
   throw ( NotPresentException( SERROR( "No dialog available" ),
     CException::RECOVER, ERR_DIALOGNOTPRESENT ) );
@@ -55,7 +55,7 @@ inline void CModuleDialog::setCaption ( const std::string ) throw( NotPresentExc
 /**
  * \exception NotPresentException if no dialog exists (default)
  */
-inline void CModuleDialog::showDialog() throw( NotPresentException )
+void CModuleDialog::showDialog() throw( NotPresentException )
 {
   throw ( NotPresentException( SERROR( "No dialog available" ),
     CException::RECOVER, ERR_DIALOGNOTPRESENT ) );
@@ -64,13 +64,13 @@ inline void CModuleDialog::showDialog() throw( NotPresentException )
 /**
  * \exception NotPresentException if no dialog exists (default)
  */
-inline void CModuleDialog::hideDialog() throw( NotPresentException )
+void CModuleDialog::hideDialog() throw( NotPresentException )
 {
   throw ( NotPresentException( SERROR( "No dialog available" ),
     CException::RECOVER, ERR_DIALOGNOTPRESENT ) );
 }
 
-inline bool CModuleDialog::isHidden() throw( NotPresentException )
+bool CModuleDialog::isHidden() throw( NotPresentException )
 {
  	throw ( NotPresentException( SERROR( "No dialog available" ),
     CException::RECOVER, ERR_DIALOGNOTPRESENT ) );

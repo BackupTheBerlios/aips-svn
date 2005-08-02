@@ -109,8 +109,8 @@ IF(USE_XMLPP)
   	DOC "Path where libxml2 include files can be found"
 	)
 	FIND_PATH(XMLPP_INCLUDES 
-  	libxml++.h 
-		/usr/include/libxml++-2.6/libxml++ /usr/local/include/libxml++-2.6/libxml++
+  	libxml++/libxml++.h 
+		/usr/include/libxml++-2.6 /usr/local/include/libxml++-2.6
   	DOC "Path where libxml++-2.6 include files can be found"
 	)
 	FIND_PATH(GLIBMM_INCLUDES 

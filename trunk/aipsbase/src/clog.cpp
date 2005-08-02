@@ -13,10 +13,12 @@ using namespace aips;
 using namespace std;
    
 ostream aips::alog( clog.rdbuf() );
-CSubject aips::newLog( "CSubject" );
-ofstream* aips::CLogServer::logFilePtr = NULL;
-aips::ELogLevel aips::logState = LDEBUG;
 
+CSubject aips::newLog( "CSubject" );
+
+ofstream* aips::CLogServer::logFilePtr = NULL;
+
+aips::ELogLevel aips::logState = LDEBUG;
 
 std::streamsize cloneStreamBuf::xsputn ( const char * s, std::streamsize n ) 
 {	
@@ -31,8 +33,8 @@ int cloneStreamBuf::overflow( int c )
 	return assoc->sputc( c );
 }
 
-std::streampos cloneStreamBuf::seekoff ( streamoff off, ios_base::seekdir way, ios_base::openmode
-which )
+std::streampos cloneStreamBuf::seekoff ( streamoff off, ios_base::seekdir way, 
+	ios_base::openmode which )
 {
 	return assoc->pubseekoff( off, way, which );
 }

@@ -25,15 +25,15 @@ using namespace boost;
 
 /** Normally this constructor should be used */
 CTypedMap::CTypedMap() throw()
-  : CBase( "CTypedMap", "0.6", "CBase" )
+  : CBase( "CTypedMap", "0.13", "CBase" )
 {    
 }
 
 /**
- * \param aHeader header object to assign from
+ * \param aTypedMap typed map object to assign from
  */
 CTypedMap::CTypedMap( CTypedMap& aTypedMap ) throw()
-  : CBase( "CTypedMap", "0.6", "CBase" )
+  : CBase( "CTypedMap", "0.13", "CBase" )
 {
   valueMap = aTypedMap.valueMap;
 	keyVec = aTypedMap.keyVec;
@@ -334,6 +334,10 @@ void CTypedMap::clear() throw()
 	keyVec.clear();
 }
 
+/**
+ * \param sFilename name of file to write to
+ * \param sDescription description written into XML dump
+ */
 void CTypedMap::writeXMLFile( const string sFilename, const string sDescription ) throw( FileException )
 {
 	ofstream file( sFilename.c_str() );
@@ -367,9 +371,12 @@ void CTypedMap::writeXMLFile( const string sFilename, const string sDescription 
 	}
 }
 
-const std::string  CTypedMap::readXMLFile( const std::string sFilename )	throw( FileException )
+/**
+ * \param sFilename file to read XML dump from
+ */
+void CTypedMap::readXMLFile( const std::string sFilename )	throw( FileException )
 {
-	#ifdef HAVE_XMLPP
+	#ifdef USE_XMLPP
 	struct SEntry
 	{
 		string key;
@@ -517,6 +524,7 @@ const std::string  CTypedMap::readXMLFile( const std::string sFilename )	throw( 
   {
     throw( FileException( SERROR( e.what() ), CException::RECOVER, ERR_FILEACCESS ) );
   }
-  #endif
-  return "Bla";
+  #else
+  #warning Compiling without XML++. CTypedMap will not be able to read XML dumps
+  #endif  
 }

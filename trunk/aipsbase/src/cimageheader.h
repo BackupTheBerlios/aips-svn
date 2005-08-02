@@ -5,13 +5,14 @@
  *                                                                      *
  * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
  *                                                                      *
- * Version: 0.1                                                         *
+ * Version: 0.5                                                         *
  * Status:  Alpha                                                       *
  * Created: 2004-04-27                                                  *
  * Changed: 2004-04-28 Updated documentation                            *
  *          2004-11-23 Removed getVoxelSize. Added getVoxelType         *
  *          2004-12-07 Added abstract load and save methods             *
  *          2005-07-07 Added functions for VoxelDimensions and Origin   *
+ * TODO: Support for images with 5D+ dimensions                         *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *

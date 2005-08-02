@@ -35,8 +35,10 @@ CFilter::CFilter(  ulong ulID_, const string &sName_,
   setModuleName( sName_ );
   setType( ITypeFilter );
   
-  if ( usNoOfInputs > 0 ) inputsVec[0].portType = IOInteger;
-  if ( usNoOfOutputs > 0 ) outputsVec[0].portType = IOInteger;
+  for( uint i = 0; i < usNoOfInputs; ++i )
+  	inputsVec[i].portType = IOInteger;
+  for( uint i = 0; i < usNoOfOutputs; ++i )
+  	outputsVec[0].portType = IOInteger;
 }
 
 /** Destructor */

@@ -1,8 +1,8 @@
 /**
- * /param sKey key to search for
- * /param theValue reference to return casted value in
- * /returns true if succesful, false if given key/value pair could'nt be casted into the given type
- * /throws NotPresentException if the given key cannot be found
+ * \param sKey key to search for
+ * \param theValue reference to return casted value in
+ * \returns true if succesful, false if given key/value pair could'nt be casted into the given type
+ * \throws NotPresentException if the given key cannot be found
  */
  
 template<typename T> bool CTypedMap::getAs( const std::string& sKey, T& theValue ) const

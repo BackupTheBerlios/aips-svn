@@ -5,7 +5,7 @@
  *                                                                      *
  * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
  *                                                                      *
- * Created: 20.01.04                                                    *
+ * Created: 2004-01-20                                                  *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -23,7 +23,7 @@
  * \param dZ third component
  */
 template<typename DataType, ushort dimension> inline
-  CVector<DataType, dimension>::CVector ( double dX, double dY, double dZ ) throw()
+CVector<DataType, dimension>::CVector ( double dX, double dY, double dZ ) throw()
 {
   theData[0] = dX;
   if ( 1 < dimension ) 
@@ -37,7 +37,7 @@ template<typename DataType, ushort dimension> inline
  * \param aVector Vector to be copied
  */
 template<typename DataType, ushort dimension> inline 
-	CVector<DataType, dimension>::CVector( const CVector& aVector ) throw()
+CVector<DataType, dimension>::CVector( const CVector& aVector ) throw()
 {
   for ( int i = 0; i < dimension; i++ )
     theData[i] = aVector.theData[i];
@@ -45,7 +45,7 @@ template<typename DataType, ushort dimension> inline
 
 /** Destructor */
 template<typename DataType, ushort dimension> inline 
-	CVector<DataType, dimension>::~CVector() throw()
+CVector<DataType, dimension>::~CVector() throw()
 {
 }
 
@@ -58,7 +58,7 @@ template<typename DataType, ushort dimension> inline
  * \return reference to assignment target
  */
 template<typename DataType, ushort dimension> inline 
-	CVector<DataType, dimension>& CVector<DataType, dimension>::operator=
+CVector<DataType, dimension>& CVector<DataType, dimension>::operator=
   ( const CVector<DataType, dimension>& aVector ) throw()
 {
   if ( &aVector == this ) 

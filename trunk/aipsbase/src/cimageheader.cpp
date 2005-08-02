@@ -127,11 +127,16 @@ void CImageHeader::setExtents( const std::vector<size_t>& extentVec ) throw()
 	{
 		setUnsignedLong( "ExtentY", extentVec[1] );
 		if ( extentVec.size() > 2 )
+		{
 			setUnsignedLong( "ExtentZ", extentVec[2] );
-		if ( extentVec.size() > 3 )
-			setUnsignedLong( "ExtentT", extentVec[3] );
-		if ( extentVec.size() > 4 )
-			alog << LWARN << "Currently we only support images with up to four dimensions!" << std::endl;
+			if ( extentVec.size() > 3 )
+			{
+				setUnsignedLong( "ExtentT", extentVec[3] );				
+				if ( extentVec.size() > 4 )
+					alog << LWARN << "Currently we only support images with up to four dimensions!\n" 
+						<< " Higher dimensions will be ignored" << std::endl;
+			}
+		}
 	}
 }
 
