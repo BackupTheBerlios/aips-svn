@@ -5,35 +5,37 @@
  *                                                                      *
  * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
  *                                                                      *
- * Version: 0.3                                                         *
+ * Version: 0.10                                                        *
  * Status : Beta                                                        *
- * Created: 25.11.03                                                    *
- * Changed: 27.11.03 Added class CSingleValue for zerodimensional       *
- *                   values like scalars and vectors                    *
- *                   Template methods are now seperated from            *
- *                   declarations                                       *
- *                   CDataSet is now derived from CBase                 *
- *          16.01.04 Corrected an error in CTypedData::operator=        *
- *                    This member also is no longer virtual             *
- *                   Moved CVector classes to aipsnumeric.h             *
- *          20.01.04 Virtual methods and structors are no longer inline *
- *                   Made the code simpler and look prettier            *
- *                   Deleted method convert() from CTypedData<>         *
- *                   File splitted up into the three files              *
- *                    cdataset.h csinglevalue.h and ctypeddata.h        *
- *          21.01.04 Implemented random access iterator                 *
- *          12.02.04 Operator= and copy constructor now also copy       *
- *                   the minimum and maximum value                      *
- *          20.04.04 Added method swap()                                *
- *                   Added method getDataSize()                         *
- *                   Corrected documentation of getArraySize()          *
- *          01.05.05 Added new iterator class to CTypedData which       *
- *                   offers some convenience methods for easy access    *
- *                   Tested CTypedData for about 5 hours ...            *
- *        2004-08-12 Added resize(), increaseDataDimension() and        *
- *                   decreaseDataDimension() members                    *
- *        2005-05-23 Added constructor for 1D-datasets                  *
- *                   Added methods setDataRange() and adjustDataRange() *
+ * Created: 2003-11-25                                                  *
+ * Changed: 2003-11-27 Added class CSingleValue for zerodimensional     *
+ *                      values like scalars and vectors                 *
+ *                     Template methods are now seperated from          *
+ *                      declarations                                    *
+ *                     CDataSet is now derived from CBase               *
+ *          2004-01-16 Corrected an error in CTypedData::operator=      *
+ *                      This member also is no longer virtual           *
+ *                     Moved CVector classes to aipsnumeric.h           *
+ *          2004-01-20 Virtual methods and structors are no longer      *
+ *                      inline                                          *
+ *                     Made the code simpler and look prettier          *
+ *                     Deleted method convert() from CTypedData<>       *
+ *                     File splitted up into the three files            *
+ *                      cdataset.h csinglevalue.h and ctypeddata.h      *
+ *          2004-01-21 Implemented random access iterator               *
+ *          2004-02-12 Operator= and copy constructor now also copy     *
+ *                     the minimum and maximum value                    *
+ *          2004-04-20 Added method swap()                              *
+ *                     Added method getDataSize()                       *
+ *                     Corrected documentation of getArraySize()        *
+ *          2001-05-01 Added new iterator class to CTypedData which     *
+ *                     offers some convenience methods for easy access  *
+ *                     Tested CTypedData for about 5 hours ...          *
+ *          2004-08-12 Added resize(), increaseDataDimension() and      *
+ *                     decreaseDataDimension() members                  *
+ *          2005-05-23 Added constructor for 1D-datasets                *
+ *                     Added methods setDataRange() and                 *
+ *                      adjustDataRange()                               *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -43,6 +45,8 @@
 
 #ifndef CTYPEDDATA_H
 #define CTYPEDDATA_H
+
+#define CTYPEDDATA_VERSION "0.10"
 
 // Standard includes
 #include <algorithm> // std::swap
@@ -466,38 +470,15 @@ private:
   valueType theMaximum;           ///< Dataset maximum value
 };
 
-/**
- * Move the TypedDataIterator by an specific amount
- * \param iterator iterator to move
- * \param amount amount to move iterator by (gets added to iterator position)
- */
+/// Move the TypedDataIterator forward by an specific amount
 template<typename T, typename U>
-CTypedData<T>::TypedDataIterator<T,U> operator+( CTypedData<T>::TypedDataIterator<T,U> iterator,
+CTypedData<T>::TypedDataIterator<T,U> operator+( CTypedData<T>::TypedDataIterator<T,U> anIterator,
 	ptrdiff_t amount );
- 
-template<typename T, typename U>
-CTypedData<T>::TypedDataIterator<T,U> operator+( CTypedData<T>::TypedDataIterator<T,U> iterator,
-	ptrdiff_t amount )
-{
-	return CTypedData<T>::iterator( &(*iterator) + amount, iterator.getParent() );
-}
 
-/**
- * Move the TypedDataIterator by an specific amount
- * \param iterator iterator to move
- * \param amount amount to move iterator by (gets subtracted from iterator position)
- */
-
+/// Move the TypedDataIterator backward by an specific amount
 template<typename T, typename U>
-CTypedData<T>::TypedDataIterator<T,U> operator-( CTypedData<T>::TypedDataIterator<T,U> iterator,
+CTypedData<T>::TypedDataIterator<T,U> operator-( CTypedData<T>::TypedDataIterator<T,U> anIterator,
 	ptrdiff_t amount );
- 
-template<typename T, typename U>
-CTypedData<T>::TypedDataIterator<T,U> operator-( CTypedData<T>::TypedDataIterator<T,U> iterator, 
-	ptrdiff_t amount )
-{
-	return CTypedData<T>::iterator( &(*iterator) - amount, iterator.getParent() );
-}
 
 #include "ctypeddatainlines.tpp"
 

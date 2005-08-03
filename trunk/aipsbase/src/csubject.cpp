@@ -79,7 +79,7 @@ void CSubject::attachObserver( CObserver* const anObserverPtr, uint uiInterestTy
 	if ( anObserverPtr == NULL )
 		throw( NullException( SERROR("Observer is NULL"), CException::RECOVER, ERR_CALLERNULL ) );
 		
-DBG( "Adding " << anObserverPtr->getClassName() << " to subscriber list of " << this->getClassName() );
+DBG2( "Adding " << anObserverPtr->getClassName() << " to subscriber list of " << this->getClassName() );
 
 	observerPtrList.push_back( SObserverListEntry( anObserverPtr, uiInterestType ) );
 }
@@ -94,7 +94,7 @@ void CSubject::detachObserver( CObserver* const anObserverPtr ) throw( NullExcep
 	if ( anObserverPtr == NULL )
 		throw( NullException( SERROR("Observer is NULL"), CException::RECOVER, ERR_CALLERNULL ) );
 	
-DBG( "Removing " << anObserverPtr->getClassName() << " from subscriber list of " << this->getClassName() );
+DBG2( "Removing " << anObserverPtr->getClassName() << " from subscriber list of " << this->getClassName() );
 
 	observerPtrList.remove_if( std::bind2nd( CheckIdentityFunctor(), anObserverPtr ) );
 }
@@ -104,17 +104,17 @@ DBG( "Removing " << anObserverPtr->getClassName() << " from subscriber list of "
  * \param anEvent event to deploy to all registered observers with the appropiate interest
  * \throws NullException if given event is NULL
  */
-void CSubject::notify( boost::shared_ptr<CEvent> anEvent ) throw( NullException )
+void CSubject::notify( boost::shared_ptr<CEvent> anEventSPtr ) throw( NullException )
 {
-	if ( !anEvent )
+	if ( !anEventSPtr )
 		throw( NullException( SERROR("Event is NULL"), CException::RECOVER, ERR_CALLERNULL ) );
 	for( std::list<SObserverListEntry>::iterator it = observerPtrList.begin(); it != observerPtrList.end(); ++it )
 	{
-		if ( it->uiInterestType == anEvent->getType() )
+		if ( it->uiInterestType == anEventSPtr->getType() )
 		{
-DS( "Calling	" << anEvent->dump() );//<< " for " << it->anObserverPtr->dump() );
+DBG2( "Calling	" << anEventSPtr->dump() );//<< " for " << it->anObserverPtr->dump() );
 			
-			it->anObserverPtr->execute( anEvent );
+			it->anObserverPtr->execute( anEventSPtr );
 		}
 	}
 }

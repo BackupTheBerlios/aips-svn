@@ -114,14 +114,25 @@ IF(USE_XMLPP)
   	DOC "Path where libxml++-2.6 include files can be found"
 	)
 	FIND_PATH(GLIBMM_INCLUDES 
-  	arrayhandle.h
-		/usr/include/glibmm-2.4/glibmm /usr/local/include/glibmm-2.4/glibmm
+  	glibmm/arrayhandle.h
+		/usr/include/glibmm-2.4 /usr/local/include/glibmm-2.4
   	DOC "Path where glibmm-2.4 include files can be found"
 	)
 	FIND_PATH(GLIBMM_CONFIG_INCLUDES 
-  	glibmmconfig.h 
+  	glibmmconfig.h   	
 		/usr/lib/glibmm-2.4/include /usr/local/lib/glibmm-2.4/include
 	)	
+	FIND_PATH(GLIB_INCLUDES
+		glib/gmacros.h
+		/usr/include/glib-2.0 /usr/local/include/glib-2.0
+	)
+	FIND_PATH(GLIB_CONFIG_INCLUDES
+		glibconfig.h
+		/usr/lib/glib-2.0/include /usr/local/lib/glib-2.0/include
+	)
+	IF( NOT GLIB_INCLUDES AND GLIB_CONFIG_INCLUDES )
+		MESSAGE( SEND_ERROR "Could not find glib include files" )
+	ENDIF( NOT GLIB_INCLUDES AND GLIB_CONFIG_INCLUDES )
 	IF( NOT GLIBMM_LIBRARY AND GLIBMM_CONFIG_INCLUDES AND GLIBMM_INCLUDES )
  		MESSAGE( SEND_ERROR "Could not find glibmm-2.4 or its include files" )
 	ENDIF( NOT GLIBMM_LIBRARY AND GLIBMM_CONFIG_INCLUDES AND GLIBMM_INCLUDES )
@@ -133,7 +144,7 @@ IF(USE_XMLPP)
 	ENDIF( NOT XML2_INCLUDES AND XML2_LIBRARY )
 	LINK_LIBRARIES(	${XMLPP_LIBRARY} ${XML2_LIBRARY} ${GLIBMM_LIBRARY} -lm -lpthread )
 	INCLUDE_DIRECTORIES( ${XMLPP_INCLUDES} ${XML2_INCLUDES} ${GLIBMM_INCLUDES}
-		${GLIBMM_CONFIG_INCLUDES} )
+		${GLIBMM_CONFIG_INCLUDES} ${GLIB_INCLUDES} ${GLIB_CONFIG_INCLUDES} )
 ENDIF(USE_XMLPP)
 #endof xml++ search
 

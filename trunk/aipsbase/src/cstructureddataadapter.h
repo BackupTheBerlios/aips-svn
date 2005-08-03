@@ -5,10 +5,10 @@
  *                                                                      *
  * Author: Hendrik Belitz                                               *
  *                                                                      *
- * Version: 0.1                                                         *
- * Status : PreAlpha                                                    *
- * Created: 22-12-2004                                                  *
- * Changed: 25-01-2004 Added method setYSwapping and corr. data member  *
+ * Version: 0.2                                                         *
+ * Status : Alpha                                                       *
+ * Created: 2004-12-22                                                  *
+ * Changed: 2005-01-25 Added method setYSwapping and corr. data member  *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -17,6 +17,8 @@
  ************************************************************************/
 #ifndef CSTRUCTUREDDATAADAPTER_H
 #define CSTRUCTUREDDATAADAPTER_H
+
+#define CSTRUCTUREDDATAADAPTER_VERSION "0.2"
 
 // AIPS includes
 #include "cdataadapter.h"
@@ -40,16 +42,18 @@ public:
 /* Structors */
 	/// Constructor
   CStructuredDataAdapter( const std::string &sClassName_ = "CStructuredDataAdapter", 
-		const std::string &sClassVersion_ = "0.1", const std::string &sDerivedFrom_ = "CDataAdapter ") throw(); 
+		const std::string &sClassVersion_ = CSTRUCTUREDDATAADAPTER_VERSION, 
+		const std::string &sDerivedFrom_ = "CDataAdapter ") throw(); 
 	/// Constructor with additional parameter for internal data
-  CStructuredDataAdapter( boost::shared_ptr<CDataSet> internalDataPtr_, 
-		const std::string &sClassName_ = "CStructuredDataAdapter", const std::string &sClassVersion_ = "0.1", 
+  CStructuredDataAdapter( TDataSetPtr internalDataSPtr_, 
+		const std::string &sClassName_ = "CStructuredDataAdapter", 
+		const std::string &sClassVersion_ = CSTRUCTUREDDATAADAPTER_VERSION, 
 		const std::string &sDerivedFrom_ = "CDataAdapter " ) throw();  
 	/// Destructor - pure virtual
   virtual ~CStructuredDataAdapter() throw() = 0;
 /* Accessors */
 	/// Sets the internal data pointer to the given dataset
-  void setInternalData( TDataSetPtr internalDataPtr_ );
+  void setInternalData( TDataSetPtr internalDataSPtr_ );
 /* Other methods */		
 	/// Converts the external data into an internal representation - pure virtual
   virtual TDataSetPtr convertToInternal() = 0;
@@ -57,7 +61,7 @@ public:
 	void setYSwapping( bool bSwapYAxis_ );
 protected:  
   /// Smart pointer to a representation of the internal data
-  TDataSetPtr internalDataPtr;
+  TDataSetPtr internalDataSPtr;
 	/// Stores if returned conversions should swap the y-axis
 	bool bSwapYAxis;
 };

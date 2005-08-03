@@ -18,8 +18,10 @@
  * the Free Software Foundation; either version 2 of the License, or    *
  * (at your option) any later version.                                  *
  ************************************************************************/
-#ifndef AIPSAUTO_VALUE_H
-#define AIPSAUTO_VALUE_H
+#ifndef AUTO_VALUE_H
+#define AUTO_VALUE_H
+
+#define AUTO_VALUE_VERSION "0.1"
 
 #include <stdexcept>
 

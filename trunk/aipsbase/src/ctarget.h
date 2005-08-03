@@ -5,17 +5,17 @@
  *                                                                      *
  * Author: Hendrik Belitz                                               *
  *                                                                      *
- * Version: 0.3                                                         *
+ * Version: 0.6                                                         *
  * Status : Beta                                                        *
- * Created: 17.09.03                                                    *
- * Changed: 18.09.03 Added dump() method                                *
- *          22.09.03 All members now use string instead of QString for  *
- *                    parameters and return values                      *
- *          30.09.03 Reorganized file structure, moved documentation    *
- *                   to ctarget.cpp                                     *
- *          11.11.03 Moved inline members to cpp file.                  *
- *                   Added class to namespace aips                      *
- *          22.01.04 Made source code look prettier                     *
+ * Created: 2003-09-17                                                  *
+ * Changed: 2003-09-18 Added dump() method                              *
+ *          2003-09-22 All members now use string instead of QString    *
+ *                      for parameters and return values                *
+ *          2003-09-30 Reorganized file structure, moved documentation  *
+ *                     to ctarget.cpp                                   *
+ *          2003-11-11 Moved inline members to cpp file.                *
+ *                     Added class to namespace aips                    *
+ *          2004-01-22 Made source code look prettier                   *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -25,6 +25,8 @@
 
 #ifndef CTARGET_H
 #define CTARGET_H
+
+#define CTARGET_VERSION "0.6"
 
 // AIPS includes
 #include "cpipelineitem.h"
@@ -47,7 +49,8 @@ public:
 /* Structors */
   /// Constructor. 
   CTarget( ulong ulID, ushort usNoOfInputs = 1, const std::string &sClassName_ = "CTarget",
-		const std::string &sClassVersion_ = "0.3", const std::string &sDerivedFrom_ = "CPipelineItem" )
+		const std::string &sClassVersion_ = CTARGET_VERSION, 
+		const std::string &sDerivedFrom_ = "CPipelineItem" )
     throw();
   /// Destructor. 
   ~CTarget()

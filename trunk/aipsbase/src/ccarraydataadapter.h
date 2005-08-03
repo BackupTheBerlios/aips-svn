@@ -23,6 +23,8 @@
 #ifndef AIPSCCARRAYDATAADAPTER_H
 #define AIPSCCARRAYDATAADAPTER_H
 
+#define AIPSCCARRAYDATAADAPTER_VERSION "0.2"
+
 #include <aipsdatatraits.h>
 #include <cstructureddataadapter.h>
 

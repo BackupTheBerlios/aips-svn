@@ -5,7 +5,7 @@
  *                                                                      *
  * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
  *                                                                      *
- * Created: 20.01.04                                                    *
+ * Created: 2004-01-20                                                  *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -25,7 +25,8 @@
 template<typename valueType>
 CTypedData<valueType>::CTypedData( const ushort usDimension_, const size_t* extentArr_,
   const size_t dataDimensionSize_ ) throw() 
-	: CDataSet( usDimension_, extentArr_, dataDimensionSize_, "CTypedData", "0.3", "CDataSet" )
+	: CDataSet( usDimension_, extentArr_, dataDimensionSize_, "CTypedData", CTYPEDDATA_VERSION, 
+	"CDataSet" )
 {
 	// Compute array size and resize internal vector
   arraySize = 1;
@@ -45,7 +46,8 @@ CTypedData<valueType>::CTypedData( const ushort usDimension_, const size_t* exte
 template<typename valueType> 
 CTypedData<valueType>::CTypedData( const ushort usDimension_,
   const std::vector<size_t> extentVec_, const size_t dataDimensionSize_ ) throw()
-  : CDataSet( usDimension_, extentVec_, dataDimensionSize_, "CTypedData", "0.3", "CDataSet" )
+  : CDataSet( usDimension_, extentVec_, dataDimensionSize_, "CTypedData", CTYPEDDATA_VERSION,
+  "CDataSet" )
 {
 	// Compute array size and resize internal vector
   arraySize = 1;
@@ -64,7 +66,8 @@ CTypedData<valueType>::CTypedData( const ushort usDimension_,
  */
 template<typename valueType> 
 CTypedData<valueType>::CTypedData( const size_t extent_, const size_t dataDimensionSize_ ) throw()
-	: CDataSet( extent_, dataDimensionSize_, "CTypedData", "0.3", "CDataSet" )
+	: CDataSet( extent_, dataDimensionSize_, "CTypedData", CTYPEDDATA_VERSION,
+	"CDataSet" )
 {
 	arraySize = extent_;
 	arraySize *= dataDimensionSize;
@@ -79,7 +82,7 @@ CTypedData<valueType>::CTypedData( const size_t extent_, const size_t dataDimens
 template<typename valueType> 
 CTypedData<valueType>::CTypedData ( const CTypedData<valueType>& aDataSet ) throw()
   : CDataSet( aDataSet.usDimension, aDataSet.extentVec, aDataSet.dataDimensionSize, 
-		"CTypedData", "0.3", "CDataSet" )
+		"CTypedData", CTYPEDDATA_VERSION, "CDataSet" )
 {
   arraySize = aDataSet.arraySize;
   dataVec.resize( arraySize );
@@ -629,3 +632,28 @@ typename CTypedData<valueType>::iterator CTypedData<valueType>::moveTo( const us
 		+usW*extendVec[0]*extentVec[1]*extentVec[2]], this );
 }
 
+/*********************************
+ * CTypedData::TypedDataIterator *
+ *********************************/
+
+/**
+ * \param iterator iterator to move
+ * \param amount amount to move iterator by (gets added to iterator position)
+ */
+template<typename T, typename U>
+CTypedData<T>::TypedDataIterator<T,U> operator+( CTypedData<T>::TypedDataIterator<T,U> anIterator,
+	ptrdiff_t amount )
+{
+	return CTypedData<T>::iterator( &(*iterator) + amount, iterator.getParent() );
+}
+
+/**
+ * \param iterator iterator to move
+ * \param amount amount to move iterator by (gets subtracted from iterator position)
+ */
+template<typename T, typename U>
+CTypedData<T>::TypedDataIterator<T,U> operator-( CTypedData<T>::TypedDataIterator<T,U> anIterator, 
+	ptrdiff_t amount )
+{
+	return CTypedData<T>::iterator( &(*iterator) - amount, iterator.getParent() );
+}

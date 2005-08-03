@@ -21,7 +21,7 @@
  * \param theValue_ Initial value of scalar
  */
 template<typename valueType> CSingleValue<valueType>::CSingleValue( valueType theValue_ )
-  throw() : CDataSet( 0, NULL, 1, "CSingleValue", "0.2", "CDataSet" )
+  throw() : CDataSet( 0, NULL, 1, "CSingleValue", CSINGLEVALUE_VERSION, "CDataSet" )
 {
   valueVec.resize(1);
   valueVec[0] = theValue_;
@@ -32,7 +32,8 @@ template<typename valueType> CSingleValue<valueType>::CSingleValue( valueType th
  * \param dataDimensionSize Dimension of the vector
  */
 template<typename valueType> CSingleValue<valueType>::CSingleValue( valueType* valueArr_,
-  size_t dataDimensionSize_ ) throw() : CDataSet( 0, NULL, dataDimensionSize_, "CSingleValue","0.2","CDataSet" )
+  size_t dataDimensionSize_ ) throw() 
+  : CDataSet( 0, NULL, dataDimensionSize_, "CSingleValue", CSINGLEVALUE_VERSION, "CDataSet" )
 {
   valueVec.resize( dataDimensionSize );
   for ( size_t i = 0; i < dataDimensionSize; i++ )
@@ -44,7 +45,7 @@ template<typename valueType> CSingleValue<valueType>::CSingleValue( valueType* v
  */
 template<typename valueType> CSingleValue<valueType>::CSingleValue
   ( const CSingleValue& aSingleValue ) throw()
-  : CDataSet( 0, NULL, aSingleValue.dataDimensionSize, "CSingleValue","0.2","CDataSet" )  
+  : CDataSet( 0, NULL, aSingleValue.dataDimensionSize, "CSingleValue", CSINGLEVALUE_VERSION, "CDataSet" )  
 {
 FBEGIN;
   valueVec.resize( dataDimensionSize );

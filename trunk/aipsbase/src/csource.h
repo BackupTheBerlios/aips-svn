@@ -5,27 +5,27 @@
  *                                                                      *
  * Author: Hendrik Belitz                                               *
  *                                                                      *
- * Version: 0.6.1                                                       *
+ * Version: 0.11                                                        *
  * Status : Beta                                                        *
- * Created: 17.09.03                                                    *
- * Changed: 18.09.03 Added dump() method                                *
- *          22.09.03 All members now use string instead of QString for  *
- *                    parameters and return values                      *
- *          24.09.03 Added dialog window                                *
- *          30.09.03 Reorganized file structure, moved documentation    *
- *                   to csource.cpp                                     *
- *          08.10.03 Mirroring check boxes are now working              *
- *                   selectNewFile won't crash anymore if file dialog   *
- *                    is cancelled.                                     *
- *                   updateData won't load a file without a file name   *
- *                   Error windows are now working                      *
- *                   Corrected handling of illegal input files          *
- *          15.10.03 Adapted for the new CDataSet class                 *
- *          11.11.03 Moved inline members to cpp file.                  *
- *                   Added class to namespace aips                      *
- *          04.12.03 Made class abstract. Code moved to CFileSource     *
- *          22.01.04 Removed unneccessary code                          *
- *        2004-11-22 Removed setinfo. Updated constructor accordingly   *
+ * Created: 2003-09-17                                                  *
+ * Changed: 2003-09-18 Added dump() method                              *
+ *          2003-09-22 All members now use string instead of QString    *
+ *                      for parameters and return values                *
+ *          2003-09-24 Added dialog window                              *
+ *          2003-09-30 Reorganized file structure, moved documentation  *
+ *                     to csource.cpp                                   *
+ *          2003-10-08 Mirroring check boxes are now working            *
+ *                     selectNewFile won't crash anymore if file dialog *
+ *                      is cancelled.                                   *
+ *                     updateData won't load a file without a file name *
+ *                     Error windows are now working                    *
+ *                     Corrected handling of illegal input files        *
+ *          2003-10-15 Adapted for the new CDataSet class               *
+ *          2003-11-11 Moved inline members to cpp file.                *
+ *                     Added class to namespace aips                    *
+ *          2003-12-04 Made class abstract. Code moved to CFileSource   *
+ *          2004-01-22 Removed unneccessary code                        *
+ *          2004-11-22 Removed setinfo. Updated constructor accordingly *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -35,6 +35,8 @@
 
 #ifndef CSOURCE_H
 #define CSOURCE_H
+
+#define CSOURCE_VERSION "0.11"
 
 // AIPS includes
 #include "cpipelineitem.h"
@@ -56,8 +58,9 @@ private:
 public:
 /* Structors */
   /// Constructor.
-  CSource( ulong ulID, ushort usFanOut = 1, const std::string &sClassName_ = "CSource",
-		const std::string &sClassVersion_ = "0.6.1", const std::string &sDerivedFrom_ = "CPipelineItem" )
+  CSource( ulong ulID, ushort usNoOfOutputs = 1, const std::string &sClassName_ = "CSource",
+		const std::string &sClassVersion_ = CSOURCE_VERSION, 
+		const std::string &sDerivedFrom_ = "CPipelineItem" )
     throw();
   /// Destructor 
   virtual ~CSource() 

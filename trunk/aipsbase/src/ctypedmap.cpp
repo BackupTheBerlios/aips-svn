@@ -25,7 +25,7 @@ using namespace boost;
 
 /** Normally this constructor should be used */
 CTypedMap::CTypedMap() throw()
-  : CBase( "CTypedMap", "0.13", "CBase" )
+  : CBase( "CTypedMap", CTYPEDMAP_VERSION, "CBase" )
 {    
 }
 
@@ -33,7 +33,7 @@ CTypedMap::CTypedMap() throw()
  * \param aTypedMap typed map object to assign from
  */
 CTypedMap::CTypedMap( CTypedMap& aTypedMap ) throw()
-  : CBase( "CTypedMap", "0.13", "CBase" )
+  : CBase( "CTypedMap", CTYPEDMAP_VERSION, "CBase" )
 {
   valueMap = aTypedMap.valueMap;
 	keyVec = aTypedMap.keyVec;

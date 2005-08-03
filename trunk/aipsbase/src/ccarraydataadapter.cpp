@@ -24,15 +24,15 @@ using namespace aips;
  *************/
 
 CCArrayDataAdapter::CCArrayDataAdapter() throw()
-	: CStructuredDataAdapter( "CCArrayDataAdapter", "0.2", "CStructuredDataAdapter" ), 
-		externalShortDataPtr( NULL ),	externalDoubleDataPtr( NULL )
+	: CStructuredDataAdapter( "CCArrayDataAdapter", AIPSCCARRAYDATAADAPTER_VERSION, 
+		"CStructuredDataAdapter" ), externalShortDataPtr( NULL ),	externalDoubleDataPtr( NULL )
 {
-	internalDataPtr.reset();
+	internalDataSPtr.reset();
 }	
 	
 CCArrayDataAdapter::CCArrayDataAdapter( TDataSetPtr internalDataPtr_ ) throw()
-	: CStructuredDataAdapter( internalDataPtr_, "CCArrayDataAdapter", "0.2", "CStructuredDataAdapter" ),
-		externalShortDataPtr( NULL ),	externalDoubleDataPtr( NULL )
+	: CStructuredDataAdapter( internalDataPtr_, "CCArrayDataAdapter", AIPSCCARRAYDATAADAPTER_VERSION, 
+		"CStructuredDataAdapter" ),	externalShortDataPtr( NULL ),	externalDoubleDataPtr( NULL )
 {
 }
 	
@@ -117,7 +117,7 @@ void CCArrayDataAdapter::convertToExternal( short* shortData ) throw( NullExcept
 {
 	if ( !shortData )
 		throw( NullException( "Target image not allocated", CException::RECOVER, ERR_CALLERNULL ) );
-	if ( !internalDataPtr )
+	if ( !internalDataSPtr )
 		throw( NullException( "No internal data present", CException::RECOVER, ERR_REQUESTNULL ) );
 	actualConversion( shortData );
 }
@@ -127,7 +127,7 @@ void CCArrayDataAdapter::convertToExternal( double* doubleData ) throw( NullExce
 {
 	if ( !doubleData )
 		throw( NullException( "Target field not allocated", CException::RECOVER, ERR_CALLERNULL ) );
-	if ( !internalDataPtr )
+	if ( !internalDataSPtr )
 		throw( NullException( "No internal data present", CException::RECOVER, ERR_REQUESTNULL ) );	
 	actualConversion( doubleData );
 }
@@ -137,9 +137,9 @@ template<typename T>
 void CCArrayDataAdapter::actualConversion( T* dataPtr )
 {
 FBEGIN;
-	if ( checkType<TImage>( *internalDataPtr ) )
+	if ( checkType<TImage>( *internalDataSPtr ) )
 	{
-		TImagePtr imagePtr = static_pointer_cast<TImage>( internalDataPtr );
+		TImagePtr imagePtr = static_pointer_cast<TImage>( internalDataSPtr );
 		if ( imagePtr )
 		{
 			uint maxZ = 1;
@@ -158,9 +158,9 @@ FBEGIN;
 								= static_cast<T>( (*imagePtr)( x, y, z ) );
 		}
 	}
-	else if ( checkType<TField>( *internalDataPtr ) )
+	else if ( checkType<TField>( *internalDataSPtr ) )
 	{
-	  TFieldPtr fieldPtr = static_pointer_cast<TField>( internalDataPtr );
+	  TFieldPtr fieldPtr = static_pointer_cast<TField>( internalDataSPtr );
 		if ( fieldPtr )
 		{
 		 	uint maxZ = 1;		 	

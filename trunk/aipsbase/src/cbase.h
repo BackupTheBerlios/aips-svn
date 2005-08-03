@@ -35,6 +35,8 @@
 #ifndef CBASE_H
 #define CBASE_H
 
+#define CBASE_VERSION "0.13"
+
 // Include aipsbase_config.h (for USE_BLITZ or USE_STANDALONE, BENCHMARK and USE_FLOAT)
 #include "aipsbase_config.h"
 
@@ -61,7 +63,7 @@ private:
 public:
 /* Structors */
   /// Constructor
-  CBase( const std::string &sClassName_, const std::string &sClassVersion_ = "0.6",
+  CBase( const std::string &sClassName_, const std::string &sClassVersion_ = CBASE_VERSION,
     const std::string &sDerivedFrom_ = "CBase" ) throw();
   /// Destructor. Pure virtual to generate an abstract base class
   virtual ~CBase() 

@@ -32,7 +32,8 @@ using boost::shared_ptr;
  * \param sDerivedFrom_ parent class
  */
 CStructuredDataAdapter::CStructuredDataAdapter( const string &sClassName_, const string &sClassVersion_, 
-	const string &sDerivedFrom_ ) throw() : CDataAdapter( sClassName_, sClassVersion_, sDerivedFrom_ )
+	const string &sDerivedFrom_ ) throw() 
+	: CDataAdapter( sClassName_, sClassVersion_, sDerivedFrom_ )
 {
 }
    
@@ -42,9 +43,9 @@ CStructuredDataAdapter::CStructuredDataAdapter( const string &sClassName_, const
  * \param sClassVersion_ class version
  * \param sDerivedFrom_ parent class
  */
-CStructuredDataAdapter::CStructuredDataAdapter( TDataSetPtr internalDataPtr_,
-	const string &sClassName_, const string &sClassVersion_, const string &sDerivedFrom_ )
-  throw() : CDataAdapter( sClassName_, sClassVersion_, sDerivedFrom_ ), internalDataPtr ( internalDataPtr_ )
+CStructuredDataAdapter::CStructuredDataAdapter( TDataSetPtr internalDataSPtr_,
+	const string &sClassName_, const string &sClassVersion_, const string &sDerivedFrom_ ) throw() 
+  : CDataAdapter( sClassName_, sClassVersion_, sDerivedFrom_ ), internalDataSPtr ( internalDataSPtr_ )
 {
 }
 
@@ -55,9 +56,9 @@ CStructuredDataAdapter::~CStructuredDataAdapter() throw() {}
  *****************/
  
 /** \param internalDataPtr_ new dataset to use for conversions into external format */
-void CStructuredDataAdapter::setInternalData( TDataSetPtr internalDataPtr_ )
+void CStructuredDataAdapter::setInternalData( TDataSetPtr internalDataSPtr_ )
 {
-	internalDataPtr = internalDataPtr_;
+	internalDataSPtr = internalDataSPtr_;
 }
 
 void CStructuredDataAdapter::setYSwapping( bool bSwapYAxis_ ) 

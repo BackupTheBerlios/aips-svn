@@ -5,24 +5,25 @@
  *                                                                      *
  * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
  *                                                                      *
- * Version: 0.2                                                         *
+ * Version: 0.6                                                         *
  * Status : Beta                                                        *
- * Created: 25.11.03                                                    *
- * Changed: 27.11.03 Added class CSingleValue for zerodimensional       *
- *                   values like scalars and vectors                    *
- *                   Template methods are now seperated from            *
- *                   declarations                                       *
- *                   CDataSet is now derived from CBase                 *
- *          16.01.04 Corrected an error in CTypedData::operator=        *
- *                    This member also is no longer virtual             *
- *                   Moved CVector classes to aipsnumeric.h             *
- *          20.01.04 Virtual methods and structors are no longer inline *
- *                   Made the code simpler and look prettier            *
- *                   Deleted method convert() from CTypedData<>         *
- *                   File splitted up into the three files              *
- *                    cdataset.h csinglevalue.h and ctypeddata.h        *
- *          26.04.04 Added method swap()                                *
- *          28.04.04 Updated documentation                              *
+ * Created: 2003-11-25                                                  *
+ * Changed: 2003-11-27 Added class CSingleValue for zerodimensional     *
+ *                     values like scalars and vectors                  *
+ *                     Template methods are now seperated from          *
+ *                     declarations                                     *
+ *                     CDataSet is now derived from CBase               *
+ *          2004-01-16 Corrected an error in CTypedData::operator=      *
+ *                      This member also is no longer virtual           *
+ *                     Moved CVector classes to aipsnumeric.h           *
+ *          2004-01-20 Virtual methods and structors are no longer      *
+ *                      inline                                          *
+ *                     Made the code simpler and look prettier          *
+ *                     Deleted method convert() from CTypedData<>       *
+ *                     File splitted up into the three files            *
+ *                      cdataset.h csinglevalue.h and ctypeddata.h      *
+ *          2004-04-26 Added method swap()                              *
+ *          2004-04-28 Updated documentation                            *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -32,6 +33,8 @@
 
 #ifndef CSINGLEVALUE_H
 #define CSINGLEVALUE_H
+
+#define CSINGLEVALUE_VERSION "0.6"
 
 // AIPS includes
 #include "cdataset.h"

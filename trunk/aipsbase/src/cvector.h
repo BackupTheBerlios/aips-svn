@@ -26,6 +26,8 @@
 #ifndef CVECTOR_H
 #define CVECTOR_H
 
+#define CVECTOR_VERSION "0.4"
+
 namespace aips 
 {
 

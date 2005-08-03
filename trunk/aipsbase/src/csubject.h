@@ -7,7 +7,7 @@
  * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
  *                                                                      *
  * Version: 0.3                                                         *
- * Status:  Alpha                                                       *
+ * Status:  Beta                                                        *
  * Created: 2005-03-28                                                  *
  * Changed: 2005-03-30 Corrected some minor bugs.                       *
  *          2005-03-31 Added documentation                              *
@@ -17,8 +17,10 @@
  * the Free Software Foundation; either version 2 of the License, or    *
  * (at your option) any later version.                                  *
  ************************************************************************/
-#ifndef AIPSCSUBJECT_H
-#define AIPSCSUBJECT_H
+#ifndef CSUBJECT_H
+#define CSUBJECT_H
+
+#define CSUBJECT_VERSION "0.3"
 
 // Standard includes
 #include <iostream>
@@ -41,7 +43,8 @@ class CSubject : public CBase
 public:
 /* Structors */
 	/// Constructor
-  CSubject( const std::string& className_ = "CSubject",	const std::string& classVersion_ = "0.3",
+  CSubject( const std::string& className_ = "CSubject",	
+  	const std::string& classVersion_ = CSUBJECT_VERSION,
   	const std::string& derivedFrom_ = "CBase" ) throw();
   /// Copy constructor
 	CSubject( const CSubject& );
@@ -59,7 +62,7 @@ public:
 	void detachObserver( CObserver* const anObserverPtr )
 		throw( NullException );
 	/// Notifies all registered observers with the appropiate interest that a new event has occured in the subject
-	void notify( boost::shared_ptr<CEvent> anEvent )
+	void notify( boost::shared_ptr<CEvent> anEventSPtr )
 		throw( NullException );
 private:
 	/// A struct representing a tuple of an observer and an event type which it is interested in
@@ -76,6 +79,7 @@ private:
 	{
 		bool operator()( SObserverListEntry anEntry, CObserver* anObserverPtr ) const;
 	};
+	
 	std::list<SObserverListEntry> observerPtrList; ///< List of all attached observers
 };
 

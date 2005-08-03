@@ -43,6 +43,8 @@
 #ifndef CTYPEDMAP_H
 #define CTYPEDMAP_H
 
+#define CTYPEDMAP_VERSION "0.13"
+
 // Standard includes
 #include <string>  // std::string
 #include <vector>  // std::vector
@@ -56,8 +58,8 @@
 #include "aipsmacros.h"
 #include "cbase.h"
 #ifdef USE_XMLPP
-#include <libxml++.h>
-#include <parsers/textreader.h>
+#include <libxml++/libxml++.h>
+#include <libxml++/parsers/textreader.h>
 #endif
 
 namespace aips {
