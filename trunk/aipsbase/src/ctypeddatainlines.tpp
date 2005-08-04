@@ -644,7 +644,7 @@ template<typename T, typename U>
 CTypedData<T>::TypedDataIterator<T,U> operator+( CTypedData<T>::TypedDataIterator<T,U> anIterator,
 	ptrdiff_t amount )
 {
-	return CTypedData<T>::TypedDataIterator<T,U>( &(*anIterator) + amount, iterator.getParent() );
+	return CTypedData<T>::TypedDataIterator<T,U>( &(*anIterator) + amount, ianIterator.getParent() );
 }
 
 /**
@@ -655,5 +655,5 @@ template<typename T, typename U>
 CTypedData<T>::TypedDataIterator<T,U> operator-( CTypedData<T>::TypedDataIterator<T,U> anIterator, 
 	ptrdiff_t amount )
 {
-	return CTypedData<T>::TypedDataIterator<T,U>( &(*anIterator) - amount, iterator.getParent() );
+	return CTypedData<T>::TypedDataIterator<T,U>( &(*anIterator) - amount, anIterator.getParent() );
 }
