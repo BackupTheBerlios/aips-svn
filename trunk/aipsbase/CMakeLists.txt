@@ -1,42 +1,42 @@
 PROJECT(aipsbase)
+
+# Include some usefil CMake modules 
 INCLUDE(${CMAKE_ROOT}/Modules/CMakeDetermineCXXCompiler.cmake)
 INCLUDE(${CMAKE_ROOT}/Modules/CMakeDetermineSystem.cmake)
 INCLUDE(${CMAKE_ROOT}/Modules/CheckTypeSize.cmake)
 INCLUDE(${CMAKE_ROOT}/Modules/CMakeSystemSpecificInformation.cmake)
 INCLUDE(${CMAKE_ROOT}/Modules/CMakeTestCXXCompiler.cmake)
 INCLUDE(${CMAKE_ROOT}/Modules/TestForSTDNamespace.cmake)
+# Include FindZLIB, since we need this for the GZStream class
 INCLUDE(${CMAKE_ROOT}/Modules/FindZLIB.cmake)
 
+# Always give as much information as possible when compiling
 ADD_DEFINITIONS(-Wall)
 SET(CMAKE_VERBOSE_MAKEFILE ON)
 
-OPTION(BENCHMARK
-  "Allow timers for benchmarking"
-  OFF)
+# Some basic options for the user
 
-OPTION(BUILD_SHARED_LIBS 
-	"Build with shared libraries." 
-	ON)
+OPTION(BENCHMARK "Allow timers for benchmarking" OFF)
 
-OPTION(BUILD_DOC
-	"Build documentation with Doxygen"
-	OFF)
+OPTION(USE_DOUBLE "Wether to use double or float as the standard floating point type (double should be preferred)" ON )
 
-SET( DEBUG_LEVEL 0 CACHE STRING "Level of debugging output (This is either 0 (no output) or 1,2,3)")
+OPTION(USE_BLITZ "Use the blitz++ library for numerical computations (recommended)" ON )
 
-OPTION(USE_DOUBLE
-  "Wether to use double or float as the standard floating point type"
-  ON)
+OPTION(USE_XMLPP "Support loading of XML files (strongly recommended)" ON )
 
-OPTION(USE_BLITZ
-  "Use the blitz++ library for numerical computations"
-  ON)
+SET( DEBUG_LEVEL 0 CACHE STRING "Level of debugging output (This is either 0 (no output) or 1,2,3)" )
 
-OPTION(USE_XMLPP
-  "Support loading of XML files (strongly recommended)"
-  ON)
+OPTION(BUILD_SHARED_LIBS "Build with shared libraries" ON )
 
-#checking for mandatory libs
+OPTION(BUILD_DOC "Build documentation with Doxygen (takes very long!)"	OFF )
+
+# --- Checking for mandatory libs ---
+
+# We need to link with libz.so and set the appropiate include path
+LINK_LIBRARIES( ${ZLIB_LIBRARIES} )
+INCLUDE_DIRECTORIES( ${ZLIB_INCLUDE_DIR} )
+
+#BEGIN Checking for components of the boost libarries
 FIND_PATH(BOOST_LEXICAL_CAST boost/lexical_cast.hpp
   /usr/include
   /usr/local/include
@@ -60,11 +60,10 @@ FIND_PATH(BOOST_TIMER boost/timer.hpp
 IF( NOT BOOST_TIMER )
  MESSAGE( SEND_ERROR "boost::timer is mandatory for installation" )
 ENDIF( NOT BOOST_TIMER )
-#endof boost
+#END Checking for components of the boost libarries
+INCLUDE_DIRECTORIES( ${BOOST_LEXICAL_CAST} )
 
-LINK_LIBRARIES( ${ZLIB_LIBRARIES} )
-INCLUDE_DIRECTORIES( ${BOOST_LEXICAL_CAST} ${ZLIB_INCLUDE_DIR} )
-#Look for blitz++ library and includes
+#BEGIN Look for blitz++ library and includes
 IF(USE_BLITZ)
 	FIND_LIBRARY(BLITZ_LIBRARY
 		NAMES blitz
@@ -84,9 +83,9 @@ IF(USE_BLITZ)
 ELSE(USE_BLITZ)
   SET( USE_STANDALONE ON )
 ENDIF(USE_BLITZ)
-#endof blitz++ search
+#END Look for blitz++ library and includes
 
-#Look for libxml++ library and includes
+#BEGIN Look for the libxml++ library, its dependencies and includes
 IF(USE_XMLPP)
 	FIND_LIBRARY(XMLPP_LIBRARY
 		NAMES xml++-2.6 xml++
@@ -146,21 +145,21 @@ IF(USE_XMLPP)
 	INCLUDE_DIRECTORIES( ${XMLPP_INCLUDES} ${XML2_INCLUDES} ${GLIBMM_INCLUDES}
 		${GLIBMM_CONFIG_INCLUDES} ${GLIB_INCLUDES} ${GLIB_CONFIG_INCLUDES} )
 ENDIF(USE_XMLPP)
-#endof xml++ search
+#END Look for the libxml++ library, its dependencies and includes
 
 INCLUDE_DIRECTORIES( ${PROJECT_BINARY_DIR} ${PROJECT_SOURCE_DIR}/src )
-CONFIGURE_FILE( ${PROJECT_SOURCE_DIR}/aipsbase_config.h.in 
-	${PROJECT_BINARY_DIR}/aipsbase_config.h)
-SUBDIRS( src )
 
 INSTALL_FILES(/include/aipsbase .h aipsbase_config.h)
 
+CONFIGURE_FILE( ${PROJECT_SOURCE_DIR}/aipsbase_config.h.in 
+	${PROJECT_BINARY_DIR}/aipsbase_config.h)
+
 CONFIGURE_FILE( ${aipsbase_SOURCE_DIR}/aipsbaseConfig.cmake.in 
 	${aipsbase_BINARY_DIR}/aipsbaseConfig.cmake)
+
 CONFIGURE_FILE( ${aipsbase_SOURCE_DIR}/Doxyfile.in 
 	${aipsbase_SOURCE_DIR}/Doxyfile)
 	
-
 INCLUDE(CMakeExportBuildSettings)
 
 CMAKE_EXPORT_BUILD_SETTINGS(
@@ -183,3 +182,5 @@ INCLUDE( ${CMAKE_ROOT}/Modules/FindDoxygen.cmake)
     ADD_CUSTOM_TARGET(api-docs ALL ${DOXYGEN}
 	${aipsbase_SOURCE_DIR}/Doxyfile )
 ENDIF(BUILD_DOC)
+
+SUBDIRS( src )
