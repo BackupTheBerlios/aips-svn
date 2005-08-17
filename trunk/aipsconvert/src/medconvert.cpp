@@ -49,13 +49,15 @@ int main(int argc, char *argv[])
 	{
 		cout << "aipsconvert - conversion between different image formats" << endl;
 		cout << "command syntax:" << endl;
-		cout << "aipsconvert [-s] inputfile.ext outputfile.ext" << endl;
+		cout << "aipsconvert [-s -c%] inputfile.ext outputfile.ext" << endl;
 		cout << " -s swap data endianess" << endl;		
+		cout << " -c% combine % slices into a single volume file" << endl;
 		return EXIT_SUCCESS;
 	}
   
 //	uint force = 0;
 	bool bSwapEndianess = false;
+	bool bCombine = true;
 	bool ipset = false;
 	string input, output;
 	for( int i = 1; i < argc; ++i )
@@ -65,6 +67,19 @@ int main(int argc, char *argv[])
 			if ( argv[i][1] == 's' )
 			{
 				bSwapEndianess = true;
+			}			
+			else
+			if ( argv[i][1] == 'c' )
+			{
+				bSwapEndianess = false;
+				bCombine = true;
+				int count = 0;
+				int number[4];
+				int slices = 0;
+				char tmps[10];
+				strcpy( tmps, &(argv[i][2]) );
+				slices = atoi( tmps );
+				cerr << "Slices " << slices << endl;
 			}			
 			else 
 			{
