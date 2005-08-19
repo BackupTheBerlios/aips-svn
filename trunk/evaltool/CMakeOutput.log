@@ -1,0 +1,86 @@
+The system is: Linux - 2.4.27-2-686-smp - i686
+Determining if the C compiler is GNU succeeded with the following output:
+# 1 "/usr/local/share/CMake/Modules/CMakeTestGNU.c"
+# 1 "<eingebaut>"
+# 1 "<Kommandozeile>"
+# 1 "/usr/local/share/CMake/Modules/CMakeTestGNU.c"
+
+void THIS_IS_GNU();
+
+Determining if the C++ compiler is GNU succeeded with the following output:
+# 1 "/usr/local/share/CMake/Modules/CMakeTestGNU.c"
+# 1 "<eingebaut>"
+# 1 "<Kommandozeile>"
+# 1 "/usr/local/share/CMake/Modules/CMakeTestGNU.c"
+
+void THIS_IS_GNU();
+
+Determining if the C compiler works passed with the following output:
+/usr/local/bin/cmake -H. -B. --check-build-system Makefile.cmake 0
+/usr/bin/make -f Makefile2 cmTryCompileExec
+make[1]: Entering directory `/home/belitz/work/trunk/evaltool/CMakeTmp'
+/usr/local/bin/cmake -H. -B. --check-build-system Makefile.cmake 0
+/usr/bin/make -f Makefile2 cmTryCompileExec.dir/all
+make[2]: Entering directory `/home/belitz/work/trunk/evaltool/CMakeTmp'
+/usr/bin/make -f cmTryCompileExec.dir/build.make cmTryCompileExec.dir/depend
+make[3]: Entering directory `/home/belitz/work/trunk/evaltool/CMakeTmp'
+Scanning C dependencies of cmTryCompileExec.dir/testCCompiler.o
+/usr/local/bin/cmake -E cmake_depends  "KDevelop3" /home/belitz/work/trunk/evaltool/CMakeTmp /home/belitz/work/trunk/evaltool/CMakeTmp C cmTryCompileExec.dir/testCCompiler.o testCCompiler.c
+make[3]: Leaving directory `/home/belitz/work/trunk/evaltool/CMakeTmp'
+/usr/bin/make -f cmTryCompileExec.dir/build.make cmTryCompileExec.dir/build
+make[3]: Entering directory `/home/belitz/work/trunk/evaltool/CMakeTmp'
+Building C object cmTryCompileExec.dir/testCCompiler.o
+gcc -o cmTryCompileExec.dir/testCCompiler.o            -c /home/belitz/work/trunk/evaltool/CMakeTmp/testCCompiler.c
+Linking C executable cmTryCompileExec
+gcc           -fPIC "cmTryCompileExec.dir/testCCompiler.o"   -o cmTryCompileExec -rdynamic 
+make[3]: Leaving directory `/home/belitz/work/trunk/evaltool/CMakeTmp'
+make[2]: Leaving directory `/home/belitz/work/trunk/evaltool/CMakeTmp'
+make[1]: Leaving directory `/home/belitz/work/trunk/evaltool/CMakeTmp'
+
+
+Determining size of void * passed with the following output:
+/usr/local/bin/cmake -H. -B. --check-build-system Makefile.cmake 0
+/usr/bin/make -f Makefile2 cmTryCompileExec
+make[1]: Entering directory `/home/belitz/work/trunk/evaltool/CMakeTmp'
+/usr/local/bin/cmake -H. -B. --check-build-system Makefile.cmake 0
+/usr/bin/make -f Makefile2 cmTryCompileExec.dir/all
+make[2]: Entering directory `/home/belitz/work/trunk/evaltool/CMakeTmp'
+/usr/bin/make -f cmTryCompileExec.dir/build.make cmTryCompileExec.dir/depend
+make[3]: Entering directory `/home/belitz/work/trunk/evaltool/CMakeTmp'
+Scanning C dependencies of cmTryCompileExec.dir/CheckTypeSize.o
+/usr/local/bin/cmake -E cmake_depends  "KDevelop3" /home/belitz/work/trunk/evaltool/CMakeTmp /home/belitz/work/trunk/evaltool/CMakeTmp C cmTryCompileExec.dir/CheckTypeSize.o CheckTypeSize.c
+make[3]: Leaving directory `/home/belitz/work/trunk/evaltool/CMakeTmp'
+/usr/bin/make -f cmTryCompileExec.dir/build.make cmTryCompileExec.dir/build
+make[3]: Entering directory `/home/belitz/work/trunk/evaltool/CMakeTmp'
+Building C object cmTryCompileExec.dir/CheckTypeSize.o
+gcc -o cmTryCompileExec.dir/CheckTypeSize.o         -DCHECK_TYPE_SIZE_TYPE="void *"   -c /home/belitz/work/trunk/evaltool/CMakeTmp/CheckTypeSize.c
+Linking C executable cmTryCompileExec
+gcc          -DCHECK_TYPE_SIZE_TYPE="void *" -fPIC "cmTryCompileExec.dir/CheckTypeSize.o"   -o cmTryCompileExec -rdynamic 
+make[3]: Leaving directory `/home/belitz/work/trunk/evaltool/CMakeTmp'
+make[2]: Leaving directory `/home/belitz/work/trunk/evaltool/CMakeTmp'
+make[1]: Leaving directory `/home/belitz/work/trunk/evaltool/CMakeTmp'
+
+
+Determining if the CXX compiler works passed with the following output:
+/usr/local/bin/cmake -H. -B. --check-build-system Makefile.cmake 0
+/usr/bin/make -f Makefile2 cmTryCompileExec
+make[1]: Entering directory `/home/belitz/work/trunk/evaltool/CMakeTmp'
+/usr/local/bin/cmake -H. -B. --check-build-system Makefile.cmake 0
+/usr/bin/make -f Makefile2 cmTryCompileExec.dir/all
+make[2]: Entering directory `/home/belitz/work/trunk/evaltool/CMakeTmp'
+/usr/bin/make -f cmTryCompileExec.dir/build.make cmTryCompileExec.dir/depend
+make[3]: Entering directory `/home/belitz/work/trunk/evaltool/CMakeTmp'
+Scanning CXX dependencies of cmTryCompileExec.dir/testCXXCompiler.o
+/usr/local/bin/cmake -E cmake_depends  "KDevelop3" /home/belitz/work/trunk/evaltool/CMakeTmp /home/belitz/work/trunk/evaltool/CMakeTmp CXX cmTryCompileExec.dir/testCXXCompiler.o testCXXCompiler.cxx
+make[3]: Leaving directory `/home/belitz/work/trunk/evaltool/CMakeTmp'
+/usr/bin/make -f cmTryCompileExec.dir/build.make cmTryCompileExec.dir/build
+make[3]: Entering directory `/home/belitz/work/trunk/evaltool/CMakeTmp'
+Building CXX object cmTryCompileExec.dir/testCXXCompiler.o
+c++ -o cmTryCompileExec.dir/testCXXCompiler.o           -c /home/belitz/work/trunk/evaltool/CMakeTmp/testCXXCompiler.cxx
+Linking CXX executable cmTryCompileExec
+c++           -fPIC "cmTryCompileExec.dir/testCXXCompiler.o"   -o cmTryCompileExec -rdynamic 
+make[3]: Leaving directory `/home/belitz/work/trunk/evaltool/CMakeTmp'
+make[2]: Leaving directory `/home/belitz/work/trunk/evaltool/CMakeTmp'
+make[1]: Leaving directory `/home/belitz/work/trunk/evaltool/CMakeTmp'
+
+

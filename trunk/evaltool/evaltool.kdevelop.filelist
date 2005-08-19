@@ -1,0 +1,6 @@
+# KDevelop Custom Project File List
+CMakeCCompiler.cmake
+CMakeCXXCompiler.cmake
+CMakeLists.txt
+CMakeSystem.cmake
+main.cpp

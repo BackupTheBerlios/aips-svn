@@ -21,6 +21,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
+#include <queue>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/signal.hpp>
@@ -45,20 +46,28 @@ using namespace boost;
 
 int main(int argc, char *argv[])
 {
-	if ( argc < 3 || argc > 4 )
+	if ( argc < 3 || argc > 7 )
 	{
 		cout << "aipsconvert - conversion between different image formats" << endl;
 		cout << "command syntax:" << endl;
 		cout << "aipsconvert [-s -c%] inputfile.ext outputfile.ext" << endl;
 		cout << " -s swap data endianess" << endl;		
-		cout << " -c% combine % slices into a single volume file" << endl;
+		cout << " -c%1 %2 combine slices %1 to %2 into a single volume file" << endl;
+		cout << " -f%1 %2 fill mask starting at position %1;%2 in a single volume file" << endl;
+		cout << " -g output should be an slice-by-slice contour" << endl;
 		return EXIT_SUCCESS;
 	}
   
 //	uint force = 0;
 	bool bSwapEndianess = false;
-	bool bCombine = true;
+	bool bCombine = false;
 	bool ipset = false;
+	bool bFill = false;
+	bool bContour = false;
+	uint slices = 0;
+	uint sliceend = 0;
+	uint fillx = 0;
+	uint filly = 0;
 	string input, output;
 	for( int i = 1; i < argc; ++i )
 	{
@@ -73,14 +82,29 @@ int main(int argc, char *argv[])
 			{
 				bSwapEndianess = false;
 				bCombine = true;
-				int count = 0;
-				int number[4];
-				int slices = 0;
 				char tmps[10];
 				strcpy( tmps, &(argv[i][2]) );
 				slices = atoi( tmps );
 				cerr << "Slices " << slices << endl;
+				sliceend = atoi( argv[i+1] );
+				i+=1;
+				cerr << "to " << sliceend << endl;
 			}			
+			else if ( argv[i][1] == 'f' )
+			{
+				bFill = true;
+				char tmps[10];
+				strcpy( tmps, &(argv[i][2]) );
+				fillx = atoi( tmps );
+				cerr << "Fill " << slices << endl;
+				filly = atoi( argv[i+1] );
+				i+=1;
+				cerr << "and " << sliceend << endl;
+			}	
+			else if ( argv[i][1] == 'g' )
+			{
+				bContour = true;
+			}		
 			else 
 			{
 				cout << "Invalid option: " << argv[i] << endl;
@@ -94,6 +118,10 @@ int main(int argc, char *argv[])
 		else
 			output = argv[i];
 	}
+	
+	string extension = input.substr( input.find_last_of('.')+1 );
+	string filename = input.substr( 0, input.find_last_of('.') );
+	cerr << "Ext: " << extension << " file: " << filename << endl;
 	
 	shared_ptr<CAnalyzeHandler> h1 ( new CAnalyzeHandler );	
 	shared_ptr<CSimpleDatHandler> h2 ( new CSimpleDatHandler );	
@@ -115,6 +143,8 @@ int main(int argc, char *argv[])
  	getFileServer().addHandler( h8 );
 	getFileServer().addHandler( h9 );
 
+	if (!bCombine )
+	{
 	bool bBigEndian = false;
 	try
 	{	
@@ -140,7 +170,27 @@ int main(int argc, char *argv[])
 		}
 		if ( bSwapEndianess )
 			file.second->setBool( "FileEndianess", !bBigEndian );
-		file.second->setString("ForceDataType", "Int16");
+		//file.second->setString("ForceDataType", "Int16");
+		if ( bContour )
+		{
+			TImagePtr img = static_pointer_cast<TImage>(file.first);
+			TImagePtr out ( new TImage(*img) );
+			*out = 0;
+			for( uint z = 0; z < img->getExtent(2); ++z )
+				for( uint y = 0; y < img->getExtent(1); ++y )
+					for( uint x = 0; x < img->getExtent(0); ++x )
+					{
+						if ( (*img)(x,y,z) == 0 ) 
+							continue;
+						uint cnt = 0;
+						if ( (*img)(x-1,y,z) == 1 ) cnt++;
+						if ( (*img)(x+1,y,z) == 1 ) cnt++;
+						if ( (*img)(x,y-1,z) == 1 ) cnt++;
+						if ( (*img)(x,y+1,z) == 1 ) cnt++;
+						if ( cnt < 4 ) (*out)(img->getExtent(0)-1-x,img->getExtent(1)-1-y,z)=1;
+					}
+			file.first = out;
+		}
 		getFileServer().saveDataSet( output, file );
 	}
 	catch ( std::exception& e )
@@ -148,38 +198,90 @@ int main(int argc, char *argv[])
 		cerr << e.what() << endl;
 		return EXIT_FAILURE;
 	}
-
-/*	shared_ptr<CAnalyzeHandler> h1 ( new CAnalyzeHandler );	
-	shared_ptr<CImageHandler> h6 ( new CImageHandler);
-	getFileServer().addHandler( h1 );
-	getFileServer().addHandler( h6 );
-	
-	size_t dims[] = { 256, 256, 50 };
-	TImagePtr output( new TImage(3, dims) );
-	(*output) = 0;
-	uint z = 12;
-	while( z < 26 )
-	{
-		string filename = "mr289_two_sl" + lexical_cast<string>( z ) + ".bmp";
-		TImagePtr slice;
-		try
-		{
-			slice = dynamic_pointer_cast<TImage>( getFileServer().loadDataSet( filename ).first );
-		}
-		catch( std::exception &e )
-		{
-			cerr << e.what() << endl;
-		}
-		cerr << "Slice " << z << endl;
-		for( uint y = 0; y < dims[1]; ++y )
-			for( uint x = 0; x < dims[0]; ++x )
-				if ( (*slice)(x,dims[1]-1-y) > 0)
-					(*output)(x,y,z) = 0;
-				else
-					(*output)(x,y,z) = 1;
-		++z;
 	}
-	TDataFile f; f.first = output;
-	getFileServer().saveDataSet( "mr289_brain.hdr", f );*/
+	else // Combine incoming images
+	{
+		// We need a volume that can take all images
+		
+		uint uiNoOfSlices = sliceend - slices + 1;
+		cerr << sliceend << " " << slices << " " << uiNoOfSlices << endl;
+		// Load the first slice
+		string sActualFilename = filename + lexical_cast<string>(slices) + "." + extension;
+		TImagePtr slice = dynamic_pointer_cast<TImage>( getFileServer().loadDataSet( sActualFilename ).first );
+		vector<size_t> dims = slice->getExtents();
+		dims[2] = uiNoOfSlices;
+		cerr << "Volume dimensions " << dims[0] << " " << dims[1] << " " << dims[2] << endl;
+		TImagePtr volume ( new TImage( 3, dims ) );
+		uint z = slices;
+		while( z <= sliceend )
+		{
+			cerr << "Reading slice " << z << " from " << sActualFilename << endl;
+			cerr << "Image is " << slice->getExtent(0) << " x " << slice->getExtent(1) << endl;
+			// We need to flip each slice before copying
+			for( uint y = 0; y < dims[1]; ++y )
+				for( uint x = 0; x < dims[0]; ++x )
+					(*volume)( x, y, z-slices ) = (*slice)(dims[0]-(x+1),y);//dims[1]-(y+1));
+			++z;
+			if ( z <= sliceend )
+			{
+				sActualFilename = filename + lexical_cast<string>(z) + "." + extension;
+				slice.reset();
+				slice = dynamic_pointer_cast<TImage>( getFileServer().loadDataSet( sActualFilename ).first );
+			}
+		}
+		if ( bFill )
+		{
+			TImagePtr outputPtr ( new TImage( *volume ) );
+			*outputPtr = 0;
+			(*outputPtr)(fillx,filly,1)=1;
+			TImagePtr inputPtr = volume;
+			for( uint z = 0; z < volume->getExtent(2); ++z )
+			{
+				cerr << z << endl;
+				std::queue<TPoint2D> work;
+				TPoint2D p( fillx, filly );
+				work.push( p );
+				ulong ulRegionThreshold = 0;
+				while( !work.empty() )
+			  {
+			  	TPoint2D p = work.front(); work.pop();
+					if ( ( p[0] > 0 )
+					  && ( (*outputPtr)( p[0]-1, p[1], z ) == 0 )
+						&& ( static_cast<ulong>(abs((*inputPtr)( p[0]-1, p[1], z)-(*inputPtr)( p[0], p[1], z)))<=ulRegionThreshold ) )
+						{
+							work.push( TPoint2D( p[0]-1, p[1] ) ); (*outputPtr)( p[0]-1, p[1], z ) = 1;
+						}
+					if ( ( p[0] < static_cast<long>(inputPtr->getExtent(0)-1) )
+					  && ( (*outputPtr)( p[0]+1, p[1], z ) == 0 )
+						&& ( static_cast<ulong>(abs((*inputPtr)( p[0]+1, p[1], z)-(*inputPtr)( p[0], p[1], z)))<=ulRegionThreshold ) )
+						{
+							work.push( TPoint2D( p[0]+1, p[1] ) ); (*outputPtr)( p[0]+1, p[1], z ) = 1;
+						}
+					if ( ( p[1] > 0 )
+				  	&& ( (*outputPtr)( p[0], p[1]-1, z ) == 0 )
+						&& ( static_cast<ulong>(abs((*inputPtr)( p[0], p[1]-1, z)-(*inputPtr)( p[0], p[1], z)))<=ulRegionThreshold ) )
+						{
+							work.push( TPoint2D( p[0], p[1]-1 ) ); (*outputPtr)( p[0], p[1]-1, z ) = 1;
+						}
+					if ( ( p[1] < static_cast<long>(inputPtr->getExtent(1)-1) )
+					  && ( (*outputPtr)( p[0], p[1]+1, z ) == 0 )
+						&& ( static_cast<ulong>(abs((*inputPtr)( p[0], p[1]+1, z)-(*inputPtr)( p[0], p[1], z)))<=ulRegionThreshold ) )
+						{
+							work.push( TPoint2D( p[0], p[1]+1 ) ); (*outputPtr)( p[0], p[1]+1, z ) = 1;
+						}
+				}
+			}
+	 		TImage::iterator vit = volume->begin();
+ 			TImage::iterator vot = outputPtr->begin();
+ 			while( vit != volume->end() )
+	 		{
+ 				if ( (*vot) > 0 ) (*vit) = 1;
+ 				++vit; ++vot;
+	 		}
+ 		}
+		TDataFile f; f.first = volume;
+		getFileServer().saveDataSet( output, f );
+	}
+	
   return EXIT_SUCCESS;
 }
