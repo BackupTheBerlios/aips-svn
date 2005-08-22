@@ -20,39 +20,39 @@ RM = /usr/local/bin/cmake -E remove -f
 CMAKE_EDIT_COMMAND = /usr/local/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = .
+CMAKE_SOURCE_DIR = ../../../../../../home/belitz/work/trunk/evaltool
 
 # The top-level build directory on which CMake was run.
 CMAKE_BINARY_DIR = .
 
 # Include make rules for object files.
-include src/evaltool.dir/evaltool.o.build.make
-include src/evaltool.dir/cdicecoefficient.o.build.make
 include src/evaltool.dir/chausdorffdistance.o.build.make
 include src/evaltool.dir/cmeandistance.o.build.make
+include src/evaltool.dir/cdicecoefficient.o.build.make
+include src/evaltool.dir/evaltool.o.build.make
 include src/evaltool.dir/cregionsize.o.build.make
 
-src/evaltool.dir/depend: src/evaltool.dir/evaltool.o.depend
-src/evaltool.dir/depend: src/evaltool.dir/cdicecoefficient.o.depend
 src/evaltool.dir/depend: src/evaltool.dir/chausdorffdistance.o.depend
 src/evaltool.dir/depend: src/evaltool.dir/cmeandistance.o.depend
+src/evaltool.dir/depend: src/evaltool.dir/cdicecoefficient.o.depend
+src/evaltool.dir/depend: src/evaltool.dir/evaltool.o.depend
 src/evaltool.dir/depend: src/evaltool.dir/cregionsize.o.depend
 
 # Object files for target evaltool
 evaltool_OBJECTS = \
-"src/evaltool.dir/evaltool.o" \
-"src/evaltool.dir/cdicecoefficient.o" \
 "src/evaltool.dir/chausdorffdistance.o" \
 "src/evaltool.dir/cmeandistance.o" \
+"src/evaltool.dir/cdicecoefficient.o" \
+"src/evaltool.dir/evaltool.o" \
 "src/evaltool.dir/cregionsize.o"
 
 # External object files for target evaltool
 evaltool_EXTERNAL_OBJECTS =
 
-src/evaltool: src/evaltool.dir/evaltool.o
-src/evaltool: src/evaltool.dir/cdicecoefficient.o
 src/evaltool: src/evaltool.dir/chausdorffdistance.o
 src/evaltool: src/evaltool.dir/cmeandistance.o
+src/evaltool: src/evaltool.dir/cdicecoefficient.o
+src/evaltool: src/evaltool.dir/evaltool.o
 src/evaltool: src/evaltool.dir/cregionsize.o
 src/evaltool: /usr/lib/libz.so
 src/evaltool: /usr/lib/libblitz.a
@@ -66,10 +66,10 @@ src/evaltool: src/evaltool.dir/build.make
 # Convenience name for target.
 src/evaltool.dir/build: src/evaltool
 
-src/evaltool.dir/requires: src/evaltool.dir/evaltool.o.requires
-src/evaltool.dir/requires: src/evaltool.dir/cdicecoefficient.o.requires
 src/evaltool.dir/requires: src/evaltool.dir/chausdorffdistance.o.requires
 src/evaltool.dir/requires: src/evaltool.dir/cmeandistance.o.requires
+src/evaltool.dir/requires: src/evaltool.dir/cdicecoefficient.o.requires
+src/evaltool.dir/requires: src/evaltool.dir/evaltool.o.requires
 src/evaltool.dir/requires: src/evaltool.dir/cregionsize.o.requires
 
 src/evaltool.dir/clean:

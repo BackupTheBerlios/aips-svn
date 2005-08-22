@@ -24,7 +24,6 @@
 #include <queue>
 
 #include <boost/shared_ptr.hpp>
-#include <boost/signal.hpp>
 
 #include <cdatafileserver.h>
 #include <canalyzehandler.h>
@@ -52,7 +51,7 @@ int main(int argc, char *argv[])
 		cout << "command syntax:" << endl;
 		cout << "aipsconvert [-s -c%] inputfile.ext outputfile.ext" << endl;
 		cout << " -s swap data endianess" << endl;		
-		cout << " -c%1 %2 combine slices %1 to %2 into a single volume file" << endl;
+		cout << " -c%1 %2 %3 combine slices %1 to %2 into a single volume file containing %3 slices" << endl;
 		cout << " -f%1 %2 fill mask starting at position %1;%2 in a single volume file" << endl;
 		cout << " -g output should be an slice-by-slice contour" << endl;
 		return EXIT_SUCCESS;
@@ -66,6 +65,7 @@ int main(int argc, char *argv[])
 	bool bContour = false;
 	uint slices = 0;
 	uint sliceend = 0;
+	uint sliceMax = 0;
 	uint fillx = 0;
 	uint filly = 0;
 	string input, output;
@@ -89,6 +89,9 @@ int main(int argc, char *argv[])
 				sliceend = atoi( argv[i+1] );
 				i+=1;
 				cerr << "to " << sliceend << endl;
+				sliceMax = atoi( argv[i+1] );
+				cerr << "Slices in result" << sliceMax << endl;
+				i+=1;
 			}			
 			else if ( argv[i][1] == 'f' )
 			{
@@ -209,7 +212,7 @@ int main(int argc, char *argv[])
 		string sActualFilename = filename + lexical_cast<string>(slices) + "." + extension;
 		TImagePtr slice = dynamic_pointer_cast<TImage>( getFileServer().loadDataSet( sActualFilename ).first );
 		vector<size_t> dims = slice->getExtents();
-		dims[2] = uiNoOfSlices;
+		dims[2] = sliceMax;
 		cerr << "Volume dimensions " << dims[0] << " " << dims[1] << " " << dims[2] << endl;
 		TImagePtr volume ( new TImage( 3, dims ) );
 		uint z = slices;
@@ -220,7 +223,7 @@ int main(int argc, char *argv[])
 			// We need to flip each slice before copying
 			for( uint y = 0; y < dims[1]; ++y )
 				for( uint x = 0; x < dims[0]; ++x )
-					(*volume)( x, y, z-slices ) = (*slice)(dims[0]-(x+1),y);//dims[1]-(y+1));
+					(*volume)( x, y, z/*-slices*/ ) = (*slice)(dims[0]-(x+1),y);//dims[1]-(y+1));
 			++z;
 			if ( z <= sliceend )
 			{

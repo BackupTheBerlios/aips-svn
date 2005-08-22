@@ -1,20 +1,20 @@
 <?xml version = '1.0'?>
 <kdevelop>
   <general>
+  <projectmanagement>KDevCustomProject</projectmanagement>
+  <projectdirectory>/home/belitz/work/trunk/evaltool</projectdirectory>
+  <absoluteprojectpath>true</absoluteprojectpath>
     <author/>
     <email/>
     <version>$VERSION$</version>
-    <projectmanagement>KDevCustomProject</projectmanagement>
     <primarylanguage>C++</primarylanguage>
     <ignoreparts/>
-    <projectdirectory>/home/belitz/work/trunk/evaltool</projectdirectory>
-    <absoluteprojectpath>true</absoluteprojectpath>
     <secondaryLanguages>
       <language>C</language>
     </secondaryLanguages>
   </general>
   <kdevcustomproject>
-    <filelistdirectory>/home/belitz/work/trunk/evaltool</filelistdirectory>
+    <filelistdirectory>/hd2/home/belitz/work/trunk/evaltool</filelistdirectory>
     <run>
       <mainprogram>/home/belitz/work/trunk/evaltool/evaltool</mainprogram>
       <directoryradio>custom</directoryradio>
@@ -26,7 +26,7 @@
     </run>
     <build>
       <buildtool>make</buildtool>
-      <builddir>/home/belitz/work/trunk/evaltool</builddir>
+      <builddir>/hd2/home/belitz/work/trunk/evaltool</builddir>
     </build>
     <make>
       <abortonerror>false</abortonerror>

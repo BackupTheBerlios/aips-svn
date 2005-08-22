@@ -1,4 +1,9 @@
 # Dependencies for src/evaltool.dir/evaltool.o
+src/evaltool.dir/evaltool.o: ../../../../../../home/belitz/work/trunk/evaltool/src/cdicecoefficient.h
+src/evaltool.dir/evaltool.o: ../../../../../../home/belitz/work/trunk/evaltool/src/chausdorffdistance.h
+src/evaltool.dir/evaltool.o: ../../../../../../home/belitz/work/trunk/evaltool/src/cmeandistance.h
+src/evaltool.dir/evaltool.o: ../../../../../../home/belitz/work/trunk/evaltool/src/cregionsize.h
+src/evaltool.dir/evaltool.o: ../../../../../../home/belitz/work/trunk/evaltool/src/evaltool.cpp
 src/evaltool.dir/evaltool.o: /home/belitz/include/aipsbase/aipsbase_config.h
 src/evaltool.dir/evaltool.o: /home/belitz/include/aipsbase/aipsdatatraits.h
 src/evaltool.dir/evaltool.o: /home/belitz/include/aipsbase/aipserror.h
@@ -75,9 +80,4 @@ src/evaltool.dir/evaltool.o: /usr/include/libxml++-2.6/libxml++/parsers/saxparse
 src/evaltool.dir/evaltool.o: /usr/include/libxml++-2.6/libxml++/parsers/textreader.h
 src/evaltool.dir/evaltool.o: /usr/lib/glib-2.0/include/glibconfig.h
 src/evaltool.dir/evaltool.o: /usr/lib/glibmm-2.4/include/glibmmconfig.h
-src/evaltool.dir/evaltool.o: src/cdicecoefficient.h
-src/evaltool.dir/evaltool.o: src/chausdorffdistance.h
-src/evaltool.dir/evaltool.o: src/cmeandistance.h
-src/evaltool.dir/evaltool.o: src/cregionsize.h
-src/evaltool.dir/evaltool.o: src/evaltool.cpp
 

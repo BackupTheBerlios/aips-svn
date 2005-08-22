@@ -20,7 +20,7 @@ RM = /usr/local/bin/cmake -E remove -f
 CMAKE_EDIT_COMMAND = /usr/local/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = ..
+CMAKE_SOURCE_DIR = ../../../../../../../home/belitz/work/trunk/evaltool
 
 # The top-level build directory on which CMake was run.
 CMAKE_BINARY_DIR = ..
@@ -47,38 +47,38 @@ edit_cache:
 
 # The main all target
 all:
-	cd /home/belitz/work/trunk/evaltool && $(MAKE) -f Makefile2 src/directorystart
+	cd /hd2/home/belitz/work/trunk/evaltool && $(MAKE) -f Makefile2 src/directorystart
 
 # The main clean target
 clean:
-	cd /home/belitz/work/trunk/evaltool && $(MAKE) -f Makefile2 src/clean
+	cd /hd2/home/belitz/work/trunk/evaltool && $(MAKE) -f Makefile2 src/clean
 
 # Convenience name for target.
 src/evaltool.dir/rule:
-	cd /home/belitz/work/trunk/evaltool && $(MAKE) -f Makefile2 src/evaltool.dir/rule
+	cd /hd2/home/belitz/work/trunk/evaltool && $(MAKE) -f Makefile2 src/evaltool.dir/rule
 
 # Convenience name for target.
 evaltool: src/evaltool.dir/rule
 
 # target for object file
 cdicecoefficient.o:
-	cd /home/belitz/work/trunk/evaltool && $(MAKE) -f src/evaltool.dir/build.make src/evaltool.dir/cdicecoefficient.o
+	cd /hd2/home/belitz/work/trunk/evaltool && $(MAKE) -f src/evaltool.dir/build.make src/evaltool.dir/cdicecoefficient.o
 
 # target for object file
 chausdorffdistance.o:
-	cd /home/belitz/work/trunk/evaltool && $(MAKE) -f src/evaltool.dir/build.make src/evaltool.dir/chausdorffdistance.o
+	cd /hd2/home/belitz/work/trunk/evaltool && $(MAKE) -f src/evaltool.dir/build.make src/evaltool.dir/chausdorffdistance.o
 
 # target for object file
 cmeandistance.o:
-	cd /home/belitz/work/trunk/evaltool && $(MAKE) -f src/evaltool.dir/build.make src/evaltool.dir/cmeandistance.o
+	cd /hd2/home/belitz/work/trunk/evaltool && $(MAKE) -f src/evaltool.dir/build.make src/evaltool.dir/cmeandistance.o
 
 # target for object file
 cregionsize.o:
-	cd /home/belitz/work/trunk/evaltool && $(MAKE) -f src/evaltool.dir/build.make src/evaltool.dir/cregionsize.o
+	cd /hd2/home/belitz/work/trunk/evaltool && $(MAKE) -f src/evaltool.dir/build.make src/evaltool.dir/cregionsize.o
 
 # target for object file
 evaltool.o:
-	cd /home/belitz/work/trunk/evaltool && $(MAKE) -f src/evaltool.dir/build.make src/evaltool.dir/evaltool.o
+	cd /hd2/home/belitz/work/trunk/evaltool && $(MAKE) -f src/evaltool.dir/build.make src/evaltool.dir/evaltool.o
 
 # Help Target
 help::

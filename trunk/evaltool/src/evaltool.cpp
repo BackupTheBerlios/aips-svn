@@ -25,7 +25,6 @@
 #include <fstream>
 
 #include <boost/shared_ptr.hpp>
-#include <boost/signal.hpp>
 
 #include <cdatafileserver.h>
 #include <canalyzehandler.h>

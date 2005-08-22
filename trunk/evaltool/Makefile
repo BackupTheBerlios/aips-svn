@@ -23,7 +23,7 @@ RM = /usr/local/bin/cmake -E remove -f
 CMAKE_EDIT_COMMAND = /usr/local/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = .
+CMAKE_SOURCE_DIR = ../../../../../../home/belitz/work/trunk/evaltool
 
 # The top-level build directory on which CMake was run.
 CMAKE_BINARY_DIR = .

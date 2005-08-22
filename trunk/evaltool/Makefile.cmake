@@ -7,6 +7,9 @@ SET(CMAKE_DEPENDS_GENERATOR "KDevelop3")
 # The top level Makefile was generated from the following files:
 SET(CMAKE_MAKEFILE_DEPENDS
   "CMakeCache.txt"
+  "CMakeCCompiler.cmake"
+  "CMakeCXXCompiler.cmake"
+  "CMakeSystem.cmake"
   "/home/belitz/lib/aipsbase/aipsbaseBuildSettings.cmake"
   "/home/belitz/lib/aipsbase/aipsbaseConfig.cmake"
   "/home/belitz/lib/aipsbase/aipsbaseLibraryDepends.cmake"
@@ -15,11 +18,8 @@ SET(CMAKE_MAKEFILE_DEPENDS
   "/home/belitz/lib/aipsfilehandlers/aipsfilehandlersConfig.cmake"
   "/home/belitz/lib/aipsfilehandlers/aipsfilehandlersLibraryDepends.cmake"
   "/home/belitz/lib/aipsfilehandlers/aipsfilehandlersUse.cmake"
-  "CMakeCCompiler.cmake"
-  "CMakeCXXCompiler.cmake"
-  "CMakeLists.txt"
-  "CMakeSystem.cmake"
-  "src/CMakeLists.txt"
+  "../../../../../../home/belitz/work/trunk/evaltool/CMakeLists.txt"
+  "../../../../../../home/belitz/work/trunk/evaltool/src/CMakeLists.txt"
   "/usr/local/share/CMake/Modules/CMakeCCompiler.cmake.in"
   "/usr/local/share/CMake/Modules/CMakeCInformation.cmake"
   "/usr/local/share/CMake/Modules/CMakeCXXCompiler.cmake.in"

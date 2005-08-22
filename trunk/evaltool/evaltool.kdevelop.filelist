@@ -1,6 +1,10 @@
-# KDevelop Custom Project File List
 CMakeCCompiler.cmake
 CMakeCXXCompiler.cmake
 CMakeLists.txt
 CMakeSystem.cmake
-main.cpp
+src/CMakeLists.txt
+src/cdicecoefficient.cpp
+src/chausdorffdistance.cpp
+src/cmeandistance.cpp
+src/cregionsize.cpp
+src/evaltool.cpp
