@@ -50,7 +50,7 @@ FBEGIN;
 	if ( getInput()->getType() != typeid( dataTraits<TImage>::dataType ) )
 		return;
   TImagePtr inputPtr = static_pointer_cast<TImage>( getInput() );
-  if ( !checkInput(inputPtr, 2, 2, 1, 1 ) )
+  if ( !checkInput<TImage>(inputPtr, 2, 2, 1, 1 ) )
 	{
     return;
 	}

@@ -23,9 +23,9 @@ using namespace boost;
 
 template<unsigned int index> void CSwapEndianess::call() throw()
 {	
-	swapDataFunctor<TypeAt<datasetTL, index>::Result, 
-		dataTraits<TypeAt<datasetTL, index>::Result>::isNumeric> functor;
-	if ( !functor() )
+	swapDataFunctor<typename TypeAt<datasetTL, index>::Result, 
+		dataTraits<typename TypeAt<datasetTL, index>::Result>::isNumeric > functor;
+	if ( !functor(this) )
 		call<index-1>();
 }
 
@@ -33,7 +33,7 @@ template<> void CSwapEndianess::call<0>() throw()
 {
 	typedef TypeAt<datasetTL, 0>::Result TDataType;
 	swapDataFunctor<TDataType, dataTraits<TDataType>::isNumeric> functor;
-	if ( !functor() )
+	if ( !functor(this) )
 		alog << LWARN << "Dataset type not supported by module" << endl;
 }
  
@@ -77,20 +77,20 @@ CPipelineItem* CSwapEndianess::newInstance( ulong ulID ) const throw()
 }
 
 template<typename SetType> 
-bool swapDataFunctor<SetType, true>::operator()() throw()
+bool CSwapEndianess::swapDataFunctor<SetType, true>::operator()(CSwapEndianess* parent) throw()
 {	
-	if ( checkType<SetType>( getInput() ) )
-		return false
+	if ( checkType<SetType>( parent->getInput() ) )
+		return false;
 
 	// Define local data type 
 	typedef typename dataTraits<SetType>::dataType TVoxel;
-	shared_ptr<SetType> inputSPtr = static_pointer_cast<SetType>( getInput() );
+	shared_ptr<SetType> inputSPtr = static_pointer_cast<SetType>( parent->getInput() );
 	
-	bModuleReady = true;
-  deleteOldOutput();
+	parent->bModuleReady = true;
+  parent->deleteOldOutput();
 	
-	shared_ptr<SetType> outputSPtr ( new SetType( imagePtr->getDimension(), imagePtr->getExtents(),
-		imagePtr->getDataDimension() ) );
+	shared_ptr<SetType> outputSPtr ( new SetType( inputSPtr->getDimension(), inputSPtr->getExtents(),
+		inputSPtr->getDataDimension() ) );
 	(*outputSPtr) = (*inputSPtr);
 		
 	TVoxel maximum = inputSPtr->getMaximum();
@@ -100,7 +100,7 @@ bool swapDataFunctor<SetType, true>::operator()() throw()
 	swapEndianess( minimum );
 	outputSPtr->setMinimum( minimum );
 		
-	typename T::iterator outputIt = outputSPtr->begin();
+	typename SetType::iterator outputIt = outputSPtr->begin();
 	PROG_MAX( outputSPtr->getArraySize() );
 	ulong cnt = 0;
 	while( outputIt != outputSPtr->end() )
@@ -112,12 +112,12 @@ bool swapDataFunctor<SetType, true>::operator()() throw()
 		++outputIt;
 	}
 	PROG_RESET();
-	setOutput( outputPtr );
+	parent->setOutput( outputSPtr );
 	return true;
 }
 
 template<typename SetType> 
-bool swapDataFunctor<SetType, true>::operator()() throw()
+bool CSwapEndianess::swapDataFunctor<SetType, false>::operator()(CSwapEndianess* parent) throw()
 {
 	alog << LWARN << "Unable to swap non-nnumerical data" << endl;
 	return false;

@@ -79,12 +79,12 @@ CPipelineItem* CPMAD1Filter::newInstance( ulong ulID ) const throw()
 
 template<typename T> void CPMAD1Filter::filter() throw()
 {
-	if ( getInput()->getType() != typeid( dataTraits<T>::dataType ) )
+	if ( getInput()->getType() != typeid( typename dataTraits<T>::dataType ) )
 		return;
   shared_ptr<T> inputPtr = static_pointer_cast<T>( getInput() );
 
-  if ( !checkInput( inputPtr, 2, 3 ) )
-    return;
+/*  if ( !checkInput( inputPtr, 2, 3 ) )
+    return;*/
 	bModuleReady = true;
   deleteOldOutput();
 

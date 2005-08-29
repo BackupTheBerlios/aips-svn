@@ -56,11 +56,11 @@ void CMaximum::apply() throw()
 BENCHSTART;
 	bModuleReady = false;
   TImagePtr inputPtr1 = static_pointer_cast<TImage>( getInput( 0 ) );
-  if ( !checkInput( inputPtr1, 2, 3 ) )
-    return;
+	if ( !checkInput<TImage>( inputPtr1, 2, 3 ) )
+  	return;
 
   TImagePtr inputPtr2 = static_pointer_cast<TImage>( getInput( 1 ) );
-  if ( !checkInput( inputPtr2, 2, 3 ) )
+  if ( !checkInput<TImage>( inputPtr2, 2, 3 ) )
     return;
 		
 	bModuleReady = true;

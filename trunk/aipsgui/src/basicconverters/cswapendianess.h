@@ -62,16 +62,16 @@ private:
 	struct swapDataFunctor 
 	{};
 	/// Specialization of swapData for numerical types
-	template<typename SetType> 
+	template<typename SetType>
 	struct swapDataFunctor<SetType, true> 
 	{
-		bool operator()() throw();
+		bool operator()(CSwapEndianess* parent) throw();
 	};
 	/// Specialization of swapData for non-numerical types
-	template<typename SetType> 
+	template<typename SetType>
 	struct swapDataFunctor<SetType, false>
 	{
-		bool operator()() throw();
+		bool operator()(CSwapEndianess* parent) throw();
 	};	
 	/// Internal method template for the actual filter process
 	template<unsigned int index> void call() throw();

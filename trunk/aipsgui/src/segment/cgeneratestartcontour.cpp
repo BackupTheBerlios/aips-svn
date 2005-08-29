@@ -70,7 +70,7 @@ BENCHSTART;
 	TImagePtr classPtr = static_pointer_cast<TImage>( getInput(1) );
 	TImagePtr foerstPtr = static_pointer_cast<TImage>( getInput(2) );
 	shared_ptr<TInteger> cLine = static_pointer_cast<TInteger>( getInput(3) );
-  if ( !cLine || !checkInput( inputPtr, 2, 2 ) || !checkInput( classPtr, 2, 2 ) || !checkInput( foerstPtr, 2, 2 ))
+  if ( !cLine || !checkInput<TImage>( inputPtr, 2, 2 ) || !checkInput<TImage>( classPtr, 2, 2 ) || !checkInput<TImage>( foerstPtr, 2, 2 ))
     return;
 	
 	bModuleReady = true;

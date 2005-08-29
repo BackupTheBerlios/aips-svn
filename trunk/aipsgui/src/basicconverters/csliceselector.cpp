@@ -131,13 +131,13 @@ void CSliceSelector::updateOrientation ( int iOrientation )
 /** \param volumePtr smart pointer to dataset that should be sliced */
 template<typename T> bool CSliceSelector::slice() throw()
 {
-	if ( !getInput() || getInput()->getType() != typeid( dataTraits<T>::dataType ) )
+	if ( !getInput() || getInput()->getType() != typeid( typename dataTraits<T>::dataType ) )
 	{
 		return false;
 	}
 	
 	shared_ptr<T> inputVolumePtr = static_pointer_cast<T>( getInput() );
-  if ( !checkInput( inputVolumePtr, 2, 3 ) )
+  if ( !checkInput<T>( inputVolumePtr, 2, 3 ) )
     return false;
 		
 	typedef typename dataTraits<T>::dataType TVoxel;

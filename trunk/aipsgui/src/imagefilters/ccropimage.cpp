@@ -46,7 +46,7 @@ void CCropImage::apply() throw()
 BENCHSTART;
 	bModuleReady = false;
   TImagePtr inputPtr = static_pointer_cast<TImage>( getInput() );
-  if ( !checkInput( inputPtr ) )
+  if ( !checkInput<TImage>( inputPtr ) )
     return;
 	
 	bModuleReady = true;

@@ -49,7 +49,7 @@ void CExtractRegion::apply() throw()
 FBEGIN;
 	bModuleReady = false;
   TImagePtr inputPtr = static_pointer_cast<TImage>( getInput() );
-  if ( !checkInput( inputPtr , 0, 3 )  )
+  if ( !checkInput<TImage>( inputPtr , 0, 3 )  )
     return;
 	
 	bModuleReady = true;

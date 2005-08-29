@@ -70,10 +70,10 @@ CPipelineItem* CReduceVector::newInstance( ulong ulID ) const throw()
 
 template<typename T> void CReduceVector::reduce() throw()
 {
-	if ( !getInput() || getInput()->getType() != typeid( dataTraits<T>::dataType ) )
+	if ( !getInput() || getInput()->getType() != typeid( typename dataTraits<T>::dataType ) )
 		return;
 	shared_ptr<T> inputPtr = static_pointer_cast<T>( getInput() );
-  if ( !checkInput( inputPtr ) )
+  if ( !checkInput<T>( inputPtr ) )
    	return;
 	
 	bModuleReady = true;

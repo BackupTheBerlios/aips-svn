@@ -93,18 +93,18 @@ bool CChannelCombiner::combine<T, true>::operator() ( CChannelCombiner* parent )
 	if ( !parent->getInput() )
 		return false;
 	const std::type_info& inputType = parent->getInput( 0 )->getType();
-	if ( inputType != typeid( dataTraits<T>::dataType ) ||
-		parent->getInput( 1 )->getType() != typeid( dataTraits<T>::dataType ) )
+	if ( inputType != typeid( typename dataTraits<T>::dataType ) ||
+		parent->getInput( 1 )->getType() != typeid( typename dataTraits<T>::dataType ) )
 	{
 		alog << LWARN << "Illegal input type" << endl;
 		return false;
 	}
 cerr << "A" << endl;	
 	shared_ptr<T> inputPtr1 = static_pointer_cast<T>( parent->getInput( 0 ) );
-	if ( !parent->checkInput( inputPtr1, 2, 3 ) )
+	if ( !parent->checkInput<T>( inputPtr1, 2, 3 ) )
 		return false;
   shared_ptr<T> inputPtr2 = static_pointer_cast<T>( parent->getInput( 1 ) );
-	if ( !parent->checkInput( inputPtr2 ) || inputPtr2->getDimension() != inputPtr1->getDimension() )
+	if ( !parent->checkInput<T>( inputPtr2 ) || inputPtr2->getDimension() != inputPtr1->getDimension() )
 		return false;
 	if ( inputPtr2->getExtents() != inputPtr1->getExtents() )
 	{
@@ -189,18 +189,18 @@ cerr << "F" << endl;
 template<typename T> bool CChannelCombiner::combine<T,false>::operator() ( CChannelCombiner* parent ) throw()
 {
 	const std::type_info& inputType = parent->getInput( 0 )->getType();
-	if ( inputType != typeid( dataTraits<T>::dataType ) ||
-		parent->getInput( 1 )->getType() != typeid( dataTraits<T>::dataType ) )
+	if ( inputType != typeid( typename dataTraits<T>::dataType ) ||
+		parent->getInput( 1 )->getType() != typeid( typename dataTraits<T>::dataType ) )
 	{
 		alog << LWARN << "Illegal input type" << endl;
 		return false;
 	}
 
 	shared_ptr<T> inputPtr1 = static_pointer_cast<T>( parent->getInput( 0 ) );
-	if ( !parent->checkInput( inputPtr1, 2, 3 ) )
+	if ( !parent->checkInput<T>( inputPtr1, 2, 3 ) )
 		return false;
   shared_ptr<T> inputPtr2 = static_pointer_cast<T>( parent->getInput( 1 ) );
-	if ( !parent->checkInput( inputPtr2 ) || inputPtr2->getDimension() != inputPtr1->getDimension() )
+	if ( !parent->checkInput<T>( inputPtr2 ) || inputPtr2->getDimension() != inputPtr1->getDimension() )
 		return false;
 	if ( inputPtr2->getExtents() != inputPtr1->getExtents() )
 	{

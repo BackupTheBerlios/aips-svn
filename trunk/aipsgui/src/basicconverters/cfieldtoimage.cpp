@@ -58,7 +58,7 @@ void CFieldToImage::apply() throw()
 BENCHSTART;
 	bModuleReady = false;
 	shared_ptr<TField> inputPtr = dynamic_pointer_cast<TField>( getInput() );
-  if ( !checkInput( inputPtr ) )
+  if ( !checkInput<TField>( inputPtr ) )
    	return;
 	bModuleReady = true;
   deleteOldOutput();

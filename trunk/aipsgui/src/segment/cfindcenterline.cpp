@@ -58,7 +58,7 @@ BENCHSTART;
 	bModuleReady = false;
   TImagePtr inputPtr = static_pointer_cast<TImage>( getInput() );
 	
-  if ( !checkInput( inputPtr, 2, 2 ) )
+  if ( !checkInput<TImage>( inputPtr, 2, 2 ) )
     return;
 	
 	bModuleReady = true;

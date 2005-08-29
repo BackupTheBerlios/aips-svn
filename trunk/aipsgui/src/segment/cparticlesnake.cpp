@@ -176,11 +176,11 @@ FBEGIN;
   TField2DPtr inputForcePtr = static_pointer_cast<TField2D>( getInput() );
 	TImagePtr inputImagePtr = static_pointer_cast<TImage>( getInput(1) );
 	TField2DPtr inputPolyPtr = static_pointer_cast<TField2D>( getInput(2) );
-  if ( !checkInput( inputForcePtr ) || !checkInput( inputImagePtr ) || !checkInput( inputPolyPtr )) 
+  if ( !checkInput<TField2D>( inputForcePtr ) || !checkInput<TImage>( inputImagePtr ) || !checkInput<TField2D>( inputPolyPtr )) 
 		return; 
   
 	maskPtr = static_pointer_cast<TImage>(getInput(3));
-  if ( !checkInput( maskPtr ) ) 
+  if ( !checkInput<TImage>( maskPtr ) ) 
 	{ 
 		alog << LINFO << "No mask image given. Substituting global mask" << endl; 
 		maskPtr.reset( new TImage( inputImagePtr->getDimension(), inputImagePtr->getExtents() ) );

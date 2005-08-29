@@ -61,7 +61,7 @@ BENCHSTART;
 	if ( !getInput() || getInput()->getType() != typeid( dataTraits<TImage>::dataType ) )
 		return;
 	shared_ptr<TImage> inputPtr = static_pointer_cast<TImage>( getInput() );
-  if ( !checkInput( inputPtr ) )
+  if ( !checkInput<TImage>( inputPtr ) )
    	return;
 	bModuleReady = true;
   deleteOldOutput();

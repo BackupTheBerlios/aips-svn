@@ -49,7 +49,7 @@ FBEGIN;
 cerr << "Begin CRegionGrowing" << endl;
 	bModuleReady = false;
   TImagePtr inputPtr = static_pointer_cast<TImage>( getInput() );
-  if ( !checkInput(inputPtr, 2, 3, 1, 1 ) )
+  if ( !checkInput<TImage>(inputPtr, 2, 3, 1, 1 ) )
 	{
     return;
 	}
