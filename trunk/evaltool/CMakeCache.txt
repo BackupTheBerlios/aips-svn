@@ -1,5 +1,5 @@
 # This is the CMakeCache file.
-# For build in directory: /hd2/home/belitz/work/trunk/evaltool
+# For build in directory: /home/belitz/work/trunk/evaltool
 # You can edit this file to change values found and used by cmake.
 # If you do not want to change any of the values, simply exit the editor.
 # If you do want to change a value, simply edit, save, and exit the editor.
@@ -151,7 +151,7 @@ aipsbase_DIR:PATH=/home/belitz/lib/aipsbase
 aipsfilehandlers_DIR:PATH=/home/belitz/lib/aipsfilehandlers
 
 //Value Computed by CMake
-evaltool_BINARY_DIR:STATIC=/hd2/home/belitz/work/trunk/evaltool
+evaltool_BINARY_DIR:STATIC=/home/belitz/work/trunk/evaltool
 
 //Value Computed by CMake
 evaltool_SOURCE_DIR:STATIC=/home/belitz/work/trunk/evaltool
@@ -170,7 +170,7 @@ CMAKE_BUILD_TOOL:INTERNAL=/usr/bin/make
 //Modified flag for variable: CMAKE_BUILD_TYPE
 CMAKE_BUILD_TYPE-MODIFIED:INTERNAL=1
 //This is the directory where this CMakeCahe.txt was created
-CMAKE_CACHEFILE_DIR:INTERNAL=/hd2/home/belitz/work/trunk/evaltool
+CMAKE_CACHEFILE_DIR:INTERNAL=/home/belitz/work/trunk/evaltool
 //Major version of cmake used to create the current loaded cache
 //
 CMAKE_CACHE_MAJOR_VERSION:INTERNAL=2
@@ -286,5 +286,5 @@ DEBUG_LEVEL-MODIFIED:INTERNAL=1
 //Result of TRY_COMPILE
 HAVE_CMAKE_SIZEOF_VOID_P:INTERNAL=TRUE
 //Path to an executable
-evaltool_CMAKE_PATH:INTERNAL=/hd2/home/belitz/work/trunk/evaltool/src
+evaltool_CMAKE_PATH:INTERNAL=/home/belitz/work/trunk/evaltool/src
 

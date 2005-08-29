@@ -223,7 +223,7 @@ int main(int argc, char *argv[])
 			// We need to flip each slice before copying
 			for( uint y = 0; y < dims[1]; ++y )
 				for( uint x = 0; x < dims[0]; ++x )
-					(*volume)( x, y, z/*-slices*/ ) = (*slice)(dims[0]-(x+1),y);//dims[1]-(y+1));
+					(*volume)( x, y, z-1/*-slices*/ ) = (*slice)(x,y);//dims[1]-(y+1));
 			++z;
 			if ( z <= sliceend )
 			{

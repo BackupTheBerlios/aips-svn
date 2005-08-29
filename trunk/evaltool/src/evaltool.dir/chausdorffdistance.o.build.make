@@ -3,14 +3,14 @@
 
 # Rule file for object file evaltool.dir/chausdorffdistance.o.
 
-src/evaltool.dir/chausdorffdistance.o.depend: ../../../../../../home/belitz/work/trunk/evaltool/src/chausdorffdistance.cpp
+src/evaltool.dir/chausdorffdistance.o.depend: src/chausdorffdistance.cpp
 	@echo "Scanning CXX dependencies of src/evaltool.dir/chausdorffdistance.o"
-	$(CMAKE_COMMAND) -E cmake_depends  "KDevelop3" /hd2/home/belitz/work/trunk/evaltool /hd2/home/belitz/work/trunk/evaltool/src CXX src/evaltool.dir/chausdorffdistance.o ../../../../../../home/belitz/work/trunk/evaltool/src/chausdorffdistance.cpp
+	$(CMAKE_COMMAND) -E cmake_depends  "KDevelop3" /home/belitz/work/trunk/evaltool /home/belitz/work/trunk/evaltool/src CXX src/evaltool.dir/chausdorffdistance.o src/chausdorffdistance.cpp
 
 # Include any dependencies generated for this rule.
 include src/evaltool.dir/chausdorffdistance.o.build.depend.make
 
-src/evaltool.dir/chausdorffdistance.o: ../../../../../../home/belitz/work/trunk/evaltool/src/chausdorffdistance.cpp
+src/evaltool.dir/chausdorffdistance.o: src/chausdorffdistance.cpp
 src/evaltool.dir/chausdorffdistance.o: src/evaltool.dir/chausdorffdistance.o.build.make
 	@echo "Building CXX object src/evaltool.dir/chausdorffdistance.o"
 	c++ -o src/evaltool.dir/chausdorffdistance.o -DDL3 -funroll-loops -fmove-all-movables -fprefetch-loop-arrays -mcpu=pentium4 -march=pentium4 -mfpmath=sse -O3 -I/home/belitz/include/aipsbase -I/usr/include/blitz -I/usr/include/libxml++-2.6 -I\ /usr/include/libxml2/libxml -I/usr/include/glibmm-2.4 -I/usr/lib/glibmm-2.4/include -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/home/belitz/include/aipsfilehandlers   -Wall -c /home/belitz/work/trunk/evaltool/src/chausdorffdistance.cpp

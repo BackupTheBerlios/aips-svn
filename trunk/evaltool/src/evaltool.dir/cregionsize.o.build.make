@@ -3,14 +3,14 @@
 
 # Rule file for object file evaltool.dir/cregionsize.o.
 
-src/evaltool.dir/cregionsize.o.depend: ../../../../../../home/belitz/work/trunk/evaltool/src/cregionsize.cpp
+src/evaltool.dir/cregionsize.o.depend: src/cregionsize.cpp
 	@echo "Scanning CXX dependencies of src/evaltool.dir/cregionsize.o"
-	$(CMAKE_COMMAND) -E cmake_depends  "KDevelop3" /hd2/home/belitz/work/trunk/evaltool /hd2/home/belitz/work/trunk/evaltool/src CXX src/evaltool.dir/cregionsize.o ../../../../../../home/belitz/work/trunk/evaltool/src/cregionsize.cpp
+	$(CMAKE_COMMAND) -E cmake_depends  "KDevelop3" /home/belitz/work/trunk/evaltool /home/belitz/work/trunk/evaltool/src CXX src/evaltool.dir/cregionsize.o src/cregionsize.cpp
 
 # Include any dependencies generated for this rule.
 include src/evaltool.dir/cregionsize.o.build.depend.make
 
-src/evaltool.dir/cregionsize.o: ../../../../../../home/belitz/work/trunk/evaltool/src/cregionsize.cpp
+src/evaltool.dir/cregionsize.o: src/cregionsize.cpp
 src/evaltool.dir/cregionsize.o: src/evaltool.dir/cregionsize.o.build.make
 	@echo "Building CXX object src/evaltool.dir/cregionsize.o"
 	c++ -o src/evaltool.dir/cregionsize.o -DDL3 -funroll-loops -fmove-all-movables -fprefetch-loop-arrays -mcpu=pentium4 -march=pentium4 -mfpmath=sse -O3 -I/home/belitz/include/aipsbase -I/usr/include/blitz -I/usr/include/libxml++-2.6 -I\ /usr/include/libxml2/libxml -I/usr/include/glibmm-2.4 -I/usr/lib/glibmm-2.4/include -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/home/belitz/include/aipsfilehandlers   -Wall -c /home/belitz/work/trunk/evaltool/src/cregionsize.cpp

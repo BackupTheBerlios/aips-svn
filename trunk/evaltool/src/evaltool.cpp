@@ -147,7 +147,8 @@ int main(int argc, char *argv[])
 		exit(-1);
 	}
 	ofstream op( output.c_str() );
-	op << "Slice;MeanDistance;HausdorffDistance;DiceCoefficient;Region1Size;Region2Size" << endl;
+	/*op << "Slice;MeanDistance;HausdorffDistance;DiceCoefficient;Region1Size;Region2Size" << endl;*/
+	op << output << endl;
 	CMeanDistance m(0);
 	CHausdorffDistance h(0);
 	CRegionSize r(0);
@@ -158,6 +159,8 @@ int main(int argc, char *argv[])
 	for( uint z = 0; z < image1->getExtent(2); ++z )
 	{
 		TPoint2D p;
+		bool yes = false;
+		bool yes2 = false;
 		// Get local slice and define contour center
 		for( uint y = 0; y < image1->getExtent(1); ++y )
 			for( uint x = 0; x < image1->getExtent(0); ++x )
@@ -165,15 +168,20 @@ int main(int argc, char *argv[])
 				(*slice1)(x,y) = (*image1)(x,y,z);				
 				if( (*slice1)(x,y) ) 
 				{
+					yes = true;
 					p[0]=x; p[1]=y;	work.push(p);
 				}
 				(*slice2)(x,y) = (*image2)(x,y,z);
 				if( (*slice2)(x,y) ) 
 				{
+					yes2 = true;
 					p[0]=x; p[1]=y;	work.push(p);
 				}
 			}
 		// Calculate contour center;
+		//
+		if (yes && yes2)
+		{
 		double xx = 0.0; 
 		double yy = 0.0;
 		double den = work.size();
@@ -237,6 +245,16 @@ int main(int argc, char *argv[])
 		// Output results
 		op << z << ";" << mean << ";" << hd << ";" << dice << ";" << reg1 << ";" << reg2 << endl;
 		cerr << z << ";" << mean << ";" << hd << ";" << dice << ";" << reg1 << ";" << reg2 << endl;
+		}
+		else if ( yes || yes2 )
+		{
+			cerr << z << " : Only one of the two slices to compare contains data" << endl;
+			op << z << " : Only one of the two slices to compare contains data" << endl;
+		}
+		else
+		{
+			cerr << "Skipped empty slice " << z << endl;
+		}
 	}
 	op.close();
 	//getFileServer().saveDataSet( output, file );
