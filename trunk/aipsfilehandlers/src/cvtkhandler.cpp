@@ -17,7 +17,7 @@
 #include "cvtkhandler.h"
 
 #ifdef HAVE_VTK
-#include "vtk/vtkUnsignedShortArray.h"
+#include "vtkUnsignedShortArray.h"
 using namespace aips;
 using namespace boost;
 using namespace std;

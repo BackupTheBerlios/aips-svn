@@ -26,13 +26,13 @@
 
 #ifdef HAVE_VTK
 // VTK includes
-#include "vtk/vtkPointData.h"
-#include "vtk/vtkShortArray.h"
-#include "vtk/vtkFloatArray.h"
-#include "vtk/vtkDoubleArray.h"
-#include "vtk/vtkStructuredPoints.h"
-#include "vtk/vtkStructuredPointsWriter.h"
-#include "vtk/vtkStructuredPointsReader.h"
+#include "vtkPointData.h"
+#include "vtkShortArray.h"
+#include "vtkFloatArray.h"
+#include "vtkDoubleArray.h"
+#include "vtkStructuredPoints.h"
+#include "vtkStructuredPointsWriter.h"
+#include "vtkStructuredPointsReader.h"
 
 // AIPS includes
 #include <cbinaryfilehandler.h>
