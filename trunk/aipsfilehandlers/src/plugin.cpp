@@ -32,6 +32,9 @@
 #ifdef HAVE_VTK
 #include "cvtkhandler.h"
 #endif
+#ifdef HAVE_ITK
+#include "citkhandler.h"
+#endif
 #ifdef HAVE_IM
 #include "ccommonimagehandler.h"
 #endif
@@ -61,6 +64,11 @@ void initFactory()
 	classNames.clear();
 	factoryMap.clear();
 	shared_ptr<CFileHandler> workPtr;
+#ifdef HAVE_ITK	
+	workPtr.reset( new CITKHandler() );
+	factoryMap["CITKHandler"] = workPtr;
+	classNames.push_back("CITKHandler");
+#endif	
 	workPtr.reset( new CDataHandler() );
 	factoryMap["CDataHandler"] = workPtr;
 	classNames.push_back("CDataHandler");
