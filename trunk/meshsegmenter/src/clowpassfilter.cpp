@@ -55,7 +55,7 @@ void CLowPassFilter::apply() throw()
   }
 	bModuleReady = true;
   deleteOldOutput();
-	TImagePtr outputPtr; outputPtr.reset();
+	TImagePtr outputPtr; 
 #ifdef USE_BLITZ
   if ( getInput()->getDimension() == 2 ) // Got 2D image
   {
@@ -78,7 +78,7 @@ void CLowPassFilter::apply() throw()
     kernel = 1.0 / ( usRadius * usRadius * usRadius );
   outputPtr = applyKernel( inputPtr, kernel );
 #endif /* USE_STANDALONE */
-  if ( outputPtr == NULL )
+  if ( !outputPtr )
   {
     alog << LWARN << SERROR("invalid input data") << endl;
     return;

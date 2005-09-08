@@ -292,7 +292,6 @@ PR("Looking for edges to be subdivided ... ")
 			TVector3D diff = v3->thePosition - v1->thePosition;
 			TVector3D diff2 = v2->thePosition - v1->thePosition;
 			double length = norm(diff);
-			double length2 = norm(diff2);
 			// This triangle is too large, we need to subdivide all edges
 /*			if ( !rego && (length*length2)>(maxLength*maxLength) )
 			{

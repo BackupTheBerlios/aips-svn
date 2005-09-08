@@ -5,7 +5,7 @@ PROJECT(meshsegmenter)
 SET(CMAKE_VERBOSE_MAKEFILE ON)
 
 #add definitions, compiler switches, etc. 
-ADD_DEFINITIONS(-Wall -O3 -g0)
+ADD_DEFINITIONS(-Wall)
 
 SET( DEBUG_LEVEL 0 CACHE STRING "Level of debugging output (This is either 0 (no output) or 1,2,3)")
 
@@ -33,7 +33,7 @@ LINK_DIRECTORIES( ${VTK_LIBRARY_DIRS} )
 LINK_LIBRARIES( vtkIO vtkCommon vtkRendering vtkGraphics aipsfilehandlers aipsbase )
 INCLUDE_DIRECTORIES( ${QT_INCLUDE_DIR} )
 LINK_LIBRARIES( aipsbase ${QT_LIBRARIES} )
-LINK_DIRECTORIES( -L/usr/local/lib/vtk )
+LINK_DIRECTORIES( -L/usr/local/lib/vtk -L/usr/local/lib/InsightToolkit )
 
 SET( DEBUG_LEVEL 0 CACHE STRING "Level of debugging output (This is either 0 (no output) or 1,2,3)")
 

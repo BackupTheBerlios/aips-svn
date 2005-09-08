@@ -76,10 +76,6 @@ public:
     CMainWindow( const std::string& filename ) throw();
     ~CMainWindow() throw();
 public slots:
-	void updateDecimation();
-	void updateSmoothing();
-	void updateViewRep();
-	void updateFile();
 	void iterateModel();
 	void loadDataFile();
 	void loadLutFile();
@@ -119,7 +115,13 @@ public:
 	ulong vid;
 	vtkPolyDataNormals *normals3;
 	vtkPolyDataNormals *normals4;
-	
+	vtkGlyph3D *glyph;
+	vtkTransform *trans;
+	vtkConeSource *cone;
+	vtkPolyDataMapper *mapperMeshNormalData;
+	vtkMaskPoints *ptMask;
+	vtkTransformPolyDataFilter* tpdf;
+	vtkPolyDataMapper *mapperMeshData; 
 	CImageData imageData;
 	CDataSetColors dataColors;
 	CDataSetColors meshColors;
@@ -137,6 +139,10 @@ public:
 	QLCDNumber* vMin;
 	TField3DPtr forceField;
 	CDiscreteModel theModel;
+private:
+	void initUI();
+	void initMesh();
+	void initVis();	
 };
 
 #endif

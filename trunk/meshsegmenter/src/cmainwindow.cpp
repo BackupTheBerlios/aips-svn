@@ -60,74 +60,30 @@ bool vecLess(  const TVIn& a, const TVIn& b, const double PROX=0.0001  )
 		|| ( fabs( av[2] - bv[2] ) < PROX && fabs( av[1] - bv[1] ) < PROX && (av[0] +PROX ) < bv[0] ) ); 
 }
 
-void CMainWindow::updateFile()
+void CMainWindow::initUI()
 {
-	reader->SetFileName( fileName->text() );
-	reader->Update();
-	normals3->Update();
-	inputMesh = normals3->GetOutput();
-	generateMeshFromVTK();
-	subdivideMesh();
-	transformBackMesh();
-	normals4->SetInput( outputMesh );
-// 	interactor->Update();
-//	renderer->ResetCamera();
-}
-
-void CMainWindow::updateDecimation()
-{
-	QString a = decEdit->text();
-	float p = a.toFloat();
-	deci->SetTargetReduction(p);
-// 	interactor->update();
-}
-
-void CMainWindow::updateSmoothing()
-{
-	QString a = smoothEdit->text();
-	int smoothi = a.toInt();
-	smooth->SetNumberOfIterations( smoothi );
-// 	interactor->Update();
-}
-
-void CMainWindow::updateViewRep( )
-{
-	if ( !wireframeCheck->isChecked() )
-	{
-		actorMesh->GetProperty()->SetRepresentationToSurface();
-// 		interactor->Update();
-	}
-	else
-	{
-		actorMesh->GetProperty()->SetRepresentationToWireframe();
-// 		interactor->Update();
-	}
-}
-
-CMainWindow::CMainWindow( const string& filename ) throw()
- : QMainWindow(), inputMesh( 0 ), renderer ( 0 ), outputMesh( 0 )
-{
-	 QVBox* vPtr = new QVBox( this );	 
-   QHBox* rowPtr = new QHBox ( vPtr );
-	 QHBox* row2Ptr = new QHBox ( vPtr );
-	 row2Ptr->setFixedHeight(30);
-	 QHBox* row3Ptr = new QHBox ( vPtr );
-	 QHBox* row4Ptr = new QHBox ( vPtr );
-	 row3Ptr->setFixedHeight(30);
-	 row4Ptr->setFixedHeight(30);
-	 this->setCentralWidget(vPtr);
+	/* BEGIN UI stuff */
+	QVBox* vPtr = new QVBox( this );	 
+  QHBox* rowPtr = new QHBox ( vPtr );
+	QHBox* row2Ptr = new QHBox ( vPtr );
+	row2Ptr->setFixedHeight(30);
+	QHBox* row3Ptr = new QHBox ( vPtr );
+	QHBox* row4Ptr = new QHBox ( vPtr );
+	row3Ptr->setFixedHeight(30);
+	row4Ptr->setFixedHeight(30);
+	this->setCentralWidget(vPtr);
    
-   window = new vtkQtRenderWindow(rowPtr);
-	 interactor = vtkQtRenderWindowInteractor::New();
-	 interactor->SetRenderWindow( window );
-	 QVBox* v2Ptr = new QVBox( rowPtr );
-	 v2Ptr->setMargin(8);
-	 v2Ptr->setFixedSize( 216, 460 );
+  window = new vtkQtRenderWindow(rowPtr);
+	interactor = vtkQtRenderWindowInteractor::New();
+	interactor->SetRenderWindow( window );
+	QVBox* v2Ptr = new QVBox( rowPtr );
+	v2Ptr->setMargin(8);
+	v2Ptr->setFixedSize( 216, 460 );
 	 
-	 dataFileButton = new QPushButton( "Data file", v2Ptr );
-	 dataFileButton->setFixedSize( 200, 25 );
-	 lutFileButton = new QPushButton( "Color table", v2Ptr );
-	 lutFileButton->setFixedSize( 200, 25 );
+	dataFileButton = new QPushButton( "Data file", v2Ptr );
+	dataFileButton->setFixedSize( 200, 25 );
+	lutFileButton = new QPushButton( "Color table", v2Ptr );
+	lutFileButton->setFixedSize( 200, 25 );
 	selMax = new QScrollBar( 0, 180, 1, 10, 60, Qt::Horizontal, v2Ptr );
 	selMax->setFixedSize( 200, 20 );
 	vMax = new QLCDNumber( 3, v2Ptr );
@@ -136,31 +92,15 @@ CMainWindow::CMainWindow( const string& filename ) throw()
 	selMin->setFixedSize( 200, 20 );
 	vMin = new QLCDNumber( 3, v2Ptr );
 	vMin->setFixedSize( 120, 30 );
+	iterateButton = new QPushButton( "Iterate", v2Ptr );
 
-/*	 QLabel *decStep = new QLabel("Decimation",row2Ptr);
-	 decEdit = new QLineEdit( "0.99", row2Ptr );
-	 QLabel *smoothStep = new QLabel("Smoothing iterations",row3Ptr);
-	 smoothEdit = new QLineEdit( "20", row3Ptr );*/
-/*	 QLabel *fileStep = new QLabel("Source file",row4Ptr);
-	 fileName = new QLineEdit( "/data/data/externe/loni/th.vtk", row4Ptr );*/
-	 iterateButton = new QPushButton( "Iterate", v2Ptr );
-/*   wireframeCheck = new QCheckBox("Wireframe representation",vPtr);*/
-
- 	 connect( dataFileButton, SIGNAL( clicked( ) ),
-	 	this, SLOT( loadDataFile() ) );
- 	 connect( lutFileButton, SIGNAL( clicked( ) ),
+	connect( dataFileButton, SIGNAL( clicked( ) ),
+		this, SLOT( loadDataFile() ) );
+ 	connect( lutFileButton, SIGNAL( clicked( ) ),
 	 	this, SLOT( loadLutFile() ) );
-	 
-/*	 connect( decEdit, SIGNAL( returnPressed() ),
-    this, SLOT( updateDecimation() ) );
-	 connect( smoothEdit, SIGNAL( returnPressed() ),
-    this, SLOT( updateSmoothing() ) );
-	 connect( fileName, SIGNAL( returnPressed() ),
-    this, SLOT( updateFile() ) );*/
-	 connect( iterateButton, SIGNAL( clicked( ) ),
+	connect( iterateButton, SIGNAL( clicked( ) ),
 	 	this, SLOT( iterateModel() ) );
-	 /*connect( wireframeCheck, SIGNAL( clicked( ) ),
-    this, SLOT( updateViewRep( ) ) );*/
+  
   selX = new QScrollBar( 0, 180, 1, 10, 60, Qt::Horizontal, v2Ptr );
 	selX->setFixedSize( 200, 20 );
   vX = new QLCDNumber( 3, v2Ptr );
@@ -195,135 +135,37 @@ CMainWindow::CMainWindow( const string& filename ) throw()
   connect ( selMax, SIGNAL( valueChanged( int ) ),
     this, SLOT( updateMax( int ) ) );
 
-	
-	// Read dataset and convert into simplified mesh
-/*	reader = vtkStructuredPointsReader::New();
-	reader->SetFileName("/data/data/externe/loni/nc.vtk");//"/home/belitz/data/nc.vtk");
-	reader->Update();
-	vtkMarchingCubes *iso = vtkMarchingCubes::New();
-	iso->SetInput( (vtkImageData*)reader->GetOutput() );
-	iso->SetValue( 0, 1 );
-	deci = vtkQuadricDecimation::New();
-	deci->SetTargetReduction(0.95);
-	deci->SetInput( iso->GetOutput() );
-	smooth = vtkWindowedSincPolyDataFilter::New();
-	smooth->SetInput( deci->GetOutput() );
-	smooth->SetNumberOfIterations( 50 );
-	vtkPolyDataNormals *normals1 = vtkPolyDataNormals::New();
-	normals1->SetInput( iso->GetOutput() );
-	normals1->FlipNormalsOn();
-	vtkPolyDataNormals *normals2 = vtkPolyDataNormals::New();
-	normals2->SetInput( smooth->GetOutput() );
-	normals2->ConsistencyOn();
-	//normals2->FlipNormalsOn();
-	normals2->SplittingOff();*/
-// 	vtkSphereSource *sphere = vtkSphereSource::New();
-// 	sphere->SetRadius( 30 );
-// 	sphere->SetCenter( 64.0, 64.0, 64.0 );
-// 	sphere->SetThetaResolution(25);
-// 	sphere->SetPhiResolution(25);
+	/* END UI stuff */
+}
 
-// Read dataset and convert into simplified mesh
-	
-	//cerr << "Loading mask... ";
-	//TDataFile theData = getFileServer().loadDataSet( "EMIL/wtrsl/mrmauswt1_rsl_mask.hdr" );
-/*	cerr << "done" << endl;
-	cerr << "Starting conversion... ";
-	cerr << "Read " << theData.first->getExtent(0) << " x " <<
-		theData.first->getExtent(1) << " x " << theData.first->getExtent(2) << endl << theData.first->getType().name() << endl;
-	// Create vtk structured points structure
-  vtkImageData* sp = vtkImageData::New();
-  sp->SetDimensions( theData.first->getExtent(0), theData.first->getExtent(1), theData.first->getExtent(2) );
-  sp->AllocateScalars();	
-  // Assign dataset to structured points
-  vtkPointData *p=sp->GetPointData();
-	vtkShortArray* sArray = NULL;
-	vtkDoubleArray* fArray = NULL;*/
-	
-/*	if ( theData.first->getType() == typeid( double ) )
-	{
-		TFieldPtr floatSet = static_pointer_cast<TField>( theData.first );
-		fArray = vtkDoubleArray::New();
-		fArray->SetArray(floatSet->getArray(),
-			theData.first->getExtent(0)*theData.first->getExtent(1)*theData.first->getExtent(2), 1 );
-		p->SetScalars( fArray );
-		sp->SetScalarTypeToDouble();
-	}
-	else 
-	{
-		
-		if ( theData.first->getType() == typeid( short ) )
-		{
-			TImagePtr shortSet = static_pointer_cast<TImage>( theData.first );
-			cerr << "Here" << endl;
-			short* sA = new short[theData.first->getExtent(0)*theData.first->getExtent(1)*theData.first->getExtent(2)];
-			short* sAs = sA;
-			for( TImage::iterator it = shortSet->begin(); it != shortSet->end(); ++it, ++sAs )
-				*sAs = *it;
-			sArray = vtkShortArray::New();
-			sArray->SetArray( sA,
-				theData.first->getExtent(0)*theData.first->getExtent(1)*theData.first->getExtent(2), 1 );
-			p->SetScalars( sArray );
-			sp->SetScalarTypeToShort();
-			cerr << "There" << endl;
-		}		
-		else
-		{
-	    sp->Delete();		
-			cerr << "CVTkHandler - Unknown image format in dataset. Image was not saved" << endl;
-			exit(-1);
-		}
-	}
-	sp->SetSpacing( 1.0, 1.0, 1.0 );
-	sp->SetOrigin( static_cast<double>( theData.first->getExtent(0) )/ 2.0, 
-		static_cast<double>( theData.first->getExtent(1) )/ 2.0,
-		static_cast<double>( theData.first->getExtent(2) )/ 2.0	);
-	sp->UpdateData();*/
-	
-/*	vtkMarchingCubes *iso = vtkMarchingCubes::New(); */
-/*	vtkGenericContourFilter *iso = vtkContourFilter::New();
-	iso->SetInput( sp );
-	iso->SetValue( 0, 1 );*/
-/*	iso->ComputeNormalsOff();
-	iso->ComputeGradientsOff();*/
-/* 	deci = vtkQuadricDecimation::New();
- 	deci->SetTargetReduction(0.95 );
- 	deci->SetInput( iso->GetOutput() );
- 	smooth = vtkWindowedSincPolyDataFilter::New();
- 	smooth->SetInput( deci->GetOutput() );
- 	smooth->SetNumberOfIterations( 50 );*/
-// 	vtkPolyDataNormals *normals1 = vtkPolyDataNormals::New();
-// 	normals1->SetInput( iso->GetOutput() );
-// 	normals1->FlipNormalsOn();
-// 	vtkPolyDataNormals *normals2 = vtkPolyDataNormals::New();
-// 	normals2->SetInput( smooth->GetOutput() );
-// 	normals2->ConsistencyOn();
+void CMainWindow::initMesh()
+{
+	// Load a binary mask and generate an initial mesh from it
 
-	// Get VTK mesh, convert into internal data and remesh
- 	//inputMesh = normals3->GetOutput();
-	//outputMesh = normals3->GetOutput();
- 	//generateMeshFromVTK();
  	generateMeshFromFile( "/data/data/EMILSegmentierungen/neu/wtrsl/mrmauswt1_rsl_mask.hdr" );
- 	cerr << "A" << endl;
-//	subdivideMesh();
-// 	
-// 	// Do the backconversion and generate normals
+
+cerr << "Mask loaded" << endl;
+
+	// Refine the initial mesh
  	deci = vtkQuadricDecimation::New();
  	deci->SetTargetReduction(0.98 );
  	deci->SetInput( outputMesh );
+ 	
  	smooth = vtkWindowedSincPolyDataFilter::New();
  	smooth->SetInput( deci->GetOutput() );
  	smooth->SetNumberOfIterations( 10 );
  	smooth->Update();
- 	cerr << "A" << endl;
+ 	
   inputMesh = smooth->GetOutput();
+  
+  // Produce an internal representation of the smoothed mesh
 	generateMeshFromVTK();
- 	cerr << "B" << endl;
+	// Return the smoothed mesh for display
  	transformBackMesh();
-	cerr << "C" << endl;
+	
+	// Generate normals
 	normals3 = vtkPolyDataNormals::New();
-	normals3->SetInput( outputMesh );
-	//normals3->SetInput( sphere->GetOutput() );
+	normals3->SetInput( outputMesh );	
 	normals3->ConsistencyOn();
 	normals3->FlipNormalsOn();
 	normals3->SplittingOff();
@@ -336,30 +178,31 @@ CMainWindow::CMainWindow( const string& filename ) throw()
 	normals4->ConsistencyOn();
 	normals4->SplittingOff();
 	normals4->FlipNormalsOn();
-	
+}
+
+void CMainWindow::initVis()
+{
+// Setup color tables for volume and mesh
 	dataColors.loadLookupTable();
 	dataColors.setLowerClamp( 50.0 );
 	dataColors.setUpperClamp( 200.0 );
 	meshColors.loadLookupTable();
 	meshColors.setLowerClamp( 0.0 );
 	meshColors.setUpperClamp( 255.0 );
-/*	vtkLookupTable* table = meshColors.getLookupTable();
-	for( uint i = 0; i < 256; ++i )
-	{
-		double rgba[4];
-		table->GetTableValue( i, rgba );
-		rgba[3] = 1.0 - ( 0.75 * ( static_cast<double>(i) / 255.0 ) );
-		table->SetTableValue( i, rgba );
-	}*/
-	//imageData.loadDataSet( "/data/data/phantoms/3dphantom.dat" );
+	
+	// Load the image
 	imageData.loadDataSet( "/data/data/externe/joaquin/original/emil/data1/uint_mrmauswt1_rsl.hdr" );
+	
+	// Load the GVF field
 	forceField = imageData.computeExternalForces();
+	
+	// Set sliders to image extent and value ranges
 	selX->setRange( 0, imageData.getExtent( 2 ) );
 	selX->setValue( 64 );
 	selY->setRange( 0, imageData.getExtent( 1 ) );
 	selY->setValue( 64 );
 	selZ->setRange( 0, imageData.getExtent( 0 ) );
-	selZ->setValue( 64 );
+	selZ->setValue( 64 );	
 	int imageMax = static_cast<int>(imageData.getMaximum());
 	int imageMin = static_cast<int>(imageData.getMinimum());
 	selMax->setRange( imageMin, imageMax );
@@ -368,76 +211,91 @@ CMainWindow::CMainWindow( const string& filename ) throw()
 	selMin->setValue( imageMin );
 	
 	// Map mesh data
-	vtkPolyDataMapper *mapperMeshData = vtkPolyDataMapper::New();
+	mapperMeshData = vtkPolyDataMapper::New();
 	mapperMeshData->SetInput( outputMesh );
 	mapperMeshData->SetLookupTable( meshColors.getLookupTable() );
-//	mapperMeshData->SetScalarMaterialModeToAmbient();
 	mapperMeshData->UseLookupTableScalarRangeOn();
 	actorMesh = vtkActor::New();
 	actorMesh->SetMapper( mapperMeshData );
+	
 	// Map mesh normal data
-	vtkPolyDataMapper *mapperMeshNormalData = vtkPolyDataMapper::New();
-	vtkMaskPoints *ptMask = vtkMaskPoints::New();
+	mapperMeshNormalData = vtkPolyDataMapper::New();
+	ptMask = vtkMaskPoints::New();
 	ptMask->SetInput( normals4->GetOutput() );
 	ptMask->SetOnRatio( 1 );
-	vtkConeSource *cone = vtkConeSource::New();
+	cone = vtkConeSource::New();
 	cone->SetResolution(4);
-	vtkTransform *trans = vtkTransform::New();
+	trans = vtkTransform::New();
 	trans->Translate( 0.5, 0.0, 0.0 );
 	trans->Scale( 1.0, 0.25, 0.25 );
-	vtkTransformPolyDataFilter* tpdf = vtkTransformPolyDataFilter::New();
+	tpdf = vtkTransformPolyDataFilter::New();
 	tpdf->SetInput( cone->GetOutput() );
 	tpdf->SetTransform( trans );
-	vtkGlyph3D *glyph = vtkGlyph3D::New();
+	glyph = vtkGlyph3D::New();
 	glyph->SetInput( ptMask->GetOutput() );
 	glyph->SetSource( tpdf->GetOutput() );
 	glyph->SetVectorModeToUseNormal();
 	glyph->SetScaleModeToScaleByVector();
 	glyph->SetScaleFactor( 2.0 );
-	mapperMeshNormalData->SetInput( glyph->GetOutput() );
+	mapperMeshNormalData->SetInput( glyph->GetOutput() );	
 	actorMeshNormal = vtkActor::New();
  	actorMeshNormal->SetMapper( mapperMeshNormalData );
  	actorMeshNormal->GetProperty()->SetColor( 0.9, 0.2, 0.2 );
 
-	// Map orthoslices
-		
-	cerr << "Init renderer" << endl;
+	// Map orthoslices		
+cerr << "Init renderer" << endl;
 	renderer = vtkRenderer::New();
 	window->AddRenderer( renderer );
 	renderer->TwoSidedLightingOn();
 	renderer->SetAmbient( 1.0, 1.0, 1.0 );
-	//axesActor->GetProperty()->SetColor( 1.0, 1.0, 1.0 );
-/*	axesActor->GetProperty()->SetAmbient( 0.5 );
-	axesActor->GetProperty()->SetDiffuse( 1.0 );
-	axesActor->GetProperty()->BackfaceCullingOff();
-	axesActor->GetProperty()->FrontfaceCullingOff();*/
-	cerr << "1" << endl;
 	renderer->AddActor( meshColors.getColorBar() );
-	cerr << "2" << endl;
 	imageData.setColorTable( dataColors.getLookupTable() );
-	cerr << "3" << endl;
 	imageData.setSlicePosition( 0, 90 );
 	imageData.setSlicePosition( 1, 90 );
 	imageData.setSlicePosition( 2, 90 );
-/*	actorMesh->GetProperty()->SetColor( 1.0, 1.0, 1.0 );
-	actorMesh->GetProperty()->SetAmbient( 1.0 );*/
+	
+	// Add all actors to the renderer
 	renderer->AddActor( actorMesh );
-/*	actorMeshNormal->GetProperty()->SetColor( 1.0, 1.0, 1.0 );
-	actorMeshNormal->GetProperty()->SetAmbient( 1.0 );*/
 	renderer->AddActor( actorMeshNormal );
-// 	actorSliceX->GetProperty()->SetColor( 1.0, 1.0, 1.0 );	
 	renderer->AddActor( imageData.getSlice( 0 ) );
-// 	actorSliceY->GetProperty()->SetColor( 1.0, 1.0, 1.0 );	
 	renderer->AddActor( imageData.getSlice( 1 ) );
-// 	actorSliceZ->GetProperty()->SetColor( 1.0, 1.0, 1.0 );
 	renderer->AddActor( imageData.getSlice( 2 ) );
 	renderer->ResetCamera();
-cerr << "Bye" << endl;
+}	
+
+CMainWindow::CMainWindow( const string& filename ) throw()
+ : QMainWindow(), renderer ( 0 ), inputMesh( 0 ), outputMesh( 0 )
+{
+cerr << "Init UI components... ";
+	initUI();
+cerr << "done" << endl <<	"Loading/generating initial mesh... ";
+	initMesh();
+cerr << "done" << endl <<	"Initialisiation of visualization componenets... ";
+	initVis();
+cerr << "done" << endl << "Initialisiation completed... time to work" << endl;
 }
 
 
 CMainWindow::~CMainWindow() throw()
 {
+	renderer->Delete();
+	actorMeshNormal->Delete();
+	actorMesh->Delete();
+	axesActor->Delete();
+	coordSystem->Delete();	
+	glyph->Delete();
+	tpdf->Delete();
+	cone->Delete();
+	trans->Delete();
+	ptMask->Delete();
+	mapperMeshNormalData->Delete();
+	mapperMeshData->Delete();
+	normals4->Delete();
+	normals3->Delete();
+	smooth->Delete();
+	deci->Delete();
+	inputMesh->Delete();
+	outputMesh->Delete();
 }
 
 void CMainWindow::transformBackMesh()
@@ -507,9 +365,14 @@ void CMainWindow::generateMeshFromFile( std::string filename )
 	//work.reset();
 
 	cerr << "Loading mask... ";
-	TDataFile theData = getFileServer().loadDataSet( filename );
 	cerr << "ok" << endl;
-	TImagePtr img = static_pointer_cast<TImage>( theData.first );
+	TDataFile data = getFileServer().loadDataSet( filename );
+	TImagePtr img ( new TImage( *(static_pointer_cast<TImage>(data.first) ) ) );
+	data.first.reset();
+	data.second.reset();
+	cerr << "img" << img.use_count() << endl;
+// 	img.reset();
+// 	cerr << "img" << img.use_count() << endl;
 	for( TImage::iterator it = img->begin();
 		it != img->end(); ++it )
 	{			
@@ -520,19 +383,17 @@ void CMainWindow::generateMeshFromFile( std::string filename )
 	CTypedMap* params = lp->getParameters();
 	params->setUnsignedLong( "Radius", 3 );
 	lp->setInput( img );
-	lp->apply();	
-	cerr << "ok" << endl;
-	CTypedData<int> intimg( theData.first->getDimension(), theData.first->getExtents() );
+	lp->update();	
+	TImage* image = (static_cast<TImage*>( lp->getOutput().get() ));
+	CTypedData<int> intimg( image->getDimension(), image->getExtents() );
 	CTypedData<int>::iterator ot = intimg.begin();
- 	img = static_pointer_cast<TImage>( lp->getOutput() );
-	for( TImage::iterator it = img->begin();
-		it != img->end(); ++it, ++ot )
-	{
-			
+	for( TImage::iterator it = image->begin();
+		it != image->end(); ++it, ++ot )
+	{			
 			if ( *it > 5 ) *ot = 1;
 			else *ot = 0;
 	};
-	CIsoSurface iso( img->getExtent(0), img->getExtent(1), img->getExtent(2), intimg.getArray() );
+	CIsoSurface iso( intimg.getExtent(0), intimg.getExtent(1), intimg.getExtent(2), intimg.getArray() );
 	std::vector<TVector3D> vertices;
 	std::vector<TriangleKey> tris;
 	iso.ExtractContour (0.5, vertices, tris);
@@ -547,11 +408,8 @@ void CMainWindow::generateMeshFromFile( std::string filename )
 		SVertex* v = new SVertex( *it );
 		vVector.push_back( v );
 	}
-
 	list<TFIn> FL;
-	cerr << "Starting mesh consists of " << vVector.size() << " vertices";
 	// Now we need to sort the vectors according to their position. Lets hope to find some double vertices ....
-	int res = 1;
 	for( uint i = 0; i < tris.size(); ++i )
 	{
 		TFIn f;
@@ -561,12 +419,11 @@ void CMainWindow::generateMeshFromFile( std::string filename )
 		FL.push_back(f);
 	}	
 	cerr << " " << endl << "Generated vertex lists " << vVector.size() << endl;
-	cerr << "Resulting mesh consists of " << work.fList.size() << " faces and " << work.vList.size() << " vertices" << endl;
 	if ( outputMesh != NULL ) 
 		outputMesh->Reset();
 	else
 		outputMesh = vtkPolyData::New();
-	cerr << "Converting Mesh to VTK" << endl;
+	cerr << "Converting Mesh to VTK... ";
  	vtkCellArray *meshpolys = vtkCellArray::New();
 	vtkPoints *meshpts = vtkPoints::New();
 	
@@ -594,9 +451,12 @@ void CMainWindow::generateMeshFromFile( std::string filename )
 		p[1] = tris[i].V[1];
 		meshpolys->InsertNextCell( 3, p );
 	}	
+	cerr << "done" << endl;
+	
+	cerr << "lp " << lp.use_count() << endl;
+	lp.reset();
 	
 	cerr << "Clearing up the mess" << endl;
-	
 	outputMesh->SetPolys( meshpolys );
 	cerr << "1" << endl;
 	outputMesh->SetPoints( meshpts );
