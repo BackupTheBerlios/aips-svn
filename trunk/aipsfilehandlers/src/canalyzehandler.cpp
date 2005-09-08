@@ -78,11 +78,13 @@ TDataFile CAnalyzeHandler::load( const std::string& sFilename ) const
 		
 	if ( dataType == DFloat32 || dataType == DFloat16 )
 	{
+		alog << LINFO << " Datatype is Float" << endl;
 		TFieldPtr aFieldSet( new TField( extentSize.size(), extentSize, 1 ) );
 		if ( bCompressed )
   		loadData( aFieldSet, theGzFile, dataType, aHeader->getEndianess() );
 		else
 			loadData( aFieldSet, theFile, dataType, aHeader->getEndianess() );
+		alog << LINFO << " Loaded" << endl;
 		switch( aHeader->getUnsignedLong( "Orientation" ) )
 		{
 			case 0:
@@ -106,10 +108,12 @@ TDataFile CAnalyzeHandler::load( const std::string& sFilename ) const
 				aFieldSet = rotate( aFieldSet, 1, 2, 0 ); 
 				break;
 		}
+		alog << LINFO << " Flipped" << endl;
 		return make_pair( aFieldSet, aHeader );
 	}
 	else
 	{
+		alog << LINFO << " Datatype is Int" << endl;		
 		TImagePtr anImageSet( new TImage( extentSize.size(), extentSize, 1 ) );
 		if ( bCompressed )
 		{
@@ -121,6 +125,7 @@ TDataFile CAnalyzeHandler::load( const std::string& sFilename ) const
 			loadData( anImageSet, theFile, dataType, aHeader->getEndianess() );
 			theFile.close();
 		}
+		alog << LINFO << " Loaded with ori " << aHeader->getUnsignedLong( "Orientation" ) << endl;
 		switch( aHeader->getUnsignedLong( "Orientation" ) )
 		{
 			case 0:
@@ -143,6 +148,7 @@ TDataFile CAnalyzeHandler::load( const std::string& sFilename ) const
 				//anImageSet = flip( anImageSet, false, true, false ); 
 				break; 
 		}		
+		alog << LINFO << " Flipped" << endl;
 	  return make_pair( anImageSet, aHeader );
 	}
 }
@@ -288,14 +294,20 @@ CAnalyzeHandler::EDataType CAnalyzeHandler::determineDataType( CDataSet* theData
 			alog << LFATAL << SERROR("Reached some code we should never reach.") << endl;
 		}
 	}
+	/* FIXME */
+	return DUInt8;
 }
 
 template<typename T> 
 shared_ptr<T> CAnalyzeHandler::flip( shared_ptr<T> original, bool bSwapX, bool bSwapY, bool bSwapZ ) const
 {
+	cerr << "Original " << original->getDimension() << ": " << original->getExtent(0) << " x "
+		<< original->getExtent(1) << " x " << original->getExtent(2) << " X " << original->getDataDimension() << endl;
 	shared_ptr<T> copy ( new T( original->getDimension(), original->getExtents(), original->getDataDimension() ) );
 	copy->setMaximum( original->getMaximum() );
 	copy->setMinimum( original->getMinimum() );
+	cerr << "Copy " << copy->getDimension() << ": " << copy->getExtent(0) << " x "
+		<< copy->getExtent(1) << " x " << copy->getExtent(2) << " X " << copy->getDataDimension() << endl;
 	std::vector<size_t> dimensionSize = copy->getExtents();
 	ushort ay = 0; ushort ax = 0; ushort az = 0;
 	for ( uint z = 0; z < dimensionSize[2]; ++z )
@@ -357,4 +369,3 @@ boost::shared_ptr<T> CAnalyzeHandler::rotate( boost::shared_ptr<T> original,
 	}
 	return copy;
 }
-// 

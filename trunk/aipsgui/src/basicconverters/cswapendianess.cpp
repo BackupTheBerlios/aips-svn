@@ -119,6 +119,6 @@ bool CSwapEndianess::swapDataFunctor<SetType, true>::operator()(CSwapEndianess* 
 template<typename SetType> 
 bool CSwapEndianess::swapDataFunctor<SetType, false>::operator()(CSwapEndianess* parent) throw()
 {
-	alog << LWARN << "Unable to swap non-nnumerical data" << endl;
+	alog << LWARN << "Unable to swap non-numerical data" << endl;
 	return false;
 }
