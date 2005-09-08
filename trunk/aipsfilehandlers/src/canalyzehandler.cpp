@@ -126,11 +126,14 @@ TDataFile CAnalyzeHandler::load( const std::string& sFilename ) const
 			theFile.close();
 		}
 		alog << LINFO << " Loaded with ori " << aHeader->getUnsignedLong( "Orientation" ) << endl;
+		TImagePtr tmp;
 		switch( aHeader->getUnsignedLong( "Orientation" ) )
 		{
 			case 0:
 				// Do not swap or rotate anything
-				anImageSet = flip( anImageSet, false, true, false ); 
+				tmp = flip( anImageSet, false, true, false ); 
+				anImageSet = tmp;
+				alog << LINFO << " Flipped A" << endl;
 				break;
 			case 1:
 				anImageSet = flip( anImageSet, false, true, true ); 
@@ -148,7 +151,7 @@ TDataFile CAnalyzeHandler::load( const std::string& sFilename ) const
 				//anImageSet = flip( anImageSet, false, true, false ); 
 				break; 
 		}		
-		alog << LINFO << " Flipped" << endl;
+		alog << LINFO << " Flipped B" << endl;
 	  return make_pair( anImageSet, aHeader );
 	}
 }
@@ -331,6 +334,7 @@ shared_ptr<T> CAnalyzeHandler::flip( shared_ptr<T> original, bool bSwapX, bool b
   	     	(*copy)( ax, ay, az, i ) = (*original)( x, y, z, i );
     	}
 	}
+	cerr << " Flipping complete" << endl;
 	return copy;
 }
 
