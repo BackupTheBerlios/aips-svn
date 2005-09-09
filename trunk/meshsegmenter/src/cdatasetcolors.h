@@ -25,6 +25,7 @@
 #include <vtkLookupTable.h>
 #include <vtkScalarBarActor.h>
 #include <qcolor.h>
+#include "vtkdatatype.h"
 
 /**
 @author Hendrik Belitz
@@ -41,7 +42,7 @@ public:
 private:
 	vtkLookupTable* theLookupTable;
 	vtkScalarBarActor* theColorBar;
-	double dClampValues[2];
+	vtkFloatingPointType dClampValues[2];
 };
 
 #endif

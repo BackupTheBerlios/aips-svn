@@ -35,7 +35,7 @@ CImageLoader::CImageLoader()
 	shared_ptr<CAnalyzeHandler> h1 ( new CAnalyzeHandler );	
 	shared_ptr<CSimpleDatHandler> h2 ( new CSimpleDatHandler );
 	shared_ptr<CVectorFieldHandler> h3 ( new CVectorFieldHandler );
-	getFileServer().addHandler( h0 );
+	//getFileServer().addHandler( h0 );
 	getFileServer().addHandler( h1 );
 	getFileServer().addHandler( h2 );
 	getFileServer().addHandler( h3 );

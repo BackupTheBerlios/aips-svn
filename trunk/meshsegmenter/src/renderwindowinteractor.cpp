@@ -6,6 +6,8 @@
 #include "vtkPolyDataMapper.h"
 #include "vtkMath.h"
 
+#include "vtkdatatype.h"
+
 /*! \class RenderWindowInteractor
     \brief Gives a RenderWindow the ability to interact with the mouse
 
@@ -499,7 +501,7 @@ void RenderWindowInteractor::ActorRotate() {
    The actor must be set with SetInteractionActor()
 */
 void RenderWindowInteractor::ActorTranslate() {
-   double *center;
+   vtkFloatingPointType *center;
    double dispCenter[4];
    double newP[4];
    double oldP[4];
@@ -804,7 +806,7 @@ void RenderWindowInteractor::CameraRoll() {
 */
 void RenderWindowInteractor::ActorPlaneMove() {
 
-   double  *center;
+   vtkFloatingPointType  *center;
    double  dispCenter[4];
    double  newP[4];
    double  oldP[4];

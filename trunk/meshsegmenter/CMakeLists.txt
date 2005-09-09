@@ -25,20 +25,27 @@ IF(NOT aipsfilehandlers_FOUND)
 ENDIF(NOT aipsfilehandlers_FOUND)	
 
 INCLUDE(${CMAKE_ROOT}/Modules/FindVTK.cmake)
+IF(NOT VTK_FOUND)
+	MESSAGE( SEND_ERROR "VTK 4.x library is needed for compilation" )
+ENDIF(NOT VTK_FOUND)	
+
+INCLUDE(${CMAKE_ROOT}/Modules/FindITK.cmake)
+IF(NOT ITK_FOUND)
+	MESSAGE( SEND_ERROR "ITK 2.x library is needed for compilation" )
+ENDIF(NOT ITK_FOUND)	
+
 INCLUDE( ${VTK_USE_FILE} )
+INCLUDE( ${ITK_USE_FILE} )
 INCLUDE( ${aipsbase_USE_FILE} )
 INCLUDE( ${aipsfilehandlers_USE_FILE} )
-INCLUDE_DIRECTORIES( ${VTK_INCLUDE_DIRS} /home/belitz/include )
-LINK_DIRECTORIES( ${VTK_LIBRARY_DIRS} )
-LINK_LIBRARIES( vtkIO vtkCommon vtkRendering vtkGraphics aipsfilehandlers aipsbase )
+INCLUDE_DIRECTORIES( ${VTK_INCLUDE_DIRS} ${ITK_INCLUDE_DIRS} ${aipsbase_INCLUDE_DIRS} ${aipsfilehandlers_INCLUDE_DIRS} )
+
+LINK_DIRECTORIES( ${VTK_LIBRARY_DIRS} ${ITK_LIBRARY_DIRS} ${aipsbase_LIBRARY_DIRS} ${aipsfilehandlers_LIBRARY_DIRS} )
+LINK_LIBRARIES( vtkIO vtkCommon vtkRendering vtkGraphics vtkftgl vtkPatented vtkpng vtkDICOMParser vtkexpat vtkjpeg vtkHybrid vtkFiltering vtkParallel vtktiff vtkfreetype vtkImaging vtkzlib aipsfilehandlers aipsbase )
+
 INCLUDE_DIRECTORIES( ${QT_INCLUDE_DIR} )
 LINK_LIBRARIES( aipsbase ${QT_LIBRARIES} )
-LINK_DIRECTORIES( -L/usr/local/lib/vtk -L/usr/local/lib/InsightToolkit )
 
 SET( DEBUG_LEVEL 0 CACHE STRING "Level of debugging output (This is either 0 (no output) or 1,2,3)")
-
-#CONFIGURE_FILE( ${PROJECT_SOURCE_DIR}/aipsgui_config.h.in 
-#	${PROJECT_BINARY_DIR}/aipsgui_config.h)
-#SUBDIRS( src )
 
 SUBDIRS( src )

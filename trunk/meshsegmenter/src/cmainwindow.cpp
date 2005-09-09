@@ -365,11 +365,11 @@ void CMainWindow::generateMeshFromFile( std::string filename )
 	//work.reset();
 
 	cerr << "Loading mask... ";
-	cerr << "ok" << endl;
 	TDataFile data = getFileServer().loadDataSet( filename );
+	cerr << "ok" << endl;
 	TImagePtr img ( new TImage( *(static_pointer_cast<TImage>(data.first) ) ) );
-	data.first.reset();
-	data.second.reset();
+// 	data.first.reset();
+// 	data.second.reset();
 	cerr << "img" << img.use_count() << endl;
 // 	img.reset();
 // 	cerr << "img" << img.use_count() << endl;

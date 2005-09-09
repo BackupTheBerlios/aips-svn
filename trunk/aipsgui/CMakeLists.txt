@@ -44,7 +44,7 @@ INCLUDE( ${aipsbase_USE_FILE} )
 INCLUDE( ${aipsfilehandlers_USE_FILE} )
 INCLUDE_DIRECTORIES( ${QT_INCLUDE_DIR} ${GSL_INCLUDES} )
 LINK_LIBRARIES( aipsbase ${QT_LIBRARIES} ${GSL_LIBRARY} gslcblas m )
-LINK_DIRECTORIES( -L/usr/local/lib/vtk )
+LINK_DIRECTORIES( ${aipsbase_LIBRARY_DIR} ${aipsfilehandlers_LIBRARY_DIR} -L/usr/local/lib/vtk -L/usr/local/lib/InsightToolkit)
 
 SET( DEBUG_LEVEL 0 CACHE STRING "Level of debugging output (This is either 0 (no output) or 1,2,3)")
 
