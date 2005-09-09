@@ -12,5 +12,5 @@ INSTALL_FILES(/include/aipsbase .h ${INSTALL_HEADERS} )
 INSTALL_FILES(/include/aipsbase .tpp ${INSTALL_TEMPLATES} )
 
 ADD_LIBRARY( aipsbase ${SRC_FILES} )
-TARGET_LINK_LIBRARIES( aipsbase ${LIBFLAGS} )
+TARGET_LINK_LIBRARIES( aipsbase )
 INSTALL_TARGETS( /lib aipsbase )
