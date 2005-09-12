@@ -23,7 +23,7 @@
 #include <canalyzehandler.h>
 #include <csimpledathandler.h>
 #include <cvectorfieldhandler.h>
-#include <citkhandler.h>
+/*#include <citkhandler.h>*/
 
 using namespace std;
 using namespace boost;
@@ -31,7 +31,7 @@ using namespace aips;
 
 CImageLoader::CImageLoader()
 {
-	shared_ptr<CITKHandler> h0 ( new CITKHandler );	
+	//shared_ptr<CITKHandler> h0 ( new CITKHandler );	
 	shared_ptr<CAnalyzeHandler> h1 ( new CAnalyzeHandler );	
 	shared_ptr<CSimpleDatHandler> h2 ( new CSimpleDatHandler );
 	shared_ptr<CVectorFieldHandler> h3 ( new CVectorFieldHandler );

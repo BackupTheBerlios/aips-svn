@@ -85,7 +85,7 @@ DBG("About to flip");
 		for( ushort z = 0; z < dimensionSize[2]; ++z )
 			for( ushort y = 0; y < dimensionSize[1]; ++y )
 				for( ushort x = 0; x < dimensionSize[0]; ++x )
-					(*flippedImage)( x, y, dimensionSize[2] - 1 - z ) = (*aDataSet)( x, y, z );
+					(*flippedImage)( x, dimensionSize[1] - 1 - y, dimensionSize[2] - 1 - z ) = (*aDataSet)( x, y, z );
 DBG("Flipped");
 FEND;
 		return make_pair( flippedImage, aHeader );
@@ -148,7 +148,7 @@ cerr << "F" << endl;
 		for( ushort z = 0; z < aDataSet->getExtent(2); ++z )
 			for( ushort y = 0; y < aDataSet->getExtent(1); ++y )
 				for( ushort x = 0; x < aDataSet->getExtent(0); ++x )
-					(*flippedImage)( x, aDataSet->getExtent(1) - 1 - y, z ) = (*aDataSet)( x, y, z );
+					(*flippedImage)( x, aDataSet->getExtent(1) - 1 - y, aDataSet->getExtent(2) - 1 - z ) = (*aDataSet)( x, y, z );
 		saveData( flippedImage, theFile, dataType, aHeader.getEndianess() );
 	}
  	else

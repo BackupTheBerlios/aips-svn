@@ -4,7 +4,7 @@ PROJECT(aipsfilehandlers)
 SET(CMAKE_VERBOSE_MAKEFILE ON)
 
 #add definitions, compiler switches, etc. 
-ADD_DEFINITIONS(-Wall)
+ADD_DEFINITIONS(-Wall -pthread)
 
 FIND_PACKAGE(aipsbase)
 IF(!aipsbase_FOUND)

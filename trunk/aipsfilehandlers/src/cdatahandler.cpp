@@ -92,7 +92,25 @@ FBEGIN;
 			theFile.close();
 		}
 
-    return make_pair( aDataSet, aHeader );
+		if ( dimensionSize[2] > 1 )
+		{
+			TImagePtr originalImage = static_pointer_cast<TImage>( aDataSet );
+			TImagePtr flippedImage( new TImage( originalImage->getDimension(), originalImage->getExtents() ) );
+			flippedImage->setMaximum( originalImage->getMaximum() );
+			flippedImage->setMinimum( originalImage->getMinimum() );
+			for( ushort z = 0; z < dimensionSize[2]; ++z )
+				for( ushort y = 0; y < dimensionSize[1]; ++y )
+					for( ushort x = 0; x < dimensionSize[0]; ++x )
+						(*flippedImage)( x, dimensionSize[1] - 1 - y, dimensionSize[2] - 1 - z ) = 	(*originalImage)( x, y, z );
+			DBG("Flipped");
+			FEND;
+			return make_pair( flippedImage, aHeader );
+		}
+		else
+		{
+			FEND;	
+	  	return make_pair( aDataSet, aHeader );
+		}
   } //endif ( theFile.is_open() )
 	
   throw ( FileException( SERROR( "Could not open header file" ),
@@ -163,6 +181,16 @@ FBEGIN;
 	aHeader->saveHeader( theFile );  
   theFile.close();
   
+  if ( aDataSet->getDimension() == 3 )
+	{
+		TImagePtr flippedImage( new TImage( aDataSet->getDimension(), aDataSet->getExtents() ) );
+		for( ushort z = 0; z < aDataSet->getExtent(2); ++z )
+			for( ushort y = 0; y < aDataSet->getExtent(1); ++y )
+				for( ushort x = 0; x < aDataSet->getExtent(0); ++x )
+					(*flippedImage)( x, aDataSet->getExtent(1) - 1 - y, aDataSet->getExtent(2) - 1 - z ) = (*aDataSet)( x, y, z );
+		(*aDataSet) = (*flippedImage);
+	}
+		
 	std::string sDataFilename( sFilename, 0, sFilename.size() - 4 );
   if ( usVoxelSize == 1 )
     sDataFilename += "rawb";
