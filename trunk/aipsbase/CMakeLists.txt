@@ -42,7 +42,7 @@ FIND_PATH(BOOST_LEXICAL_CAST boost/lexical_cast.hpp
   /usr/local/include
         DOC "Directory containing lexical_cast.hpp")
 IF( NOT BOOST_LEXICAL_CAST )
- MESSAGE( SEND_ERROR "boost::lexical_cast is mandatory for installation" )
+ MESSAGE( SEND_ERROR "boost::lexical_cast<> is mandatory for installation" )
 ENDIF( NOT BOOST_LEXICAL_CAST )
 
 FIND_PATH(BOOST_SHARED_PTR boost/shared_ptr.hpp
@@ -50,8 +50,16 @@ FIND_PATH(BOOST_SHARED_PTR boost/shared_ptr.hpp
   /usr/local/include
         DOC "Directory containing shared_ptr.hpp")
 IF( NOT BOOST_SHARED_PTR )
- MESSAGE( SEND_ERROR "boost::lexical_cast is mandatory for installation" )
+ MESSAGE( SEND_ERROR "boost::shared_ptr<> is mandatory for installation" )
 ENDIF( NOT BOOST_SHARED_PTR )
+
+FIND_PATH(BOOST_WEAK_PTR boost/weak_ptr.hpp
+  /usr/include
+  /usr/local/include
+        DOC "Directory containing weak_ptr.hpp")
+IF( NOT BOOST_WEAK_PTR )
+ MESSAGE( SEND_ERROR "boost::weak_ptr<> is mandatory for installation" )
+ENDIF( NOT BOOST_WEAK_PTR )
 
 FIND_PATH(BOOST_TIMER boost/timer.hpp
   /usr/include
@@ -60,9 +68,18 @@ FIND_PATH(BOOST_TIMER boost/timer.hpp
 IF( NOT BOOST_TIMER )
  MESSAGE( SEND_ERROR "boost::timer is mandatory for installation" )
 ENDIF( NOT BOOST_TIMER )
+
+FIND_PATH(BOOST_OPTIONAL boost/optional/optional.hpp
+  /usr/include
+  /usr/local/include
+        DOC "Directory containing optional.hpp")
+IF( NOT BOOST_OPTIONAL )
+ MESSAGE( SEND_ERROR "boost::optional<> is mandatory for installation" )
+ENDIF( NOT BOOST_OPTIONAL )
+
+INCLUDE_DIRECTORIES( ${BOOST_LEXICAL_CAST} ${BOOST_SHARED_PTR} ${BOOST_WEAK_PTR} ${BOOST_TIMER} ${BOOST_OPTIONAL} )
+SET( AIPSBASE_EXTRA_INCLUDES ${BOOST_LEXICAL_CAST} ${BOOST_SHARED_PTR} ${BOOST_WEAK_PTR} ${BOOST_TIMER} ${BOOST_OPTIONAL} )
 #END Checking for components of the boost libarries
-INCLUDE_DIRECTORIES( ${BOOST_LEXICAL_CAST} ${BOOST_SHARED_PTR} ${BOOST_TIMER} )
-SET( AIPSBASE_EXTRA_INCLUDES ${BOOST_LEXICAL_CAST} ${BOOST_SHARED_PTR} ${BOOST_TIMER} )
 
 #BEGIN Look for blitz++ library and includes
 IF(USE_BLITZ)

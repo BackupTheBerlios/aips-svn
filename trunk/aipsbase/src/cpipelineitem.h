@@ -295,12 +295,15 @@ private:
   std::vector<SConnection> connectionsPtrVec;   ///< Input connections of the module
   std::vector<ulong> connectionsTimeStampsVec; ///< Time stamps of all connections
   boost::shared_ptr<CModuleDialog> itemDialog;  ///< Item dialog
-	bool bRecompute; ///< Do we enforce a recomputation of all outputs?  
+	bool bRecompute; ///< Do we enforce a recomputation of all outputs?
+  
   struct itemCompareFunctor ///< Functor to compare two pipeline items
 	{
 		bool operator() ( CPipelineItem* a, CPipelineItem* b ) throw();
 	};
-	static std::set<CPipelineItem*> allItemsSet; ///< All items of the pipeline we're actually working on	
+  
+	static std::set<CPipelineItem*> allItemsSet; ///< All items of the pipeline we're actually working on
+  
 	static std::priority_queue<CPipelineItem*, std::vector<CPipelineItem*>, itemCompareFunctor>
 		itemsPriQueue; ///< Priority queue to execute all pipeline items in correct order
 private:	
