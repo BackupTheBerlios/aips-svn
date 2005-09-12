@@ -94,7 +94,7 @@ TDataFile CCommonImageHandler::load( const std::string& sFilename ) const throw(
 			{
 				Magick::ColorGray grayColor = anImage.pixelColor( x, y );
 				short shade = static_cast<short>( round( grayColor.shade() * static_cast<double>( sIntensityMaximum ) ) );
-				(*aDataSet)( dimensionSize[0] - 1 - x, y ) = shade;
+				(*aDataSet)( x, y ) = shade;
 			}
 	}
 	else if ( imageType == Magick::BilevelType )
@@ -105,7 +105,7 @@ TDataFile CCommonImageHandler::load( const std::string& sFilename ) const throw(
 			for( uint x = 0; x < anImage.columns(); ++x )
 			{
 				Magick::ColorMono monoColor = anImage.pixelColor( x, y );
-				(*aDataSet)( dimensionSize[0] - 1 - x, y ) = monoColor.mono();
+				(*aDataSet)( x, y ) = monoColor.mono();
 			}
 	}
 	else 
@@ -118,9 +118,9 @@ TDataFile CCommonImageHandler::load( const std::string& sFilename ) const throw(
 				short sShadeRed = static_cast<short>( round( color.red() * static_cast<double>( sIntensityMaximum ) ) );
 				short sShadeGreen = static_cast<short>( round( color.green() * static_cast<double>( sIntensityMaximum ) ) );
 				short sShadeBlue = static_cast<short>( round( color.blue() * static_cast<double>( sIntensityMaximum ) ) );
-				(*aDataSet)( dimensionSize[0] - 1 - x, y, 0 ) = sShadeRed;
-				(*aDataSet)( dimensionSize[0] - 1 - x, y, 1 ) = sShadeGreen;
-				(*aDataSet)( dimensionSize[0] - 1 - x, y, 2 ) = sShadeBlue;
+				(*aDataSet)( x, y, 0 ) = sShadeRed;
+				(*aDataSet)( x, y, 1 ) = sShadeGreen;
+				(*aDataSet)( x, y, 2 ) = sShadeBlue;
 			}
 	}
 	// Set data range
@@ -172,7 +172,7 @@ TDataFile CCommonImageHandler::loadImageSequence( const std::string& sFilename )
 				{
 					Magick::ColorGray grayColor = anImage.pixelColor( x, y );
 					short shade = static_cast<short>( round( grayColor.shade() * static_cast<double>( sIntensityMaximum ) ) );
-					(*aDataSet)( dimensionSize[0] - 1 - x, y ) = shade;
+					(*aDataSet)( x, y ) = shade;
 				}
 		}
 		else if ( imageType == Magick::BilevelType )
@@ -183,7 +183,7 @@ TDataFile CCommonImageHandler::loadImageSequence( const std::string& sFilename )
 				for( uint x = 0; x < anImage.columns(); ++x )
 				{
 					Magick::ColorMono monoColor = anImage.pixelColor( x, y );
-					(*aDataSet)( dimensionSize[0] - 1 - x, y ) = monoColor.mono();
+					(*aDataSet)( x, y ) = monoColor.mono();
 				}
 		}
 		else 
@@ -196,9 +196,9 @@ TDataFile CCommonImageHandler::loadImageSequence( const std::string& sFilename )
 					short sShadeRed = static_cast<short>( round( color.red() * static_cast<double>( sIntensityMaximum ) ) );
 					short sShadeGreen = static_cast<short>( round( color.green() * static_cast<double>( sIntensityMaximum ) ) );
 					short sShadeBlue = static_cast<short>( round( color.blue() * static_cast<double>( sIntensityMaximum ) ) );
-					(*aDataSet)( dimensionSize[0] - 1 - x, y, 0 ) = sShadeRed;
-					(*aDataSet)( dimensionSize[0] - 1 - x, y, 1 ) = sShadeGreen;
-					(*aDataSet)( dimensionSize[0] - 1 - x, y, 2 ) = sShadeBlue;
+					(*aDataSet)( x, y, 0 ) = sShadeRed;
+					(*aDataSet)( x, y, 1 ) = sShadeGreen;
+					(*aDataSet)( x, y, 2 ) = sShadeBlue;
 				}
 		}		
 	}
@@ -226,7 +226,7 @@ TDataFile CCommonImageHandler::loadImageSequence( const std::string& sFilename )
 					{
 						Magick::ColorGray grayColor = anImage.pixelColor( x, y );
 						short shade = static_cast<short>( round( grayColor.shade() * static_cast<double>( sIntensityMaximum ) ) );
-						(*aDataSet)( dimensionSize[0] - 1 - x, y, z ) = shade;
+						(*aDataSet)( x, y, z ) = shade;
 					}
 			}
 			else if ( imageType == Magick::BilevelType )
@@ -236,7 +236,7 @@ TDataFile CCommonImageHandler::loadImageSequence( const std::string& sFilename )
 					for( uint x = 0; x < anImage.columns(); ++x )
 					{
 						Magick::ColorMono monoColor = anImage.pixelColor( x, y );
-						(*aDataSet)( dimensionSize[0] - 1 - x, y, z ) = monoColor.mono();
+						(*aDataSet)( x, y, z ) = monoColor.mono();
 					}
 			}
 			else 
@@ -248,9 +248,9 @@ TDataFile CCommonImageHandler::loadImageSequence( const std::string& sFilename )
 						short sShadeRed = static_cast<short>( round( color.red() * static_cast<double>( sIntensityMaximum ) ) );
 						short sShadeGreen = static_cast<short>( round( color.green() * static_cast<double>( sIntensityMaximum ) ) );
 						short sShadeBlue = static_cast<short>( round( color.blue() * static_cast<double>( sIntensityMaximum ) ) );
-						(*aDataSet)( dimensionSize[0] - 1 - x, y, z, 0 ) = sShadeRed;
-						(*aDataSet)( dimensionSize[0] - 1 - x, y, z, 1 ) = sShadeGreen;
-						(*aDataSet)( dimensionSize[0] - 1 - x, y, z, 2 ) = sShadeBlue;
+						(*aDataSet)( x, y, z, 0 ) = sShadeRed;
+						(*aDataSet)( x, y, z, 1 ) = sShadeGreen;
+						(*aDataSet)( x, y, z, 2 ) = sShadeBlue;
 					}
 			}		
 		}
@@ -300,7 +300,7 @@ void CCommonImageHandler::save( const std::string& sFilename, const TDataFile& t
 		{
 			if ( aDataSet->getDataDimension() == 2 )
 			{
-				Magick::PixelPacket *pixel = pixel_cache + y * aDataSet->getExtent( 0 ) + (aDataSet->getExtent( 0 ) - 1 - x);
+				Magick::PixelPacket *pixel = pixel_cache + y * aDataSet->getExtent( 0 ) + x;
 				Magick::ColorRGB actColor(
 					static_cast<double>( (*aDataSet)( x, y, 0 ) ) / static_cast<double>( aDataSet->getMaximum() ),
 					static_cast<double>( (*aDataSet)( x, y, 1 ) ) / static_cast<double>( aDataSet->getMaximum() ), 0.0 );
@@ -308,7 +308,7 @@ void CCommonImageHandler::save( const std::string& sFilename, const TDataFile& t
 			}
 			else if ( aDataSet->getDataDimension() > 2 )
 			{
-				Magick::PixelPacket *pixel = pixel_cache + y * aDataSet->getExtent( 0 ) + (aDataSet->getExtent( 0 ) - 1 - x);
+				Magick::PixelPacket *pixel = pixel_cache + y * aDataSet->getExtent( 0 ) + x;
 				Magick::ColorRGB actColor(
 					static_cast<double>( (*aDataSet)( x, y, 0 ) ) / static_cast<double>( aDataSet->getMaximum() ),
 					static_cast<double>( (*aDataSet)( x, y, 1 ) ) / static_cast<double>( aDataSet->getMaximum() ),
@@ -317,7 +317,7 @@ void CCommonImageHandler::save( const std::string& sFilename, const TDataFile& t
 			}
 			else
 			{
-				Magick::PixelPacket *pixel = pixel_cache + y * aDataSet->getExtent( 0 ) + (aDataSet->getExtent( 0 ) - 1 - x);
+				Magick::PixelPacket *pixel = pixel_cache + y * aDataSet->getExtent( 0 ) + x;
 				Magick::ColorGray actColor( static_cast<double>( (*aDataSet)( x, y ) ) / static_cast<double>( aDataSet->getMaximum() ) );
 				*pixel = actColor;
 			}
@@ -375,7 +375,7 @@ void CCommonImageHandler::saveImageSequence(  const std::string& sFilename, TIma
 			{
 				if ( aDataSet->getDataDimension() == 2 )
 				{
-					Magick::PixelPacket *pixel = pixel_cache + y * aDataSet->getExtent( 0 ) + (aDataSet->getExtent( 0 ) - 1 - x);
+					Magick::PixelPacket *pixel = pixel_cache + y * aDataSet->getExtent( 0 ) + x;
 					Magick::ColorRGB actColor( 
 						static_cast<double>( (*aDataSet)( x, y, z, 0 ) ) / static_cast<double>( aDataSet->getMaximum() ),
 						static_cast<double>( (*aDataSet)( x, y, z, 1 ) ) / static_cast<double>( aDataSet->getMaximum() ), 0.0 );
@@ -383,7 +383,7 @@ void CCommonImageHandler::saveImageSequence(  const std::string& sFilename, TIma
 				}
 				else if ( aDataSet->getDataDimension() > 2 )
 				{
-					Magick::PixelPacket *pixel = pixel_cache + y * aDataSet->getExtent( 0 ) + (aDataSet->getExtent( 0 ) - 1 - x);
+					Magick::PixelPacket *pixel = pixel_cache + y * aDataSet->getExtent( 0 ) + x;
 					Magick::ColorRGB actColor( 
 						static_cast<double>( (*aDataSet)( x, y, z, 0 ) ) / static_cast<double>( aDataSet->getMaximum() ),
 						static_cast<double>( (*aDataSet)( x, y, z, 1 ) ) / static_cast<double>( aDataSet->getMaximum() ),
@@ -392,7 +392,7 @@ void CCommonImageHandler::saveImageSequence(  const std::string& sFilename, TIma
 				}			
 				else
 				{
-					Magick::PixelPacket *pixel = pixel_cache + y * aDataSet->getExtent( 0 ) + (aDataSet->getExtent( 0 ) - 1 - x);
+					Magick::PixelPacket *pixel = pixel_cache + y * aDataSet->getExtent( 0 ) + x;
 					Magick::ColorGray actColor( static_cast<double>( (*aDataSet)( x, y, z ) ) / static_cast<double>( aDataSet->getMaximum() ) );
 					*pixel = actColor;
 				}
