@@ -26,6 +26,10 @@ OPTION(USE_XMLPP "Support loading of XML files (strongly recommended)" ON )
 
 OPTION(USE_ITK "Compile ITK adapter" OFF )
 
+OPTION(USE_VTK "Compile VTK adapter" OFF )
+
+OPTION(USE_IM "Compile ImageMagick adapter" OFF )
+
 SET( DEBUG_LEVEL 0 CACHE STRING "Level of debugging output (This is either 0 (no output) or 1,2,3)" )
 
 OPTION(BUILD_SHARED_LIBS "Build with shared libraries" ON )
@@ -199,6 +203,18 @@ IF(USE_ITK)
   LINK_DIRECTORIES( ${ITK_LIBRARY_DIRS} )
   LINK_LIBRARIES( ITKCommon )
 ENDIF(USE_ITK)
+
+IF(USE_VTK)
+  INCLUDE(${CMAKE_ROOT}/Modules/FindVTK.cmake)
+  IF(!VTK_FOUND)
+    MESSAGE( SEND_ERROR "Cannot find VTK library" )
+  ENDIF(!VTK_FOUND) 
+  INCLUDE( ${VTK_USE_FILE} )
+  SET( HAVE_VTK 1 )
+  INCLUDE_DIRECTORIES( ${VTK_INCLUDE_DIRS} )
+  LINK_DIRECTORIES( ${VTK_LIBRARY_DIRS} )
+  LINK_LIBRARIES( vtkCommon )
+ENDIF(USE_VTK)
 
 INCLUDE_DIRECTORIES( ${PROJECT_BINARY_DIR} ${PROJECT_SOURCE_DIR}/src )
 

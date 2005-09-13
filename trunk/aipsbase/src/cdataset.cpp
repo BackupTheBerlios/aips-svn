@@ -35,12 +35,13 @@ CDataSet::CDataSet( const ushort usDimension_, const size_t* extentArr_,
 	const std::string &sClassVersion_,
   const std::string &sDerivedFrom_ ) throw ()
   : CBase( sClassName_, sClassVersion_, sDerivedFrom_ ), usDimension( usDimension_ ),
-  extentVec( usDimension_ + 1 ), baseElementDimensionsVec( usDimension_ ), dataDimensionSize( dataDimensionSize_ )
+  extentVec( usDimension_ + 1 ), baseElementDimensionsVec( usDimension_ ), originVec( usDimension_ ), dataDimensionSize( dataDimensionSize_ )
 {
   for ( ushort i = 0; i < usDimension; i++ )
   {
     extentVec[i] = extentArr_[i];
     baseElementDimensionsVec[i] = 1.0;
+    originVec[i] = 0.0;
   }
 	extentVec[usDimension] = dataDimensionSize;
 }
@@ -58,12 +59,13 @@ CDataSet::CDataSet( const ushort usDimension_, const vector<size_t> extentVec_,
 	const std::string &sClassVersion_ ,
   const std::string &sDerivedFrom_ ) throw ()
   : CBase( sClassName_, sClassVersion_, sDerivedFrom_ ),
-  usDimension( usDimension_ ), extentVec( extentVec_ ), baseElementDimensionsVec( usDimension_ ),
+  usDimension( usDimension_ ), extentVec( extentVec_ ), baseElementDimensionsVec( usDimension_ ), originVec( usDimension_ ),
   dataDimensionSize( dataDimensionSize_ )  
 {
 	for ( ushort i = 0; i < usDimension; i++ )
   {
     baseElementDimensionsVec[i] = 1.0;
+    originVec[i] = 0.0;
   }
   extentVec.push_back( dataDimensionSize );
 }
@@ -72,10 +74,12 @@ CDataSet::CDataSet( const ushort usDimension_, const vector<size_t> extentVec_,
 CDataSet::CDataSet( const size_t extent_, const size_t dataDimensionSize_,
 	const std::string &sClassName_, const std::string &sClassVersion_, const std::string &sDerivedFrom_ ) throw()
   : CBase( sClassName_, sClassVersion_, sDerivedFrom_ ), usDimension( 1 ), extentVec( 2 ),
-  	baseElementDimensionsVec( 1 ), dataDimensionSize( dataDimensionSize_ )
+  	baseElementDimensionsVec( 1 ), originVec( 1 ), dataDimensionSize( dataDimensionSize_ )
 {
 	extentVec[0] = extent_;
 	extentVec[1] = dataDimensionSize_;
+  baseElementDimensionsVec[0] = 1.0;
+  originVec[0] = 0.0;
 }
 
 CDataSet::CDataSet( const CDataSet& aDataSet ) throw()
@@ -85,6 +89,7 @@ FBEGIN;
   usDimension = aDataSet.usDimension;
   dataDimensionSize = aDataSet.dataDimensionSize;
   extentVec = aDataSet.extentVec;
+  originVec = aDataSet.originVec;
   baseElementDimensionsVec = aDataSet.baseElementDimensionsVec;
 FEND;
 }
@@ -147,7 +152,20 @@ double CDataSet::getBaseElementDimension( const ushort usIndex ) const throw( Ou
     throw( OutOfRangeException( SERROR("Index out of range"), CException::RECOVER, ERR_BADDIMENSION ) );
   return baseElementDimensionsVec[usIndex];
 }
-  
+
+std::vector<double> CDataSet::getOrigin() const throw()
+{
+  return originVec;
+}
+
+double CDataSet::getOrigin( const ushort usIndex ) const
+    throw( OutOfRangeException )
+{
+  if ( usIndex > ( usDimension - 1 ) )
+    throw( OutOfRangeException( SERROR("Index out of range"), CException::RECOVER, ERR_BADDIMENSION ) );
+  return originVec[usIndex];
+}
+
 /************
  * Mutators *
  ************/
@@ -176,6 +194,50 @@ void CDataSet::setBaseElementDimensions( const std::vector<double> dimensionsVec
 	baseElementDimensionsVec = dimensionsVec;
 }
 
+/**
+ * \param dimensionsVec double array of updated origin
+ * \throws OutOfRangeException if vector of updated dimensions has the wrong size
+ */
+void CDataSet::setBaseElementDimensions( const double* dimensionsVec_ ) throw()
+{
+  for( uint i = 0; i < usDimension; ++i )
+    baseElementDimensionsVec[i] = dimensionsVec_[i];
+}
+
+/**
+ * \param usIndex index of dimension to update
+ * \param dValue new dimension value
+ * \throws OutOfRangeException if usIndex is greater than dataset dimension minus one
+ */
+void CDataSet::setOrigin( const ushort usIndex, const double dValue ) throw( OutOfRangeException )
+{
+  if ( usIndex > ( usDimension - 1 ) )
+    throw( OutOfRangeException( SERROR("Index out of range"), CException::RECOVER, ERR_BADDIMENSION ) );
+  originVec[usIndex] = dValue;
+}
+
+/**
+ * \param originVec_ vector of updated origin
+ * \throws OutOfRangeException if vector of updated dimensions has the wrong size
+ */
+void CDataSet::setOrigin( const std::vector<double> originVec_ ) throw( OutOfRangeException )
+{
+  if ( usDimension != originVec_.size() )
+    throw( OutOfRangeException( SERROR("Origin vector has wrong number of elements"),
+      CException::RECOVER, ERR_BADDIMENSION ) );
+  originVec = originVec_;
+}
+
+/**
+ * \param dimensionsVec double array of updated origin
+ * \throws OutOfRangeException if vector of updated dimensions has the wrong size
+ */
+void CDataSet::setOrigin( const double* originVec_ ) throw()
+{
+  for( uint i = 0; i < usDimension; ++i )
+    originVec[i] = originVec_[i];
+}
+
 /**************************
  * Operators (Assignment) *
  **************************/
@@ -191,6 +253,7 @@ CDataSet& CDataSet::operator=( CDataSet& aDataSet ) throw()
   usDimension = aDataSet.usDimension;
   extentVec = aDataSet.extentVec;
   dataDimensionSize = aDataSet.dataDimensionSize;
+  originVec = aDataSet.originVec;
   return *this;
 }
 

@@ -18,6 +18,7 @@
 
 #ifdef HAVE_VTK
 #include "vtkUnsignedShortArray.h"
+#include <cvtkadapter.h>
 using namespace aips;
 using namespace boost;
 using namespace std;
@@ -79,7 +80,7 @@ TDataFile CVtkHandler::load( const string& sFilename )
 FBEGIN;
 		// Initialize reader and load image
     shared_ptr<CImageHeader> aHeader( new CImageHeader );
-		TDataSetPtr aDataSet;
+		
     vtkStructuredPointsReader *spr = vtkStructuredPointsReader::New();
     spr->SetFileName( sFilename.c_str() );
 		spr->Update();
@@ -101,10 +102,10 @@ FBEGIN;
 
 		aHeader->setEndianess( false );
 		
-		vtkPointData *p= sp->GetPointData();
+		//vtkPointData *p= sp->GetPointData();
 		
 		// Convert vtkDataArray to CDataSet
-		if ( sp->GetScalarType() == VTK_UNSIGNED_SHORT )
+		/*if ( sp->GetScalarType() == VTK_UNSIGNED_SHORT )
 		{			
 			vtkShortArray* myArray = static_cast<vtkShortArray*>( p->GetScalars() );
 			aDataSet = this->convertVTKImage<short, TImage, vtkShortArray>( myArray, dimensionSize );
@@ -121,7 +122,11 @@ FBEGIN;
 			vtkDoubleArray* myArray = static_cast<vtkDoubleArray*>( p->GetScalars() );
 			aDataSet = this->convertVTKImage<double, TField, vtkDoubleArray>( myArray, dimensionSize );
 			aHeader->setVoxelType( "Float32" );
-		}		
+		}		*/
+
+    CVTKAdapter myAdapter;
+    myAdapter.setExternalData( sp );
+    TDataSetPtr aDataSet = myAdapter.convertToInternal();
 		
 		// Clean up
     spr->Delete();
@@ -140,7 +145,7 @@ void CVtkHandler::save( const string& sFilename, const TDataFile& theData )
 {
 FBEGIN;
     // Determine dimension size
-    size_t dimensionSize[3];
+/*    size_t dimensionSize[3];
     dimensionSize[0] = theData.first->getExtent(0);
     dimensionSize[1] = theData.first->getExtent(1);
     if( theData.first->getDimension() > 2 )
@@ -149,9 +154,12 @@ FBEGIN;
         dimensionSize[2] = 1;
 
 		size_t siz = dimensionSize[0] * dimensionSize[1] * dimensionSize[2];
-cerr << dimensionSize[0] << " " << dimensionSize[1] << " " << dimensionSize[2] << endl;        		
+cerr << dimensionSize[0] << " " << dimensionSize[1] << " " << dimensionSize[2] << endl;        		*/
     // Create vtk structured points structure
-    vtkStructuredPoints* sp = vtkStructuredPoints::New();
+    CVTKAdapter myAdapter( theData.first );
+    vtkStructuredPoints* sp = myAdapter.convertToExternal();
+         
+    /*= vtkStructuredPoints::New();
     ushort* array = new ushort[siz];
     sp->SetDimensions( dimensionSize[0], dimensionSize[1], dimensionSize[2] );
     sp->AllocateScalars();
@@ -192,7 +200,7 @@ cerr << dimensionSize[0] << " " << dimensionSize[1] << " " << dimensionSize[2] <
 		    delete array;
 				throw( FileException( "CVTkHandler - Unknown image format in dataset. Image was not saved" ) );
 			}
-		}
+		}*/
     
 		// Save generated vtkStructuredPoints structure
     vtkStructuredPointsWriter *spw = vtkStructuredPointsWriter::New();
@@ -204,9 +212,9 @@ cerr << dimensionSize[0] << " " << dimensionSize[1] << " " << dimensionSize[2] <
     // Clean up
     spw->Delete();
     sp->Delete();
-		if ( sArray != NULL ) sArray->Delete();
+/*		if ( sArray != NULL ) sArray->Delete();
 		if ( fArray != NULL ) fArray->Delete();
-		delete array;
+		delete array;*/
 FEND;		
 }
 #endif

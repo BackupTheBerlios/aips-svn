@@ -117,11 +117,25 @@ public:
   /// Get one dimension of the base element
   double getBaseElementDimension( const ushort usIndex ) const
   	throw( OutOfRangeException );
+  /// Get the origin of the dataset
+  std::vector<double> getOrigin() const
+    throw();
+  /// Get a coordinate of the origin of the dataset
+  double getOrigin( const ushort usIndex ) const
+    throw( OutOfRangeException );
 /* Mutators */
 	void setBaseElementDimension( const ushort usIndex, const double dValue )
 		throw( OutOfRangeException );
 	void setBaseElementDimensions( const std::vector<double> dimensionsVec )
-		throw( OutOfRangeException );	
+		throw( OutOfRangeException );
+  void setBaseElementDimensions( const double* dimensionsVec_ )
+    throw();
+  void setOrigin( const ushort usIndex, const double dValue )
+    throw( OutOfRangeException );
+  void setOrigin( const std::vector<double> originVec_ )
+    throw( OutOfRangeException );
+  void setOrigin( const double* originVec_ )
+    throw(); 
 /* Operators (Assignment) */
   /// Assignment operator for datasets    
   CDataSet& operator=( CDataSet& aDataSet )
@@ -134,6 +148,7 @@ protected:
   ushort usDimension;            ///< Dimension of the data set
   std::vector<size_t> extentVec; ///< Size of each dimension
   std::vector<double> baseElementDimensionsVec; ///< Size of one base element
+  std::vector<double> originVec; ///< Size of one base element
   size_t dataDimensionSize;      ///< Dimension of each field entry
 };
 
