@@ -24,6 +24,8 @@ OPTION(USE_BLITZ "Use the blitz++ library for numerical computations (recommende
 
 OPTION(USE_XMLPP "Support loading of XML files (strongly recommended)" ON )
 
+OPTION(USE_ITK "Compile ITK adapter" OFF )
+
 SET( DEBUG_LEVEL 0 CACHE STRING "Level of debugging output (This is either 0 (no output) or 1,2,3)" )
 
 OPTION(BUILD_SHARED_LIBS "Build with shared libraries" ON )
@@ -185,6 +187,18 @@ IF(USE_XMLPP)
 	ENDIF( GLIB_CONFIG_INCLUDES )
 ENDIF(USE_XMLPP)
 #END Look for the libxml++ library, its dependencies and includes
+
+IF(USE_ITK)
+  INCLUDE(${CMAKE_ROOT}/Modules/FindITK.cmake)
+  IF(!ITK_FOUND)
+    MESSAGE( SEND_ERROR "Cannot find ITK library" )
+  ENDIF(!ITK_FOUND) 
+  INCLUDE( ${ITK_USE_FILE} )
+  SET( HAVE_ITK 1 )
+  INCLUDE_DIRECTORIES( ${ITK_INCLUDE_DIRS} )
+  LINK_DIRECTORIES( ${ITK_LIBRARY_DIRS} )
+  LINK_LIBRARIES( ITKCommon )
+ENDIF(USE_ITK)
 
 INCLUDE_DIRECTORIES( ${PROJECT_BINARY_DIR} ${PROJECT_SOURCE_DIR}/src )
 

@@ -2,5 +2,8 @@
 #cmakedefine USE_STANDALONE
 #cmakedefine USE_XMLPP
 #cmakedefine USE_DOUBLE
+#cmakedefine USE_ITK
+#cmakedefine USE_VTK
+#cmakedefine USE_MAGICK
 #cmakedefine DEBUG_MODE
 #cmakedefine BENCHMARK
