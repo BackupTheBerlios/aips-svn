@@ -163,29 +163,33 @@ void CITKHandler::save( const string& sFilename, const TDataFile& theData )
 			
 	if ( theData.first->getType() == typeid( short ) )
 	{		
-		typedef itk::Image<short,3> ImageType;
-		typedef itk::ImportImageFilter<short,3> ImportFilterType;
-		typedef itk::ImageFileWriter<ImageType> FileWriter;
-		FileWriter::Pointer writer = FileWriter::New();
-		TImagePtr image = static_pointer_cast<TImage>( theData.first );
-		ImportFilterType::Pointer importFilter = ImportFilterType::New();
-		ImportFilterType::SizeType size;
-		for( uint i = 0; i < 3; ++i )
-			size[i] = dimensionSize[i];
-		ImportFilterType::IndexType start;
-		start.Fill(0);
-		ImportFilterType::RegionType region;
-		region.SetIndex( start );
-		region.SetSize( size );
-		importFilter->SetRegion( region );
-		/* FIXME Origin and Spacing are not imported */
-		double origin[3] = {0.0,0.0,0.0};
-		importFilter->SetOrigin( origin );
-		double spacing[3] = {1.0,1.0,1.0};
-		importFilter->SetSpacing( spacing );
-		importFilter->SetImportPointer( image->getArray(), siz, false );		
+    typedef itk::Image<short,3> ImageType;
+// 		typedef itk::ImportImageFilter<short,3> ImportFilterType;
+// 		TImagePtr image = static_pointer_cast<TImage>( theData.first );
+// 		ImportFilterType::Pointer importFilter = ImportFilterType::New();
+// 		ImportFilterType::SizeType size;
+// 		for( uint i = 0; i < 3; ++i )
+// 			size[i] = dimensionSize[i];
+// 		ImportFilterType::IndexType start;
+// 		start.Fill(0);
+// 		ImportFilterType::RegionType region;
+// 		region.SetIndex( start );
+// 		region.SetSize( size );
+// 		importFilter->SetRegion( region );
+// 		double origin[3] = {0.0,0.0,0.0};
+// 		importFilter->SetOrigin( origin );
+// 		double spacing[3] = {1.0,1.0,1.0};
+// 		importFilter->SetSpacing( spacing );
+//     importFilter->SetImportPointer( image->getArray(), siz, false );
+    CITKAdapter myAdapter( theData.first );
+    typedef itk::Image<short,3> ImageType;
+    typedef itk::ImageFileWriter<ImageType> FileWriter;
+    ImageType::Pointer myimage;
+    myAdapter.convertToExternal<ImageType>( myimage );
+//    myimage = importFilter->GetOutput();
+    FileWriter::Pointer writer = FileWriter::New();
 		writer->SetFileName( sFilename.c_str() );
-		writer->SetInput( importFilter->GetOutput() );
+  	writer->SetInput( myimage );
 		try
 		{
 			writer->Update();

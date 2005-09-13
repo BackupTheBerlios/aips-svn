@@ -52,7 +52,7 @@ DBG2("Seeking data offset");
 	cerr << dimensionSize[0] << endl;
 	cerr << dimensionSize[1] << endl;
 	cerr << dimensionSize[2] << endl;
-	size_t dataLength = dimensionSize[0] * dimensionSize[1] * dimensionSize[2];	
+//	size_t dataLength = dimensionSize[0] * dimensionSize[1] * dimensionSize[2];	
 	TField3DPtr aDataSet( new TField3D( 3, dimensionSize ) );
   loadData( aDataSet, theFile, DFloat32, bFileEndianess );
   	return make_pair( aDataSet, aHeader );
