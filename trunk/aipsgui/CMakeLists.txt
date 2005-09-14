@@ -4,7 +4,7 @@ PROJECT(aipsfilehandlers)
 SET(CMAKE_VERBOSE_MAKEFILE ON)
 
 #add definitions, compiler switches, etc. 
-ADD_DEFINITIONS(-Wall -pthread)
+ADD_DEFINITIONS(-Wall -DQT_THREAD_SUPPORT)
 
 SET( DEBUG_LEVEL 0 CACHE STRING "Level of debugging output (This is either 0 (no output) or 1,2,3)")
 
