@@ -5,7 +5,7 @@ PROJECT(meshsegmenter)
 SET(CMAKE_VERBOSE_MAKEFILE ON)
 
 #add definitions, compiler switches, etc. 
-ADD_DEFINITIONS(-Wall -pthread)
+ADD_DEFINITIONS(-Wall)
 
 SET( DEBUG_LEVEL 0 CACHE STRING "Level of debugging output (This is either 0 (no output) or 1,2,3)")
 

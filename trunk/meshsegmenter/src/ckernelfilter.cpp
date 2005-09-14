@@ -57,7 +57,7 @@ CKernelFilter::~CKernelFilter() throw()
 TImagePtr CKernelFilter::applyKernel( TImagePtr dataPtr, Array<double, 3>& kernel ) throw()
 {
 BENCHSTART;
-
+FBEGIN;
   size_t usDims[] = { dataPtr->getExtent(0), dataPtr->getExtent(1), 
 		dataPtr->getExtent(2) };
   TImagePtr outputPtr ( new TImage( 3, dataPtr->getExtents(), 
@@ -82,14 +82,15 @@ DBG2("Starting filter BLITZ++");
       shape(usDims[0], usDims[1], usDims[2]), neverDeleteData, AIPSArray<3>() );
 
 		int lastpos = 0;
+		cerr << ">>>";
     for ( Array<short, 3>::iterator it = work.begin(); it != work.end(); ++it )
     {
       TinyVector<int, 3> position = it.position();
-      if ( position[2] != lastpos )
+/*      if ( position[2] != lastpos )
       {
       	cerr << position[2] << " ";
       	lastpos = position[2];
-      }
+      }*/
       double dTmp = 0;
       for ( int k = position[0] - usRadius; k < ( position[0] + usRadius + 1 ); ++k )
         for ( int l = position[1] - usRadius; l < ( position[1] + usRadius + 1 ); ++l )
@@ -108,9 +109,11 @@ DBG2("Starting filter BLITZ++");
 			else if ( output( position ) < outputPtr->getMinimum() )
         outputPtr->setMinimum( output( position ) );
     }
+		cerr << "<<<" << endl;
   }
 	PROG_RESET();	
 BENCHSTOP;
+FEND;
   return outputPtr;
 }
 

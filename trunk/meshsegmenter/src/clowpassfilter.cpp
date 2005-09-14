@@ -45,12 +45,14 @@ CLowPassFilter::~CLowPassFilter() throw()
 /** Reimplemented from CPipelineItem */
 void CLowPassFilter::apply() throw()
 {
+FBEGIN;
   ushort usRadius = 1 + 2 * parameters.getUnsignedLong("Radius"); // Determine filter radius
 	bModuleReady = false;
   TImagePtr inputPtr = static_pointer_cast<TImage>( getInput() );
   if ( inputPtr.get() == NULL || inputPtr->getDimension() < 2 || inputPtr->getDimension() > 3 )
   {
     alog << LWARN << SERROR("Input type is no 2D image or 3D volume!") << endl;
+FEND;    
     return;
   }
 	bModuleReady = true;
@@ -81,9 +83,11 @@ void CLowPassFilter::apply() throw()
   if ( !outputPtr )
   {
     alog << LWARN << SERROR("invalid input data") << endl;
+FEND;    
     return;
   }
   setOutput( outputPtr );
+FEND;  
 }
 
 /** Reimplemented from CPipelineItem */
