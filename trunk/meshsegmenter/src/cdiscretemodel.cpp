@@ -33,7 +33,7 @@ void CDiscreteModel::setExternalForceField( TField3DPtr field_ )
 	field = field_;
 }
 
-void CDiscreteModel::setMesh( CMesh* mesh_ )
+void CDiscreteModel::setMesh( TMesh* mesh_ )
 {
 	mesh = mesh_;
 }
@@ -44,7 +44,7 @@ void CDiscreteModel::iterate()
 	double internal = 0.025;
 	boost::timer t;
 	std::vector<size_t> extents = field->getExtents();
-	mesh->edgeMelt( 0.5*disc );
+	edgeMelt( *mesh, 0.5*disc );
 /*	for( list<SVertex*>::iterator vit = mesh->vList.begin(); vit != mesh->vList.end(); ++vit )
 	{
 		swap( (*vit)->position[2], (*vit)->position[1] );
@@ -57,55 +57,60 @@ void CDiscreteModel::iterate()
 /*		while( mesh->subdivide( 1.25*disc ) > 0 )
 			cerr << ".";*/
 		boost::progress_display show( 1000 );
+		ulong numv = 0;
 		for(int i = 0; i < 1000; ++i )
 		{
 			ulong stableNodes = 0;
 			if (i%(static_cast<long>(disc))==0)
 			{
-				mesh->subdivide( 1.5*disc );
-				mesh->edgeMelt( 0.5*disc );
+				subdivide( *mesh,1.5*disc );
+				edgeMelt( *mesh,0.5*disc );
  			}
-			for( list<SVertex*>::iterator vit = mesh->vList.begin(); vit != mesh->vList.end(); ++vit )
-				(*vit)->theForce = 0.0;
-			mesh->computeBins( !((i%2)==0), disc*0.5 );
-			mesh->computeNormals();
-			for( list<SVertex*>::iterator vit = mesh->vList.begin(); vit != mesh->vList.end(); ++vit )
+ 			numv = 0;
+ 			TMesh::VertexIter v_it, v_end = mesh->vertices_end();
+			for( v_it = mesh->vertices_begin(); v_it != v_end; ++v_it, ++numv )
+				v_it->theForce = 0.0;
+			computeBins( *mesh, !((i%2)==0), disc*0.5 );
+			mesh->update_normals();
+			for( v_it = mesh->vertices_begin(); v_it != v_end; ++v_it )
 			{
-				if (!(*vit)->isStable)
+				if (!v_it->isStable)
 				{					
 					// Bending force, Find neighbors
-					SEdge* startEdgePtr = (*vit)->anEdgePtr;
-					SEdge* actEdgePtr = startEdgePtr;
-					// Find COG				
 					TVector3D cog = 0.0;
 					uint uiNeighbours = 0;
-					do
+					TMesh::VertexVertexIter vv_it;
+					for( vv_it = mesh->vv_iter( v_it ); vv_it; ++vv_it )
 					{
-						cog += actEdgePtr->endPointPtr->thePosition;
-						actEdgePtr = actEdgePtr->opposingEdgePtr->nextEdgePtr;
-						uiNeighbours++;
+						OpenMesh::Vec3d p = mesh->point( vv_it );
+						TVector3D t( p[0], p[1], p[2] );
+						cog += t;
+						uiNeighbours++;						
 					}
-					while( actEdgePtr != startEdgePtr );
 					cog /= static_cast<double>( uiNeighbours );
+					OpenMesh::Vec3d p = mesh->point( v_it );
+					TVector3D thePosition( p[0], p[1], p[2] );
+					p = mesh->normal( v_it );					
+					TVector3D theNormal( p[0], p[1], p[2] );
 					// Mark transition and update force
-					TVector3D curvature = cog - (*vit)->thePosition;
-					double dForceStrength = dot( curvature, (*vit)->theNormal ); 
+					TVector3D curvature = cog - thePosition;
+					double dForceStrength = dot( curvature, theNormal ); 
 					TVector3D force1 = curvature * dForceStrength * 1.0 / norm(curvature);
-					curvature = cog - ( (*vit)->thePosition + force1 );
-					dForceStrength = dot( curvature, (*vit)->theNormal ); 
+					curvature = cog - ( thePosition + force1 );
+					dForceStrength = dot( curvature, theNormal ); 
 					TVector3D force2 = curvature * dForceStrength * -1.1 / norm(curvature);
 					TVector3D inner = ( force1 + force2 ) * internal;
 					if ( norm(inner) > 1.0 )
 						inner /=	norm(inner);
-					(*vit)->theForce += inner;
+					v_it->theForce += inner;
 					// Add balloon force
 					//(*vit)->theForce += (*vit)->theNormal * -0.001;
 					// Add external force		
-					if ( (*vit)->thePosition[0] > 0.0 && (*vit)->thePosition[0] < static_cast<double>(extents[0])
-						&& (*vit)->thePosition[1] > 0.0 && (*vit)->thePosition[1] < static_cast<double>(extents[1])
-						&& (*vit)->thePosition[2] > 0.0 && (*vit)->thePosition[2] < static_cast<double>(extents[2]) )
+					if ( thePosition[0] > 0.0 && thePosition[0] < static_cast<double>(extents[0])
+						&& thePosition[1] > 0.0 && thePosition[1] < static_cast<double>(extents[1])
+						&& thePosition[2] > 0.0 && thePosition[2] < static_cast<double>(extents[2]) )
 					{
-						const TVector3D& pos = (*vit)->thePosition;
+						const TVector3D& pos = thePosition;
 /*						TVector3D nb[8];
   					double vals[8];
 	  				nb[0][0] = static_cast<int>( ceil( pos[0] ) );  nb[0][1] = static_cast<int>( floor( pos[1] ) ); nb[0][2] = static_cast<int>( floor( pos[2] ) );
@@ -128,49 +133,54 @@ void CDiscreteModel::iterate()
   							static_cast<ushort>( nb[i][1] ), static_cast<ushort>( nb[i][2] ) ) );*/
   					TVector3D eforce = (*field)( static_cast<ushort>( round( pos[0] ) ),
   							static_cast<ushort>( round( pos[1] ) ), static_cast<ushort>( round( pos[2] ) ) ) ;
-						eforce = dot((*vit)->theNormal,eforce) * (*vit)->theNormal;
+						eforce = dot(theNormal,eforce) * theNormal;
 //cerr << norm(eforce) << endl;
 						if ( norm(eforce) < 0.1 && norm(eforce) > 0.0 )
 							eforce = eforce / norm(eforce) * 0.1;
-						(*vit)->theForce += eforce;
+						v_it->theForce += eforce;
 					}
 else
 {
-	cerr << (*vit)->thePosition << " <> " << static_cast<double>(extents[0]) << "," << static_cast<double>(extents[1])
+	cerr << thePosition << " <> " << static_cast<double>(extents[0]) << "," << static_cast<double>(extents[1])
 		<< "," << static_cast<double>(extents[2]) << endl ;
 }
-					double forceNorm = norm ( (*vit)->theForce );
+					double forceNorm = norm ( v_it->theForce );
 					if ( forceNorm > 0.01 )
 					{
 						if ( forceNorm > 1.0 )
-							(*vit)->theForce /= forceNorm;					
-						(*vit)->lastPositions.push_back((*vit)->thePosition);
-						(*vit)->thePosition += (0.5*(*vit)->theForce);
+							v_it->theForce /= forceNorm;					
+						v_it->lastPositions.push_back(thePosition);
+						thePosition += (0.5*v_it->theForce);
+						p = mesh->point( v_it );
+// 						cerr << p[0] << " " << p[1] << " " << p[2] << endl;
+						p[0] = thePosition[0]; p[1] = thePosition[1]; p[2] = thePosition[2];
+						mesh->set_point( v_it, p );
+// 						cerr << p[0] << " " << p[1] << " " << p[2] << endl << "-" << endl;
 						if( i > 8 ) 
 						{
-							size_t size = (*vit)->lastPositions.size();
+							size_t size = v_it->lastPositions.size();
 							TVector3D mean = 0.0;						
-							for( deque<TVector3D>::iterator vi = (*vit)->lastPositions.begin(); vi != (*vit)->lastPositions.end(); ++vi )
+							for( deque<TVector3D>::iterator vi = v_it->lastPositions.begin(); vi != v_it->lastPositions.end(); ++vi )
 								mean += (*vi);
 							mean /= static_cast<double>(size);
-							if ( i > 50 && norm( (*vit)->thePosition - mean ) < divisor ) (*vit)->stability++;
-							if ( size > 10 ) (*vit)->lastPositions.pop_front();
+							if ( i > 50 && norm( thePosition - mean ) < divisor ) v_it->stability++;
+							if ( size > 10 ) v_it->lastPositions.pop_front();
 						}
 					}
 					else
 					{
-						(*vit)->stability++;
+						v_it->stability++;
 					}
-					if( (*vit)->stability > 100 )
-						(*vit)->isStable = true;					
+					if( v_it->stability > 100 )
+						v_it->isStable = true;					
 				}
 				else
 				{
 					stableNodes++;
-					(*vit)->theForce[0] = 1.0;
+					v_it->theForce[0] = 1.0;
 				}
 			}
-			if ( static_cast<double>(stableNodes) > ( threshold * static_cast<double>(mesh->vList.size())) )
+			if ( static_cast<double>(stableNodes) > ( threshold * static_cast<double>(numv)) )
 			{
 				threshold += 0.05;
 				divisor += 0.025;
@@ -186,21 +196,22 @@ else
 				notify( e );
 			}
 			++show;
-			if ( static_cast<double>(stableNodes) > ( 0.95 * static_cast<double>(mesh->vList.size())) )
+			if ( static_cast<double>(stableNodes) > ( 0.95 * static_cast<double>(numv)) )
 			{
 				cerr << "Stability reached after " << i << " iterations" << endl;
 				i=1000;
 			}			
 		} // FOR iterations
-		cerr << "Mesh consists of " << mesh->vList.size() << " vertices" << endl;
+		cerr << "Mesh consists of " << numv << " vertices" << endl;
 		disc /= 2.0;
 		internal *= 10.0;
 		cerr << "Reinitialize mesh .. ";
-		for( list<SVertex*>::iterator vit = mesh->vList.begin(); vit != mesh->vList.end(); ++vit )
+		TMesh::VertexIter v_it, v_end = mesh->vertices_end();
+		for( v_it = mesh->vertices_begin(); v_it != v_end; ++v_it )
 		{
-			(*vit)->isStable = false;
-			(*vit)->stability = 0;
-			(*vit)->lastPositions.clear();
+			v_it->isStable = false;
+			v_it->stability = 0;
+			v_it->lastPositions.clear();
 		}
 		cerr << "done" << endl;
 		double timetaken = t.elapsed();		
@@ -211,11 +222,12 @@ else
 	// Now save the mesh to a file
 	cerr << "Saving mesh to mousebrain.mesh" << endl;
 	ulong id = 0;
-	for( list<SVertex*>::iterator vit = mesh->vList.begin(); vit != mesh->vList.end(); ++vit, ++id )
+	TMesh::VertexIter v_it, v_end = mesh->vertices_end();
+	for( v_it = mesh->vertices_begin(); v_it != v_end; ++v_it, ++id )
 	{
-		(*vit)->ulID = id;
+		v_it->ulID = id;
 	}
-	ofstream file( "mousebrain.mesh" );
+/*	ofstream file( "mousebrain.mesh" );
 	file << id << endl;
 	for( list<SVertex*>::iterator vit = mesh->vList.begin(); vit != mesh->vList.end(); ++vit, ++id )
 	{
@@ -228,6 +240,6 @@ else
 		file << (*fit)->anEdgePtr->nextEdgePtr->endPointPtr->ulID << " ";
 		file << (*fit)->anEdgePtr->nextEdgePtr->nextEdgePtr->endPointPtr->ulID << endl;
 	}
-	file.close();
+	file.close();*/
 }
 

@@ -5,9 +5,27 @@ PROJECT(meshsegmenter)
 SET(CMAKE_VERBOSE_MAKEFILE ON)
 
 #add definitions, compiler switches, etc. 
-ADD_DEFINITIONS(-Wall)
+ADD_DEFINITIONS(-Wall -DQT_THREAD_SUPPORT)
 
 SET( DEBUG_LEVEL 0 CACHE STRING "Level of debugging output (This is either 0 (no output) or 1,2,3)")
+
+FIND_PATH(OPEN_MESH_INCLUDES OpenMesh/Core/Mesh/Types/TriMesh_ArrayKernelT.hh
+	${HOME}/include
+  /usr/include
+  /usr/local/include
+  DOC "Directory containing OpenMesh/Core/Mesh/Types/TriMesh_ArrayKernelT.hh")
+IF( NOT OPEN_MESH_INCLUDES )
+ MESSAGE( SEND_ERROR "OpenMesh is needed for compilation" )
+ENDIF( NOT OPEN_MESH_INCLUDES )
+
+FIND_LIBRARY(OPEN_MESH_LIBRARY
+	NAMES OpenMesh_Core
+	PATHS /usr/lib /usr/local/lib ${HOME}/lib
+	DOC "Path to the OpenMesh library"
+)
+IF( NOT OPEN_MESH_LIBRARY )
+ MESSAGE( SEND_ERROR "OpenMesh is needed for compilation" )
+ENDIF( NOT OPEN_MESH_LIBRARY )
 
 INCLUDE(${CMAKE_ROOT}/Modules/FindQt.cmake)
 IF(NOT QT_FOUND)
@@ -38,13 +56,10 @@ INCLUDE( ${VTK_USE_FILE} )
 INCLUDE( ${ITK_USE_FILE} )
 INCLUDE( ${aipsbase_USE_FILE} )
 INCLUDE( ${aipsfilehandlers_USE_FILE} )
-INCLUDE_DIRECTORIES( ${VTK_INCLUDE_DIRS} ${ITK_INCLUDE_DIRS} ${aipsbase_INCLUDE_DIRS} ${aipsfilehandlers_INCLUDE_DIRS} )
+INCLUDE_DIRECTORIES( ${VTK_INCLUDE_DIRS} ${ITK_INCLUDE_DIRS} ${aipsbase_INCLUDE_DIRS} ${aipsfilehandlers_INCLUDE_DIRS} ${QT_INCLUDE_DIR} ${OPEN_MESH_INCLUDES} )
 
-LINK_DIRECTORIES( ${VTK_LIBRARY_DIRS} ${ITK_LIBRARY_DIRS} ${aipsbase_LIBRARY_DIRS} ${aipsfilehandlers_LIBRARY_DIRS} )
-LINK_LIBRARIES( vtkIO vtkCommon vtkRendering vtkGraphics vtkftgl vtkPatented vtkpng vtkDICOMParser vtkexpat vtkjpeg vtkHybrid vtkFiltering vtkParallel vtktiff vtkfreetype vtkImaging vtkzlib aipsfilehandlers aipsbase )
-
-INCLUDE_DIRECTORIES( ${QT_INCLUDE_DIR} )
-LINK_LIBRARIES( aipsbase ${QT_LIBRARIES} )
+LINK_DIRECTORIES( ${VTK_LIBRARY_DIRS} ${ITK_LIBRARY_DIRS} ${aipsbase_LIBRARY_DIRS} ${aipsfilehandlers_LIBRARY_DIRS} ${OPEN_MESH_LIBRARY} )
+LINK_LIBRARIES( ${QT_LIBRARIES} vtkCommon vtkIO vtkRendering ITKIO aipsbase aipsfilehandlers OpenMesh_Core )
 
 SET( DEBUG_LEVEL 0 CACHE STRING "Level of debugging output (This is either 0 (no output) or 1,2,3)")
 

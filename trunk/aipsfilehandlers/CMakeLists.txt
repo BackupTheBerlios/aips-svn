@@ -38,30 +38,6 @@ INCLUDE( ${aipsbase_USE_FILE} )
 #Look for Magick++ library and includes
 IF(USE_IMAGEMAGICK)
   INCLUDE( FindImageMagickLib.cmake )
-# 	FIND_PROGRAM( MAGICKCONFIG_PATH Magick++-config /usr/bin /usr/local/bin )
-# 	IF( !MAGICKCONFIG_PATH )
-#  		MESSAGE( SEND_ERROR "Magick++-config executable is needed" )
-# 	ENDIF( !MAGICKCONFIG_PATH )
-# 	EXEC_PROGRAM( ${MAGICKCONFIG_PATH} 
-# 		ARGS --cxxflags
-# 		OUTPUT_VARIABLE IM_CXXFLAGS )
-# 	EXEC_PROGRAM( ${MAGICKCONFIG_PATH} 
-# 		ARGS --libs
-# 		OUTPUT_VARIABLE IM_LIBFLAGS )
-# 	EXEC_PROGRAM( ${MAGICKCONFIG_PATH} 
-# 		ARGS --ldflags
-# 		OUTPUT_VARIABLE IM_LDFLAGS )	
-# 	STRING(REGEX REPLACE "-l[a-zA-Z0-9]+ " " " IM_LD ${IM_LDFLAGS} )
-# 	STRING(REGEX REPLACE "-L" " " IM_LD2 ${IM_LD} )
-# 	STRING(REGEX REPLACE "[ ]+" "" IM_LD3 ${IM_LD2} )
-#   STRING(REGEX REPLACE "/lib" "/libA" IM_LD4 ${IM_LD3} )
-# 	MESSAGE( ${IM_LD} )
-#   MESSAGE( ${IM_LD2} )
-#   MESSAGE( ${IM_LD3} )
-#   MESSAGE( ${IM_LD4} )
-# 	LINK_DIRECTORIES( ${IM_LD3} )
-# 	LINK_LIBRARIES( ${IM_LIBFLAGS} )	
-	#SET( CMAKE_CXX_FLAGS "${IM_CXXFLAGS} ${CMAKE_CXX_FLAGS}" )
   INCLUDE_DIRECTORIES( ${IMAGEMAGICKLIB_INCLUDE_DIR} )
   LINK_LIBRARIES( ${IMAGEMAGICKLIB_CXX_LIBRARY} ${IMAGEMAGICKLIB_C_LIBRARY} ${IMAGEMAGICKLIB_X11_LIBRARY} )
 	SET( HAVE_IM 1 )
@@ -77,7 +53,7 @@ IF(USE_VTK)
 	SET( HAVE_VTK 1 )
 	INCLUDE_DIRECTORIES( ${VTK_INCLUDE_DIRS} )
 	LINK_DIRECTORIES( ${VTK_LIBRARY_DIRS} )
- 	LINK_LIBRARIES( vtkIO )	
+ 	LINK_LIBRARIES( vtkCommon vtkIO )	
 ENDIF(USE_VTK)
 
 IF(USE_ITK)
@@ -92,6 +68,9 @@ IF(USE_ITK)
  	LINK_LIBRARIES( ITKIO )	
 ENDIF(USE_ITK)
 
+LINK_DIRECTORIES( /usr/local/lib/vtk /usr/local/lib/InsightToolkit )
+LINK_LIBRARIES( aipsbase )
+
 INCLUDE_DIRECTORIES( ${PROJECT_BINARY_DIR} ${PROJECT_SOURCE_DIR}/src ) 
 CONFIGURE_FILE( ${PROJECT_SOURCE_DIR}/aipsfilehandlers_config.h.in 
 	${PROJECT_BINARY_DIR}/aipsfilehandlers_config.h)
@@ -104,7 +83,6 @@ CONFIGURE_FILE( ${aipsfilehandlers_SOURCE_DIR}/aipsfilehandlersConfig.cmake.in
 CONFIGURE_FILE( ${aipsfilehandlers_SOURCE_DIR}/Doxyfile.in 
 	${aipsfilehandlers_SOURCE_DIR}/Doxyfile)
 	
-
 INCLUDE(CMakeExportBuildSettings)
 
 CMAKE_EXPORT_BUILD_SETTINGS(

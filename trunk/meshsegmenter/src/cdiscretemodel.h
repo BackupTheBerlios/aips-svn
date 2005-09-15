@@ -35,10 +35,10 @@ public:
   CDiscreteModel() throw();
   ~CDiscreteModel() throw();
 	void setExternalForceField( TField3DPtr field_ );
-	void setMesh( CMesh* mesh_ );
+	void setMesh( TMesh* mesh_ );
 	void iterate();
 private:
-	CMesh* mesh;
+	TMesh* mesh;
   TField3DPtr field;
 };
 

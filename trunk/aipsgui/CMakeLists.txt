@@ -1,10 +1,10 @@
-PROJECT(aipsfilehandlers)
+PROJECT(aipsgui)
 
 #if you don't want the full compiler output, remove the following line
 SET(CMAKE_VERBOSE_MAKEFILE ON)
 
 #add definitions, compiler switches, etc. 
-ADD_DEFINITIONS(-Wall -DQT_THREAD_SUPPORT)
+ADD_DEFINITIONS(-Wall -DQT_THREAD_SUPPORT -pthread)
 
 SET( DEBUG_LEVEL 0 CACHE STRING "Level of debugging output (This is either 0 (no output) or 1,2,3)")
 
@@ -12,7 +12,6 @@ INCLUDE(${CMAKE_ROOT}/Modules/FindQt.cmake)
 IF(NOT QT_FOUND)
 	MESSAGE( SEND_ERROR "Qt library is needed for compilation" )
 ENDIF(NOT QT_FOUND)	
-
 
 FIND_PACKAGE(aipsbase)
 IF(NOT aipsbase_FOUND)
@@ -40,49 +39,6 @@ IF( NOT GSL_LIBRARY AND GSL_INCLUDES )
 ENDIF( NOT GSL_LIBRARY AND GSL_INCLUDES )
 #endof gsl search
 
-#	#FIND_PROGRAM( MAGICKCONFIG_PATH Magick++-config /usr/bin /usr/local/bin )
-#	#IF( !MAGICKCONFIG_PATH )
-# 		MESSAGE( SEND_ERROR "Magick++-config executable is needed" )
-#	ENDIF( !MAGICKCONFIG_PATH )
-#	EXEC_PROGRAM( ${MAGICKCONFIG_PATH} 
-#		ARGS --cxxflags
-#		OUTPUT_VARIABLE IM_CXXFLAGS )
-#	EXEC_PROGRAM( ${MAGICKCONFIG_PATH} 
-#		ARGS --libs
-#		OUTPUT_VARIABLE IM_LIBFLAGS )
-#	EXEC_PROGRAM( ${MAGICKCONFIG_PATH} 
-#		ARGS --ldflags
-#		OUTPUT_VARIABLE IM_LDFLAGS )	
-#	STRING(REGEX REPLACE "-l[a-zA-Z0-9]+ " " " IM_LD ${IM_LDFLAGS} )
-#	STRING(REGEX REPLACE "-L" " " IM_LD2 ${IM_LD} )
-##	STRING(REGEX REPLACE "  " " " IM_LD3 ${IM_LD2} )
-#	
-#	LINK_DIRECTORIES( /usr/lib /usr/X11R6/lib /usr/lib/graphviz /usr/lib )
-#	LINK_LIBRARIES( ${IM_LIBFLAGS} )	
-#	SET( CMAKE_CXX_FLAGS "${IM_CXXFLAGS} ${CMAKE_CXX_FLAGS}" )
-#	SET( HAVE_IM 1 )
-#
-#	FIND_PROGRAM( MAGICKCONFIG_PATH Magick++-config /usr/bin /usr/local/bin )
-#	IF( !MAGICKCONFIG_PATH )
-#		MESSAGE( SEND_ERROR "Magick++-config executable is needed" )
-#	ENDIF( !MAGICKCONFIG_PATH )
-#	EXEC_PROGRAM( ${MAGICKCONFIG_PATH} 
-#		ARGS --cxxflags
-#		OUTPUT_VARIABLE IM_CXXFLAGS )
-#	EXEC_PROGRAM( ${MAGICKCONFIG_PATH} 
-#		ARGS --libs
-#		OUTPUT_VARIABLE IM_LIBFLAGS )
-#	EXEC_PROGRAM( ${MAGICKCONFIG_PATH} 
-#		ARGS --ldflags
-#		OUTPUT_VARIABLE IM_LDFLAGS )	
-#	STRING(REGEX REPLACE "-l[a-zA-Z0-9]+ " " " IM_LD ${IM_LDFLAGS} )
-#	STRING(REGEX REPLACE "-L" " " IM_LD2 ${IM_LD} )
-#	STRING(REGEX REPLACE "  " " " IM_LD3 ${IM_LD2} )
-#	
-#	LINK_DIRECTORIES( /usr/lib /usr/X11R6/lib /usr/lib/graphviz /usr/lib )
-#	LINK_LIBRARIES( ${IM_LIBFLAGS} )	
-#	SET( CMAKE_CXX_FLAGS "${IM_CXXFLAGS} ${CMAKE_CXX_FLAGS}" )
-#	SET( HAVE_IM 1 )
 
 
 	INCLUDE(${CMAKE_ROOT}/Modules/FindVTK.cmake)
@@ -111,8 +67,8 @@ ENDIF( NOT GSL_LIBRARY AND GSL_INCLUDES )
 INCLUDE( ${aipsbase_USE_FILE} )
 INCLUDE( ${aipsfilehandlers_USE_FILE} )
 INCLUDE_DIRECTORIES( ${QT_INCLUDE_DIR} ${GSL_INCLUDES} )
-LINK_LIBRARIES( aipsbase ${QT_LIBRARIES} ${GSL_LIBRARY} gslcblas m )
-LINK_DIRECTORIES( ${aipsbase_LIBRARY_DIR} ${aipsfilehandlers_LIBRARY_DIR} -L/usr/local/lib/vtk -L/usr/local/lib/InsightToolkit)
+LINK_LIBRARIES( vtkIO ITKIO aipsbase ${QT_LIBRARIES} ${GSL_LIBRARY} gslcblas m )
+LINK_DIRECTORIES( ${aipsbase_LIBRARY_DIR} ${aipsfilehandlers_LIBRARY_DIR} ${VTK_LIBRARY_DIRS} ${ITK_LIBRARY_DIRS} )
 
 SET( DEBUG_LEVEL 0 CACHE STRING "Level of debugging output (This is either 0 (no output) or 1,2,3)")
 

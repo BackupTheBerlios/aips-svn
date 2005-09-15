@@ -18,7 +18,7 @@
  ************************************************************************/
 #ifndef CMAINWINDOW_H
 #define CMAINWINDOW_H
-#include <mesh.h>
+#include <meshcomponents.h>
 #include <vector>
 #include <cimageloader.h>
 #include <cfilehandler.h>
@@ -101,8 +101,8 @@ public:
 	vtkAxes* coordSystem;
 	vtkPolyData *inputMesh;
 	vtkPolyData *outputMesh;
-	CMesh original;
-	CMesh work;
+	TMesh original;
+	TMesh work;
 	vtkQtRenderWindow *window;
 	vtkQtRenderWindowInteractor *interactor;
 	vtkStructuredPointsReader *reader;	

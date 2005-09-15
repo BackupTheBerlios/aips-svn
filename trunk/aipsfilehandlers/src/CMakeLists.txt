@@ -14,5 +14,4 @@ INSTALL_FILES(/include/aipsfilehandlers .h ${INSTALL_HEADERS})
 INSTALL_FILES(/include/aipsfilehandlers .tpp ${INSTALL_TEMPLATES})
 
 ADD_LIBRARY(aipsfilehandlers ${SRC_FILES})
-TARGET_LINK_LIBRARIES(aipsfilehandlers aipsbase Magick++)
 INSTALL_TARGETS(/lib aipsfilehandlers)
