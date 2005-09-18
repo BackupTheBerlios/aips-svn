@@ -26,7 +26,7 @@
 
 namespace aips {
 
-/// Produces a string containing signaling entering or leaving a function
+/// Produces a string signaling entering or leaving a function
 std::string functionString ( const char* sFunction, 
 	bool bEnter = true, const char* sErrorMsg = "" ) throw();
 
@@ -38,13 +38,13 @@ std::string errorString ( const char* sFile, uint uiLine, const char* sFunction,
   const char* sErrorMsg ) throw();
 
 /** \def SSHORTERROR(s) A macro for simplified usage of the shortErrorString function */
-#define SSHORTERROR(s) errorString( __LINE__, s )
+#define SSHORTERR(s) shortErrorString( __LINE__, s )
 
 /** \def SERROR(s) A macro for simplified usage of the errorString function */
 #define SERROR(s) errorString( __FILE__, __LINE__, __FUNCTION__, s )
 
 /** \def SFULLERROR(s) A macro for simplified usage of the errorString function */
-#define SFULLERROR(s) errorString( __FILE__, __LINE__, __PRETTY_FUNCTION__, s )
+#define SFULLERR(s) errorString( __FILE__, __LINE__, __PRETTY_FUNCTION__, s )
  
 // Generic error codes
 const uint ERR_NOERROR  =   0; ///< No error at all ( never use with exceptions ;-)

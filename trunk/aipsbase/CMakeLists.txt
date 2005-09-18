@@ -46,7 +46,7 @@ INCLUDE_DIRECTORIES( ${ZLIB_INCLUDE_DIR} )
 FIND_PATH(BOOST_LEXICAL_CAST boost/lexical_cast.hpp
   /usr/include
   /usr/local/include
-        DOC "Directory containing lexical_cast.hpp")
+        DOC "Directory containing boost/lexical_cast.hpp")
 IF( NOT BOOST_LEXICAL_CAST )
  MESSAGE( SEND_ERROR "boost::lexical_cast<> is mandatory for installation" )
 ENDIF( NOT BOOST_LEXICAL_CAST )
@@ -54,7 +54,7 @@ ENDIF( NOT BOOST_LEXICAL_CAST )
 FIND_PATH(BOOST_SHARED_PTR boost/shared_ptr.hpp
   /usr/include
   /usr/local/include
-        DOC "Directory containing shared_ptr.hpp")
+        DOC "Directory containing boost/shared_ptr.hpp")
 IF( NOT BOOST_SHARED_PTR )
  MESSAGE( SEND_ERROR "boost::shared_ptr<> is mandatory for installation" )
 ENDIF( NOT BOOST_SHARED_PTR )
@@ -62,7 +62,7 @@ ENDIF( NOT BOOST_SHARED_PTR )
 FIND_PATH(BOOST_WEAK_PTR boost/weak_ptr.hpp
   /usr/include
   /usr/local/include
-        DOC "Directory containing weak_ptr.hpp")
+        DOC "Directory containing boost/weak_ptr.hpp")
 IF( NOT BOOST_WEAK_PTR )
  MESSAGE( SEND_ERROR "boost::weak_ptr<> is mandatory for installation" )
 ENDIF( NOT BOOST_WEAK_PTR )
@@ -70,7 +70,7 @@ ENDIF( NOT BOOST_WEAK_PTR )
 FIND_PATH(BOOST_TIMER boost/timer.hpp
   /usr/include
   /usr/local/include
-        DOC "Directory containing timer.hpp")
+        DOC "Directory containing boost/timer.hpp")
 IF( NOT BOOST_TIMER )
  MESSAGE( SEND_ERROR "boost::timer is mandatory for installation" )
 ENDIF( NOT BOOST_TIMER )
@@ -78,13 +78,22 @@ ENDIF( NOT BOOST_TIMER )
 FIND_PATH(BOOST_OPTIONAL boost/optional/optional.hpp
   /usr/include
   /usr/local/include
-        DOC "Directory containing optional.hpp")
+        DOC "Directory containing boost/optional/optional.hpp")
 IF( NOT BOOST_OPTIONAL )
  MESSAGE( SEND_ERROR "boost::optional<> is mandatory for installation" )
 ENDIF( NOT BOOST_OPTIONAL )
 
-INCLUDE_DIRECTORIES( ${BOOST_LEXICAL_CAST} ${BOOST_SHARED_PTR} ${BOOST_WEAK_PTR} ${BOOST_TIMER} ${BOOST_OPTIONAL} )
-SET( AIPSBASE_EXTRA_INCLUDES ${BOOST_LEXICAL_CAST} ${BOOST_SHARED_PTR} ${BOOST_WEAK_PTR} ${BOOST_TIMER} ${BOOST_OPTIONAL} )
+FIND_PATH(BOOST_STATIC_ASSERT boost/static_assert.hpp
+  /usr/include
+  /usr/local/include
+        DOC "Directory containing boost/static_assert.hpp")
+IF( NOT BOOST_STATIC_ASSERT )
+ MESSAGE( SEND_ERROR "BOOST_STATIC_ASSERT is mandatory for installation" )
+ENDIF( NOT BOOST_STATIC_ASSERT )
+
+INCLUDE_DIRECTORIES( ${BOOST_LEXICAL_CAST} ${BOOST_SHARED_PTR} ${BOOST_WEAK_PTR} ${BOOST_TIMER} ${BOOST_OPTIONAL}
+${BOOST_STATIC_ASSERT} )
+SET( AIPSBASE_EXTRA_INCLUDES ${BOOST_LEXICAL_CAST} ${BOOST_SHARED_PTR} ${BOOST_WEAK_PTR} ${BOOST_TIMER} ${BOOST_OPTIONAL} ${BOOST_STATIC_ASSERT} )
 #END Checking for components of the boost libarries
 
 #BEGIN Look for blitz++ library and includes
