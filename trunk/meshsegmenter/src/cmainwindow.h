@@ -101,8 +101,10 @@ public:
 	vtkAxes* coordSystem;
 	vtkPolyData *inputMesh;
 	vtkPolyData *outputMesh;
-	TMesh original;
-	TMesh work;
+/*	TMesh original;
+	TMesh work;*/
+	CMesh original;
+	CMesh work;
 	vtkQtRenderWindow *window;
 	vtkQtRenderWindowInteractor *interactor;
 	vtkStructuredPointsReader *reader;	

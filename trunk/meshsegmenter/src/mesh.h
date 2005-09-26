@@ -26,15 +26,15 @@
 
 using namespace std;
 
-void checkTopology( TMesh& mesh );	
-void subdivide( TMesh& mesh, double length);
-void edgeMelt( TMesh& mesh, double length);
-void computeBins( TMesh& mesh, bool odd = false, double minDist = 1.0 );
+// void checkTopology( TMesh& mesh );	
+// void subdivide( TMesh& mesh, double length);
+// void edgeMelt( TMesh& mesh, double length);
+// void computeBins( TMesh& mesh, bool odd = false, double minDist = 1.0 );
 
-// typedef list<SFace*> TFList;
-// typedef list<SEdge*> TEList;
-// typedef list<SVertex*> TVList;
-/*
+ typedef list<SFace*> TFList;
+ typedef list<SEdge*> TEList;
+ typedef list<SVertex*> TVList;
+
 class CMesh
 {
 public:
@@ -62,6 +62,6 @@ private:
 	deque<SFace*> facePool;
 	deque<SVertex*> vertexPool;
 	deque<SEdge*> edgePool;
-};*/
+};
 
 #endif
