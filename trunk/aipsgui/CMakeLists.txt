@@ -4,7 +4,7 @@ PROJECT(aipsgui)
 SET(CMAKE_VERBOSE_MAKEFILE ON)
 
 #add definitions, compiler switches, etc. 
-ADD_DEFINITIONS(-Wall -DQT_THREAD_SUPPORT -pthread)
+ADD_DEFINITIONS(-Wall -DQT_THREAD_SUPPORT)
 
 SET( DEBUG_LEVEL 0 CACHE STRING "Level of debugging output (This is either 0 (no output) or 1,2,3)")
 
@@ -39,36 +39,11 @@ IF( NOT GSL_LIBRARY AND GSL_INCLUDES )
 ENDIF( NOT GSL_LIBRARY AND GSL_INCLUDES )
 #endof gsl search
 
-
-
-	INCLUDE(${CMAKE_ROOT}/Modules/FindVTK.cmake)
-	IF(!VTK_FOUND)
-		MESSAGE( SEND_ERROR "Cannot find VTK library" )
-	ENDIF(!VTK_FOUND)	
-	INCLUDE( ${VTK_USE_FILE} )
-	SET( HAVE_VTK 1 )
-	INCLUDE_DIRECTORIES( ${VTK_INCLUDE_DIRS} )
-	LINK_DIRECTORIES( ${VTK_LIBRARY_DIRS} )
- 	LINK_LIBRARIES( vtkIO )	
-
-
-
-	INCLUDE(${CMAKE_ROOT}/Modules/FindITK.cmake)
-	IF(!ITK_FOUND)
-		MESSAGE( SEND_ERROR "Cannot find ITK library" )
-	ENDIF(!ITK_FOUND)	
-	INCLUDE( ${ITK_USE_FILE} )
-	SET( HAVE_ITK 1 )
-	INCLUDE_DIRECTORIES( ${ITK_INCLUDE_DIRS} )
-	LINK_DIRECTORIES( ${ITK_LIBRARY_DIRS} )
- 	LINK_LIBRARIES( ITKIO )	
-
-
 INCLUDE( ${aipsbase_USE_FILE} )
 INCLUDE( ${aipsfilehandlers_USE_FILE} )
 INCLUDE_DIRECTORIES( ${QT_INCLUDE_DIR} ${GSL_INCLUDES} )
-LINK_LIBRARIES( vtkIO ITKIO aipsbase ${QT_LIBRARIES} ${GSL_LIBRARY} gslcblas m )
-LINK_DIRECTORIES( ${aipsbase_LIBRARY_DIR} ${aipsfilehandlers_LIBRARY_DIR} ${VTK_LIBRARY_DIRS} ${ITK_LIBRARY_DIRS} )
+LINK_LIBRARIES( aipsbase aipsfilehandlers ${QT_LIBRARIES} ${GSL_LIBRARY} pthread gslcblas m )
+LINK_DIRECTORIES( ${aipsbase_LIBRARY_DIR} ${aipsfilehandlers_LIBRARY_DIR} /usr/local/lib/vtk /usr/local/lib/InsightToolkit) 
 
 SET( DEBUG_LEVEL 0 CACHE STRING "Level of debugging output (This is either 0 (no output) or 1,2,3)")
 

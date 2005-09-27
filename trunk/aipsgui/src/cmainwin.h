@@ -34,6 +34,7 @@
 #include <map>
 #include <algorithm>
 #include <cstdio>
+#include <dlfcn.h>
 
 // boost includes
 #include <boost/shared_ptr.hpp>

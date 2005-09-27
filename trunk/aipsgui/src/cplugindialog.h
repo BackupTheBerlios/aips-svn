@@ -42,7 +42,8 @@ struct SLibItem
 	std::string path;
 	std::string documentation;
 	bool isHandlerLib;
-	QLibrary* lib;
+	//QLibrary* lib;
+	void* lib;
 	bool operator==( const SLibItem& other )
 	{
 		return ( ( library == other.library ) && ( version == other.version )

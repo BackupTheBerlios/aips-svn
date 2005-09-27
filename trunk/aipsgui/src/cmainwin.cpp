@@ -939,10 +939,11 @@ void CMainWin::removeRuntimePlugin( const SLibItem& l )
 					}
 				}
 			}
-			DBG("Prepare to unload" << (*it).lib << " " << (*it).lib->library());
+//			DBG("Prepare to unload" << (int)((*it).lib) << " " << (*it).lib->library());
 			// Unload library
-			(*it).lib->unload();
-			delete (*it).lib;
+			dlclose( (*it).lib );
+			//(*it).lib->unload();
+			//delete (*it).lib;
 			loadedPlugIns.erase( it );
 			DBG("Unregistered library");
 			writeConfigFile();
@@ -978,31 +979,38 @@ void CMainWin::loadPlugin( const std::string& sFilename )
 	uint usModulesInLib;
 	SLibItem tmpLibID;
 DBG("Loading library <" << sFilename << ">");	
-  QLibrary* plugIn = new QLibrary( sFilename );
-  plugIn->load();
-  if ( !plugIn->isLoaded() )
+	void* plugIn;
+	plugIn = dlopen( sFilename.c_str(), RTLD_LAZY | RTLD_GLOBAL );
+//   QLibrary* plugIn = new QLibrary( sFilename );
+//   plugIn->load();
+	
+	char* errString = dlerror();
+  if ( /* !plugIn->isLoaded()*/ errString != NULL )
   {
-    QString excepStr = "Could not load plugin library";
-		throw ( FileException( SERROR( excepStr.ascii() ), CException::FATAL ) );
+		throw ( FileException( SERROR( errString ), CException::FATAL ) );
   }
   else
   {
     alog << LINFO << "Plugin library " << sFilename << " loaded." << endl;
-		initFactory* ptrToInitFactoryFunc = (initFactory*) plugIn->resolve("initFactory");
+		//initFactory* ptrToInitFactoryFunc = (initFactory*) plugIn->resolve("initFactory");
+		initFactory* ptrToInitFactoryFunc = (initFactory*) dlsym( plugIn, "initFactory");
 		ptrToInitFactoryFunc();
-    getNoOfModules* ptrToModuleNumberFunc =
-      (getNoOfModules*) plugIn->resolve("numberOfModules");
+//     getNoOfModules* ptrToModuleNumberFunc =
+//       (getNoOfModules*) plugIn->resolve("numberOfModules");
+		getNoOfModules* ptrToModuleNumberFunc = (getNoOfModules*) dlsym( plugIn, "numberOfModules");
     if ( ptrToModuleNumberFunc == NULL )
     {
 			// Hey, thats not one of ours!
       QMessageBox::warning( this, "Warning", "The selected library is not a valid AIPS plugin",
 				QMessageBox::Ok, QMessageBox::NoButton );
-			delete plugIn;
+			//delete plugIn;
+			dlclose( plugIn );
 			throw ( PlugInException( SERROR( "The selected library is not a valid AIPS plugin" ),
 				CException::RECOVER ) );
     }
-		getLibraryID* ptrToLibIDFunc = 
-			(getLibraryID*) plugIn->resolve("libraryID");
+// 		getLibraryID* ptrToLibIDFunc = 
+// 			(getLibraryID*) plugIn->resolve("libraryID");
+		getLibraryID* ptrToLibIDFunc = (getLibraryID*) dlsym(plugIn, "libraryID");
 		if ( ptrToLibIDFunc == NULL )
 		{
 			alog << LWARN << "Library doesn't provide ID string!" << endl;
@@ -1016,8 +1024,10 @@ DBG("Loading library <" << sFilename << ">");
 			tmpLibID.library.length() - tmpLibID.library.find("/",0) );
 			tmpLibID.library = tmpLibID.library.substr( 0, tmpLibID.library.find("/",0) );
 		}
-		getLibraryDoc* ptrToLibDocFunc = 
-			(getLibraryDoc*) plugIn->resolve("libraryDoc");
+/*		getLibraryDoc* ptrToLibDocFunc = 
+			(getLibraryDoc*) plugIn->resolve("libraryDoc");*/
+		getLibraryDoc* ptrToLibDocFunc = (getLibraryDoc*) dlsym(plugIn,"libraryDoc");
+
 		if ( ptrToLibDocFunc == NULL )
 		{
 			alog << LWARN << "Library doesn't provide doc string!" << endl;
@@ -1030,11 +1040,20 @@ DBG("Loading library <" << sFilename << ">");
       << " modules in " << sFilename << endl;			
   }
   // Create one instance of every filter we've found
+/*  instantiateModuleByNumber* ptrToInstallModuleFunc =
+    (instantiateModuleByNumber*) plugIn->resolve("createModuleByNumber");*/
   instantiateModuleByNumber* ptrToInstallModuleFunc =
-    (instantiateModuleByNumber*) plugIn->resolve("createModuleByNumber");
+    (instantiateModuleByNumber*) dlsym(plugIn,"createModuleByNumber");
+/*	errString = dlerror();
+  if ( errString != NULL )
+  {
+		throw ( FileException( SERROR( errString ), CException::FATAL ) );
+  }*/
+  
 	// Try if this is a module plugin
   if ( ptrToInstallModuleFunc != NULL )
   {  
+cerr << "1" << endl;
 		int libCount[] = {filtersToolBoxPtr->count(),convertersToolBoxPtr->count(),
 			sourcesToolBoxPtr->count(),targetsToolBoxPtr->count(), othersToolBoxPtr->count()};
 		CDragListBox* availFiltersPtr = new CDragListBox( 0, libCount[0] );
@@ -1045,16 +1064,23 @@ DBG("Loading library <" << sFilename << ">");
 		tmpLibID.lib = plugIn;	
 		tmpLibID.isHandlerLib = false;
 		loadedPlugIns.push_back( tmpLibID );
+cerr << "2" << endl;		
   	for ( uint i = 0; i < usModulesInLib; i++ )
 	  {
+cerr << "Register module " << i << " / " << usModulesInLib << endl;	  	
   	  pipelineItemPtr anItem = ptrToInstallModuleFunc( i );
+cerr << "Gna!" << anItem->getType() << endl;  	  
+			if ( anItem->getType() > 999 ) anItem->setType( anItem->getType() / 1000 );
 			modules[anItem->getType()  - 1].resize( libCount[anItem->getType()  - 1] + 1,
 vector<pipelineItemPtr>() );
 			//DS( "Modules " << modules[anItem->getType()  - 1].size() );
+cerr << "Gne!" << endl;			
     	modules[anItem->getType()  - 1][libCount[anItem->getType()  - 1]].push_back( anItem );
+cerr << "Gno!" << endl;    	
 			DS(" Added Item " << anItem->getType()  - 1 << "/" << libCount[anItem->getType()  - 1]
 				<< "/" << modules[anItem->getType()  - 1][libCount[anItem->getType()  - 1]].size()-1);
 			//DS( "Pushed back a new item ");
+cerr << "Gnu!" << endl;			
 	    if ( anItem->getModuleDialog() && anItem->getModuleDialog()->hasDialog() )
   	    anItem->getModuleDialog()->hideDialog();
     	alog << LINFO << "[" << __PRETTY_FUNCTION__ << "]\n Registered module "
@@ -1081,6 +1107,7 @@ vector<pipelineItemPtr>() );
   	      alog << LWARN << "Unknown module type" << endl;
      	}								
   	}
+cerr << "3" << endl;  	
 		// Now delete all Boxes which are empty and add the others to the toolboxes
 		
 		if ( availFiltersPtr->count() > 0 )
@@ -1128,8 +1155,10 @@ vector<pipelineItemPtr>() );
 	{
 		alog << LINFO << "Plugin seems to provide file handlers" << endl;
 		// Create one instance of every filter we've found
+/*  	instantiateHandlerByNumber* ptrToInstallHandlerFunc =
+    (instantiateHandlerByNumber*) plugIn->resolve("createHandlerByNumber");*/
   	instantiateHandlerByNumber* ptrToInstallHandlerFunc =
-    (instantiateHandlerByNumber*) plugIn->resolve("createHandlerByNumber");
+    (instantiateHandlerByNumber*) dlsym( plugIn,"createHandlerByNumber");
 		if ( ptrToInstallHandlerFunc == NULL )
 			throw ( PlugInException( SERROR( "Error registering plugins" ), CException::FATAL ) );
 		tmpLibID.lib = plugIn;
