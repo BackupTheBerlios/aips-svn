@@ -76,11 +76,11 @@ public:
 /* Data Types */
   /** Item types */
   enum EItemType {	ITypeFilter = 1,///< Item type filter
-                           	ITypeConverter, ///< Item type converter
-                           	ITypeSource,    ///< Item type source
-                           	ITypeTarget,    ///< Item type target
-                           	ITypeStub,      ///< Item type stub (scripting or external processes)
-                           	ITypeUser };    ///< Item type user (anything else)
+                           	ITypeConverter = 2, ///< Item type converter
+                           	ITypeSource = 3,    ///< Item type source
+                           	ITypeTarget = 4,    ///< Item type target
+                           	ITypeStub = 5,      ///< Item type stub (scripting or external processes)
+                           	ITypeUser = 6 };    ///< Item type user (anything else)
   /**
    * IO port data types. 
    * A simple hierarchy is obtained through the numerical values of the type

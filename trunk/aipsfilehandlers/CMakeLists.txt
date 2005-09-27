@@ -69,7 +69,7 @@ IF(USE_ITK)
 ENDIF(USE_ITK)
 
 LINK_DIRECTORIES( /usr/local/lib/vtk /usr/local/lib/InsightToolkit )
-LINK_LIBRARIES( aipsbase )
+LINK_LIBRARIES( aipsbase pthread )
 
 INCLUDE_DIRECTORIES( ${PROJECT_BINARY_DIR} ${PROJECT_SOURCE_DIR}/src ) 
 CONFIGURE_FILE( ${PROJECT_SOURCE_DIR}/aipsfilehandlers_config.h.in 
