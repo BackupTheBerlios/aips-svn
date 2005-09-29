@@ -12,6 +12,7 @@
 #include <cimagedisplay.h>
 
 using namespace std;
+using namespace boost;
 
 /** \param ulID unique module ID */
 CDisplay::CDisplay( ulong ulID ) throw()
@@ -44,8 +45,8 @@ void CDisplay::apply() throw()
 		return;
 	if ( getInput()->getType() == typeid( dataTraits<TImage>::dataType ) )
 	{
-  	TImage* inputPtr = static_cast<TImage*>( getInput().get() );
-  	if ( inputPtr != NULL && inputPtr->getDataDimension() >= 1
+  	TImagePtr inputPtr = static_pointer_cast<TImage>( getInput() );
+  	if ( inputPtr && inputPtr->getDataDimension() >= 1
     	&& inputPtr->getDataDimension() < 5 )
 	  {
 			bModuleReady = true;
@@ -54,8 +55,8 @@ void CDisplay::apply() throw()
 	}
 	else if ( getInput()->getType() == typeid( dataTraits<TField>::dataType ) )
 	{
-		TField* fieldPtr = static_cast<TField*>( getInput().get() );
-		if ( fieldPtr != NULL && fieldPtr->getDataDimension() >= 1
+		TFieldPtr fieldPtr = static_pointer_cast<TField>( getInput() );
+		if ( fieldPtr && fieldPtr->getDataDimension() >= 1
     	&& fieldPtr->getDataDimension() < 5 )
 		{
 	  	bModuleReady = true;

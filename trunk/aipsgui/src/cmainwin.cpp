@@ -152,7 +152,7 @@ CMainWin::CMainWin( QWidget* parentPtr, const char* sName ) throw()
     this, SLOT( processModule( ulong ) ) );
 	connect( dialog, SIGNAL( newItem( const std::string& ) ), 
 		this, SLOT( loadRuntimePlugin( const std::string& ) ) );
-	connect( dialog, SIGNAL( removeItem( const SLibItem& ) ), 
+  connect( dialog, SIGNAL( removeItem( const SLibItem& ) ),
 		this, SLOT( removeRuntimePlugin( const SLibItem& ) ) );
 	curFont = false;
 	showLog = true;

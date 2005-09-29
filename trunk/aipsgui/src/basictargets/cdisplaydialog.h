@@ -21,15 +21,59 @@
 #define CDISPLAYDIALOG_H
 
 #include <cmoduledialog.h>
-#include <cimagedisplay.h>
 #include <aipsnumeric.h>
+#include <cvtkadapter.h>
+#include <qvbox.h>
+#include <qscrollbar.h>
+#include <qcheckbox.h>
+#include <qlcdnumber.h>
+#include <qfiledialog.h>
+#include <qlabel.h>
+
+#include <vtkQtRenderWindow.h>
+#include <vtkQtRenderWindowInteractor.h>
+#include <vtkImageActor.h>
+#include <vtkLookupTable.h>
 
 using namespace aips;
 
 /**
 @author Hendrik Belitz
 */
-class CDisplayDialog : public CModuleDialog
+
+class CDisplayWindow : public QWidget
+{
+Q_OBJECT
+public:
+  CDisplayWindow();
+  ~CDisplayWindow();
+  void update();
+  vtkRenderer* getRenderer();
+  void resizeEvent( QResizeEvent* e )
+    throw();
+  void setNewLutValues( double min, double max );
+  vtkLookupTable* getLut();
+public slots:  
+  void updateMax( int i );
+  void updateMin( int i );
+private:
+  vtkQtRenderWindowInteractor* interactor;
+  vtkQtRenderWindow* display;
+  vtkRenderer* renderer;
+  vtkLookupTable* theLut;
+  QVBox* aColumnPtr;
+  QScrollBar* dataMin;
+  QScrollBar* dataMax;
+  QCheckBox* transparency;
+  QCheckBox* interpolate;
+  QLabel* doc1;
+  QLabel* doc2;
+  QLabel* doc3;
+  QLabel* doc4;
+  double lutmin,lutmax;
+};
+
+class CDisplayDialog : public CModuleDialog, vtkObject
 {
 public:
     CDisplayDialog() throw();
@@ -56,12 +100,14 @@ public:
 	virtual void activateDialog()
 		throw( NotPresentException );
   /// Update the view 
-  void updateView( TImage* inputPtr )
+  void updateView( TImagePtr inputPtr )
     throw();	
-	void updateView( TField* inputPtr )
-    throw();	
+	void updateView( TFieldPtr inputPtr )
+    throw();
 private:
-  CImageDisplay* displayPtr; ///< The display window
+  CDisplayWindow* displayPtr; ///< The display window
+  vtkImageActor* myActor;
+  uint width, height;
 };
 
 #endif

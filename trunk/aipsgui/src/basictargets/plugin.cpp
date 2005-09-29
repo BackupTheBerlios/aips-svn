@@ -20,10 +20,10 @@
 #include <boost/shared_ptr.hpp>
 
 #include "libid.h"
-#include "cdisplay.h"
-#include "cdisplayvectorfield.h"
 #include "cimagewriter.h"
 #include "cviewhistogram.h"
+#include "cdisplayvectorfield.h"
+#include "cdisplay.h"
 
 using namespace std;
 using namespace boost;

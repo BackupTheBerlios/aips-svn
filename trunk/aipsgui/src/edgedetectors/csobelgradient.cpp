@@ -144,6 +144,7 @@ APP_PROC();
 	}
 PROG_RESET();
   setOutput( outputPtr );
+  static_cast<TField2D*>( getOutput().get() );
 FEND;  
 }
 

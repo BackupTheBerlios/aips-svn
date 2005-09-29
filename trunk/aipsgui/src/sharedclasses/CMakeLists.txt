@@ -1,6 +1,6 @@
 FILE(GLOB SRC_FILES *.cpp )
 FILE(GLOB HDR_FILES *.h )
-SET( MOC_INPUT cimagedisplay.h )
+SET( MOC_INPUT cimagedisplay.h vtkQtRenderWindow.h vtkQtRenderWindowInteractor.h )
 
 IF( ${DEBUG_LEVEL} GREATER 0 )
 SET_SOURCE_FILES_PROPERTIES(

@@ -10,7 +10,5 @@ ENDIF( ${DEBUG_LEVEL} GREATER 0 )
 INCLUDE_DIRECTORIES( ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/src/sharedclasses )
 QT_WRAP_CPP(aipsgui QT_MOC_SRCS ${HDR_FILES})
 ADD_EXECUTABLE(aipsgui ${SRC_FILES} ${QT_MOC_SRCS})
-TARGET_LINK_LIBRARIES( aipsgui aipsbasicconverters aipsbasicsources aipsbasictargets
- aipsedgedetectors aipsfieldfilters aipshistogramfilters aipsimagefilters
- aipsneighbourfilters aipssegmentation )
+TARGET_LINK_LIBRARIES( aipsgui )
 INSTALL_TARGETS(/bin aipsgui)

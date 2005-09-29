@@ -25,7 +25,7 @@ CRescaleHistogram::CRescaleHistogram( ulong ulID ) throw()
 : CFilter ( ulID, "Rescale histogram", 1, 1, "CRescaleHistogram", "0.1", "CFilter" )
 {
   setModuleID( sLibID );
-
+  setType(2);
   sDocumentation = "Adds or subtracts two images. Through free choice of the "
 	                 "weighting parameters also subraction is possible\n"
                    "** Input ports:\n"
