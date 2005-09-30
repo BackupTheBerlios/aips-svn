@@ -19,7 +19,6 @@
  ***************************************************************************/
 #include "cdisplaydialog.h"
 
-#include <vtkImageMapToColors.h>
 #include <vtkCamera.h>
 #include <vtkInteractorStyleImage.h>
 
@@ -41,37 +40,138 @@ CDisplayWindow::CDisplayWindow() : lutmin(0),lutmax(255)
   renderer = vtkRenderer::New();
   display->AddRenderer( renderer );
 
-  vtkLookupTable *theLut = vtkLookupTable::New();
-  theLut->SetTableRange (0, 255 );
-  theLut->SetSaturationRange (0, 0);
-  theLut->SetHueRange (0, 0);
-  theLut->SetValueRange (0, 1);
-  theLut->Build(); //effective built
+  theLookupTable = vtkLookupTable::New();
+  theLookupTable->SetTableRange( 0.0, 255.0 );
+  theLookupTable->SetRampToLinear();
+  theLookupTable->SetSaturationRange( 0.0, 0.0 );
+  theLookupTable->SetValueRange( 0.0, 1.0 );
+  theLookupTable->SetHueRange( 0.0, 0.0);
+  theLookupTable->Build();
+  theLookupTable->SetTableValue( 0, 0.0, 0.0, 0.0, 0.0 );
+  theColorBar = vtkScalarBarActor::New();
+  theColorBar->SetLookupTable( theLookupTable );
+  theColorBar->SetOrientationToVertical();
+  theColorBar->SetWidth( 0.05 );
+  theColorBar->SetHeight( 0.9 );
+  dClampValues[0] = 0.0;
+  dClampValues[1] = 255.0;
 
+  theImage = vtkImageActor::New();
+  colorsMapper = vtkImageMapToColors::New();
+  theImage->SetInput( colorsMapper->GetOutput() );
+  renderer->AddProp( theImage );
+  renderer->AddActor( theColorBar );
+  
   doc1 = new QLabel( "Data range minimum", aColumnPtr );
-  dataMin = new QScrollBar ( 0, 255, 1, 10, 255, Qt::Horizontal, aColumnPtr );
+  dataMin = new QScrollBar ( 0, 255, 1, 10, 0, Qt::Horizontal, aColumnPtr );
   doc2 = new QLabel( "Data range maximum", aColumnPtr );
-  dataMax = new QScrollBar ( 0, 0, 1, 10, 0, Qt::Horizontal, aColumnPtr );
+  dataMax = new QScrollBar ( 0, 255, 1, 10, 255, Qt::Horizontal, aColumnPtr );
+  dClampValues[0] = 0.0;
+  dClampValues[1] = 255.0;
   QHBox* aRow1Ptr = new QHBox ( aColumnPtr );
   transparency = new QCheckBox( aRow1Ptr );
+  transparency->setChecked( true );
   doc3 = new QLabel( "Background transparency", aRow1Ptr );
   QHBox* aRow2Ptr = new QHBox ( aColumnPtr );
   interpolate = new QCheckBox( aRow2Ptr );
+  interpolate->setChecked( true );
   doc4 = new QLabel( "Interpolate", aRow2Ptr );
   connect ( dataMin, SIGNAL( valueChanged( int ) ),
     this, SLOT( updateMin( int ) ) );
   connect ( dataMax, SIGNAL( valueChanged( int ) ),
     this, SLOT( updateMax( int ) ) );
+  connect( transparency, SIGNAL( stateChanged( int ) ),
+    this, SLOT( toggleTransparency( int ) ) );
+  connect( interpolate, SIGNAL( stateChanged( int ) ),
+    this, SLOT( toggleInterpolation( int ) ) );
+}
+
+void CDisplayWindow::toggleTransparency( int i )
+{
+  if ( i == QButton::On )
+  {
+    theLookupTable->SetTableValue( 0, 0.0, 0.0, 0.0, 0.0 );
+  }
+  else
+  {
+    theLookupTable->SetTableValue( 0, 0.0, 0.0, 0.0, 1.0 );
+  }
+  interactor->Render();
+}
+
+void CDisplayWindow::toggleInterpolation( int i )
+{
+  if ( i == QButton::On )
+  {
+    theImage->InterpolateOn();
+  }
+  else
+  {
+    theImage->InterpolateOff();
+  }
+  interactor->Render();
+}
+
+void CDisplayWindow::loadLookupTable( std::string sFilename )
+{
+  theLookupTable->SetNumberOfTableValues( 256 );
+  ifstream file ( sFilename.c_str() );
+  unsigned char r[256],g[256],b[256];
+  double color[4];
+  color[3] = 1.0;
+  file.read( (char*)r, 256 );
+  file.read( (char*)g, 256 );
+  file.read( (char*)b, 256 );
+  file.close();
+  for( int i = 0; i < 256; ++i )    
+  {
+    color[0] = static_cast<double>( r[i] ) / 255.0;
+    color[1] = static_cast<double>( g[i] ) / 255.0;
+    color[2] = static_cast<double>( b[i] ) / 255.0;   
+    theLookupTable->SetTableValue( i, color );
+  } 
+  theLookupTable->GetTableValue( 0, color );
+  color[3] = 0.0;
+  theLookupTable->SetTableValue( 0, color );
+  interactor->Render();
+}
+
+void CDisplayWindow::setUpperClamp( double dValue )
+{
+  dClampValues[1] = dValue;
+  theLookupTable->SetTableRange( dClampValues );
+  colorsMapper->Update();
+  renderer->Render();
+  interactor->Render();
+}
+
+void CDisplayWindow::setLowerClamp( double dValue )
+{
+  dClampValues[0] = dValue;
+  theLookupTable->SetTableRange( dClampValues );
+  colorsMapper->Update();
+  renderer->Render();
+  interactor->Render();
 }
 
 void CDisplayWindow::updateMax( int i )
 {
-  setNewLutValues( lutmin, i );
+  setUpperClamp( static_cast<double>( i ) );
+  if ( i < dataMin->value() )
+  {
+    dataMin->setValue( i );
+    setLowerClamp( static_cast<double>( i ) );
+  }
 }
 
 void CDisplayWindow::updateMin( int i ) 
 {
-  setNewLutValues( i, lutmax );  
+  setLowerClamp( static_cast<double>( i ) );
+  if ( i > dataMax->value() )
+  {
+    dataMax->setValue( i );
+    setUpperClamp( static_cast<double>( i ) );
+  }
 }
 
 void CDisplayWindow::update()
@@ -84,27 +184,10 @@ vtkRenderer* CDisplayWindow::getRenderer()
   return renderer;
 }
 
-void CDisplayWindow::setNewLutValues( double min, double max )
-{
-  cerr << "Setting lut from " << lutmin << " / " << lutmax << " to " << min << " / " << max << endl;
-//   lutmin = min;
-//   lutmax = max;
-//   theLut->SetTableRange( min, max );
-//   theLut->SetSaturationRange (0, 0);
-//   theLut->SetHueRange (0, 0);
-//   theLut->SetValueRange (0, 1);
-//   theLut->Build();
-  interactor->Render();
-}
-
-vtkLookupTable* CDisplayWindow::getLut()
-{
-  return theLut;
-}
-
 CDisplayWindow::~CDisplayWindow()
 {
-  theLut->Delete();
+  theLookupTable->Delete();
+  theImage->Delete();
   delete interactor;
   delete display;
   renderer->Delete();
@@ -116,16 +199,44 @@ void CDisplayWindow::resizeEvent( QResizeEvent* e ) throw()
   //displayPtr->
 }
 
+void CDisplayWindow::setImage( vtkImageData* anImage )
+{
+  colorsMapper->SetLookupTable( theLookupTable );
+  colorsMapper->SetInput( anImage );
+  if( dataMin->minValue() != static_cast<int>( dClampValues[0] )
+    || dataMin->maxValue() != static_cast<int>( dClampValues[1] ) )
+  {
+    double newOffset = static_cast<int>( dClampValues[0] ) - dataMin->minValue();
+    double factor = (dClampValues[1]+newOffset) / static_cast<double>( dataMin->maxValue() );
+    double value = ( static_cast<double>( dataMin->value() ) * factor ) - newOffset;
+    dataMin->setMinValue( static_cast<int>( dClampValues[0] ) );
+    dataMin->setMaxValue( static_cast<int>( dClampValues[1] ) );
+    dataMin->setValue( static_cast<int>( value ) );
+  }
+  if( dataMax->minValue() != static_cast<int>( dClampValues[0] )
+    || dataMax->maxValue() != static_cast<int>( dClampValues[1] ) )
+  {
+    double newOffset = static_cast<int>( dClampValues[0] ) - dataMax->minValue();
+    double factor = (dClampValues[1]+newOffset) / static_cast<double>( dataMax->maxValue() );
+    double value = ( static_cast<double>( dataMax->value() ) * factor ) - newOffset;
+    dataMax->setMinValue( static_cast<int>( dClampValues[0] ) );
+    dataMax->setMaxValue( static_cast<int>( dClampValues[1] ) );
+    dataMax->setValue( static_cast<int>( value ) );
+  }
+  setUpperClamp( dataMax->value() );
+  setLowerClamp( dataMin->value() );
+  colorsMapper->Update();
+  renderer->Render();
+  interactor->Render();
+}
+
 CDisplayDialog::CDisplayDialog() throw()
  : aips::CModuleDialog(), width(0), height(0)
 {
   displayPtr = new CDisplayWindow();
   displayPtr->hide();
   displayPtr->setCaption( "2D image viewer" );
-  myActor = vtkImageActor::New();
-//   myCast = vtkImageCast::New();
-//   myActor->SetInput( myCast->GetOutput() );
-  displayPtr->getRenderer()->AddProp( myActor );
+
   displayPtr->getRenderer()->TwoSidedLightingOn();
   displayPtr->getRenderer()->SetAmbient( 1.0, 1.0, 1.0 );  
   displayPtr->getRenderer()->GetActiveCamera()->SetPosition(128.0,128.0,-256.0);
@@ -185,13 +296,11 @@ BENCHSTART;
   int* dims = myImage->GetDimensions();
   cerr << dims[0] << " x " << dims[1] << " x " << dims[2] << " - " << myImage->GetNumberOfCells() << endl;
   myImage->SetScalarTypeToUnsignedShort();
+  displayPtr->setLowerClamp( inputPtr->getMinimum() );
+  displayPtr->setUpperClamp( inputPtr->getMaximum() );
+  displayPtr->getImage()->SetDisplayExtent(0,inputPtr->getExtent(0)-1,0,inputPtr->getExtent(1)-1,0,0);
   // Start by creatin a black/white lookup table.
-  displayPtr->setNewLutValues( inputPtr->getMinimum(), inputPtr->getMaximum() );  
-  vtkImageMapToColors *saggitalColors = vtkImageMapToColors::New();
-  saggitalColors->SetInput(myImage);
-  saggitalColors->SetLookupTable( displayPtr->getLut() );
-  myActor->SetInput(saggitalColors->GetOutput());
-  myActor->SetDisplayExtent(0,inputPtr->getExtent(0)-1,0,inputPtr->getExtent(1)-1,0,0);
+  displayPtr->setImage( myImage );
   if ( width != inputPtr->getExtent(0) || height != inputPtr->getExtent(1) )
   {
     width = inputPtr->getExtent(0);
@@ -208,8 +317,7 @@ BENCHSTART;
   }
   //myCast->Update();  
   displayPtr->getRenderer()->Render();
-  displayPtr->update();
-  saggitalColors->Delete();
+  displayPtr->update();  
 BENCHSTOP;
 }
 
@@ -217,7 +325,7 @@ void CDisplayDialog::updateView( TFieldPtr inputPtr ) throw()
 {
 BENCHSTART;
   CVTKAdapter myAdapter( inputPtr );
-  vtkImageData* myImage = myAdapter.convertToExternal();
+//  vtkImageData* myImage = myAdapter.convertToExternal();
 //   myCast->SetInput( myImage );
   displayPtr->update();
 /*  QImage processed;

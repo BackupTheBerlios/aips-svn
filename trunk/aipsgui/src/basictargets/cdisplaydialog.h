@@ -34,6 +34,8 @@
 #include <vtkQtRenderWindowInteractor.h>
 #include <vtkImageActor.h>
 #include <vtkLookupTable.h>
+#include <vtkScalarBarActor.h>
+#include <vtkImageMapToColors.h>
 
 using namespace aips;
 
@@ -51,16 +53,27 @@ public:
   vtkRenderer* getRenderer();
   void resizeEvent( QResizeEvent* e )
     throw();
-  void setNewLutValues( double min, double max );
-  vtkLookupTable* getLut();
+  void loadLookupTable( std::string sFilename = "/home/hendrik/bin/mricro/spectrum.lut" );
+  void setUpperClamp( double dValue );
+  void setLowerClamp( double dValue );
+  void setImage( vtkImageData* anImage );
+  vtkImageActor* getImage() { return theImage; }
 public slots:  
   void updateMax( int i );
   void updateMin( int i );
+  void toggleTransparency( int i );
+  void toggleInterpolation( int i );
 private:
   vtkQtRenderWindowInteractor* interactor;
   vtkQtRenderWindow* display;
   vtkRenderer* renderer;
   vtkLookupTable* theLut;
+private:
+  vtkLookupTable* theLookupTable;
+  vtkScalarBarActor* theColorBar;
+  vtkFloatingPointType dClampValues[2];
+  vtkImageActor* theImage;
+  vtkImageMapToColors *colorsMapper;
   QVBox* aColumnPtr;
   QScrollBar* dataMin;
   QScrollBar* dataMax;
