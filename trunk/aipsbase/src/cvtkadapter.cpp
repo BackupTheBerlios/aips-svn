@@ -14,6 +14,7 @@
 #ifdef USE_VTK
 
 #ifndef vtkFloatingPointType
+#define VTK_OLD
 #define vtkFloatingPointType vtkFloatingPointType
 typedef float vtkFloatingPointType;
 #endif 
@@ -83,8 +84,13 @@ TDataSetPtr CVTKAdapter::convertToInternal()
   }
   if ( aDataSet )
   {
-    aDataSet->setBaseElementDimensions( spacing );
-    aDataSet->setOrigin( origin );
+  #ifdef VTK_OLD
+  #warning Origin not set since VTK is fairly old
+  	cerr << "Origin not set since VTK is fairly old" << endl;
+  #elseif
+   	aDataSet->setBaseElementDimensions( spacing );
+   	aDataSet->setOrigin( origin );
+  #endif
   }
   // Clean up
   externalDataPtr->Delete();
