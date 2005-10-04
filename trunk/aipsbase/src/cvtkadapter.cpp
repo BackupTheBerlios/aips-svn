@@ -84,6 +84,7 @@ TDataSetPtr CVTKAdapter::convertToInternal()
   }
   if ( aDataSet )
   {
+  /* FIXME Old VTK */
   #ifdef VTK_OLD
   #warning Origin not set since VTK is fairly old
   	cerr << "Origin not set since VTK is fairly old" << endl;
