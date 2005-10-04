@@ -58,6 +58,7 @@ public:
   void setLowerClamp( double dValue );
   void setImage( vtkImageData* anImage );
   vtkImageActor* getImage() { return theImage; }
+  void testDataRamge( double minRange, double maxRange );
 public slots:  
   void updateMax( int i );
   void updateMin( int i );
@@ -84,6 +85,7 @@ private:
   QLabel* doc3;
   QLabel* doc4;
   double lutmin,lutmax;
+  bool doNotUpdate;
 };
 
 class CDisplayDialog : public CModuleDialog, vtkObject
@@ -117,6 +119,7 @@ public:
     throw();	
 	void updateView( TFieldPtr inputPtr )
     throw();
+  
 private:
   CDisplayWindow* displayPtr; ///< The display window
   vtkImageActor* myActor;

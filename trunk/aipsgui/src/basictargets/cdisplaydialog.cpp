@@ -24,7 +24,7 @@
 
 using namespace std;
 
-CDisplayWindow::CDisplayWindow() : lutmin(0),lutmax(255)
+CDisplayWindow::CDisplayWindow() : lutmin(0),lutmax(127)
 {
   //setFixedSize(260,260);
   setMinimumSize(256,256);
@@ -41,7 +41,7 @@ CDisplayWindow::CDisplayWindow() : lutmin(0),lutmax(255)
   display->AddRenderer( renderer );
 
   theLookupTable = vtkLookupTable::New();
-  theLookupTable->SetTableRange( 0.0, 255.0 );
+  theLookupTable->SetTableRange( 0.0, 127.0 );
   theLookupTable->SetRampToLinear();
   theLookupTable->SetSaturationRange( 0.0, 0.0 );
   theLookupTable->SetValueRange( 0.0, 1.0 );
@@ -54,7 +54,7 @@ CDisplayWindow::CDisplayWindow() : lutmin(0),lutmax(255)
   theColorBar->SetWidth( 0.05 );
   theColorBar->SetHeight( 0.9 );
   dClampValues[0] = 0.0;
-  dClampValues[1] = 255.0;
+  dClampValues[1] = 127.0;
 
   theImage = vtkImageActor::New();
   colorsMapper = vtkImageMapToColors::New();
@@ -63,11 +63,11 @@ CDisplayWindow::CDisplayWindow() : lutmin(0),lutmax(255)
   renderer->AddActor( theColorBar );
   
   doc1 = new QLabel( "Data range minimum", aColumnPtr );
-  dataMin = new QScrollBar ( 0, 255, 1, 10, 0, Qt::Horizontal, aColumnPtr );
+  dataMin = new QScrollBar ( lutmin, lutmax, 1, 10, lutmin, Qt::Horizontal, aColumnPtr );
   doc2 = new QLabel( "Data range maximum", aColumnPtr );
-  dataMax = new QScrollBar ( 0, 255, 1, 10, 255, Qt::Horizontal, aColumnPtr );
+  dataMax = new QScrollBar ( lutmin, lutmax, 1, 10, lutmax, Qt::Horizontal, aColumnPtr );
   dClampValues[0] = 0.0;
-  dClampValues[1] = 255.0;
+  dClampValues[1] = 127.0;
   QHBox* aRow1Ptr = new QHBox ( aColumnPtr );
   transparency = new QCheckBox( aRow1Ptr );
   transparency->setChecked( true );
@@ -96,7 +96,7 @@ void CDisplayWindow::toggleTransparency( int i )
   {
     theLookupTable->SetTableValue( 0, 0.0, 0.0, 0.0, 1.0 );
   }
-  interactor->Render();
+  if ( !doNotUpdate ) interactor->Render();
 }
 
 void CDisplayWindow::toggleInterpolation( int i )
@@ -109,7 +109,7 @@ void CDisplayWindow::toggleInterpolation( int i )
   {
     theImage->InterpolateOff();
   }
-  interactor->Render();
+  if ( !doNotUpdate ) interactor->Render();
 }
 
 void CDisplayWindow::loadLookupTable( std::string sFilename )
@@ -133,25 +133,29 @@ void CDisplayWindow::loadLookupTable( std::string sFilename )
   theLookupTable->GetTableValue( 0, color );
   color[3] = 0.0;
   theLookupTable->SetTableValue( 0, color );
-  interactor->Render();
+  if ( !doNotUpdate ) interactor->Render();
 }
 
 void CDisplayWindow::setUpperClamp( double dValue )
 {
   dClampValues[1] = dValue;
-  theLookupTable->SetTableRange( dClampValues );
+  if ( !doNotUpdate ) 
+  {theLookupTable->SetTableRange( dClampValues );
   colorsMapper->Update();
-  renderer->Render();
-  interactor->Render();
+  //renderer->Render();
+  interactor->Render();}
 }
 
 void CDisplayWindow::setLowerClamp( double dValue )
 {
   dClampValues[0] = dValue;
+  if ( !doNotUpdate ) 
+  {
   theLookupTable->SetTableRange( dClampValues );
   colorsMapper->Update();
-  renderer->Render();
+  //renderer->Render();
   interactor->Render();
+  }
 }
 
 void CDisplayWindow::updateMax( int i )
@@ -176,12 +180,49 @@ void CDisplayWindow::updateMin( int i )
 
 void CDisplayWindow::update()
 {
-  interactor->Render();
+  if ( !doNotUpdate ) interactor->Render();
 }
 
 vtkRenderer* CDisplayWindow::getRenderer()
 {
   return renderer;
+}
+
+void CDisplayWindow::testDataRamge( double minRange, double maxRange )
+{
+FBEGIN;
+	doNotUpdate = true;
+	if( dataMin->minValue() != static_cast<int>( minRange )
+    || dataMin->maxValue() != static_cast<int>( maxRange ) )
+  {
+  	cerr << "a1" << endl;    
+    double newOffset = static_cast<int>( minRange ) - dataMin->minValue();
+    double factor = (maxRange+newOffset) / static_cast<double>( dataMin->maxValue() );    
+    double value = ( static_cast<double>( dataMin->value() ) * factor ) - newOffset;
+    cerr << "off " << newOffset << " factor " << factor << " value " << value << endl;
+    dClampValues[0] = minRange;
+    dClampValues[1] = maxRange;
+    dataMin->setMinValue( static_cast<int>( dClampValues[0] ) );
+    dataMin->setMaxValue( static_cast<int>( dClampValues[1] ) );
+    dataMin->setValue( static_cast<int>( value ) );    
+  }
+  if( dataMax->minValue() != static_cast<int>( minRange )
+    || dataMax->maxValue() != static_cast<int>( maxRange ) )
+  {
+  	cerr << "a2" << endl;
+    double newOffset = static_cast<int>( minRange ) - dataMax->minValue();
+    double factor = (maxRange+newOffset) / static_cast<double>( dataMax->maxValue() );
+    double value = ( static_cast<double>( dataMax->value() ) * factor ) - newOffset;
+    cerr << "off " << newOffset << " factor " << factor << " value " << value << endl;
+    
+    dClampValues[0] = minRange;
+    dClampValues[1] = maxRange;
+    dataMax->setMinValue( static_cast<int>( dClampValues[0] ) );
+    dataMax->setMaxValue( static_cast<int>( dClampValues[1] ) );
+    dataMax->setValue( static_cast<int>( value ) );        
+  }  
+  doNotUpdate = false;
+FEND;
 }
 
 CDisplayWindow::~CDisplayWindow()
@@ -201,33 +242,25 @@ void CDisplayWindow::resizeEvent( QResizeEvent* e ) throw()
 
 void CDisplayWindow::setImage( vtkImageData* anImage )
 {
-  colorsMapper->SetLookupTable( theLookupTable );
-  colorsMapper->SetInput( anImage );
-  if( dataMin->minValue() != static_cast<int>( dClampValues[0] )
-    || dataMin->maxValue() != static_cast<int>( dClampValues[1] ) )
-  {
-    double newOffset = static_cast<int>( dClampValues[0] ) - dataMin->minValue();
-    double factor = (dClampValues[1]+newOffset) / static_cast<double>( dataMin->maxValue() );
-    double value = ( static_cast<double>( dataMin->value() ) * factor ) - newOffset;
-    dataMin->setMinValue( static_cast<int>( dClampValues[0] ) );
-    dataMin->setMaxValue( static_cast<int>( dClampValues[1] ) );
-    dataMin->setValue( static_cast<int>( value ) );
-  }
-  if( dataMax->minValue() != static_cast<int>( dClampValues[0] )
-    || dataMax->maxValue() != static_cast<int>( dClampValues[1] ) )
-  {
-    double newOffset = static_cast<int>( dClampValues[0] ) - dataMax->minValue();
-    double factor = (dClampValues[1]+newOffset) / static_cast<double>( dataMax->maxValue() );
-    double value = ( static_cast<double>( dataMax->value() ) * factor ) - newOffset;
-    dataMax->setMinValue( static_cast<int>( dClampValues[0] ) );
-    dataMax->setMaxValue( static_cast<int>( dClampValues[1] ) );
-    dataMax->setValue( static_cast<int>( value ) );
-  }
-  setUpperClamp( dataMax->value() );
-  setLowerClamp( dataMin->value() );
-  colorsMapper->Update();
+ FBEGIN;
+	doNotUpdate = true;
+	cerr << (void*)anImage << endl;
+	theLookupTable->SetTableRange( dClampValues );
+cerr << "<A>" << endl;  
+	colorsMapper->SetLookupTable( theLookupTable );
+cerr << "<B>" << endl;
+	colorsMapper->SetInput( anImage );	  
+  //setUpperClamp( dataMax->value() );
+cerr << "<C>" << endl;
+  //setLowerClamp( dataMin->value() );  
+  //colorsMapper->SetInput( anImage );
+  doNotUpdate = false;
+  //colorsMapper->Update();  
+cerr << "<D>" << endl;  
   renderer->Render();
+cerr << "<E>" << endl;  
   interactor->Render();
+ FEND;
 }
 
 CDisplayDialog::CDisplayDialog() throw()
@@ -288,23 +321,32 @@ bool CDisplayDialog::isHidden() throw( NotPresentException )
 void CDisplayDialog::updateView( TImagePtr inputPtr ) throw()
 {
 BENCHSTART;
+FBEGIN;
   if ( !inputPtr )
-    return;
-  cerr << "BLA" << endl;
+    return;  
   CVTKAdapter myAdapter( inputPtr );
   vtkImageData* myImage = myAdapter.convertToExternal();
   int* dims = myImage->GetDimensions();
   cerr << dims[0] << " x " << dims[1] << " x " << dims[2] << " - " << myImage->GetNumberOfCells() << endl;
+  cerr << "Data range: " << inputPtr->getMinimum() << " - " << inputPtr->getMaximum() << endl;
+cerr << "<1>" << endl;  
   myImage->SetScalarTypeToUnsignedShort();
-  displayPtr->setLowerClamp( inputPtr->getMinimum() );
-  displayPtr->setUpperClamp( inputPtr->getMaximum() );
-  displayPtr->getImage()->SetDisplayExtent(0,inputPtr->getExtent(0)-1,0,inputPtr->getExtent(1)-1,0,0);
+cerr << "<2>" << endl;  
+  //displayPtr->getImage()->SetDisplayExtent(0,inputPtr->getExtent(0)-1,0,inputPtr->getExtent(1)-1,0,0);
   // Start by creatin a black/white lookup table.
+cerr << "<3>" << endl;  
+  displayPtr->testDataRamge( inputPtr->getMinimum(), inputPtr->getMaximum() );
+cerr << "<4>" << endl;  
   displayPtr->setImage( myImage );
+/*  displayPtr->setLowerClamp( inputPtr->getMinimum() );
+cerr << "<5>" << endl;  
+  displayPtr->setUpperClamp( inputPtr->getMaximum() );*/
   if ( width != inputPtr->getExtent(0) || height != inputPtr->getExtent(1) )
   {
+cerr << "<6>" << endl;  
     width = inputPtr->getExtent(0);
     height = inputPtr->getExtent(1);
+    displayPtr->getImage()->SetDisplayExtent(0,inputPtr->getExtent(0)-1,0,inputPtr->getExtent(1)-1,0,0);
     displayPtr->getRenderer()->GetActiveCamera()->SetPosition(
       static_cast<double>( inputPtr->getExtent(0) ) / 2.0, static_cast<double>( inputPtr->getExtent(1) ) / 2.0,
       2.0 * static_cast<double>( std::max( inputPtr->getExtent(0), inputPtr->getExtent(1) ) ) );
@@ -313,11 +355,15 @@ BENCHSTART;
     displayPtr->getRenderer()->GetActiveCamera()->ComputeViewPlaneNormal();
     displayPtr->getRenderer()->GetActiveCamera()->SetViewUp(0.0,-1.0,0.0);
     displayPtr->getRenderer()->GetActiveCamera()->OrthogonalizeViewUp();
+cerr << "<7>" << endl;    
     displayPtr->getRenderer()->ResetCamera();
   }
+cerr << "<8>" << endl;  
   //myCast->Update();  
-  displayPtr->getRenderer()->Render();
+  //displayPtr->getRenderer()->Render();
+cerr << "<9>" << endl;  
   displayPtr->update();  
+FEND;  
 BENCHSTOP;
 }
 
