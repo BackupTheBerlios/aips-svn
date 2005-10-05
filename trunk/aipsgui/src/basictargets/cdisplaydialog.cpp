@@ -24,7 +24,7 @@
 
 using namespace std;
 
-CDisplayWindow::CDisplayWindow() : lutmin(0),lutmax(127)
+CDisplayWindow::CDisplayWindow() : lutmin(0.0),lutmax(127.0),actualImage(NULL)
 {
   //setFixedSize(260,260);
   setMinimumSize(256,256);
@@ -63,9 +63,11 @@ CDisplayWindow::CDisplayWindow() : lutmin(0),lutmax(127)
   renderer->AddActor( theColorBar );
   
   doc1 = new QLabel( "Data range minimum", aColumnPtr );
-  dataMin = new QScrollBar ( lutmin, lutmax, 1, 10, lutmin, Qt::Horizontal, aColumnPtr );
+  dataMin = new QScrollBar ( static_cast<int>(lutmin), static_cast<int>(lutmax),
+    1, 10, static_cast<int>(lutmin), Qt::Horizontal, aColumnPtr );
   doc2 = new QLabel( "Data range maximum", aColumnPtr );
-  dataMax = new QScrollBar ( lutmin, lutmax, 1, 10, lutmax, Qt::Horizontal, aColumnPtr );
+  dataMax = new QScrollBar ( static_cast<int>(lutmin), static_cast<int>(lutmax),
+    1, 10, static_cast<int>(lutmax), Qt::Horizontal, aColumnPtr );
   dClampValues[0] = 0.0;
   dClampValues[1] = 127.0;
   QHBox* aRow1Ptr = new QHBox ( aColumnPtr );
@@ -229,9 +231,13 @@ CDisplayWindow::~CDisplayWindow()
 {
   theLookupTable->Delete();
   theImage->Delete();
-  delete interactor;
-  delete display;
-  renderer->Delete();
+  theColorBar->Delete();
+  colorsMapper->Delete();
+  renderer->Delete();  
+  interactor->Delete();
+  display->Delete();
+  
+  delete aColumnPtr;
 }
 
 void CDisplayWindow::resizeEvent( QResizeEvent* e ) throw()
@@ -244,21 +250,13 @@ void CDisplayWindow::setImage( vtkImageData* anImage )
 {
  FBEGIN;
 	doNotUpdate = true;
-	cerr << (void*)anImage << endl;
 	theLookupTable->SetTableRange( dClampValues );
-cerr << "<A>" << endl;  
 	colorsMapper->SetLookupTable( theLookupTable );
-cerr << "<B>" << endl;
-	colorsMapper->SetInput( anImage );	  
-  //setUpperClamp( dataMax->value() );
-cerr << "<C>" << endl;
-  //setLowerClamp( dataMin->value() );  
-  //colorsMapper->SetInput( anImage );
+  if ( actualImage ) 
+    actualImage->Delete();
+  actualImage = anImage;
+	colorsMapper->SetInput( anImage );
   doNotUpdate = false;
-  //colorsMapper->Update();  
-cerr << "<D>" << endl;  
-  renderer->Render();
-cerr << "<E>" << endl;  
   interactor->Render();
  FEND;
 }
@@ -326,43 +324,28 @@ FBEGIN;
     return;  
   CVTKAdapter myAdapter( inputPtr );
   vtkImageData* myImage = myAdapter.convertToExternal();
-  int* dims = myImage->GetDimensions();
-  cerr << dims[0] << " x " << dims[1] << " x " << dims[2] << " - " << myImage->GetNumberOfCells() << endl;
-  cerr << "Data range: " << inputPtr->getMinimum() << " - " << inputPtr->getMaximum() << endl;
-cerr << "<1>" << endl;  
+  //int* dims = myImage->GetDimensions();
+/*  cerr << dims[0] << " x " << dims[1] << " x " << dims[2] << " - " << myImage->GetNumberOfCells() << endl;
+  cerr << "Data range: " << inputPtr->getMinimum() << " - " << inputPtr->getMaximum() << endl;*/
   myImage->SetScalarTypeToUnsignedShort();
-cerr << "<2>" << endl;  
-  //displayPtr->getImage()->SetDisplayExtent(0,inputPtr->getExtent(0)-1,0,inputPtr->getExtent(1)-1,0,0);
-  // Start by creatin a black/white lookup table.
-cerr << "<3>" << endl;  
   displayPtr->testDataRamge( inputPtr->getMinimum(), inputPtr->getMaximum() );
-cerr << "<4>" << endl;  
   displayPtr->setImage( myImage );
-/*  displayPtr->setLowerClamp( inputPtr->getMinimum() );
-cerr << "<5>" << endl;  
-  displayPtr->setUpperClamp( inputPtr->getMaximum() );*/
   if ( width != inputPtr->getExtent(0) || height != inputPtr->getExtent(1) )
   {
-cerr << "<6>" << endl;  
     width = inputPtr->getExtent(0);
     height = inputPtr->getExtent(1);
     displayPtr->getImage()->SetDisplayExtent(0,inputPtr->getExtent(0)-1,0,inputPtr->getExtent(1)-1,0,0);
     displayPtr->getRenderer()->GetActiveCamera()->SetPosition(
       static_cast<double>( inputPtr->getExtent(0) ) / 2.0, static_cast<double>( inputPtr->getExtent(1) ) / 2.0,
-      2.0 * static_cast<double>( std::max( inputPtr->getExtent(0), inputPtr->getExtent(1) ) ) );
+      1.0 * static_cast<double>( std::max( inputPtr->getExtent(0), inputPtr->getExtent(1) ) ) );
     displayPtr->getRenderer()->GetActiveCamera()->SetFocalPoint(
       static_cast<double>( inputPtr->getExtent(0) ) / 2.0, static_cast<double>( inputPtr->getExtent(1) ) / 2.0 , 0.0 );
     displayPtr->getRenderer()->GetActiveCamera()->ComputeViewPlaneNormal();
     displayPtr->getRenderer()->GetActiveCamera()->SetViewUp(0.0,-1.0,0.0);
     displayPtr->getRenderer()->GetActiveCamera()->OrthogonalizeViewUp();
-cerr << "<7>" << endl;    
     displayPtr->getRenderer()->ResetCamera();
   }
-cerr << "<8>" << endl;  
-  //myCast->Update();  
-  //displayPtr->getRenderer()->Render();
-cerr << "<9>" << endl;  
-  displayPtr->update();  
+  displayPtr->update();
 FEND;  
 BENCHSTOP;
 }
@@ -370,6 +353,7 @@ BENCHSTOP;
 void CDisplayDialog::updateView( TFieldPtr inputPtr ) throw()
 {
 BENCHSTART;
+  exit( 0 );
   CVTKAdapter myAdapter( inputPtr );
 //  vtkImageData* myImage = myAdapter.convertToExternal();
 //   myCast->SetInput( myImage );

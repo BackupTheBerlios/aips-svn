@@ -68,13 +68,12 @@ private:
   vtkQtRenderWindowInteractor* interactor;
   vtkQtRenderWindow* display;
   vtkRenderer* renderer;
-  vtkLookupTable* theLut;
-private:
   vtkLookupTable* theLookupTable;
   vtkScalarBarActor* theColorBar;
   vtkFloatingPointType dClampValues[2];
   vtkImageActor* theImage;
   vtkImageMapToColors *colorsMapper;
+  vtkImageData* actualImage;
   QVBox* aColumnPtr;
   QScrollBar* dataMin;
   QScrollBar* dataMax;
