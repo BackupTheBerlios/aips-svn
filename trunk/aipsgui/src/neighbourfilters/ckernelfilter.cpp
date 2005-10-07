@@ -95,7 +95,7 @@ DBG2("Starting filter BLITZ++");
           && l > -1 && m < work.depth() && m > -1 )
           dTmp += work( k, l, m ) * kernel( i, j, n );
       }
-      output( position ) = static_cast<ushort>( abs( static_cast<long>( dTmp ) ) );
+      output( position ) = static_cast<ushort>( std::abs( static_cast<long>( dTmp ) ) );
       if ( output( position ) > outputPtr->getMaximum() )
         outputPtr->setMaximum( output( position ) );
 			else if ( output( position ) < outputPtr->getMinimum() )
@@ -146,7 +146,7 @@ BENCHSTART;
         if ( k < work.rows() && k > -1 && l < work.cols() && l > -1 )
           dTmp += static_cast<double>( work( k, l ) ) * kernel( i, j );
       }
-      (*oit) = static_cast<ushort>( abs( static_cast<long>( dTmp ) ) );
+      (*oit) = static_cast<ushort>( std::abs( static_cast<long>( dTmp ) ) );
       if ( (*oit) > outputPtr->getMaximum() )
         outputPtr->setMaximum( (*oit) );
 			else if ( (*oit) < outputPtr->getMinimum() )

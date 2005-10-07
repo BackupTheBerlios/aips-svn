@@ -7,10 +7,11 @@ template<typename itkImageType>
 void CITKAdapter::setExternalData( typename itkImageType::Pointer anImage ) throw( NullException )
 {
 FBEGIN;
-  if ( anImage.IsNull() )
+/* FIXME */
+/*  if ( anImage.IsNull() )
   {
     FEND;
-    throw( NullException( "Given image pointer is invalid", RECOVER, ERR_CALLERNULL ) );
+    throw( NullException( "Given image pointer is invalid", CException::RECOVER, ERR_CALLERNULL ) );
   }
   if ( typeid( char ) == anImage->PixelType || typeid( unsigned char ) == anImage->PixelType ||
       typeid( short ) == anImage->PixelType || typeid( ushort ) == anImage->PixelType ||
@@ -55,7 +56,7 @@ FBEGIN;
   else
   {
     alog << LWARN << SSHORTERR( "Type ") << anImage->PixelType.name() << " is currently not supported" << endl;
-  }
+  }*/
 FEND;
 }
 
@@ -69,7 +70,7 @@ void CITKAdapter::convertToExternal( typename itkImageType::Pointer& anImage ) t
 FBEGIN;
   if ( !internalDataSPtr )
   {
-    throw( NullException( "Currently no interal data available", RECOVER, ERR_REQUESTNULL ) );
+    throw( NullException( "Currently no interal data available", CException::RECOVER, ERR_REQUESTNULL ) );
     FEND;
   }  
   // Determine dimension size
@@ -87,7 +88,7 @@ DBG3( dimensionSize[0] << " " << dimensionSize[1] << " " << dimensionSize[2] );
   else if( internalDataSPtr->getType() == typeid( double ) )
     anImage = doActualConversion<TField,itkImageType,double>();
   else
-    alog << SSHORTERR( "Conversion of given datatype is not supported yet" ) << endl;
+    alog << SSHORTERR( "Conversion of given datatype is not supported yet" ) << std::endl;
 FEND;
 }
 
@@ -98,7 +99,8 @@ template<typename internalDataType, typename itkImageType, typename dataType>
 typename itkImageType::Pointer CITKAdapter::doActualConversion() throw()
 {
 FBEGIN;
-  using boost::shared_ptr;
+/* FIXME */
+/*  using boost::shared_ptr;
   using boost::static_pointer_cast;
   typedef itk::Image<dataType, 3> TImageType;
   typedef itk::ImportImageFilter<dataType,3> TImportFilterType;
@@ -131,5 +133,5 @@ FBEGIN;
   theOutput->SetInput( theImportFilter->GetOutput() );
   theOutput->Update();
 FEND;
-  return theImportFilter->GetOutput();
+  return theImportFilter->GetOutput();*/
 }

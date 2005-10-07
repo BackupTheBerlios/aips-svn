@@ -97,13 +97,13 @@ cerr << "Begin CDeleteNarrows" << endl;
 			}
 			if (!maybe) (*outputPtr)(xmax,y) = 1;
 			if (!maybe2) (*outputPtr)(xmin,y) = 2;
-			if ( abs(static_cast<long>(xmax)-static_cast<long>(lastmax)) > 3 )
+			if ( std::abs(static_cast<long>(xmax)-static_cast<long>(lastmax)) > 3 )
 			{
-				cerr << "L " << y << " ( " << abs(static_cast<long>(xmax)-static_cast<long>(lastmax)) << " ) " << endl;
+				cerr << "L " << y << " ( " << std::abs(static_cast<long>(xmax)-static_cast<long>(lastmax)) << " ) " << endl;
 			}
-			if ( abs(static_cast<long>(xmin)-static_cast<long>(lastmin)) > 3 )
+			if ( std::abs(static_cast<long>(xmin)-static_cast<long>(lastmin)) > 3 )
 			{
-				cerr << "R " << y << " ( " << abs(static_cast<long>(xmin)-static_cast<long>(lastmin)) << " ) " << endl;
+				cerr << "R " << y << " ( " << std::abs(static_cast<long>(xmin)-static_cast<long>(lastmin)) << " ) " << endl;
 			}
 			lastmin = xmin;
 			lastmax = xmax;

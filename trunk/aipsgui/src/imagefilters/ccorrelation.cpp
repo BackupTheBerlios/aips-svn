@@ -104,7 +104,7 @@ BENCHSTART;
 					{
 						lValue -= ( (*inputPtr2)( x, y, z, usChannel ) );
 					}
-					lValue = abs( lValue );					
+					lValue = std::abs( lValue );					
     			if ( lValue > 65535 ) 
 						lValue = 65535;
 		    	(*outputPtr)( x, y, z, usChannel ) = static_cast<ushort>( lValue );

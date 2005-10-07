@@ -51,7 +51,7 @@ FBEGIN;
 			= itk::ImageIOFactory::CreateImageIO( sFilename.c_str(), itk::ImageIOFactory::ReadMode );
 		if ( imageIO.IsNull() )
 		{
-			alog << LWARN << "File type not supported (this should never happen!)" << endl;
+			alog << LWARN << "File type not supported (this should never happen!)" << std::endl;
 			return make_pair( aDataSet, aHeader );
 		}
 		
@@ -61,7 +61,7 @@ FBEGIN;
 		uint uiDimensions = imageIO->GetNumberOfDimensions();
 		if ( uiDimensions > 4 )
 		{
-			alog << LWARN << "We only support up to 4 dimensions yet!" << endl;
+			alog << LWARN << "We only support up to 4 dimensions yet!" << std::endl;
 			uiDimensions = 4;
 		}
 		itk::ImageIORegion ioRegion( uiDimensions );
@@ -75,13 +75,13 @@ FBEGIN;
 			ioSize[i] = imageIO->GetDimensions( i );
 			dims[i] = imageIO->GetDimensions( i );
 			spacing[i] = imageIO->GetSpacing( i );
-			cerr << "### " << i << " Dim: " << dims[i] << " Spac " << spacing[i] << endl;
+			cerr << "### " << i << " Dim: " << dims[i] << " Spac " << spacing[i] << std::endl;
 		}
 		
 		ioRegion.SetSize( ioSize );
 		ioRegion.SetIndex( ioStart );
 		
-		cerr << "ioRegion: " << ioRegion << endl;
+		cerr << "ioRegion: " << ioRegion << std::endl;
 		imageIO->SetIORegion( ioRegion );
 		void* buffer = malloc( imageIO->GetImageSizeInBytes() );
 		imageIO->Read( buffer );
@@ -91,7 +91,7 @@ FBEGIN;
 			uiDimensions = 2;
 		size_t dataDimension = imageIO->GetNumberOfComponents();
 		
-		cerr << "Resulting dimension " << uiDimensions << " " << dataDimension << endl;
+		cerr << "Resulting dimension " << uiDimensions << " " << dataDimension << std::endl;
 		
 		// Now we must take this buffer and convert it into a CTypedData<> structure
 		

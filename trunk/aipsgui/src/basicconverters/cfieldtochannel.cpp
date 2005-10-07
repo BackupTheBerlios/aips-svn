@@ -103,8 +103,8 @@ BENCHSTART;
 	  {
 			cnt++;
 			if ( cnt % 2000 == 0 ) PROG_VAL( cnt );
-  	  ushort usValue1 = static_cast<ushort>( abs(round( (*inputIt)[0] * dQuot ) ) );
-			ushort usValue2 = static_cast<ushort>( abs(round( (*inputIt)[1] * dQuot ) ) );
+  	  ushort usValue1 = static_cast<ushort>( std::abs(round( (*inputIt)[0] * dQuot ) ) );
+			ushort usValue2 = static_cast<ushort>( std::abs(round( (*inputIt)[1] * dQuot ) ) );
     	if ( usValue1 > ulMaxValue )
     	{
       	alog << LWARN << SERROR( "Value is too large " ) << usValue1 << endl;
@@ -165,9 +165,9 @@ BENCHSTART;
 	  {
 			cnt++;
 			if ( cnt % 20000 == 0 ) PROG_VAL( cnt );
-  	  ushort usValue1 = static_cast<ushort>( abs( round( (*inputIt)[0] * dQuot ) ) );
-			ushort usValue2 = static_cast<ushort>( abs( round( (*inputIt)[1] * dQuot ) ) );
-			ushort usValue3 = static_cast<ushort>( abs( round( (*inputIt)[2] * dQuot ) ) );			
+  	  ushort usValue1 = static_cast<ushort>( std::abs( round( (*inputIt)[0] * dQuot ) ) );
+			ushort usValue2 = static_cast<ushort>( std::abs( round( (*inputIt)[1] * dQuot ) ) );
+			ushort usValue3 = static_cast<ushort>( std::abs( round( (*inputIt)[2] * dQuot ) ) );			
     	if ( usValue1 > ulMaxValue )
     	{
       	alog << LWARN << SERROR("Value is too large") << usValue1 << endl;

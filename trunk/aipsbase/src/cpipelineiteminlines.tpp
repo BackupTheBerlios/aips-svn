@@ -161,27 +161,27 @@ inline bool CPipelineItem::checkInput( T inputPtr, ushort usMinDim,
 {
 	if ( !inputPtr )
 	{
-		alog << LWARN << "Input set error: <No input>" << endl; 
+		alog << LWARN << "Input set error: <No input>" << std::endl; 
 		return false;
 	}	
 	typedef dataTraits<U> traits;
 	if ( inputPtr->getType() != typeid( typename traits::dataType ) )
 	{
-		alog << LWARN << "Input set error: <Type mismatch>" << endl;
+		alog << LWARN << "Input set error: <Type mismatch>" << std::endl;
 		return false;
 	}	
 	if ( ( usMinDim && inputPtr->getDimension() < usMinDim ) 
 		|| ( usMaxDim && inputPtr->getDimension() > usMaxDim ) )
 	{
 		alog << LWARN << "Input data has wrong dimension " << inputPtr->getDimension() << ". Legal range is "
-			<< usMinDim << " - " << usMaxDim << endl; 
+			<< usMinDim << " - " << usMaxDim << std::endl; 
 		return false;
 	}
 	if ( ( usMinDataDim && inputPtr->getDataDimension() < usMinDataDim )
 		|| ( usMaxDataDim && inputPtr->getDataDimension() > usMaxDataDim ) )
 	{
 		alog << LWARN << "Input data has wrong dimension " << inputPtr->getDataDimension() << ". Legal range is "
-			<< usMinDataDim << " - " << usMaxDataDim << endl; 
+			<< usMinDataDim << " - " << usMaxDataDim << std::endl; 
 		return false;
 	}
 	return true;

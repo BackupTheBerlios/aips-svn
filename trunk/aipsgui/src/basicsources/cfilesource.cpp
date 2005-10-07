@@ -19,6 +19,7 @@
 extern const char* sLibID;
 
 #include "cfilesource.h"
+#include <cglobalconfig.h>
 
 using namespace std;
 
@@ -45,7 +46,10 @@ CFileSource::CFileSource( ulong ulID ) throw()
 										" Path: path to data files";
 
 	parameters.initString( "Filename", "" );
-	parameters.initString( "Path", "" );									
+	if ( getGlobalConfiguration().isDefined( "AIPS_DATA" ) )
+		parameters.initString( "Path", getGlobalConfiguration().getString( "AIPS_DATA" ) );					
+	else
+		parameters.initString( "Path", "" );	
 /* HB 28-06-05 */	
  	myFileSourceDialog.reset( new CFileSourceDialog( this ) );
   setModuleDialog( myFileSourceDialog );
@@ -53,6 +57,7 @@ CFileSource::CFileSource( ulong ulID ) throw()
 	myFileSourceDialog->setCaption( getModuleName().c_str() );	
 	myFileSourceDialog->attachObserver( this, EFileNameChangedEvent );
 	myFileSourceDialog->attachObserver( this, ELoadActivatedEvent );
+	myFileSourceDialog->setPath( parameters.getString( "Path" ) );
 }
 
 CFileSource::~CFileSource() throw()

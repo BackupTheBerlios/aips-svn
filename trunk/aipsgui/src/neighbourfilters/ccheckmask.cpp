@@ -91,43 +91,43 @@ BENCHSTART;
 				// Check mask 1
 				short val = static_cast<short>((*image)(x,y));
 				short mask[5];
-				mask[0] = abs( static_cast<short>((*image)(x-1,y-1)) - val );
-				mask[1] = abs( static_cast<short>((*image)(x-1,y+1)) - val );
-				mask[2] = abs( static_cast<short>((*image)(x,y-1)) - val );
-				mask[3] = abs( static_cast<short>((*image)(x,y+1)) - val );
-				mask[4] = abs( static_cast<short>((*image)(x-1,y)) - val );				
+				mask[0] = std::abs( static_cast<short>((*image)(x-1,y-1)) - val );
+				mask[1] = std::abs( static_cast<short>((*image)(x-1,y+1)) - val );
+				mask[2] = std::abs( static_cast<short>((*image)(x,y-1)) - val );
+				mask[3] = std::abs( static_cast<short>((*image)(x,y+1)) - val );
+				mask[4] = std::abs( static_cast<short>((*image)(x-1,y)) - val );				
 				isGood = ( mask[0] >= diff && mask[1] >= diff && mask[2] >= diff && mask[3] >= diff				
 					&& mask[4] >= diff );
 				DS( x << ";" << y << " One: " << isGood );
 				if ( !isGood )
 				{
-				mask[0] = abs( static_cast<short>((*image)(x-1,y-1)) - val );
-				mask[1] = abs( static_cast<short>((*image)(x+1,y-1)) - val );
-				mask[2] = abs( static_cast<short>((*image)(x-1,y) )- val );
-				mask[3] = abs( static_cast<short>((*image)(x+1,y) )- val );
-				mask[4] = abs( static_cast<short>((*image)(x,y-1)) - val );
+				mask[0] = std::abs( static_cast<short>((*image)(x-1,y-1)) - val );
+				mask[1] = std::abs( static_cast<short>((*image)(x+1,y-1)) - val );
+				mask[2] = std::abs( static_cast<short>((*image)(x-1,y) )- val );
+				mask[3] = std::abs( static_cast<short>((*image)(x+1,y) )- val );
+				mask[4] = std::abs( static_cast<short>((*image)(x,y-1)) - val );
 				isGood = ( mask[0] >= diff && mask[1] >= diff && mask[2] >= diff && mask[3] >= diff
 				&& mask[4] >= diff );					
 				DS( x << ";" << y << " 2: " << isGood );
 				}
 				if ( !isGood )
 				{
-				mask[0] = abs( static_cast<short>((*image)(x-1,y+1) )- val );
-				mask[1] = abs( static_cast<short>((*image)(x+1,y+1)) - val );
-				mask[2] = abs( static_cast<short>((*image)(x-1,y) )- val );
-				mask[3] = abs( static_cast<short>((*image)(x+1,y) )- val );
-				mask[4] = abs( static_cast<short>((*image)(x,y+1)) - val );
+				mask[0] = std::abs( static_cast<short>((*image)(x-1,y+1) )- val );
+				mask[1] = std::abs( static_cast<short>((*image)(x+1,y+1)) - val );
+				mask[2] = std::abs( static_cast<short>((*image)(x-1,y) )- val );
+				mask[3] = std::abs( static_cast<short>((*image)(x+1,y) )- val );
+				mask[4] = std::abs( static_cast<short>((*image)(x,y+1)) - val );
 				isGood = ( mask[0] >= diff && mask[1] >= diff && mask[2] >= diff && mask[3] >= diff
 					&& mask[4] >= diff );		
 					DS( x << ";" << y << " 3: " << isGood );			
 				}
 				if ( !isGood )
 				{
-				mask[0] = abs( static_cast<short>((*image)(x+1,y-1) )- val );
-				mask[1] = abs( static_cast<short>((*image)(x+1,y+1)) - val );
-				mask[2] = abs( static_cast<short>((*image)(x,y-1) )- val );
-				mask[3] = abs( static_cast<short>((*image)(x,y+1) )- val );
-				mask[4] = abs( static_cast<short>((*image)(x+1,y)) - val );
+				mask[0] = std::abs( static_cast<short>((*image)(x+1,y-1) )- val );
+				mask[1] = std::abs( static_cast<short>((*image)(x+1,y+1)) - val );
+				mask[2] = std::abs( static_cast<short>((*image)(x,y-1) )- val );
+				mask[3] = std::abs( static_cast<short>((*image)(x,y+1) )- val );
+				mask[4] = std::abs( static_cast<short>((*image)(x+1,y)) - val );
 				isGood = ( mask[0] >= diff && mask[1] >= diff && mask[2] >= diff && mask[3] >= diff
 					&& mask[4] >= diff );	
 					DS( x << ";" << y << " 4: " << isGood );				

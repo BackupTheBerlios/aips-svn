@@ -24,16 +24,17 @@
 
 using namespace std;
 
-CDisplayWindow::CDisplayWindow() : lutmin(0.0),lutmax(127.0),actualImage(NULL)
+CDisplayWindow::CDisplayWindow() : QWidget( NULL ), actualImage(NULL),lutmin(0.0),lutmax(127.0)
 {
   //setFixedSize(260,260);
   setMinimumSize(256,256);
   aColumnPtr = new QVBox( this );
-  aColumnPtr->setGeometry(0,0,260,260);
+  aColumnPtr->setGeometry(0,0,250,250);
   aColumnPtr->setMargin(2);
+  aColumnPtr->setSpacing(8);
   
-  display = new vtkQtRenderWindow(aColumnPtr);
-  display->setMinimumSize(128,128);
+  display = new vtkQtRenderWindow( aColumnPtr );
+  //display->setMinimumSize(128,128);
   interactor = vtkQtRenderWindowInteractor::New();
   interactor->SetRenderWindow( display );
   interactor->SetInteractorStyle( vtkInteractorStyleImage::New() );
@@ -58,26 +59,51 @@ CDisplayWindow::CDisplayWindow() : lutmin(0.0),lutmax(127.0),actualImage(NULL)
 
   theImage = vtkImageActor::New();
   colorsMapper = vtkImageMapToColors::New();
+  colorsMapper->SetLookupTable( theLookupTable );
+  colorsMapper->SetOutputFormatToRGBA();
   theImage->SetInput( colorsMapper->GetOutput() );
   renderer->AddProp( theImage );
   renderer->AddActor( theColorBar );
-  
+
+  lutFileButton = new QPushButton( "Color table", aColumnPtr );
+  lutFileButton->setMinimumSize( 200, 25 );
   doc1 = new QLabel( "Data range minimum", aColumnPtr );
+  QHBox* aRow3Ptr = new QHBox ( aColumnPtr );
   dataMin = new QScrollBar ( static_cast<int>(lutmin), static_cast<int>(lutmax),
-    1, 10, static_cast<int>(lutmin), Qt::Horizontal, aColumnPtr );
+    1, 10, static_cast<int>(lutmin), Qt::Horizontal, aRow3Ptr );
+   dataMin->setMinimumSize(256,16);
+  aRow3Ptr->setStretchFactor( dataMin, 3 );
+  aRow3Ptr->setSpacing(10);
+  minDisplay = new QLineEdit( QString::number( lutmin ), aRow3Ptr );
+   minDisplay->setFixedSize(96,16);
+  minDisplay->setValidator( new QDoubleValidator(0) );
   doc2 = new QLabel( "Data range maximum", aColumnPtr );
+  QHBox* aRow4Ptr = new QHBox ( aColumnPtr );
   dataMax = new QScrollBar ( static_cast<int>(lutmin), static_cast<int>(lutmax),
-    1, 10, static_cast<int>(lutmax), Qt::Horizontal, aColumnPtr );
+    1, 10, static_cast<int>(lutmax), Qt::Horizontal, aRow4Ptr );
+   dataMax->setMinimumSize(256,16);
+  aRow4Ptr->setStretchFactor( dataMax, 3 );
+  aRow4Ptr->setSpacing(10);
+  maxDisplay = new QLineEdit( QString::number( lutmax ), aRow4Ptr );
+   maxDisplay->setFixedSize(96,16);
+  maxDisplay->setValidator( new QDoubleValidator(0) );
   dClampValues[0] = 0.0;
   dClampValues[1] = 127.0;
   QHBox* aRow1Ptr = new QHBox ( aColumnPtr );
+  aRow1Ptr->setSpacing(5);
   transparency = new QCheckBox( aRow1Ptr );
+  transparency->setFixedSize(16,16);
   transparency->setChecked( true );
   doc3 = new QLabel( "Background transparency", aRow1Ptr );
   QHBox* aRow2Ptr = new QHBox ( aColumnPtr );
+  aRow2Ptr->setSpacing(5);
   interpolate = new QCheckBox( aRow2Ptr );
+  interpolate->setFixedSize(16,16);
   interpolate->setChecked( true );
   doc4 = new QLabel( "Interpolate", aRow2Ptr );
+
+  connect( lutFileButton, SIGNAL( clicked( ) ),
+    this, SLOT( loadLutFile() ) );
   connect ( dataMin, SIGNAL( valueChanged( int ) ),
     this, SLOT( updateMin( int ) ) );
   connect ( dataMax, SIGNAL( valueChanged( int ) ),
@@ -86,6 +112,37 @@ CDisplayWindow::CDisplayWindow() : lutmin(0.0),lutmax(127.0),actualImage(NULL)
     this, SLOT( toggleTransparency( int ) ) );
   connect( interpolate, SIGNAL( stateChanged( int ) ),
     this, SLOT( toggleInterpolation( int ) ) );
+  connect( minDisplay, SIGNAL( returnPressed() ),
+    this, SLOT( minDataChanged() ) );
+  connect( minDisplay, SIGNAL( lostFocus() ),
+    this, SLOT( minDataChanged() ) );
+  connect( maxDisplay, SIGNAL( returnPressed() ),
+    this, SLOT( maxDataChanged() ) );
+  connect( maxDisplay, SIGNAL( lostFocus() ),
+    this, SLOT( maxDataChanged() ) );
+  
+}
+
+void CDisplayWindow::loadLutFile()
+{
+	string path;
+	if ( getGlobalConfiguration().isDefined( "AIPS_LUT" ) )
+		path = getGlobalConfiguration().getString( "AIPS_LUT" );
+	else
+		path = "/home/hendrik/bin/mricro";
+  QString fn = QFileDialog::getOpenFileName( path.c_str(), "*.lut", this, "File loader", "Select a color table to load" );
+  loadLookupTable( fn.ascii() );
+  lutFileButton->setText( fn );
+}
+
+void CDisplayWindow::minDataChanged()
+{
+  dataMin->setValue( static_cast<int>( minDisplay->text().toDouble() ) );
+}
+
+void CDisplayWindow::maxDataChanged()
+{
+  dataMax->setValue( static_cast<int>( maxDisplay->text().toDouble() ) );
 }
 
 void CDisplayWindow::toggleTransparency( int i )
@@ -141,6 +198,7 @@ void CDisplayWindow::loadLookupTable( std::string sFilename )
 void CDisplayWindow::setUpperClamp( double dValue )
 {
   dClampValues[1] = dValue;
+  maxDisplay->setText( QString::number( dValue ) );
   if ( !doNotUpdate ) 
   {theLookupTable->SetTableRange( dClampValues );
   colorsMapper->Update();
@@ -151,6 +209,7 @@ void CDisplayWindow::setUpperClamp( double dValue )
 void CDisplayWindow::setLowerClamp( double dValue )
 {
   dClampValues[0] = dValue;
+  minDisplay->setText( QString::number( dValue ) );
   if ( !doNotUpdate ) 
   {
   theLookupTable->SetTableRange( dClampValues );
@@ -236,8 +295,6 @@ CDisplayWindow::~CDisplayWindow()
   renderer->Delete();  
   interactor->Delete();
   display->Delete();
-  
-  delete aColumnPtr;
 }
 
 void CDisplayWindow::resizeEvent( QResizeEvent* e ) throw()
@@ -251,11 +308,11 @@ void CDisplayWindow::setImage( vtkImageData* anImage )
  FBEGIN;
 	doNotUpdate = true;
 	theLookupTable->SetTableRange( dClampValues );
-	colorsMapper->SetLookupTable( theLookupTable );
-  if ( actualImage ) 
+	//colorsMapper->SetLookupTable( theLookupTable );
+	colorsMapper->SetInput( anImage );
+	if ( actualImage ) 
     actualImage->Delete();
   actualImage = anImage;
-	colorsMapper->SetInput( anImage );
   doNotUpdate = false;
   interactor->Render();
  FEND;

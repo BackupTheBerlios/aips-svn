@@ -77,7 +77,7 @@ CPipelineItem* CPMAD2Filter::newInstance( ulong ulID ) const throw()
   return new CPMAD2Filter( ulID );
 }
 
-template<typename T> void CPMAD2Filterfilter() throw()
+template<typename T> void CPMAD2Filter::filter() throw()
 {
 	if ( getInput()->getType() != typeid( typename dataTraits<T>::dataType ) )
 		return;
@@ -88,7 +88,7 @@ template<typename T> void CPMAD2Filterfilter() throw()
 	bModuleReady = true;
   deleteOldOutput();
 
-	typedef typename dataTraits<T>::voxelType TVoxel;
+	typedef typename dataTraits<T>::dataType TVoxel;
 	typedef typename dataTraits<T>::increasedRangeType TInc;
 	
   size_t dimensionSize[3];

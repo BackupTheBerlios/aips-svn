@@ -17,7 +17,7 @@
 
 using namespace std;
 using namespace boost;
-using namespace aips;
+namespace aips {
 
 /*************
  * Structors *
@@ -441,4 +441,6 @@ void CBinaryFileHandler::saveData( TDataSetPtr theSourceDataAPtr, ostream& theFi
 	}
   else
   	throw ( NullException( SERROR( "Could not determine dataset type" ), CException::RECOVER, ERR_UNKNOWNTYPE ) );
+}
+
 }

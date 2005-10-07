@@ -760,8 +760,8 @@ TVector2D CParticleSnake::edgeDistance( const TVector2D& p0, const TVector2D& p1
 		}
 	}
 	
-	sc = ( abs(sN) > DBL_EPSILON ? sN/sD : 0.0 );
-	tc = ( abs(tN) > DBL_EPSILON ? tN/tD : 0.0 );
+	sc = ( std::abs(sN) > DBL_EPSILON ? sN/sD : 0.0 );
+	tc = ( std::abs(tN) > DBL_EPSILON ? tN/tD : 0.0 );
 	TVector2D dP = w + ( sc * u ) - ( tc * v );
 	return dP;
 }

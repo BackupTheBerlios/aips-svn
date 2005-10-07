@@ -110,7 +110,7 @@ DS("B");
       for ( ushort i = 0; i < NB-1; i++ )
         for ( ushort j = i + 1; j < NB; j++ )
         {
-          double dTmp = abs( angleVec[i] - angleVec[j] );
+          double dTmp = std::abs( angleVec[i] - angleVec[j] );
           if ( angleVec[i] == -1.0 || angleVec[j] == -1.0 )
             dTmp = 0.0;
           if ( dTmp > M_PI )
@@ -172,7 +172,7 @@ BENCHSTART;
 	      for ( ushort i = 0; i < 5; i++ )
         for ( ushort j = i + 1; j < 6; j++ )
         {
-          double dTmp = abs( acos( dot( angleVec[i], angleVec[j] ) 
+          double dTmp = std::abs( acos( dot( angleVec[i], angleVec[j] ) 
 						/ ( norm( angleVec[i] ) * norm( angleVec[j] ) ) ) );
           if ( dTmp > dValue )
             dValue = dTmp;

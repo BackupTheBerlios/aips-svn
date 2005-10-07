@@ -274,8 +274,8 @@ alog << "End" << endl;
 	for( vector<TPoint2D>::iterator it = intervals.begin(); it != intervals.end(); ++it )
 	{
 		ushort tmp = 
-			std::min( abs( static_cast<int>((*it)[0])-static_cast<int>(outputPtr->getExtent(1)/2)), 
-			abs( static_cast<int>((*it)[1])-static_cast<int>(outputPtr->getExtent(1)/2) ));
+			std::min( std::abs( static_cast<int>((*it)[0])-static_cast<int>(outputPtr->getExtent(1)/2)), 
+			std::abs( static_cast<int>((*it)[1])-static_cast<int>(outputPtr->getExtent(1)/2) ));
 		intDist.push_back( tmp );
 	}
 	ushort usMinDist = outputPtr->getExtent(1);	

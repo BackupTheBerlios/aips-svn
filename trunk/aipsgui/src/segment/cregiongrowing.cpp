@@ -118,25 +118,25 @@ cerr << " Computing area" << endl;
 		{
 			if ( ( p[0] > 0 )
 			  && ( (*outputPtr)( p[0]-1, p[1] ) == 0 )
-				&& ( static_cast<ulong>(abs((*inputPtr)( p[0]-1, p[1])-(*inputPtr)( p[0], p[1])))<=ulRegionThreshold ) )
+				&& ( static_cast<ulong>(std::abs((*inputPtr)( p[0]-1, p[1])-(*inputPtr)( p[0], p[1])))<=ulRegionThreshold ) )
 				{
 					work.push( TPoint3D( p[0]-1, p[1], 0 ) ); (*outputPtr)( p[0]-1, p[1] ) = 1;
 				}
 			if ( ( p[0] < static_cast<long>(inputPtr->getExtent(0)-1) )
 			  && ( (*outputPtr)( p[0]+1, p[1] ) == 0 )
-				&& ( static_cast<ulong>(abs((*inputPtr)( p[0]+1, p[1])-(*inputPtr)( p[0], p[1])))<=ulRegionThreshold ) )
+				&& ( static_cast<ulong>(std::abs((*inputPtr)( p[0]+1, p[1])-(*inputPtr)( p[0], p[1])))<=ulRegionThreshold ) )
 				{
 					work.push( TPoint3D( p[0]+1, p[1], 0 ) ); (*outputPtr)( p[0]+1, p[1] ) = 1;
 				}
 			if ( ( p[1] > 0 )
 		  	&& ( (*outputPtr)( p[0], p[1]-1 ) == 0 )
-				&& ( static_cast<ulong>(abs((*inputPtr)( p[0], p[1]-1)-(*inputPtr)( p[0], p[1])))<=ulRegionThreshold ) )
+				&& ( static_cast<ulong>(std::abs((*inputPtr)( p[0], p[1]-1)-(*inputPtr)( p[0], p[1])))<=ulRegionThreshold ) )
 				{
 					work.push( TPoint3D( p[0], p[1]-1, 0 ) ); (*outputPtr)( p[0], p[1]-1 ) = 1;
 				}
 			if ( ( p[1] < static_cast<long>(inputPtr->getExtent(1)-1) )
 			  && ( (*outputPtr)( p[0], p[1]+1 ) == 0 )
-				&& ( static_cast<ulong>(abs((*inputPtr)( p[0], p[1]+1)-(*inputPtr)( p[0], p[1])))<=ulRegionThreshold ) )
+				&& ( static_cast<ulong>(std::abs((*inputPtr)( p[0], p[1]+1)-(*inputPtr)( p[0], p[1])))<=ulRegionThreshold ) )
 				{
 					work.push( TPoint3D( p[0], p[1]+1, 0 ) ); (*outputPtr)( p[0], p[1]+1 ) = 1;
 				}
@@ -145,38 +145,38 @@ cerr << " Computing area" << endl;
 		{
 			if ( ( p[0] > 0 )
 			  && ( (*outputPtr)( p[0]-1, p[1], p[2] ) == 0 )
-				&& ( static_cast<ulong>( abs( (*inputPtr)( p[0]-1, p[1], p[2])
+				&& ( static_cast<ulong>( std::abs( (*inputPtr)( p[0]-1, p[1], p[2])
 					- (*inputPtr)( p[0], p[1], p[2]) ) ) <= ulRegionThreshold ) )
 				{
 					work.push( TPoint3D( p[0]-1, p[1], p[2] ) ); (*outputPtr)( p[0]-1, p[1], p[2] ) = 1;
 				}
 			if ( ( p[0] < static_cast<long>(inputPtr->getExtent(0)-1) )
 			  && ( (*outputPtr)( p[0]+1, p[1], p[2] ) == 0 )
-				&& ( static_cast<ulong>( abs((*inputPtr)( p[0]+1, p[1], p[2])-(*inputPtr)( p[0], p[1], p[2])))<=ulRegionThreshold ) )
+				&& ( static_cast<ulong>( std::abs((*inputPtr)( p[0]+1, p[1], p[2])-(*inputPtr)( p[0], p[1], p[2])))<=ulRegionThreshold ) )
 				{
 					work.push( TPoint3D( p[0]+1, p[1], p[2] ) ); (*outputPtr)( p[0]+1, p[1], p[2] ) = 1;
 				}
 			if ( ( p[1] > 0 )
 			  && ( (*outputPtr)( p[0], p[1]-1, p[2] ) == 0 )
-				&& ( static_cast<ulong>(abs((*inputPtr)( p[0], p[1]-1, p[2])-(*inputPtr)( p[0], p[1], p[2])))<=ulRegionThreshold ) )
+				&& ( static_cast<ulong>(std::abs((*inputPtr)( p[0], p[1]-1, p[2])-(*inputPtr)( p[0], p[1], p[2])))<=ulRegionThreshold ) )
 				{
 					work.push( TPoint3D( p[0], p[1]-1, p[2] ) ); (*outputPtr)( p[0], p[1]-1, p[2] ) = 1;
 				}
 			if ( ( p[1] < static_cast<long>(inputPtr->getExtent(1)-1) )
 			  && ( (*outputPtr)( p[0], p[1]+1, p[2] ) == 0 )
-				&& ( static_cast<ulong>(abs((*inputPtr)( p[0], p[1]+1, p[2])-(*inputPtr)( p[0], p[1], p[2])))<=ulRegionThreshold ) )
+				&& ( static_cast<ulong>(std::abs((*inputPtr)( p[0], p[1]+1, p[2])-(*inputPtr)( p[0], p[1], p[2])))<=ulRegionThreshold ) )
 				{
 					work.push( TPoint3D( p[0], p[1]+1, p[2] ) ); (*outputPtr)( p[0], p[1]+1, p[2] ) = 1;
 				}
 			if ( ( p[2] > 0 )
 			  && ( (*outputPtr)( p[0], p[1], p[2]-1 ) == 0 )
-				&& ( static_cast<ulong>(abs((*inputPtr)( p[0], p[1], p[2]-1 ) - (*inputPtr)( p[0], p[1], p[2])))<=ulRegionThreshold ) )
+				&& ( static_cast<ulong>(std::abs((*inputPtr)( p[0], p[1], p[2]-1 ) - (*inputPtr)( p[0], p[1], p[2])))<=ulRegionThreshold ) )
 				{
 					work.push( TPoint3D( p[0], p[1], p[2]-1 ) ); (*outputPtr)( p[0], p[1], p[2]-1 ) = 1;
 				}
 			if ( ( p[2] < static_cast<long>(inputPtr->getExtent(2)-1) )
 			  && ( (*outputPtr)( p[0], p[1], p[2]+1 ) == 0 )
-				&& ( static_cast<ulong>(abs((*inputPtr)( p[0], p[1], p[2]+1 ) - (*inputPtr)( p[0], p[1], p[2])))<=ulRegionThreshold ) )
+				&& ( static_cast<ulong>(std::abs((*inputPtr)( p[0], p[1], p[2]+1 ) - (*inputPtr)( p[0], p[1], p[2])))<=ulRegionThreshold ) )
 				{
 					work.push( TPoint3D( p[0], p[1], p[2]+1 ) ); (*outputPtr)( p[0], p[1], p[2]+1 ) = 1;
 				}

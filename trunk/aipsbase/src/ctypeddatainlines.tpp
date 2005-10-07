@@ -285,10 +285,10 @@ void CTypedData<valueType>::adjustDataRange( const valueType theValue ) throw()
  * \param alignment Alignment of old data in the new dataset
  */
 template<typename valueType> inline 
-void CTypedData<valueType>::resize( const size_t* extendArr_, const EDataAlign 
+void CTypedData<valueType>::resize( const size_t* extentArr_, const EDataAlign 
 	alignment ) throw()
 {
-	newArraySize = 1;
+	size_t newArraySize = 1;
   for ( ushort i = 0; i < usDimension; i++ )
     newArraySize *= extentArr_[i];
   newArraySize *= dataDimensionSize;	
@@ -298,7 +298,7 @@ void CTypedData<valueType>::resize( const size_t* extendArr_, const EDataAlign
 	{
 		for ( ushort d = 0; d < usDimension; d++ )	
 		{
-			maxExtent[d] = std::min( extendArr_[d], extendVec[d] );
+			maxExtent[d] = std::min( extentArr_[d], extentVec[d] );
 		}
 		ushort maxW = 1;		
 		if ( usDimension > 3 ) maxW = maxExtent[3];
@@ -322,10 +322,10 @@ void CTypedData<valueType>::resize( const size_t* extendArr_, const EDataAlign
  * \param alignment Alignment of old data in the new dataset
  */
 template<typename valueType> inline 
-void CTypedData<valueType>::resize( const std::vector<size_t> extendVec_,
+void CTypedData<valueType>::resize( const std::vector<size_t> extentVec_,
 	const EDataAlign alignment )	throw()
 {
-	newArraySize = 1;
+	size_t newArraySize = 1;
   for ( ushort i = 0; i < usDimension; i++ )
     newArraySize *= extentVec_[i];
   newArraySize *= dataDimensionSize;	
@@ -335,7 +335,7 @@ void CTypedData<valueType>::resize( const std::vector<size_t> extendVec_,
 	{
 		for ( ushort d = 0; d < usDimension; d++ )	
 		{
-			maxExtent[d] = std::min( extendVec_[d], extendVec[d] );
+			maxExtent[d] = std::min( extentVec_[d], extentVec[d] );
 		}
 		ushort maxW = 1;		
 		if ( usDimension > 3 ) maxW = maxExtent[3];
@@ -377,12 +377,12 @@ void CTypedData<valueType>::decreaseDataDimension( const size_t subFromDataDimen
 {
 	typedef typename std::vector<valueType>::iterator localIterator;
 	
-	if ( addToDataDimension == 0 ) 
+	if ( subFromDataDimension == 0 ) 
 		return;
 	ulong dimensionSize = 1;
 	for( uint i = 0; i < usDimension; ++i )
 		dimensionSize *= getExtent( i );
-	dataDimensionSize -= addToDataDimension;	
+	dataDimensionSize -= subFromDataDimension;	
 	std::vector<valueType> newDataVec( dimensionSize * dataDimensionSize );
 	localIterator newIt = newDataVec.begin();
 	localIterator oldIt = dataVec.begin();
@@ -629,7 +629,7 @@ typename CTypedData<valueType>::iterator CTypedData<valueType>::moveTo( const us
 	const ushort usY,	const ushort usZ, const ushort usW ) throw()
 {
 	return iterator( &dataVec[usX+usY*extentVec[0]+usZ*extentVec[0]*extentVec[1]
-		+usW*extendVec[0]*extentVec[1]*extentVec[2]], this );
+		+usW*extentVec[0]*extentVec[1]*extentVec[2]], this );
 }
 
 /*********************************
@@ -640,20 +640,20 @@ typename CTypedData<valueType>::iterator CTypedData<valueType>::moveTo( const us
  * \param iterator iterator to move
  * \param amount amount to move iterator by (gets added to iterator position)
  */
-template<typename T, typename U>
-CTypedData<T>::TypedDataIterator<T,U> operator+( CTypedData<T>::TypedDataIterator<T,U> anIterator,
-	ptrdiff_t amount )
-{
-	return CTypedData<T>::TypedDataIterator<T,U>( &(*anIterator) + amount, anIterator.getParent() );
-}
+// template<typename T, typename U>
+// CTypedData<T>::TypedDataIterator<T,U> operator+( CTypedData<T>::TypedDataIterator<T,U> anIterator,
+// 	ptrdiff_t amount )
+// {
+// 	return CTypedData<T>::TypedDataIterator<T,U>( &(*anIterator) + amount, anIterator.getParent() );
+// }
 
 /**
  * \param iterator iterator to move
  * \param amount amount to move iterator by (gets subtracted from iterator position)
  */
-template<typename T, typename U>
-CTypedData<T>::TypedDataIterator<T,U> operator-( CTypedData<T>::TypedDataIterator<T,U> anIterator, 
-	ptrdiff_t amount )
-{
-	return CTypedData<T>::TypedDataIterator<T,U>( &(*anIterator) - amount, anIterator.getParent() );
-}
+// template<typename T, typename U>
+// CTypedData<T>::TypedDataIterator<T,U> operator-( CTypedData<T>::TypedDataIterator<T,U> anIterator, 
+// 	ptrdiff_t amount )
+// {
+// 	return CTypedData<T>::TypedDataIterator<T,U>( &(*anIterator) - amount, anIterator.getParent() );
+// }

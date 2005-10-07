@@ -84,7 +84,7 @@ BENCHSTART;
 	TImage::iterator oit = outputPtr->begin();
 	while( iit != inputPtr->end() )
 	{
-		*oit = static_cast<ushort>(abs( static_cast<short>(*iit) - static_cast<short>(*lit) ));
+		*oit = static_cast<ushort>( std::abs( static_cast<short>(*iit) - static_cast<short>(*lit) ));
 		if ( *oit > outputPtr->getMaximum() )
 			outputPtr->setMaximum( *oit );
 		++iit; ++lit; ++oit;

@@ -128,7 +128,8 @@ template<typename valueType> inline valueType& CSingleValue<valueType>::at
   ( const ushort usIndex ) throw( OutOfRangeException )
 {
   if ( usIndex > ( dataDimensionSize - 1 ) )
-    throw( OutOfRangeException( SERROR("Index out of range"), ERR_BADDIMENSION, RECOVER ) );
+    throw( OutOfRangeException( SERROR("Index out of range"), ERR_BADDIMENSION, 
+    CException::RECOVER ) );
   return valueVec[usIndex];
 }
 
@@ -140,7 +141,8 @@ template<typename valueType> inline const valueType& CSingleValue<valueType>::at
   ( const ushort usIndex ) const throw( OutOfRangeException )
 {
   if ( usIndex > ( dataDimensionSize - 1 ) )
-    throw( OutOfRangeException( SERROR("Index out of range"), ERR_BADDIMENSION, RECOVER ) );
+    throw( OutOfRangeException( SERROR("Index out of range"), ERR_BADDIMENSION, 
+    CException::RECOVER ) );
   return valueVec[usIndex];
 }
 
@@ -159,9 +161,8 @@ template<typename valueType> const std::string CSingleValue<valueType>::dump() c
 template<typename valueType> inline 
 void CSingleValue<valueType>::swap( CSingleValue<valueType>& aDataSet ) throw()
 {
-	std::swap( arraySize, aDataSet.arraySize );
 	valueVec.swap( aDataSet.valueVec );
 	std::swap( usDimension, aDataSet.usDimension );
-  extendVec.swap( aDataSet.extendVec ); 
+  extentVec.swap( aDataSet.extentVec ); 
   std::swap( dataDimensionSize, aDataSet.dataDimensionSize );
 }

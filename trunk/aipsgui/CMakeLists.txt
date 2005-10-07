@@ -7,6 +7,7 @@ SET(CMAKE_VERBOSE_MAKEFILE ON)
 ADD_DEFINITIONS(-Wall -DQT_THREAD_SUPPORT)
 
 SET( DEBUG_LEVEL 0 CACHE STRING "Level of debugging output (This is either 0 (no output) or 1,2,3)")
+SET( USE_RENDERING ON "Use VTK-based rendering for display")
 
 INCLUDE(${CMAKE_ROOT}/Modules/FindQt.cmake)
 IF(NOT QT_FOUND)

@@ -85,7 +85,7 @@ inline double abs( const double value ) throw()
 /** Specialized template of abs<float>. Uses the cmath fabsf function */
 inline float abs( const float value ) throw()
 {
-  return std::fabsf( value );
+  return fabsf( value );
 }
 
 /** Specialized template of abs<long>. Uses the cmath labs function */

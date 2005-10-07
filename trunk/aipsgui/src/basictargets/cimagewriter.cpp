@@ -14,6 +14,7 @@
  ************************************************************************/
 
 #include "cimagewriter.h"
+#include <cglobalconfig.h>
 
 using namespace std;
 using namespace boost;
@@ -32,6 +33,11 @@ CImageWriter::CImageWriter( ulong ulID ) throw()
                    " none";
 
   inputsVec[0].portType = IOOther;
+  parameters.initString( "Filename", "" );
+	if ( getGlobalConfiguration().isDefined( "AIPS_DATA" ) )
+		parameters.initString( "Path", getGlobalConfiguration().getString( "AIPS_DATA" ) );					
+	else
+		parameters.initString( "Path", "" );	
 /* HB 28-06-05 */	
 myDialog.reset( new CImageWriterDialog( this ) );
 	setModuleDialog( myDialog );

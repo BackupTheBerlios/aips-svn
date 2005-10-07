@@ -11,6 +11,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
 #include "cmainwin.h"
+#include <cglobalconfig.h>
 
 using namespace std;
 using namespace boost;
@@ -53,6 +54,20 @@ CMainWin::CMainWin( QWidget* parentPtr, const char* sName ) throw()
 		sConfigDir = getenv( "AIPS_CONFIG" );
 	else
 		sConfigDir = getenv( "HOME" );
+  std::string sLutDir;
+	if ( getenv( "AIPS_LUT" ) )
+		sLutDir = getenv( "AIPS_LUT" );
+	else
+	{
+		sLutDir = getenv( "HOME" );
+		sLutDir += "/bin/mricro";
+	}
+		
+	getGlobalConfiguration().setString( "AIPS_PLUGINS", sPluginDir );
+	getGlobalConfiguration().setString( "AIPS_PIPELINES", sPipelineDir );
+	getGlobalConfiguration().setString( "AIPS_DATA", sDataDir );
+	getGlobalConfiguration().setString( "AIPS_CONFIG", sConfigDir );
+	getGlobalConfiguration().setString( "AIPS_LUT", sLutDir );
 
   setCaption("AIPS - Automatic image processing system");
   // Setup window geometry and layout management
@@ -463,7 +478,7 @@ DBG( "Deleting node " << ulID );
     windowMenuPtr->removeItem( aNode->getID() );
     windowItemPtrMap.erase( aNode->getID() );
   }
-  delete aNode;
+  //delete aNode;
 	bPipelineChanged = true;
 FEND;
 }

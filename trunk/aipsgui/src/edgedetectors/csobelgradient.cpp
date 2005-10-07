@@ -185,7 +185,7 @@ PROG_MAX( d - 1 );
 					- (*( inputIt - 1 - w )) 
 					- 2 * (*( inputIt - 1 )) 
 					- (*( inputIt - 1 + w ));
-				dMaxGradient = std::max( dMaxGradient, abs( (*outputIt)[0] ) );
+				dMaxGradient = std::max( dMaxGradient, std::abs( (*outputIt)[0] ) );
 			
 				(*outputIt)[1] = (*( inputIt + w - slice )) 
 					+ 2 * (*( inputIt + w )) 
@@ -193,7 +193,7 @@ PROG_MAX( d - 1 );
 					- (*( inputIt - w - slice )) 
 					- 2 * (*( inputIt - w )) 
 					- (*( inputIt - w + slice ));
-				dMaxGradient = std::max( dMaxGradient, abs( (*outputIt)[1] ) );
+				dMaxGradient = std::max( dMaxGradient, std::abs( (*outputIt)[1] ) );
 			
 				(*outputIt)[2] = (*( inputIt - 1 + slice )) 
 					+ 2 * (*( inputIt + slice )) 
@@ -201,7 +201,7 @@ PROG_MAX( d - 1 );
 					- (*( inputIt - 1 - slice )) 
 					- 2 * (*( inputIt - slice )) 
 					- (*( inputIt + 1 - slice) );
-				dMaxGradient = std::max( dMaxGradient, abs( (*outputIt)[2] ) );
+				dMaxGradient = std::max( dMaxGradient, std::abs( (*outputIt)[2] ) );
 			}
 			++inputIt; ++outputIt; ++roiIt; ++x;
 			if ( x == ( w - 1 ) )
@@ -239,7 +239,7 @@ PROG_MAX( d - 1 );
 				- 4 * (*(inputIt - 1 ) )
 				- 2 * (*(inputIt - 1 + w ) );
 				
-				dMaxGradient = std::max( dMaxGradient, abs( (*outputIt)[0] ) );
+				dMaxGradient = std::max( dMaxGradient, std::abs( (*outputIt)[0] ) );
 			
 				(*outputIt)[1] = (*(inputIt + 1 + w - slice ) )
 				+ 2 * (*(inputIt + 1 + w - slice ) )
@@ -260,7 +260,7 @@ PROG_MAX( d - 1 );
 				- 4 * (*(inputIt - w ) )
 				- 2 * (*(inputIt - w + slice ) );
 				
-				dMaxGradient = std::max( dMaxGradient, abs( (*outputIt)[1] ) );
+				dMaxGradient = std::max( dMaxGradient, std::abs( (*outputIt)[1] ) );
 				
 				(*outputIt)[2] = (*(inputIt - 1 - w - slice ) )
 				+ 2 * (*(inputIt  - w - slice ) )
@@ -281,7 +281,7 @@ PROG_MAX( d - 1 );
 				- 2 * (*(inputIt + slice ) )
 				- 1 * (*(inputIt + 1 + slice ) );				
 				
-				dMaxGradient = std::max( dMaxGradient, abs( (*outputIt)[2] ) );
+				dMaxGradient = std::max( dMaxGradient, std::abs( (*outputIt)[2] ) );
 			}
 			++inputIt; ++outputIt; ++roiIt; ++x;
 			if ( x == ( w - 1 ) )

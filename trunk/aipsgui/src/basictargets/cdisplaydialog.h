@@ -20,15 +20,18 @@
 #ifndef CDISPLAYDIALOG_H
 #define CDISPLAYDIALOG_H
 
+#include <cglobalconfig.h>
 #include <cmoduledialog.h>
 #include <aipsnumeric.h>
 #include <cvtkadapter.h>
 #include <qvbox.h>
 #include <qscrollbar.h>
 #include <qcheckbox.h>
-#include <qlcdnumber.h>
+#include <qlineedit.h>
 #include <qfiledialog.h>
 #include <qlabel.h>
+#include <qvalidator.h>
+#include <qpushbutton.h>
 
 #include <vtkQtRenderWindow.h>
 #include <vtkQtRenderWindowInteractor.h>
@@ -42,7 +45,7 @@ using namespace aips;
 /**
 @author Hendrik Belitz
 */
-
+// #ifdef USE_RENDERING
 class CDisplayWindow : public QWidget
 {
 Q_OBJECT
@@ -64,6 +67,9 @@ public slots:
   void updateMin( int i );
   void toggleTransparency( int i );
   void toggleInterpolation( int i );
+  void minDataChanged();
+  void maxDataChanged();
+  void loadLutFile();
 private:
   vtkQtRenderWindowInteractor* interactor;
   vtkQtRenderWindow* display;
@@ -75,10 +81,13 @@ private:
   vtkImageMapToColors *colorsMapper;
   vtkImageData* actualImage;
   QVBox* aColumnPtr;
+  QPushButton* lutFileButton;
   QScrollBar* dataMin;
   QScrollBar* dataMax;
   QCheckBox* transparency;
   QCheckBox* interpolate;
+  QLineEdit* minDisplay;
+  QLineEdit* maxDisplay;
   QLabel* doc1;
   QLabel* doc2;
   QLabel* doc3;
@@ -86,6 +95,7 @@ private:
   double lutmin,lutmax;
   bool doNotUpdate;
 };
+// #endif
 
 class CDisplayDialog : public CModuleDialog, vtkObject
 {
@@ -121,7 +131,6 @@ public:
   
 private:
   CDisplayWindow* displayPtr; ///< The display window
-  vtkImageActor* myActor;
   uint width, height;
 };
 

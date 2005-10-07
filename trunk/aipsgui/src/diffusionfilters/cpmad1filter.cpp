@@ -173,7 +173,7 @@ template<typename T> void CPMAD1Filter::filter() throw()
 
             for (ushort indice=0; indice < 6; ++indice)
               TotalFlux = TotalFlux - ( dDeltaN( indice ) 
-								* ( exp( -pow( ( abs( dDeltaN( indice ) ) / dK_factor ), 2 ) ) ) );
+								* ( exp( -pow( ( std::abs( static_cast<double>( dDeltaN( indice ) ) / dK_factor ) ), 2 ) ) ) );
 
             TInc flow_value = static_cast<TInc>( TotalFlux * dlambda );
             TInc pixelResult = (ImageCopie)( x, y, z, usChannel ) + flow_value;
@@ -237,10 +237,10 @@ template<typename T> void CPMAD1Filter::filter() throw()
 
             for (ushort indice = 0; indice < 6; ++indice )
               TotalFlux = TotalFlux - ( dDeltaN( indice ) 
-								* ( exp( -pow( ( abs( dDeltaN( indice ) ) / dK_factor ), 2 ) ) ) );
+								* ( exp( -pow( ( std::abs( dDeltaN( indice ) ) / dK_factor ), 2 ) ) ) );
             for (ushort indice = 6; indice < 18; ++indice )
               TotalFlux = TotalFlux - 0.5 * ( dDeltaN( indice ) 
-								* ( exp( -pow( ( abs( dDeltaN( indice ) ) / dK_factor ), 2 ) ) ) );
+								* ( exp( -pow( ( std::abs( dDeltaN( indice ) ) / dK_factor ), 2 ) ) ) );
 
             TInc flow_value = static_cast<TInc>( TotalFlux * dlambda );
             TInc pixelResult = (ImageCopie)( x, y, z, usChannel ) + flow_value;
@@ -314,13 +314,13 @@ template<typename T> void CPMAD1Filter::filter() throw()
 
             for ( ushort indice = 0; indice < 6; ++indice )
               TotalFlux = TotalFlux - ( dDeltaN( indice ) 
-								* ( exp( -pow( ( abs( dDeltaN( indice ) ) / dK_factor ), 2 ) ) ) );
+								* ( exp( -pow( ( std::abs( dDeltaN( indice ) ) / dK_factor ), 2 ) ) ) );
             for ( ushort indice = 6; indice < 18; ++indice )
               TotalFlux = TotalFlux - 0.5 * ( dDeltaN( indice ) 
-								* ( exp( -pow( ( abs( dDeltaN( indice ) ) / dK_factor ), 2 ) ) ) );
+								* ( exp( -pow( ( std::abs( dDeltaN( indice ) ) / dK_factor ), 2 ) ) ) );
             for ( ushort indice = 18; indice < 26; ++indice )
               TotalFlux = TotalFlux - 0.333 * ( dDeltaN( indice) 
-								* ( exp( -pow( ( abs( dDeltaN( indice ) ) / dK_factor ), 2 ) ) ) );
+								* ( exp( -pow( ( std::abs( dDeltaN( indice ) ) / dK_factor ), 2 ) ) ) );
 
             TInc flow_value = static_cast<TInc>( TotalFlux * dlambda );
             TInc pixelResult = (ImageCopie)( x, y, z, usChannel ) + flow_value;
@@ -365,7 +365,7 @@ template<typename T> void CPMAD1Filter::filter() throw()
 
             for ( ushort indice = 0; indice < 4; ++indice )
               TotalFlux = TotalFlux - ( dDeltaN( indice ) 
-								* ( exp( -pow( ( abs( dDeltaN( indice ) ) / dK_factor ), 2 ) ) ) );
+								* ( exp( -pow( ( std::abs( dDeltaN( indice ) ) / dK_factor ), 2 ) ) ) );
 
             TInc flow_value = static_cast<TInc>( TotalFlux * dlambda );
             TInc pixelResult = (ImageCopie)( x, y, usChannel ) + flow_value;
@@ -416,10 +416,10 @@ template<typename T> void CPMAD1Filter::filter() throw()
 						/* HB 2004-06-16: Changed fabs to abs, since we use double values here */
             for (ushort indice=0; indice <4; ++indice)
               TotalFlux = TotalFlux - ( dDeltaN( indice ) 
-								* ( exp( - pow( ( abs( dDeltaN( indice ) ) / dK_factor ), 2 ) ) ) );
+								* ( exp( - pow( ( std::abs( dDeltaN( indice ) ) / dK_factor ), 2 ) ) ) );
             for (ushort indice=4; indice < 8; ++indice)
               TotalFlux = TotalFlux - 0.5*( dDeltaN(indice) 
-								* ( exp( - pow( ( abs( dDeltaN( indice ) ) / dK_factor ), 2 ) ) ) );
+								* ( exp( - pow( ( std::abs( dDeltaN( indice ) ) / dK_factor ), 2 ) ) ) );
 
             TInc flow_value = static_cast<TInc>( TotalFlux * dlambda );
             TInc pixelResult = ImageCopie( x, y, usChannel )+ flow_value;

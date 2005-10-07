@@ -428,6 +428,12 @@ public:
 		{ 
 			return parentPtr; 
 		}
+/// Move the TypedDataIterator forward by an specific amount
+	TypedDataIterator<T,U> operator+( ptrdiff_t amount ){ TypedDataIterator<T,U> t; t += amount; return t; }
+
+/// Move the TypedDataIterator backward by an specific amount
+	TypedDataIterator<T,U> operator-( ptrdiff_t amount ){ TypedDataIterator<T,U> t; t -= amount; return t; }
+		
 	private:
 		U positionPtr; 					///< Pointer to actual position
 		CTypedData<T>* parentPtr; ///< Pointer to parent CTypedData
@@ -470,15 +476,6 @@ private:
   valueType theMaximum;           ///< Dataset maximum value
 };
 
-/// Move the TypedDataIterator forward by an specific amount
-template<typename T, typename U>
-CTypedData<T>::TypedDataIterator<T,U> operator+( CTypedData<T>::TypedDataIterator<T,U> anIterator,
-	ptrdiff_t amount );
-
-/// Move the TypedDataIterator backward by an specific amount
-template<typename T, typename U>
-CTypedData<T>::TypedDataIterator<T,U> operator-( CTypedData<T>::TypedDataIterator<T,U> anIterator,
-	ptrdiff_t amount );
 
 #include "ctypeddatainlines.tpp"
 

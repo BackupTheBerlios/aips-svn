@@ -111,15 +111,15 @@ void CFoerstner::apply2D( TField2D* inputPtr ) throw()
 			  + image(x,y+1)[0]*image(x,y+1)[1] + image(x+1,y+1)[0]*image(x+1,y+1)[1] 
 				+ image(x-1,y+1)[0] * image(x-1,y+1)[1]	)	/ 9.0;
 			double operatorOutput = 0.0; 
-			if ( abs(gx) > numeric_limits<double>::epsilon() 
-				|| abs(gy) > numeric_limits<double>::epsilon() )
+			if ( std::abs(gx) > numeric_limits<double>::epsilon() 
+				|| std::abs(gy) > numeric_limits<double>::epsilon() )
 			{
 				// Determine curvature
 				double dNumerator = ( gx * gy )  - ( gxgy * gxgy );						
 				double dDenominator = ( gx + gy ) / 2.0;				
 				// Only set output if operator response is greater or equal to specified threshold
 				if ( ( dNumerator / pow( dDenominator, 2 ) ) >= dThreshold )
-					operatorOutput = round( abs( dNumerator / dDenominator ) * 255.0 );
+					operatorOutput = round( std::abs( dNumerator / dDenominator ) * 255.0 );
 			}
 			if ( operatorOutput < numeric_limits<ushort>::max() )
 				(*output)( x, y ) = static_cast<ushort>( operatorOutput );
@@ -249,9 +249,9 @@ void CFoerstner::apply3D( TField3D* inputPtr ) throw()
 			  + image(x,y+1,z+1)[2]*image(x,y+1,z+1)[1] + image(x+1,y+1,z+1)[2]*image(x+1,y+1,z+1)[1] 
 				+ image(x-1,y+1,z+1)[2] * image(x-1,y+1,z+1)[1]	)	;
 			double operatorOutput = 0.0; 
-			if ( abs(gx) > numeric_limits<double>::epsilon() 
-				|| abs(gy) > numeric_limits<double>::epsilon() 
-				|| abs(gz) > numeric_limits<double>::epsilon() )
+			if ( std::abs(gx) > numeric_limits<double>::epsilon() 
+				|| std::abs(gy) > numeric_limits<double>::epsilon() 
+				|| std::abs(gz) > numeric_limits<double>::epsilon() )
 			{
 				// Determine curvature
 				double dNumerator = ( gx * gy * gz )  - ( gx * gygz * gygz ) 
@@ -260,7 +260,7 @@ void CFoerstner::apply3D( TField3D* inputPtr ) throw()
 				double dDenominator = ( gx + gy + gz ) / 3.0;			
 				// Only set output if operator response is greater or equal to specified threshold
 				if ( ( dNumerator / pow( dDenominator, 3 ) ) >= dThreshold )
-					operatorOutput = round( abs( dNumerator / dDenominator ) * 255.0 );
+					operatorOutput = round( std::abs( dNumerator / dDenominator ) * 255.0 );
 			}
 			if ( operatorOutput < numeric_limits<ushort>::max() )
 				(*output)( x, y, z ) = static_cast<ushort>( operatorOutput );

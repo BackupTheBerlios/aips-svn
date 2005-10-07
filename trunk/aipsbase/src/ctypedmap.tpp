@@ -21,5 +21,5 @@ template<typename T> bool CTypedMap::getAs( const std::string& sKey, T& theValue
 		}
 		return true;
 	}
-	throw( NotPresentException( "Key not defined <"+sKey+">", RECOVER, ERR_KEYNOTDEFINED ) );
+	throw( NotPresentException( "Key not defined <"+sKey+">", CException::RECOVER, ERR_KEYNOTDEFINED ) );
 }
