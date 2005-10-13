@@ -23,80 +23,17 @@
 #include <cglobalconfig.h>
 #include <cmoduledialog.h>
 #include <aipsnumeric.h>
-#include <cvtkadapter.h>
-#include <qvbox.h>
-#include <qscrollbar.h>
-#include <qcheckbox.h>
-#include <qlineedit.h>
-#include <qfiledialog.h>
-#include <qlabel.h>
-#include <qvalidator.h>
-#include <qpushbutton.h>
 
-#include <vtkQtRenderWindow.h>
-#include <vtkQtRenderWindowInteractor.h>
-#include <vtkImageActor.h>
-#include <vtkLookupTable.h>
-#include <vtkScalarBarActor.h>
-#include <vtkImageMapToColors.h>
+#ifdef USE_RENDERING
+#include <cvtkadapter.h>
+#include <cdisplaywindow.h>
+#else
+#include <cimagedisplay.h>
+#endif
 
 using namespace aips;
 
-/**
-@author Hendrik Belitz
-*/
-// #ifdef USE_RENDERING
-class CDisplayWindow : public QWidget
-{
-Q_OBJECT
-public:
-  CDisplayWindow();
-  ~CDisplayWindow();
-  void update();
-  vtkRenderer* getRenderer();
-  void resizeEvent( QResizeEvent* e )
-    throw();
-  void loadLookupTable( std::string sFilename = "/home/hendrik/bin/mricro/spectrum.lut" );
-  void setUpperClamp( double dValue );
-  void setLowerClamp( double dValue );
-  void setImage( vtkImageData* anImage );
-  vtkImageActor* getImage() { return theImage; }
-  void testDataRamge( double minRange, double maxRange );
-public slots:  
-  void updateMax( int i );
-  void updateMin( int i );
-  void toggleTransparency( int i );
-  void toggleInterpolation( int i );
-  void minDataChanged();
-  void maxDataChanged();
-  void loadLutFile();
-private:
-  vtkQtRenderWindowInteractor* interactor;
-  vtkQtRenderWindow* display;
-  vtkRenderer* renderer;
-  vtkLookupTable* theLookupTable;
-  vtkScalarBarActor* theColorBar;
-  vtkFloatingPointType dClampValues[2];
-  vtkImageActor* theImage;
-  vtkImageMapToColors *colorsMapper;
-  vtkImageData* actualImage;
-  QVBox* aColumnPtr;
-  QPushButton* lutFileButton;
-  QScrollBar* dataMin;
-  QScrollBar* dataMax;
-  QCheckBox* transparency;
-  QCheckBox* interpolate;
-  QLineEdit* minDisplay;
-  QLineEdit* maxDisplay;
-  QLabel* doc1;
-  QLabel* doc2;
-  QLabel* doc3;
-  QLabel* doc4;
-  double lutmin,lutmax;
-  bool doNotUpdate;
-};
-// #endif
-
+#ifdef USE_RENDERING
 class CDisplayDialog : public CModuleDialog, vtkObject
 {
 public:
@@ -124,14 +61,53 @@ public:
 	virtual void activateDialog()
 		throw( NotPresentException );
   /// Update the view 
-  void updateView( TImagePtr inputPtr )
+  void updateView( TImagePtr inputPtr, bool bImage = true )
     throw();	
-	void updateView( TFieldPtr inputPtr )
-    throw();
-  
-private:
+	void updateView( TFieldPtr inputPtr, bool bImage = true )
+    throw();  
+private:  
   CDisplayWindow* displayPtr; ///< The display window
   uint width, height;
 };
+#else
+class CDisplayDialog : public CModuleDialog
+{
+public:
+    CDisplayDialog() throw();
+
+    ~CDisplayDialog() throw();
+/* Dialog methods */    
+  /// Returns true because CDisplay always has a dialog window
+  virtual bool hasDialog() const
+    throw();
+  /// Reimplemented from CPipelineItem 
+  virtual QWidget* getDialogHandle() const
+    throw( NotPresentException );
+  /// To set the window caption
+  void setCaption ( const std::string sCaption )
+    throw();
+  /// Reimplemented from CPipelineItem 
+  virtual void showDialog()
+    throw( NotPresentException );
+  /// Reimplemented from CPipelineItem 
+  virtual void hideDialog()
+    throw( NotPresentException );
+  virtual bool isHidden()
+    throw( NotPresentException );
+  virtual void activateDialog()
+    throw( NotPresentException );
+  /// Update the view 
+  void updateView( TImagePtr inputPtr, bool bImage = true )
+    throw();  
+  void updateView( TFieldPtr inputPtr, bool bImage = true )
+    throw();
+  
+private:
+  
+  CImageDisplay* displayPtr; ///< The display window
+  uint width, height;
+};
+#endif  
+
 
 #endif

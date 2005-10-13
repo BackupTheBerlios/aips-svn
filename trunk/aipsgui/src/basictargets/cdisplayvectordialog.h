@@ -25,9 +25,13 @@
 #include <aipsnumeric.h>
 
 // Qt includes
+#ifdef USE_RENDERING
+#include <cvectorwindow.h>
+#else
 #include <qpixmap.h>
 #include <qimage.h>
 #include <qpainter.h>
+#endif
 
 using namespace aips;
 
@@ -63,8 +67,13 @@ public:
   void updateView( TImage* imagePtr, TField2D* fieldPtr )
     throw();	
 private:
+  #ifdef USE_RENDERING
+  CVectorWindow* displayPtr;
+  #else
   CImageDisplay* displayPtr; ///< The display window
 	QPixmap bufferPixmap;      ///< Buffer to draw vector field into
+  #endif
+  uint width, height;
 };
 
 #endif

@@ -16,7 +16,7 @@ using namespace boost;
 
 /** \param ulID unique module ID */
 CDisplay::CDisplay( ulong ulID ) throw()
- : CTarget( ulID, 1, "CDisplay", "0.4", "CTarget" )
+ : CTarget( ulID, 2, "CDisplay", "0.4", "CTarget" )
 {
   setModuleName( "2D image viewer" );
   setModuleID( sLibID );
@@ -28,6 +28,7 @@ CDisplay::CDisplay( ulong ulID ) throw()
                    " none";
 
   inputsVec[0].portType = IO2DInteger;
+  inputsVec[1].portType = IO2DInteger;
 /* HB 28-06-05 */	
 	myDialog.reset( new CDisplayDialog() );
  	setModuleDialog( myDialog );
@@ -41,8 +42,7 @@ void CDisplay::apply() throw()
 {
   // Test for correct input
 	bModuleReady = false;
-	if ( !getInput() )
-		return;
+  if ( getInput() )
 	if ( getInput()->getType() == typeid( dataTraits<TImage>::dataType ) )
 	{
   	TImagePtr inputPtr = static_pointer_cast<TImage>( getInput() );
@@ -69,6 +69,33 @@ void CDisplay::apply() throw()
       << " 3 (RGB) or 4 (RGBA) channels.\n" << endl;
    	return;
 	}
+  if ( getInput(1) ) 
+  if ( getInput(1)->getType() == typeid( dataTraits<TImage>::dataType ) )
+  {
+    TImagePtr inputPtr = static_pointer_cast<TImage>( getInput(1) );
+    if ( inputPtr && inputPtr->getDataDimension() >= 1
+      && inputPtr->getDataDimension() < 5 )
+    {
+      bModuleReady = true;
+      myDialog->updateView( inputPtr, false );
+    }
+  }
+  else if ( getInput(1)->getType() == typeid( dataTraits<TField>::dataType ) )
+  {
+    TFieldPtr fieldPtr = static_pointer_cast<TField>( getInput(1) );
+    if ( fieldPtr && fieldPtr->getDataDimension() >= 1
+      && fieldPtr->getDataDimension() < 5 )
+    {
+      bModuleReady = true;
+      myDialog->updateView( fieldPtr, false );
+    }
+  }
+  else
+  {
+    alog << LWARN << SERROR(" Can only display 2D images with 1 (gray), 2, ")
+      << " 3 (RGB) or 4 (RGBA) channels.\n" << endl;
+    return;
+  }
 }
 
 const string CDisplay::dump() const throw()

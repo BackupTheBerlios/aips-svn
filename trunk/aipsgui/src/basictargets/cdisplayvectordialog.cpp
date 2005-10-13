@@ -18,13 +18,19 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "cdisplayvectordialog.h"
+#include <cvtkadapter.h>
+#include <vtkCamera.h>
 
 using namespace std;
 
 CDisplayVectorDialog::CDisplayVectorDialog() throw()
- : aips::CModuleDialog()
+ : aips::CModuleDialog(), width(0), height(0)
 {
+#ifdef USE_RENDERING
+  displayPtr = new CVectorWindow();
+#else
   displayPtr = new CImageDisplay();
+#endif
   displayPtr->hide();
   displayPtr->setCaption( "2D vector viewer" );
 }
@@ -71,7 +77,68 @@ void CDisplayVectorDialog::updateView( TImage* imagePtr, TField2D* fieldPtr ) th
 {
 BENCHSTART;
 FBEGIN;
-  
+#ifdef USE_RENDERING
+  if ( !fieldPtr || !imagePtr )
+    return;
+  boost::shared_ptr<TImage> myImg ( imagePtr );
+  CVTKAdapter myAdapter( myImg );
+  vtkImageData* myImage = myAdapter.convertToExternal();
+  vtkStructuredGrid* myField = vtkStructuredGrid::New();
+  int dims[3];
+  dims[0] = imagePtr->getExtent(0);
+  dims[1] = imagePtr->getExtent(1);
+  dims[2] = 1;
+  myField->SetDimensions(dims);
+  vtkDoubleArray *vectors = vtkDoubleArray::New();
+  vtkPoints *points = vtkPoints::New();
+  points->Allocate(dims[0]*dims[1]);
+  vectors->SetNumberOfComponents(3);
+  vectors->SetNumberOfTuples(dims[0]*dims[1]);
+  size_t count = 0;
+  double x[3] = {1.0,1.0,0.0};
+  uint dx = 0; uint dy = 0;
+  for ( TField2D::iterator it = fieldPtr->begin(); it != fieldPtr->end(); ++it, ++count )
+  {
+    x[0] = static_cast<double>(dx); ++dx;
+    if ( dx > fieldPtr->getExtent(0) )
+      {dy++;dx=0;}
+    x[1] = dy;
+/*    if ( (*it)[0] > 0.0 )
+      cerr << count << ": Setting " << x[0] << ";" << x[1] << " to " << (*it) << endl;*/
+    double v[3];
+    v[0] = (*it)[0];
+    v[1] = (*it)[1];
+    v[2] = 0.0;
+    vectors->InsertTuple(count,v);
+    points->InsertPoint(count,x);
+  }
+  myField->SetPoints(points);
+  points->Delete();
+  myField->GetPointData()->SetVectors(vectors);
+  vectors->Delete();
+  myImage->SetScalarTypeToShort();
+//   displayPtr->testImageDataRange( imagePtr->getMinimum(), imagePtr->getMaximum() );
+//   displayPtr->setImage( myImage );
+  displayPtr->testOverlayDataRange( 0.0, 1.0 );
+  displayPtr->setOverlay( myField );
+  if ( width != imagePtr->getExtent(0) || height != imagePtr->getExtent(1) )
+  {
+    width = imagePtr->getExtent(0);
+    height = imagePtr->getExtent(1);
+    displayPtr->getImage()->SetDisplayExtent(0,imagePtr->getExtent(0)-1,0,imagePtr->getExtent(1)-1,0,0);
+    displayPtr->getRenderer()->GetActiveCamera()->SetPosition(
+      static_cast<double>( imagePtr->getExtent(0) ) / 2.0, static_cast<double>( imagePtr->getExtent(1) ) / 2.0,
+      0.5 * static_cast<double>( std::max( imagePtr->getExtent(0), imagePtr->getExtent(1) ) ) );
+    displayPtr->getRenderer()->GetActiveCamera()->SetFocalPoint(
+      static_cast<double>( imagePtr->getExtent(0) ) / 2.0, static_cast<double>( imagePtr->getExtent(1) ) / 2.0 , 0.0 );
+    displayPtr->getRenderer()->GetActiveCamera()->ComputeViewPlaneNormal();
+    displayPtr->getRenderer()->GetActiveCamera()->SetViewUp(0.0,-1.0,0.0);
+    displayPtr->getRenderer()->GetActiveCamera()->OrthogonalizeViewUp();
+    displayPtr->getRenderer()->ResetCamera();
+  }
+  displayPtr->update();
+  myField->Delete();
+#else  
   // Draw the zoomed image
   ushort w = fieldPtr->getExtent(0);
   ushort h = fieldPtr->getExtent(1);
@@ -153,7 +220,7 @@ FBEGIN;
   displayPtr->setImage( bufferPixmap.convertToImage() );
   p.flush();
   p.end();  
-
+#endif
 BENCHSTOP;
 }
 
