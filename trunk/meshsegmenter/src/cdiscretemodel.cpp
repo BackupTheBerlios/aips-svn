@@ -205,7 +205,7 @@ else
 	{
 		v_it->ulID = id;
 	}*/
-		double disc = 4.0;
+	double disc = 4.0;
 	double internal = 0.025;
 	boost::timer t;
 	std::vector<size_t> extents = field->getExtents();
@@ -219,8 +219,8 @@ else
 	{
 		double divisor = 0.2;
 		double threshold = 0.75;
-/*		while( mesh->subdivide( 1.25*disc ) > 0 )
-			cerr << ".";*/
+		while( mesh->subdivide( 1.25*disc ) > 0 )
+			cerr << ".";
 		boost::progress_display show( 1000 );
 		for(int i = 0; i < 1000; ++i )
 		{

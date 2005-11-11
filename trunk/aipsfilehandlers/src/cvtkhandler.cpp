@@ -145,7 +145,7 @@ void CVtkHandler::save( const string& sFilename, const TDataFile& theData )
 {
 FBEGIN;
     // Determine dimension size
-/*    size_t dimensionSize[3];
+    size_t dimensionSize[3];
     dimensionSize[0] = theData.first->getExtent(0);
     dimensionSize[1] = theData.first->getExtent(1);
     if( theData.first->getDimension() > 2 )
@@ -154,12 +154,12 @@ FBEGIN;
         dimensionSize[2] = 1;
 
 		size_t siz = dimensionSize[0] * dimensionSize[1] * dimensionSize[2];
-cerr << dimensionSize[0] << " " << dimensionSize[1] << " " << dimensionSize[2] << endl;        		*/
+cerr << dimensionSize[0] << " " << dimensionSize[1] << " " << dimensionSize[2] << endl;        		
     // Create vtk structured points structure
-    CVTKAdapter myAdapter( theData.first );
-    vtkStructuredPoints* sp = myAdapter.convertToExternal();
+//     CVTKAdapter myAdapter( theData.first );
+//     vtkStructuredPoints* sp = myAdapter.convertToExternal();
          
-    /*= vtkStructuredPoints::New();
+    vtkStructuredPoints* sp = vtkStructuredPoints::New();
     ushort* array = new ushort[siz];
     sp->SetDimensions( dimensionSize[0], dimensionSize[1], dimensionSize[2] );
     sp->AllocateScalars();
@@ -200,7 +200,7 @@ cerr << dimensionSize[0] << " " << dimensionSize[1] << " " << dimensionSize[2] <
 		    delete array;
 				throw( FileException( "CVTkHandler - Unknown image format in dataset. Image was not saved" ) );
 			}
-		}*/
+		}
     
 		// Save generated vtkStructuredPoints structure
     vtkStructuredPointsWriter *spw = vtkStructuredPointsWriter::New();
@@ -212,9 +212,9 @@ cerr << dimensionSize[0] << " " << dimensionSize[1] << " " << dimensionSize[2] <
     // Clean up
     spw->Delete();
     sp->Delete();
-/*		if ( sArray != NULL ) sArray->Delete();
+		if ( sArray != NULL ) sArray->Delete();
 		if ( fArray != NULL ) fArray->Delete();
-		delete array;*/
+		delete array;
 FEND;		
 }
 #endif

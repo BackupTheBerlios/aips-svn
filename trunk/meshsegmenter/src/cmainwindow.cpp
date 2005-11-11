@@ -21,7 +21,8 @@
 #include <string>
 #include <cisosurface.h>
 #include <clowpassfilter.h>
-#include "MeshCheckerT.hh"
+//#include <vtkPowerCrustSurfaceReconstruction.h>
+//#include "MeshCheckerT.hh"
 //#include <imagefilters/cbinarization.h>
 
 using namespace std;
@@ -144,6 +145,7 @@ void CMainWindow::initMesh()
 	// Load a binary mask and generate an initial mesh from it
 
  	generateMeshFromFile( "/data/data/EMILSegmentierungen/neu/wtrsl/mrmauswt1_rsl_mask.hdr" );
+ 	//generateSimpleMesh();
 
 cerr << "Mask loaded" << endl;
 
@@ -193,6 +195,7 @@ void CMainWindow::initVis()
 	
 	// Load the image
 	imageData.loadDataSet( "/data/data/externe/joaquin/original/emil/data1/uint_mrmauswt1_rsl.hdr" );
+	//imageData.loadDataSet( "/data/data/externe/mni/t1.hdr" );
 	
 	// Load the GVF field
 	forceField = imageData.computeExternalForces();
@@ -527,8 +530,9 @@ void CMainWindow::generateMeshFromFile( std::string filename )
 
 
 void CMainWindow::generateMeshFromVTK( bool flip )
-{	
-/*	work = original;
+{	  
+  /*
+	work = original;
 	
 	vtkCellArray *polys = inputMesh->GetPolys();
 	vtkPoints *pts = inputMesh->GetPoints();
@@ -621,7 +625,7 @@ void CMainWindow::generateMeshFromVTK( bool flip )
 	OpenMesh::Utils::MeshCheckerT<TMesh> myChecker( work );
 	if( !myChecker.check() )
 		exit(1);*/
-		work.reset();
+	work.reset();
 	
 	vtkCellArray *polys = inputMesh->GetPolys();
 	vtkPoints *pts = inputMesh->GetPoints();
@@ -769,132 +773,162 @@ void CMainWindow::generateMeshFromVTK( bool flip )
 
 void CMainWindow::generateSimpleMesh()
 {	
-	work.reset();
+	/* Read point data from file */
+/*  vtkPoints *meshpts = vtkPoints::New();
 	
-	cout << "Opening file" << endl;
-	ifstream file( "/home/belitz/tetrahedron.pd" );
-	vector<TVIn> VV;
-	list<TFIn> FL;
-	char buff[200]; int read=200;
-	file.getline(buff,read);
-	cout << buff << endl;
-//	int i;
-	string ctxt; int vts; int fcs;
-	file >> ctxt >> vts;
-	cout << ctxt << ": " << vts << endl;
-	file >> ctxt >> fcs;
-	cout << ctxt << ": " << fcs << endl;
-	for( int i = 0; i < vts; ++i )
+	ulong i = 0;
+	vtkDoubleArray* pointForces = vtkDoubleArray::New();
+	
+	ifstream file( "/home/belitz/nclinks.pts" );
+	uint noOfPoints = 0;
+	file >> noOfPoints;
+	// read number of points
+	meshpts->SetNumberOfPoints( noOfPoints );	
+	for( int i = 0; i < noOfPoints; ++i )
 	{
-		TVIn v;
-		file >> v.ulID >> v.thePosition[0] >> v.thePosition[1] >> v.thePosition[2];
-		v.ulID = i;
-		VV.push_back(v);
-		//cout << v.ulID << ": " << v.thePosition[0] << " " << v.pos[1] << " " << v.pos[2] << endl;
+		double v[3];
+		file >> v[0] >> v[1] >> v[2];		
+		meshpts->SetPoint( i, v );
+		pointForces->InsertTuple1( i, 128.0 );		
 	}
-	// Now we need to sort the vectors according to their position. Lets hope to find some double vertices ....
-	std::sort( VV.begin(), VV.end(), vecLess );
-	std::map<ulong,ulong> vertexMap; // Maps the indices read to vertex array indices. Double vertices will be removed
-	ulong rem = 0;
-	for( uint i = 0; i < VV.size(); ++i )
-	{
-		// Find the end of the current block
-		uint begin = i;
-		uint end = i;
-		while( end < (VV.size()-1) && !vecLess(VV[end],VV[end+1]) ) 
-			end++;
-		for( uint j = begin; j < end+1; j++ )
-		{
-			vertexMap[VV[j].ulID] = begin;
-			if ( j != begin ) {VV[j].del = true; ++rem;}
-			else VV[j].del = false;
-		}
-		i = end;
-	}
-	cerr << "Marked " << rem << " vertices for removal" << endl;
-	for( int i = 0; i < fcs; ++i )
-	{
-		TFIn f;
-		file >> f.vts[0] >> f.vts[1] >> f.vts[2];
-		FL.push_back(f);
-	}	
-	file.close();
-	cerr << "File read" << endl;
-	// All data was read. Now build the vertex lists
-	vector<SVertex*> vVector;
-	for( vector<TVIn>::iterator it = VV.begin(); it != VV.end(); ++it )
-	{
-			SVertex* v = new SVertex( it->thePosition );
-			v->ulID = it->ulID; 
-			if ( vid < it->ulID ) 
-				vid = it->ulID;
-			if ( it->del == false ) 
-				work.vList.push_back( v );
-			vVector.push_back( v );
-			cout << ".";
-	}
-	cerr << endl << "Generated vertex lists" << endl;
-	// Generate triangles
-	list<Pair> pairList;
-	for( list<TFIn>::iterator it = FL.begin(); it != FL.end(); ++it )
-	{
-		SFace* f = new SFace;
-		SVertex* p1 = vVector[ vertexMap[it->vts[0]] ];
-		SVertex* p2 = vVector[ vertexMap[it->vts[1]] ];
-		SVertex* p3 = vVector[ vertexMap[it->vts[2]] ];
-		SEdge* e1 = new SEdge( p2, f );
-		SEdge* e2 = new SEdge( p3, f );
-		SEdge* e3 = new SEdge( p1, f );
-		e1->nextEdgePtr = e2;
-		e2->nextEdgePtr = e3;
-		e3->nextEdgePtr = e1;
-		work.eList.push_back( e1 );
-		work.eList.push_back( e2 );
-		work.eList.push_back( e3 );
-		p1->anEdgePtr = e1;
-		p2->anEdgePtr = e2;
-		p3->anEdgePtr = e3;
-		f->anEdgePtr = e1;
-		work.fList.push_back(f);
-		Pair p;
-		p.ulID1 = vertexMap[it->vts[0]];
-		p.ulID2 = vertexMap[it->vts[1]];
-		if ( p.ulID2 < p.ulID1 ) swap( p.ulID1, p.ulID2 );
-		p.anEdgePtr = e1;
-		pairList.push_back( p );
-		p.ulID1 = vertexMap[it->vts[1]];
-		p.ulID2 = vertexMap[it->vts[2]];
-		if ( p.ulID2 < p.ulID1 ) swap( p.ulID1, p.ulID2 );
-		p.anEdgePtr = e2;
-		pairList.push_back( p );
-		p.ulID1 = vertexMap[it->vts[2]];
-		p.ulID2 = vertexMap[it->vts[0]];
-		if ( p.ulID2 < p.ulID1 ) swap( p.ulID1, p.ulID2 );
-		p.anEdgePtr = e3;
-		pairList.push_back( p );		
-	}
-	pairList.sort( pairLess );
-	// Rebuild topology
-	list<Pair>::iterator it = pairList.begin();
-	while( it != pairList.end() )
-	{
-		Pair p = *it; ++it;
-		if ( it->ulID1 == p.ulID1 && it->ulID2 == p.ulID2 )
-		{
-			p.anEdgePtr->opposingEdgePtr = it->anEdgePtr;
-			it->anEdgePtr->opposingEdgePtr = p.anEdgePtr;
-			++it;
-		}
-		else 
-		{
-			cout << "WARN: Pair " << p.ulID1 << "/" << p.ulID2 << " has no partner" << endl;
-			cout << "Next is " << it->ulID1 << "/" << it->ulID2 << endl;
-			p.anEdgePtr->opposingEdgePtr = p.anEdgePtr;
-		}
-	}	
- 	cerr << "Rebuild topology" << endl;
-	vid++;
- 	cerr << "Resulting mesh consists of " << work.fList.size() << " faces and " << work.vList.size() << " vertices" << endl;
+		
+	vtkPolyData* mesh = vtkPolyData::New();
+	mesh->SetPoints( meshpts );
+	mesh->GetPointData()->SetScalars( pointForces );
+*/	
+  /* Use PowerCrust */
+//  vtkPowerCrustSurfaceReconstruction* surf = vtkPowerCrustSurfaceReconstruction::New();
+//  surf->SetInput(mesh);
+  /* Show mesh */
+//  surf->Update();
+//  inputMesh = surf->GetOutput();
+  
+// 	work.reset();
+// 	
+// 	cout << "Opening file" << endl;
+// 	ifstream file( "/home/belitz/tetrahedron.pd" );
+// 	vector<TVIn> VV;
+// 	list<TFIn> FL;
+// 	char buff[200]; int read=200;
+// 	file.getline(buff,read);
+// 	cout << buff << endl;
+// //	int i;
+// 	string ctxt; int vts; int fcs;
+// 	file >> ctxt >> vts;
+// 	cout << ctxt << ": " << vts << endl;
+// 	file >> ctxt >> fcs;
+// 	cout << ctxt << ": " << fcs << endl;
+// 	for( int i = 0; i < vts; ++i )
+// 	{
+// 		TVIn v;
+// 		file >> v.ulID >> v.thePosition[0] >> v.thePosition[1] >> v.thePosition[2];
+// 		v.ulID = i;
+// 		VV.push_back(v);
+// 		//cout << v.ulID << ": " << v.thePosition[0] << " " << v.pos[1] << " " << v.pos[2] << endl;
+// 	}
+// 	// Now we need to sort the vectors according to their position. Lets hope to find some double vertices ....
+// 	std::sort( VV.begin(), VV.end(), vecLess );
+// 	std::map<ulong,ulong> vertexMap; // Maps the indices read to vertex array indices. Double vertices will be removed
+// 	ulong rem = 0;
+// 	for( uint i = 0; i < VV.size(); ++i )
+// 	{
+// 		// Find the end of the current block
+// 		uint begin = i;
+// 		uint end = i;
+// 		while( end < (VV.size()-1) && !vecLess(VV[end],VV[end+1]) ) 
+// 			end++;
+// 		for( uint j = begin; j < end+1; j++ )
+// 		{
+// 			vertexMap[VV[j].ulID] = begin;
+// 			if ( j != begin ) {VV[j].del = true; ++rem;}
+// 			else VV[j].del = false;
+// 		}
+// 		i = end;
+// 	}
+// 	cerr << "Marked " << rem << " vertices for removal" << endl;
+// 	for( int i = 0; i < fcs; ++i )
+// 	{
+// 		TFIn f;
+// 		file >> f.vts[0] >> f.vts[1] >> f.vts[2];
+// 		FL.push_back(f);
+// 	}	
+// 	file.close();
+// 	cerr << "File read" << endl;
+// 	// All data was read. Now build the vertex lists
+// 	vector<SVertex*> vVector;
+// 	for( vector<TVIn>::iterator it = VV.begin(); it != VV.end(); ++it )
+// 	{
+// 			SVertex* v = new SVertex( it->thePosition );
+// 			v->ulID = it->ulID; 
+// 			if ( vid < it->ulID ) 
+// 				vid = it->ulID;
+// 			if ( it->del == false ) 
+// 				work.vList.push_back( v );
+// 			vVector.push_back( v );
+// 			cout << ".";
+// 	}
+// 	cerr << endl << "Generated vertex lists" << endl;
+// 	// Generate triangles
+// 	list<Pair> pairList;
+// 	for( list<TFIn>::iterator it = FL.begin(); it != FL.end(); ++it )
+// 	{
+// 		SFace* f = new SFace;
+// 		SVertex* p1 = vVector[ vertexMap[it->vts[0]] ];
+// 		SVertex* p2 = vVector[ vertexMap[it->vts[1]] ];
+// 		SVertex* p3 = vVector[ vertexMap[it->vts[2]] ];
+// 		SEdge* e1 = new SEdge( p2, f );
+// 		SEdge* e2 = new SEdge( p3, f );
+// 		SEdge* e3 = new SEdge( p1, f );
+// 		e1->nextEdgePtr = e2;
+// 		e2->nextEdgePtr = e3;
+// 		e3->nextEdgePtr = e1;
+// 		work.eList.push_back( e1 );
+// 		work.eList.push_back( e2 );
+// 		work.eList.push_back( e3 );
+// 		p1->anEdgePtr = e1;
+// 		p2->anEdgePtr = e2;
+// 		p3->anEdgePtr = e3;
+// 		f->anEdgePtr = e1;
+// 		work.fList.push_back(f);
+// 		Pair p;
+// 		p.ulID1 = vertexMap[it->vts[0]];
+// 		p.ulID2 = vertexMap[it->vts[1]];
+// 		if ( p.ulID2 < p.ulID1 ) swap( p.ulID1, p.ulID2 );
+// 		p.anEdgePtr = e1;
+// 		pairList.push_back( p );
+// 		p.ulID1 = vertexMap[it->vts[1]];
+// 		p.ulID2 = vertexMap[it->vts[2]];
+// 		if ( p.ulID2 < p.ulID1 ) swap( p.ulID1, p.ulID2 );
+// 		p.anEdgePtr = e2;
+// 		pairList.push_back( p );
+// 		p.ulID1 = vertexMap[it->vts[2]];
+// 		p.ulID2 = vertexMap[it->vts[0]];
+// 		if ( p.ulID2 < p.ulID1 ) swap( p.ulID1, p.ulID2 );
+// 		p.anEdgePtr = e3;
+// 		pairList.push_back( p );		
+// 	}
+// 	pairList.sort( pairLess );
+// 	// Rebuild topology
+// 	list<Pair>::iterator it = pairList.begin();
+// 	while( it != pairList.end() )
+// 	{
+// 		Pair p = *it; ++it;
+// 		if ( it->ulID1 == p.ulID1 && it->ulID2 == p.ulID2 )
+// 		{
+// 			p.anEdgePtr->opposingEdgePtr = it->anEdgePtr;
+// 			it->anEdgePtr->opposingEdgePtr = p.anEdgePtr;
+// 			++it;
+// 		}
+// 		else 
+// 		{
+// 			cout << "WARN: Pair " << p.ulID1 << "/" << p.ulID2 << " has no partner" << endl;
+// 			cout << "Next is " << it->ulID1 << "/" << it->ulID2 << endl;
+// 			p.anEdgePtr->opposingEdgePtr = p.anEdgePtr;
+// 		}
+// 	}	
+//  	cerr << "Rebuild topology" << endl;
+// 	vid++;
+//  	cerr << "Resulting mesh consists of " << work.fList.size() << " faces and " << work.vList.size() << " vertices" << endl;
 }
 
 

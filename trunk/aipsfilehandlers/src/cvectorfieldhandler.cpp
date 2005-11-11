@@ -88,9 +88,9 @@ FBEGIN;
 	
 	CVectorFieldHeader aHeader;
 	aHeader.setExtents( aDataSet->getExtents() );
-	if ( theData.second->isDefined( "FileEndianess" ) )
+/*	if ( theData.second->isDefined( "FileEndianess" ) )
 		aHeader.setEndianess( theData.second->getEndianess() );
-	else
+	else*/
 		aHeader.setEndianess( false );
 	aHeader.saveHeader( theFile );
 

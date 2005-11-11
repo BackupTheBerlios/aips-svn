@@ -232,7 +232,7 @@ int main(int argc, char *argv[])
 				slice = dynamic_pointer_cast<TImage>( getFileServer().loadDataSet( sActualFilename ).first );
 			}
 		}
-		if ( bFill )
+/*		if ( bFill )
 		{
 			TImagePtr outputPtr ( new TImage( *volume ) );
 			*outputPtr = 0;
@@ -250,13 +250,13 @@ int main(int argc, char *argv[])
 			  	TPoint2D p = work.front(); work.pop();
 					if ( ( p[0] > 0 )
 					  && ( (*outputPtr)( p[0]-1, p[1], z ) == 0 )
-						&& ( static_cast<ulong>(abs((*inputPtr)( p[0]-1, p[1], z)-(*inputPtr)( p[0], p[1], z)))<=ulRegionThreshold ) )
+						&& ( static_cast<ulong>(abs(static_cast<int>((*inputPtr)( p[0]-1, p[1], z)-(*inputPtr)( p[0], p[1], z))))<=ulRegionThreshold ) )
 						{
 							work.push( TPoint2D( p[0]-1, p[1] ) ); (*outputPtr)( p[0]-1, p[1], z ) = 1;
 						}
 					if ( ( p[0] < static_cast<long>(inputPtr->getExtent(0)-1) )
 					  && ( (*outputPtr)( p[0]+1, p[1], z ) == 0 )
-						&& ( static_cast<ulong>(abs((*inputPtr)( p[0]+1, p[1], z)-(*inputPtr)( p[0], p[1], z)))<=ulRegionThreshold ) )
+						&& ( static_cast<ulong>(abs(static_cast<int>((*inputPtr)( p[0]+1, p[1], z)-(*inputPtr)( p[0], p[1], z))))<=ulRegionThreshold ) )
 						{
 							work.push( TPoint2D( p[0]+1, p[1] ) ); (*outputPtr)( p[0]+1, p[1], z ) = 1;
 						}
@@ -281,8 +281,9 @@ int main(int argc, char *argv[])
  				if ( (*vot) > 0 ) (*vit) = 1;
  				++vit; ++vot;
 	 		}
- 		}
+ 		}*/
 		TDataFile f; f.first = volume;
+		cerr << "Saving " << output << endl;
 		getFileServer().saveDataSet( output, f );
 	}
 	

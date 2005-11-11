@@ -18,14 +18,14 @@ IF( NOT OPEN_MESH_INCLUDES )
  MESSAGE( SEND_ERROR "OpenMesh is needed for compilation" )
 ENDIF( NOT OPEN_MESH_INCLUDES )
 
-FIND_LIBRARY(OPEN_MESH_LIBRARY
-	NAMES OpenMesh_Core
-	PATHS /usr/lib /usr/local/lib ${HOME}/lib
-	DOC "Path to the OpenMesh library"
-)
-IF( NOT OPEN_MESH_LIBRARY )
- MESSAGE( SEND_ERROR "OpenMesh is needed for compilation" )
-ENDIF( NOT OPEN_MESH_LIBRARY )
+# FIND_LIBRARY(OPEN_MESH_LIBRARY
+# 	NAMES OpenMesh_Core
+# 	PATHS /usr/lib /usr/local/lib ${HOME}/lib
+# 	DOC "Path to the OpenMesh library"
+# )
+# IF( NOT OPEN_MESH_LIBRARY )
+#  MESSAGE( SEND_ERROR "OpenMesh is needed for compilation" )
+# ENDIF( NOT OPEN_MESH_LIBRARY )
 
 INCLUDE(${CMAKE_ROOT}/Modules/FindQt.cmake)
 IF(NOT QT_FOUND)
@@ -56,10 +56,10 @@ INCLUDE( ${VTK_USE_FILE} )
 INCLUDE( ${ITK_USE_FILE} )
 INCLUDE( ${aipsbase_USE_FILE} )
 INCLUDE( ${aipsfilehandlers_USE_FILE} )
-INCLUDE_DIRECTORIES( ${VTK_INCLUDE_DIRS} ${ITK_INCLUDE_DIRS} ${aipsbase_INCLUDE_DIRS} ${aipsfilehandlers_INCLUDE_DIRS} ${QT_INCLUDE_DIR} ${OPEN_MESH_INCLUDES} )
+INCLUDE_DIRECTORIES( ${VTK_INCLUDE_DIRS} ${ITK_INCLUDE_DIRS} ${aipsbase_INCLUDE_DIRS} ${aipsfilehandlers_INCLUDE_DIRS} ${QT_INCLUDE_DIR} )
 
-LINK_DIRECTORIES( ${VTK_LIBRARY_DIRS} ${ITK_LIBRARY_DIRS} ${aipsbase_LIBRARY_DIRS} ${aipsfilehandlers_LIBRARY_DIRS} ${OPEN_MESH_LIBRARY} )
-LINK_LIBRARIES( ${QT_LIBRARIES} vtkCommon vtkIO vtkRendering ITKIO aipsbase aipsfilehandlers OpenMesh_Core )
+LINK_DIRECTORIES( ${VTK_LIBRARY_DIRS} ${ITK_LIBRARY_DIRS} ${aipsbase_LIBRARY_DIRS} ${aipsfilehandlers_LIBRARY_DIRS} )
+LINK_LIBRARIES( ${QT_LIBRARIES} vtkCommon vtkIO vtkRendering ITKIO aipsbase aipsfilehandlers )
 
 SET( DEBUG_LEVEL 0 CACHE STRING "Level of debugging output (This is either 0 (no output) or 1,2,3)")
 

@@ -91,7 +91,7 @@ CParticleSnake::~CParticleSnake() throw()
 /** \param imagePtr Pointer to image to be drawn */
 void CParticleSnake::drawImage( TImagePtr imagePtr )
 {
-/*  if ( imagePtr.get() != NULL && imagePtr->getExtent( 0 ) > 0 && imagePtr->getExtent( 1 ) > 0 )
+  if ( imagePtr.get() != NULL && imagePtr->getExtent( 0 ) > 0 && imagePtr->getExtent( 1 ) > 0 )
   {
     theImage.create( imagePtr->getExtent( 0 ), imagePtr->getExtent(1), 32, 256 * 256 * 256 );
     float fIntRange = 1.0 / static_cast<float>
@@ -118,7 +118,7 @@ void CParticleSnake::drawImage( TImagePtr imagePtr )
           theImage.setPixel( x, imagePtr->getExtent(1) - 1 - y, qRgba( (*imagePtr)( x, y, 0 ),
 						(*imagePtr)( x, y, 1 ), (*imagePtr)( x, y, 2 ), (*imagePtr)( x, y , 3 ) ) );
       }
-  }*/
+  }
 }
 
 CPipelineItem* CParticleSnake::newInstance( ulong ulID_ ) const throw()
@@ -128,7 +128,7 @@ CPipelineItem* CParticleSnake::newInstance( ulong ulID_ ) const throw()
 
 void CParticleSnake::displaySnake() 
 {
-/*	static ulong frame = 0;
+	static ulong frame = 0;
 	theBuffer.resize( 2*iWidth, 2*iHeight );
 	QPainter p( &theBuffer );
 	p.scale(2.0,2.0);
@@ -166,7 +166,7 @@ void CParticleSnake::displaySnake()
 			number = "0" + number;
 		theBuffer.save( "snake_f"+number+".bmp", "BMP", 100);
 		frame++;
-	}*/
+	}
 }
 
 void CParticleSnake::apply() throw()
@@ -232,7 +232,7 @@ DS( "-- Multiscale loop" );
 		// Model loop
 	  while ( t < ulMaxIterations && bStop == false )
   	{
-APP_PROC();
+//APP_PROC();
 PROG_VAL( t );	
 	    remesh();		
 			checkProximity();
@@ -245,7 +245,9 @@ PROG_VAL( t );
 				computeTemplateForces();
 			checkStability();		
 			updateSnake();
-			if ( t % fr == 0 ) displaySnake();
+			//if ( t % fr == 0 ) 
+			displaySnake();
+APP_PROC();			
 	    t++;	
 			if ( ulStableNodes == vertexList.size() ) 
 			{
@@ -258,8 +260,8 @@ PROG_VAL( t );
 		{
 			cerr << "Reducing scaling from " << dMeanDistance << " to " << dMeanDistance / 2.0 << endl;
 			dMeanDistance /= 2.0;
-			dInternalWeight *= 4.0;
-			dBalloonWeight /= 2.0;
+			//dInternalWeight *= 4.0;
+			//dBalloonWeight /= 2.0;
 			generateNewContour( vertexList );
 			bStop = false;			
 			t = 0;
@@ -277,19 +279,6 @@ PROG_VAL( t );
 	(*outputPtr) = 0;
   outputPtr->setMaximum(255);
   outputPtr->setMinimum(0); 
-/*  TPartIterator listEnd = vertexList.end();
-   for ( TPartIterator actv = vertexList.begin(); actv != listEnd; ++actv )
-   {
-     (*outputPtr)(static_cast<int>( round( (*actv).position[0] ) ),
- 			static_cast<int>( round( (*actv).position[1] ) ) ) = 255;
-   }*/
-/* 	listEnd = vertexList.end();
-   for ( TPartIterator actv = vertexList.begin(); actv != listEnd; ++actv )
-   {
-     pa.setPoint( index, static_cast<int>( round( (*actv).position[0] ) ),
- 			static_cast<int>( round( (*actv).position[1] ) ) );
-
-   }*/
   QPixmap pic( inputImagePtr->getExtent(0), inputImagePtr->getExtent(1) );
 	pic.fill( Qt::black );
   QPainter p(&pic);
@@ -391,7 +380,7 @@ void CParticleSnake::checkProximity()
 			{
 				TVector2D particleDistance = edgeDistance( actv->position, successor->position, 
 					partner->position, partnersSuccessor->position );
-				double dMinimalDistance = dMeanDistance * 0.1;
+				double dMinimalDistance = dMeanDistance * 0.5;
 				double dDistance = norm( particleDistance );
 				if ( trueIn( dDistance, numeric_limits<double>::epsilon(), dMinimalDistance ) )
 				{
@@ -453,6 +442,9 @@ void CParticleSnake::computeInternalForces()
 		{
 			innerForce = actv->curvature; 
 			double dForceStrength = dot( actv->curvature, actv->normal );
+			double dSpatialDiscretisation = ( norm( predecessor->position - actv->position ) +
+				norm( successor->position - actv->position ) ) / 2.0;
+		  dSpatialDiscretisation *= dSpatialDiscretisation;
 			innerForce *= dForceStrength;
 			TVector2D d1 = predecessor->position / 2.0;
 			TVector2D d2 = successor->position / 2.0;
@@ -463,9 +455,10 @@ void CParticleSnake::computeInternalForces()
 			unshrinkForce *= dForceStrength;
 			unshrinkForce *= ( dInternalWeight * 1.1 );
 			innerForce += unshrinkForce;
+			innerForce /= dSpatialDiscretisation;
 			// If force is too high, this can lead to problems. So we set the maximum norm of the force to 1.0
-			if ( norm( innerForce ) > 1.0 ) 
-				innerForce /= norm( innerForce );
+/*			if ( norm( innerForce ) > 1.0 ) 
+				innerForce /= norm( innerForce );*/
 				
 			// Again, we may have problems if the force does not converge
 			if ( isnan( innerForce[0] ) || isnan( innerForce[1] ) )
@@ -556,16 +549,26 @@ void CParticleSnake::updateSnake()
 	ulStableNodes = 0;
 	dMeanForce = 0.0;
 	TPartIterator listEnd = vertexList.end();
+	double actForce = 0.0;
+	for ( TPartIterator actv = vertexList.begin(); actv != listEnd; ++actv )
+	{
+		//cerr << norm( actv->force ) << " - " << actForce << endl;
+		if ( actv->stability != -1 && norm( actv->force ) > actForce )
+			actForce = norm( actv->force );
+	}
+	if ( actForce < 0.00001 ) actForce = 1.0;
+	cerr << "Localized timestep is " << 1.0/actForce << endl;
 	for ( TPartIterator actv = vertexList.begin(); actv != listEnd; ++actv )
 	{
 		if ( actv->stability != -1 )
 		{
 			// Cap forces that are too large
-			if ( norm( actv->force ) > 1.0 )
-				actv->force /= norm( actv->force );
+			actv->force /= actForce;
 			actv->oldpos = actv->position;
-			actv->position += ( actv->force * dDelta );
-			dMeanForce += ( norm( actv->force ) * dDelta );
+/*			actv->position += ( actv->force * dDelta );
+			dMeanForce += ( norm( actv->force ) * dDelta );*/
+			actv->position += ( actv->force );
+			dMeanForce += norm( actv->force );
 			
 			// Cap positions outside of image space
 			if ( actv->position[0] < 0.0 ) 

@@ -224,12 +224,12 @@ void CBinaryMorphology::morph3D( const TImage& input, const TImage& kernel ) thr
 		}
 		DS("C");
     (*outputPtr) = work;    
-    for ( ushort z = 0; z < input.getExtent( 2 ); ++z )
+    for ( ushort z = 1; z < input.getExtent( 2 )-1; ++z )
 		{
 			PROG_VAL( ( usIterations + 1 ) * z );
 			APP_PROC();
-      for ( ushort y = 0; y < work.getExtent( 1 ); ++y )
-        for ( ushort x = 0; x < work.getExtent( 0 ); ++x )
+      for ( ushort y = 1; y < work.getExtent( 1 )-1; ++y )
+        for ( ushort x = 1; x < work.getExtent( 0 )-1; ++x )
         {
 					if ( ( !bOnlyBG || valid(x,y,z) ) && ( roiSelf || (*roiPtr)(x,y,z)>0 ) )
 					{

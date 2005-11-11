@@ -23,7 +23,7 @@
 #include <aipsnumeric.h>
 #include <deque>
 
-#include <OpenMesh/Core/Mesh/Types/TriMesh_ArrayKernelT.hh>
+/*#include <OpenMesh/Core/Mesh/Types/TriMesh_ArrayKernelT.hh>*/
 
 using namespace aips;
 using namespace std;

@@ -24,52 +24,10 @@
 #include <cmoduledialog.h>
 #include <aipsnumeric.h>
 
-#ifdef USE_RENDERING
-#include <cvtkadapter.h>
-#include <cdisplaywindow.h>
-#else
 #include <cimagedisplay.h>
-#endif
 
 using namespace aips;
 
-#ifdef USE_RENDERING
-class CDisplayDialog : public CModuleDialog, vtkObject
-{
-public:
-    CDisplayDialog() throw();
-
-    ~CDisplayDialog() throw();
-/* Dialog methods */		
-  /// Returns true because CDisplay always has a dialog window
-  virtual bool hasDialog() const
-    throw();
-  /// Reimplemented from CPipelineItem 
-  virtual QWidget* getDialogHandle() const
-    throw( NotPresentException );
-  /// To set the window caption
-  void setCaption ( const std::string sCaption )
-    throw();
-  /// Reimplemented from CPipelineItem 
-  virtual void showDialog()
-    throw( NotPresentException );
-  /// Reimplemented from CPipelineItem 
-  virtual void hideDialog()
-    throw( NotPresentException );
-	virtual bool isHidden()
-		throw( NotPresentException );
-	virtual void activateDialog()
-		throw( NotPresentException );
-  /// Update the view 
-  void updateView( TImagePtr inputPtr, bool bImage = true )
-    throw();	
-	void updateView( TFieldPtr inputPtr, bool bImage = true )
-    throw();  
-private:  
-  CDisplayWindow* displayPtr; ///< The display window
-  uint width, height;
-};
-#else
 class CDisplayDialog : public CModuleDialog
 {
 public:
@@ -107,7 +65,6 @@ private:
   CImageDisplay* displayPtr; ///< The display window
   uint width, height;
 };
-#endif  
 
 
 #endif

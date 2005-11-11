@@ -60,18 +60,18 @@ BENCHSTART;
   dynamic_cast<TField2D*>( getInput().get() );  
   TField2D* ptr = static_cast<TField2D*>( getInput().get() );
   cerr << &(*ptr) << endl;
-//	if ( getInput() && getInput()->getType() == typeid( dataTraits<TField2D>::dataType ) )
+	if ( getInput() && getInput()->getType() == typeid( dataTraits<TField2D>::dataType ) )
 		reduce<TField2D>();
-//	else if ( getInput() && getInput()->getType() == typeid( dataTraits<TField3D>::dataType ) )
-//		reduce<TField3D>();		
-/*	else
+	else if ( getInput() && getInput()->getType() == typeid( dataTraits<TField3D>::dataType ) )
+		reduce<TField3D>();		
+	else
   {
     if ( !getInput() )
       alog << LWARN << SERROR( "No input " ) << endl;
     else
 		  alog << LWARN << SERROR( "Wrong data type " ) << getInput()->getType().name() 
      << " is not " << typeid(TVector2D).name() << endl;
-  }  */
+  }  
 BENCHSTOP;	
 }
 
@@ -82,13 +82,13 @@ CPipelineItem* CReduceVector::newInstance( ulong ulID ) const throw()
 
 template<typename T> void CReduceVector::reduce() throw()
 {
-  TField2D* inputPtr = static_cast<TField2D*>( getInput().get() );
-/*  shared_ptr<T> inputPtr = static_pointer_cast<T>( getInput() );
+  //TField2D* inputPtr = static_cast<TField2D*>( getInput().get() );
+  shared_ptr<T> inputPtr = static_pointer_cast<T>( getInput() );
   if ( !checkInput<T>( inputPtr ) )
   {
     cerr << "Wrong input!!!" << endl;
     return;
-  }*/
+  }
    
 	
 	bModuleReady = true;
