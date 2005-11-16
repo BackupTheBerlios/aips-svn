@@ -60,9 +60,10 @@ BENCHSTART;
   TImagePtr outputPtr ( new TImage( inputPtr->getDimension(), inputPtr->getExtents(), 1 ) );
   outputPtr->setMaximum( 1 );
   outputPtr->setMinimum( 0 );
-  usNewGrayValuesVec.resize( inputPtr->getMaximum()+1 );
+  short sDataMaximum = inputPtr->getDataRange().getMaximum();
+  usNewGrayValuesVec.resize( sDataMaximum + 1 );
   // First calculate the new gray values
-  for ( ushort i = 0; i <= inputPtr->getMaximum(); i++ )
+  for ( short i = 0; i <= sDataMaximum; i++ )
     if ( i < parameters.getUnsignedLong("Threshold") )
       usNewGrayValuesVec[i] = 0;
     else

@@ -85,8 +85,7 @@ BENCHSTART;
 	while( iit != inputPtr->end() )
 	{
 		*oit = static_cast<ushort>( std::abs( static_cast<short>(*iit) - static_cast<short>(*lit) ));
-		if ( *oit > outputPtr->getMaximum() )
-			outputPtr->setMaximum( *oit );
+		outputPtr->adjustDataRange( *oit );
 		++iit; ++lit; ++oit;
 	}	
   setOutput( outputPtr );

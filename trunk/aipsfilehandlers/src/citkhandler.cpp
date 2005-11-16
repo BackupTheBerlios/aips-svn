@@ -103,8 +103,9 @@ FBEGIN;
 			memcpy( anImage->getVoidArray(), buffer, imageIO->GetImageSizeInBytes() );
 			for( TImage::iterator imageIt = anImage->begin(); imageIt != anImage->end(); ++imageIt )
 			{
-				if ( *imageIt > anImage->getMaximum() ) anImage->setMaximum( *imageIt );
-				if ( *imageIt < anImage->getMinimum() ) anImage->setMinimum( *imageIt );
+				anImage->adjustDataRange( *imageIt );
+// 				if ( *imageIt > anImage->getDataRange()->getMaximum() ) anImage->getDataRange()->setMaximum( *imageIt );
+// 				if ( *imageIt < anImage->getDataRange()->getMinimum() ) anImage->getDataRange()->setMinimum( *imageIt );
 			}
 			aDataSet = anImage;			
 		}
@@ -119,8 +120,9 @@ FBEGIN;
 				++fieldIt, ++ffieldIt )
 			{
 				*fieldIt = *ffieldIt;
-				if ( *fieldIt > aField->getMaximum() ) aField->setMaximum( *fieldIt );
-				if ( *fieldIt < aField->getMinimum() ) aField->setMinimum( *fieldIt );
+				aField->adjustDataRange( *fieldIt );
+/*				if ( *fieldIt > aField->getDataRange()->getMaximum() ) aField->getDataRange()->setMaximum( *fieldIt );
+				if ( *fieldIt < aField->getDataRange()->getMinimum() ) aField->getDataRange()->setMinimum( *fieldIt );*/
 			}
 			aDataSet = aField;
 		}
@@ -130,8 +132,9 @@ FBEGIN;
 			memcpy( aField->getVoidArray(), buffer, imageIO->GetImageSizeInBytes() );
 			for( TField::iterator fieldIt = aField->begin(); fieldIt != aField->end(); ++fieldIt )
 			{
-				if ( *fieldIt > aField->getMaximum() ) aField->setMaximum( *fieldIt );
-				if ( *fieldIt < aField->getMinimum() ) aField->setMinimum( *fieldIt );
+				aField->adjustDataRange( *fieldIt );
+/*				if ( *fieldIt > aField->getDataRange()->getMaximum() ) aField->getDataRange()->setMaximum( *fieldIt );
+				if ( *fieldIt < aField->getDataRange()->getMinimum() ) aField->getDataRange()->setMinimum( *fieldIt );*/
 			}
 			aDataSet = aField;
 		}

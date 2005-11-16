@@ -69,7 +69,7 @@ BENCHSTART;
   deleteOldOutput();
 
   TImagePtr outputPtr ( new TImage( *inputPtr ) );
-	outputPtr->setMaximum( inputPtr->getMaximum() + 1 );
+	outputPtr->adjustDataRange( inputPtr->getDataRange().getMaximum() + 1 );
 	   
 	PROG_MAX( 1 );
 	bool type = ( parameters.getLong( "Type X/Y" ) == 1 );

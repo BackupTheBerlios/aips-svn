@@ -47,6 +47,7 @@
 
 // AIPS includes
 #include "clog.h"
+#include <aipsnumbertraits.h>
 
 /// AIPS namespace for all libaipsbase classes
 namespace aips {
@@ -151,6 +152,39 @@ protected:
   std::vector<double> originVec; ///< Size of one base element
   size_t dataDimensionSize;      ///< Dimension of each field entry
 };
+
+/**
+ * Function to compare field/scalar types with a given dataset type
+ * Call with checkType<FieldType>( data )
+ * \param aDataSet dataset to check
+ */
+template<typename T> inline bool checkType( const CDataSet& aDataSet ) throw()
+{
+	return( aDataSet.getType() == typeid( typename dataTraits<typename T::dataType>::dataType ) );
+}
+
+/**
+ * Function to compare field/scalar types with a given dataset type
+ * Call with checkType<FieldType>( data )
+ * Overloaded function for pointer types
+ * \param aDataSet dataset to check
+ */
+template<typename T> inline bool checkType( const CDataSet* aDataSet ) throw()
+{
+	return( aDataSet->getType() == typeid( typename dataTraits<typename T::dataType>::dataType ) );
+}
+
+/**
+ * Function to compare field/scalar types with a given dataset type
+ * Call with checkType<FieldType>( data )
+ * Overloaded function for boost::shared_ptr pointer types
+ * \param aDataSet dataset to check
+ */
+template<typename T> inline bool checkType( const boost::shared_ptr<CDataSet> aDataSet ) throw()
+{
+	return( aDataSet->getType() == typeid( typename dataTraits<typename T::dataType>::dataType ) );
+}
+
 
 } // end of namespace aips
 #endif

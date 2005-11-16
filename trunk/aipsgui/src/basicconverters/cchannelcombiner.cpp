@@ -247,8 +247,7 @@ template<typename T> bool CChannelCombiner::combine<T,false>::operator() ( CChan
 		
 	shared_ptr<T> outputPtr ( new T( inputPtr1->getDimension(), inputPtr1->getExtents(),
 		usOutputChannels ) );
- 	outputPtr->setMinimum( inputPtr1->getMinimum() );
-  outputPtr->setMaximum( inputPtr1->getMaximum() );
+	outputPtr->setDataRange( inputPtr1->getDataRange() );
 	ushort usInputCounter = 0;
 	typename T::iterator inputIt = srcPtrVec[0]->begin();
   for ( typename T::iterator outputIt = outputPtr->begin(); outputIt != outputPtr->end(); 

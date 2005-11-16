@@ -69,8 +69,7 @@ BENCHSTART;
   TImagePtr outputPtr ( new TImage( inputPtr->getDimension(),
     inputPtr->getExtents(), inputPtr->getDataDimension() ) );
   (*outputPtr) = (*inputPtr);
-  outputPtr->setMaximum( inputPtr->getMaximum() );
-  outputPtr->setMinimum( inputPtr->getMinimum() );
+  outputPtr->setDataRange( inputPtr->getDataRange() );
 
   ulong ulRadius =  parameters.getUnsignedLong("Radius");
   PROG_MAX( inputPtr->getDataDimension() * dimensionSize[2] );

@@ -96,8 +96,7 @@ FBEGIN;
 		{
 			TImagePtr originalImage = static_pointer_cast<TImage>( aDataSet );
 			TImagePtr flippedImage( new TImage( originalImage->getDimension(), originalImage->getExtents() ) );
-			flippedImage->setMaximum( originalImage->getMaximum() );
-			flippedImage->setMinimum( originalImage->getMinimum() );
+			flippedImage->setDataRange( originalImage->getDataRange() );
 			for( ushort z = 0; z < dimensionSize[2]; ++z )
 				for( ushort y = 0; y < dimensionSize[1]; ++y )
 					for( ushort x = 0; x < dimensionSize[0]; ++x )
@@ -159,9 +158,9 @@ FBEGIN;
       ERR_FILEFORMATUNSUPPORTED ) );
 
 	ushort usVoxelSize = 0;
-  if ( aDataSet->getMaximum() <= 255 )
+  if ( aDataSet->getDataRange().getMaximum() <= 255 )
     usVoxelSize = 1;
-  else if ( aDataSet->getMaximum() <= numeric_limits<ushort>::max() )
+  else if ( aDataSet->getDataRange().getMaximum() <= numeric_limits<ushort>::max() )
     usVoxelSize = 2;	
 	else
 		throw( FileException( SERROR( "Cannot only write files with a voxel size up to 16 bit" ),

@@ -126,10 +126,7 @@ BENCHSTART;
     			else if ( lValue > numeric_limits<short>::max() ) 
 						lValue = numeric_limits<short>::max();
 		    	(*outputPtr)( x, y, z, usChannel ) = static_cast<ushort>( lValue );
-			    if ( (*outputPtr)( x, y, z, usChannel ) > outputPtr->getMaximum() )
-  	    		outputPtr->setMaximum( (*outputPtr)( x, y, z, usChannel ) );
-			    if ( (*outputPtr)( x, y, z, usChannel ) < outputPtr->getMinimum() )
-		  	    outputPtr->setMinimum( (*outputPtr)( x, y, z, usChannel ) );								
+		    	outputPtr->adjustDataRange( (*outputPtr)( x, y, z, usChannel ) );
 				}
 			}
   setOutput( outputPtr );

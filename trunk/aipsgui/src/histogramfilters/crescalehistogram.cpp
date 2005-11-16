@@ -77,8 +77,8 @@ BENCHSTART;
   TImagePtr outputPtr ( new TImage( (dimensionSize[2] > 1)?3:2,
     dimensionSize, usOutputDataDimension ) );
 		
-	long loMax = inputPtr->getMaximum();
-	long loMin = inputPtr->getMinimum();
+	long loMax = inputPtr->getDataRange().getMaximum();
+	long loMin = inputPtr->getDataRange().getMinimum();
 	double d = loMax-loMin;
 	long lMax = parameters.getLong( "New maximum" );
 	long lMin = parameters.getLong( "New minimum" );

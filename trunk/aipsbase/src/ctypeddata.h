@@ -53,6 +53,8 @@
 
 // AIPS includes
 #include "cdataset.h"
+#include <aipsnumbertraits.h>
+#include <cdatarange.h>
 
 namespace aips {
 
@@ -66,6 +68,9 @@ private:
 	/// Standard constructor
 	CTypedData();
 public:
+ 	typedef valueType dataType;
+ 	typedef dataTraits<valueType> traitType;
+
 	/// Enumeration types
 	enum EDataAlign { DataAlignFront = 0, DataAlignCenter, DataAlignBack };
 /* Structors */
@@ -109,11 +114,11 @@ public:
 	inline ulong getDataSize() const
 		throw();
   /// Returns the field minimum value
-  inline const valueType& getMinimum() const
-    throw();
+/*  inline const valueType& getMinimum() const
+    throw();*/
   /// Returns the field maximum value
-  inline const valueType& getMaximum() const
-    throw();
+/*  inline const valueType& getMaximum() const
+    throw();*/
 /* Mutators */
   /// Access operator with range checking and automatic min/max assignment
   inline valueType& set( const ushort usX, const ushort usY, const ushort usZ, const ushort usW,
@@ -130,6 +135,11 @@ public:
   /// Adjust range so that the given value lies definitely in data range
   inline void adjustDataRange( const valueType theValue )
     throw();  
+  inline bool isInDataRange( const valueType theValue )
+  	throw()
+  {
+  	return theDataRange.isInRange( theValue );
+  }
 	/// Resizes the data set. This won't change the array dimension nor the data dimension
 	inline void resize( const size_t* extendArr_, const EDataAlign alignment = DataAlignFront ) 
 		throw();
@@ -469,11 +479,17 @@ public:
 	/// Swaps the data with another data set of the same type
 	void swap( CTypedData<valueType>& aDataSet ) 
 		throw();
+	CDataRange<valueType,dataTraits<valueType>::isScalar> getDataRange() { return theDataRange; }
+	void setDataRange( const CDataRange<valueType,dataTraits<valueType>::isScalar>& aDataRange) 
+	{ 
+		theDataRange = aDataRange;
+	}
 private:
   size_t arraySize;               ///< Size of the data array (no. of elements)
   std::vector<valueType> dataVec; ///< The data array
-  valueType theMinimum;           ///< Dataset minimum value
-  valueType theMaximum;           ///< Dataset maximum value
+//  scalarType theMinimum; ///< Dataset minimum value
+//  scalarType theMaximum; ///< Dataset maximum value
+  CDataRange<valueType,dataTraits<valueType>::isScalar> theDataRange;
 };
 
 

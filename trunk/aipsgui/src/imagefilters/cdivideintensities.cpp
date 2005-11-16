@@ -57,8 +57,8 @@ BENCHSTART;
 				{
 					(*outputPtr)(x,y,z) = static_cast<ushort>( round( (*inputPtr)(x,y,z) / dDiv ) );	
 				}
-  outputPtr->setMaximum( static_cast<ushort>( round( inputPtr->getMaximum() / dDiv ) ) );
-  outputPtr->setMinimum( static_cast<ushort>( round( inputPtr->getMinimum() / dDiv ) ) );    
+	outputPtr->setDataRange( static_cast<ushort>( round( inputPtr->getDataRange().getMaximum() / dDiv ) ), 
+		static_cast<ushort>( round( inputPtr->getDataRange().getMinimum() / dDiv ) ) );
   setOutput( outputPtr );
 BENCHSTOP;
 }

@@ -75,8 +75,7 @@ BENCHSTART;
 					(*outputPtr)(x,y) = (*inputPtr)(x-ulRadius,y-ulRadius);
 				}
 	
-  outputPtr->setMaximum( inputPtr->getMaximum() );
-  outputPtr->setMinimum( inputPtr->getMinimum() );    
+	outputPtr->setDataRange( inputPtr->getDataRange() );
   setOutput( outputPtr );
 BENCHSTOP;
 }

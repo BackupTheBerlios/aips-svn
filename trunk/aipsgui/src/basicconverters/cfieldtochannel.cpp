@@ -76,7 +76,7 @@ BENCHSTART;
 		bModuleReady = true;
   	deleteOldOutput();
   	// Determine value range in input data
-  	double dMaxNorm = norm( inputPtr->getMaximum() );
+  	double dMaxNorm = inputPtr->getDataRange().getMaximum();
 
   	// Create output fields
 	  TImagePtr outputPtr1 ( new TImage ( 2, inputPtr->getExtents(), inputPtr->getDataDimension() ) );
@@ -135,7 +135,7 @@ BENCHSTART;
   	deleteOldOutput();
   
   	// Determine value range in input data
-  	double dMaxNorm = norm( inputPtr->getMaximum() );
+  	double dMaxNorm = inputPtr->getDataRange().getMaximum();
 
   	// Create output field
 	  TImagePtr outputPtr1 ( new TImage ( 3, inputPtr->getExtents(), inputPtr->getDataDimension() ) );

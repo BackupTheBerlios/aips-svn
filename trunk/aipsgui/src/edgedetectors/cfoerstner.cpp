@@ -125,8 +125,7 @@ void CFoerstner::apply2D( TField2D* inputPtr ) throw()
 				(*output)( x, y ) = static_cast<ushort>( operatorOutput );
 			else
 				(*output)( x, y ) = numeric_limits<ushort>::max();
-			if ( (*output)( x, y ) > output->getMaximum() )
-				output->setMaximum( (*output)( x, y ) );
+			output->adjustDataRange( (*output)( x, y ) );
 		}
 	}
 	PROG_RESET();
@@ -266,8 +265,7 @@ void CFoerstner::apply3D( TField3D* inputPtr ) throw()
 				(*output)( x, y, z ) = static_cast<ushort>( operatorOutput );
 			else
 				(*output)( x, y, z ) = numeric_limits<ushort>::max();
-			if ( (*output)( x, y, z ) > output->getMaximum() )
-				output->setMaximum( (*output)( x, y, z ) );
+			output->adjustDataRange( (*output)( x, y, z ) );
 		}
 	}
 	setOutput( output );

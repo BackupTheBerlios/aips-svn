@@ -92,8 +92,7 @@ void CDataMirror::mirrorImage() throw()
 		dimensionSize.push_back( 1 );
   TImagePtr outputPtr ( new TImage( inputPtr->getDimension(),
     inputPtr->getExtents(), inputPtr->getDataDimension() ) );
-  outputPtr->setMaximum( inputPtr->getMaximum() );
-  outputPtr->setMinimum( inputPtr->getMinimum() );
+  outputPtr->setDataRange( inputPtr->getDataRange() );
 	
 	uint ax, ay, az;
 	PROG_MAX( dimensionSize[2]-1 );
@@ -144,8 +143,7 @@ void CDataMirror::mirrorField2D() throw()
 		dimensionSize.push_back( 1 );
   TField2DPtr outputPtr ( new TField2D( inputPtr->getDimension(),
     inputPtr->getExtents(), inputPtr->getDataDimension() ) );
-  outputPtr->setMaximum( inputPtr->getMaximum() );
-  outputPtr->setMinimum( inputPtr->getMinimum() );
+  outputPtr->setDataRange( inputPtr->getDataRange() );
 	
 	uint ax, ay, az;
 	PROG_MAX( dimensionSize[2]-1 );
@@ -196,8 +194,7 @@ void CDataMirror::mirrorField3D() throw()
 		dimensionSize.push_back( 1 );
   TField3DPtr outputPtr ( new TField3D( inputPtr->getDimension(),
     inputPtr->getExtents(), inputPtr->getDataDimension() ) );
-  outputPtr->setMaximum( inputPtr->getMaximum() );
-  outputPtr->setMinimum( inputPtr->getMinimum() );
+  outputPtr->setDataRange( inputPtr->getDataRange() );
 	
 	uint ax, ay, az;
 	PROG_MAX( dimensionSize[2]-1 );

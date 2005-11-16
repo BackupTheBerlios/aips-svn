@@ -80,8 +80,9 @@ DBG("About to flip");
 	if ( dimensionSize[2] > 1 )
 	{
 		TImagePtr flippedImage( new TImage( aDataSet->getDimension(), aDataSet->getExtents() ) );
-		flippedImage->setMaximum( aDataSet->getMaximum() );
-		flippedImage->setMinimum( aDataSet->getMinimum() );
+		flippedImage->setDataRange( aDataSet->getDataRange() );
+// 		flippedImage->setMaximum( aDataSet->getMaximum() );
+// 		flippedImage->setMinimum( aDataSet->getMinimum() );
 		for( ushort z = 0; z < dimensionSize[2]; ++z )
 			for( ushort y = 0; y < dimensionSize[1]; ++y )
 				for( ushort x = 0; x < dimensionSize[0]; ++x )

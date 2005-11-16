@@ -54,13 +54,12 @@ BENCHSTART;
 
   TImagePtr outputPtr ( new TImage( inputPtr->getDimension(), inputPtr->getExtents(),
     inputPtr->getDataDimension() ) );
-  outputPtr->setMinimum( inputPtr->getMinimum() );
-  outputPtr->setMaximum( inputPtr->getMaximum() );
+  outputPtr->setDataRange( inputPtr->getDataRange() );
 	
   calculateHistogram( inputPtr );
 	
-  ushort usMaxIntensity = ( inputPtr->getMaximum() );
-  usNewGrayValuesVec.resize( inputPtr->getMaximum() + 1 );
+  ushort usMaxIntensity = ( inputPtr->getDataRange().getMaximum() );
+  usNewGrayValuesVec.resize( usMaxIntensity + 1 );
 	
 	//CHistogram::PROG_MAX( inputPtr->getDataDimension() );
   for ( ushort usChannel = 0; usChannel < inputPtr->getDataDimension(); usChannel++ )

@@ -248,8 +248,7 @@ void CBinaryMorphology::morph3D( const TImage& input, const TImage& kernel ) thr
                 	{
 	                  long lValue = work( x - s, y - t, z ) + kernel( s + 1, t + 1, 0 );
 										if ( lValue > 32767 ) lValue = 32767;
-  	                if ( lValue > outputPtr->getMaximum() )
-    	                outputPtr->setMaximum( lValue );
+										outputPtr->adjustDataRange( lValue );
       	            if ( lValue > (*outputPtr)( x, y, z ) )
         		           (*outputPtr)( x, y, z ) = static_cast<ushort>( lValue );
             	    }

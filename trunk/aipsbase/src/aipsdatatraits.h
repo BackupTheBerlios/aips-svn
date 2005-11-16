@@ -24,6 +24,7 @@
 #ifndef AIPSDATATRAITS_H
 #define AIPSDATATRAITS_H
 
+#include<aipsnulltype.h>
 #include<aipsnumeric.h>
 
 namespace aips {
@@ -31,11 +32,6 @@ namespace aips {
 /***********************************************
  * Some really weird but useful typelist stuff *
  ***********************************************/
-
-/** A "Non-Type", especially useful for our typelists */
-class NullType
-{
-};
 
 /** Generic template representing a typelist */
 template<typename T, typename U> struct TypeList
@@ -70,168 +66,6 @@ template<typename Head, typename Tail, unsigned int index> struct TypeAt<TypeLis
 /** Typelist of all supported field types */
 typedef TypeList<TImage, TypeList<TComplexImage, TypeList<TField, TypeList<TField2D, TypeList<TField3D, TypeList<TStringField, NullType> > > > > > datasetTL;
 
-/******************************
- * Trait classes for datasets *
- ******************************/
-
-/** 
- * Unspecialized trait template 
- * The following traits should be defined in any specialization
- * dataType (typedef) type used to store the value of a single data member
- * increasedRangeType (typedef) type used to temporarely store the value of a single data member.
- *   This is usually of bigger range the voxelType
- */
-template<typename T> 
-struct dataTraits
-{		
-	typedef NullType dataType;
-	typedef NullType increasedRangeType;
-	enum { isScalar = false };
-	enum { isComparable = false };
-	enum { isNumeric = false };
-};
-
-/** Data traits for ushort datasets */
-template<>
-struct dataTraits<TImage>
-{
-	typedef short dataType;
-	typedef long increasedRangeType;
-	enum { isScalar = true };
-	enum { isComparable = true };
-	enum { isNumeric = true };
-};
-
-/** Data traits for double datasets */
-template<>
-struct dataTraits<TField>
-{
-	typedef TFloatType dataType;
-	typedef TFloatType increasedRangeType;
-	enum { isScalar = true };
-	enum { isComparable = true };
-	enum { isNumeric = true };
-};
-
-/** Data traits for complex datasets */
-template<>
-struct dataTraits<TComplexImage>
-{
-	typedef std::complex<TFloatType> dataType;
-	typedef std::complex<TFloatType> increasedRangeType;
-	enum { isScalar = true };
-	enum { isComparable = false };
-	enum { isNumeric = true };
-};
-
-/** Data traits for 2D vector datasets */
-template<>
-struct dataTraits<TField2D>
-{
-	typedef TVector2D dataType;
-	typedef TVector2D increasedRangeType;
-	enum { isScalar = false };
-	enum { isComparable = false };
-	enum { isNumeric = true };
-};
-
-/** Data traits for 3D vector datasets */
-template<>
-struct dataTraits<TField3D>
-{
-	typedef TVector3D dataType;
-	typedef TVector3D increasedRangeType;
-	enum { isScalar = false };
-	enum { isComparable = false };
-	enum { isNumeric = true };
-};
-
-/** Data traits for string array datasets */
-template<>
-struct dataTraits<TStringField>
-{
-	typedef std::string dataType;
-	typedef std::string increasedRangeType;
-	enum { isScalar = false };
-	enum { isComparable = false };
-	enum { isNumeric = false };
-};
-
-/** Data traits for scalar integer data */
-template<>
-struct dataTraits<TInteger>
-{
-	typedef long dataType;
-	typedef long increasedRangeType;
-	enum { isScalar = true };
-	enum { isComparable = true };
-	enum { isNumeric = true };
-};
-
-/** Data traits for scalar double data */
-template<>
-struct dataTraits<TDouble>
-{
-	typedef TFloatType dataType;
-	typedef TFloatType increasedRangeType;
-	enum { isScalar = true };
-	enum { isComparable = true };
-	enum { isNumeric = true };
-};
-
-/** Data traits for scalar complex data */
-template<>
-struct dataTraits<TComplex>
-{
-	typedef std::complex<TFloatType> dataType;
-	typedef std::complex<TFloatType> increasedRangeType;
-	enum { isScalar = true };
-	enum { isComparable = false };
-	enum { isNumeric = true };
-};
-
-/** Data traits for scalar string data */
-template<>
-struct dataTraits<TSingleString>
-{
-	typedef std::string dataType;
-	typedef std::string increasedRangeType;
-	enum { isScalar = false };
-	enum { isComparable = false };
-	enum { isNumeric = false };
-};
-
-/**
- * Function to compare field/scalar types with a given dataset type
- * Call with checkType<FieldType>( data )
- * \param aDataSet dataset to check
- */
-template<typename T> inline bool checkType( const CDataSet& aDataSet ) throw()
-{
-	return( aDataSet.getType() == typeid( typename dataTraits<T>::dataType ) );
-}
-
-/**
- * Function to compare field/scalar types with a given dataset type
- * Call with checkType<FieldType>( data )
- * Overloaded function for pointer types
- * \param aDataSet dataset to check
- */
-template<typename T> inline bool checkType( const CDataSet* aDataSet ) throw()
-{
-	return( aDataSet->getType() == typeid( typename dataTraits<T>::dataType ) );
-}
-
-/**
- * Function to compare field/scalar types with a given dataset type
- * Call with checkType<FieldType>( data )
- * Overloaded function for boost::shared_ptr pointer types
- * \param aDataSet dataset to check
- */
-template<typename T> inline bool checkType( const boost::shared_ptr<CDataSet> aDataSet ) throw()
-{
-	return( aDataSet->getType() == typeid( typename dataTraits<T>::dataType ) );
-}
 
 }
 #endif

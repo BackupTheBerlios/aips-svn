@@ -97,15 +97,14 @@ BENCHSTART;
 				if ( value == 0 ) 
 				{ 
 					value = ( xv+yv ) / 255;	
-					if ( value > outputPtr->getMaximum() )
-						outputPtr->setMaximum( static_cast<ushort>( value ) ); 
+					outputPtr->adjustDataRange( value );
 				}
 				(*outputPtr)(x,y,z) = static_cast<ushort>( value );
 			}
 	}
 	else
 	{
-		ulong factor = (((2*ulRadius)+1)*inputPtr->getMaximum());
+		ulong factor = (((2*ulRadius)+1)*inputPtr->getDataRange().getMaximum());
 		for( ushort z = ulRadius; z < inputPtr->getExtent(2)-ulRadius; z++ )
 			for( ushort y = ulRadius; y < inputPtr->getExtent(1)-ulRadius; y++ )
 				for( ushort x = ulRadius; x < inputPtr->getExtent(0)-ulRadius; x++ )
@@ -125,11 +124,7 @@ BENCHSTART;
 			if ( value == 0 ) 
 			{ 
 				value = ( xv+yv+zv ) / factor;	
-				if ( value > outputPtr->getMaximum() )
-				{
-					outputPtr->setMaximum( static_cast<ushort>( value ) ); 
-					DS("New Max " << value );
-				}
+				outputPtr->adjustDataRange( value );
 			}
 			(*outputPtr)(x,y,z) = static_cast<ushort>( value );
 		}
@@ -137,8 +132,7 @@ BENCHSTART;
  	TImage::iterator oit = outputPtr->begin();
 	while( oit != outputPtr->end() )
 	{
-		if ( (*oit) > outputPtr->getMaximum() )
-			*oit = outputPtr->getMaximum();
+		outputPtr->adjustDataRange( *oit );
 		++oit;
 	}
   setOutput( outputPtr );

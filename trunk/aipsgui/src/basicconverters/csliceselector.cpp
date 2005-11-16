@@ -140,7 +140,7 @@ template<typename T> bool CSliceSelector::slice() throw()
   if ( !checkInput<T>( inputVolumePtr, 2, 3 ) )
     return false;
 		
-	typedef typename dataTraits<T>::dataType TVoxel;
+	typedef typename T::dataType TVoxel;
 	
 	bModuleReady = true;
 	// Check if dataset is already 2D. We don't need to do anything in this case...
@@ -214,8 +214,7 @@ template<typename T> bool CSliceSelector::slice() throw()
 	parameters.setUnsignedLong( "SliceOrientation", ucCurrentOrientation );
   // Create slice
   boost::shared_ptr<T> outputPtr ( new T( 2, dimensionSize, inputVolumePtr->getDataDimension() ) );
-  outputPtr->setMaximum( inputVolumePtr->getMaximum() );
-  outputPtr->setMinimum( inputVolumePtr->getMinimum() );
+  outputPtr->setDataRange( inputVolumePtr->getDataRange() );
 
 #ifdef USE_BLITZ				
 	Array<TVoxel, 3> slice ( outputPtr->getArray(), shape( dimensionSize[0], dimensionSize[1], 

@@ -144,9 +144,9 @@ FBEGIN;
   }
 
   float fIntensityRange = 1.0 /
-    static_cast<float>( inputPtr->getMaximum() - inputPtr->getMinimum() + 1 ) * 256.0;
-  double dMinimum = inputPtr->getMinimum();
-  if ( inputPtr->getMaximum() < 2 ) 
+    static_cast<float>( inputPtr->getDataRange().getMaximum() - inputPtr->getDataRange().getMinimum() + 1 ) * 256.0;
+  double dMinimum = inputPtr->getDataRange().getMinimum();
+  if ( inputPtr->getDataRange().getMaximum() < 2 ) 
   {
     fIntensityRange = 255.0;
     dMinimum = 0;
@@ -162,27 +162,27 @@ FBEGIN;
       }
       else if ( inputPtr->getDataDimension() == 2 )
         processed.setPixel( x, y, qRgb( static_cast<ushort>( static_cast<float>( 
-          (*inputPtr)( x, y, 0 ) - inputPtr->getMinimum() ) * fIntensityRange ),
+          (*inputPtr)( x, y, 0 ) - inputPtr->getDataRange().getMinimum() ) * fIntensityRange ),
           static_cast<ushort>( static_cast<float>( (*inputPtr)( x, y, 1 ) 
-          - inputPtr->getMinimum() ) * fIntensityRange ), 0 ) );
+          - inputPtr->getDataRange().getMinimum() ) * fIntensityRange ), 0 ) );
       else if ( inputPtr->getDataDimension() == 3 )
         processed.setPixel( x, y, qRgb( 
         static_cast<ushort>( static_cast<float>( (*inputPtr)( x, y, 0 ) 
-          - inputPtr->getMinimum() ) * fIntensityRange ),
+          - inputPtr->getDataRange().getMinimum() ) * fIntensityRange ),
           static_cast<ushort>( static_cast<float>( (*inputPtr)( x, y, 1 ) 
-          - inputPtr->getMinimum() ) * fIntensityRange ),
+          - inputPtr->getDataRange().getMinimum() ) * fIntensityRange ),
           static_cast<ushort>( static_cast<float>( (*inputPtr)( x, y, 2 ) 
-          - inputPtr->getMinimum() ) * fIntensityRange ) ) );
+          - inputPtr->getDataRange().getMinimum() ) * fIntensityRange ) ) );
       else if ( inputPtr->getDataDimension() == 4 )
         processed.setPixel( x, y, qRgba( 
           static_cast<ushort>( static_cast<float>( (*inputPtr)( x, y, 0 ) 
-          - inputPtr->getMinimum() ) * fIntensityRange ),
+          - inputPtr->getDataRange().getMinimum() ) * fIntensityRange ),
           static_cast<ushort>( static_cast<float>( (*inputPtr)( x, y, 1 ) 
-          - inputPtr->getMinimum() ) * fIntensityRange ),
+          - inputPtr->getDataRange().getMinimum() ) * fIntensityRange ),
           static_cast<ushort>( static_cast<float>( (*inputPtr)( x, y, 2 ) 
-          - inputPtr->getMinimum() ) * fIntensityRange ), 
+          - inputPtr->getDataRange().getMinimum() ) * fIntensityRange ), 
           static_cast<ushort>( static_cast<float>( (*inputPtr)( x, y, 3 ) 
-          - inputPtr->getMinimum() ) * fIntensityRange ) ) );
+          - inputPtr->getDataRange().getMinimum() ) * fIntensityRange ) ) );
     }
   displayPtr->setImage( processed );
 #endif  
@@ -244,9 +244,9 @@ FBEGIN;
   }
 
   float fIntensityRange = 1.0 /
-    static_cast<float>( inputPtr->getMaximum() - inputPtr->getMinimum() + 1 ) * 256.0;
-	double dMinimum = inputPtr->getMinimum();
-  if ( inputPtr->getMaximum() < 2 ) 
+    static_cast<float>( inputPtr->getDataRange().getMaximum() - inputPtr->getDataRange().getMinimum() + 1 ) * 256.0;
+	double dMinimum = inputPtr->getDataRange().getMinimum();
+  if ( inputPtr->getDataRange().getMaximum() < 2 ) 
 	{
 		fIntensityRange = 255.0;
 		dMinimum = 0;
@@ -262,27 +262,27 @@ FBEGIN;
       }
       else if ( inputPtr->getDataDimension() == 2 )
         processed.setPixel( x, y, qRgb(	static_cast<ushort>( static_cast<float>( 
-					(*inputPtr)( x, y, 0 ) - inputPtr->getMinimum() ) * fIntensityRange ),
+					(*inputPtr)( x, y, 0 ) - inputPtr->getDataRange().getMinimum() ) * fIntensityRange ),
 					static_cast<ushort>( static_cast<float>( (*inputPtr)( x, y, 1 ) 
-					- inputPtr->getMinimum() ) * fIntensityRange ), 0 ) );
+					- inputPtr->getDataRange().getMinimum() ) * fIntensityRange ), 0 ) );
       else if ( inputPtr->getDataDimension() == 3 )
         processed.setPixel( x, y, qRgb( 
 				static_cast<ushort>( static_cast<float>( (*inputPtr)( x, y, 0 ) 
-					- inputPtr->getMinimum() ) * fIntensityRange ),
+					- inputPtr->getDataRange().getMinimum() ) * fIntensityRange ),
 					static_cast<ushort>( static_cast<float>( (*inputPtr)( x, y, 1 ) 
-					- inputPtr->getMinimum() ) * fIntensityRange ),
+					- inputPtr->getDataRange().getMinimum() ) * fIntensityRange ),
 					static_cast<ushort>( static_cast<float>( (*inputPtr)( x, y, 2 ) 
-					- inputPtr->getMinimum() ) * fIntensityRange ) ) );
+					- inputPtr->getDataRange().getMinimum() ) * fIntensityRange ) ) );
       else if ( inputPtr->getDataDimension() == 4 )
         processed.setPixel( x, y, qRgba( 
 					static_cast<ushort>( static_cast<float>( (*inputPtr)( x, y, 0 ) 
-					- inputPtr->getMinimum() ) * fIntensityRange ),
+					- inputPtr->getDataRange().getMinimum() ) * fIntensityRange ),
 					static_cast<ushort>( static_cast<float>( (*inputPtr)( x, y, 1 ) 
-					- inputPtr->getMinimum() ) * fIntensityRange ),
+					- inputPtr->getDataRange().getMinimum() ) * fIntensityRange ),
 					static_cast<ushort>( static_cast<float>( (*inputPtr)( x, y, 2 ) 
-					- inputPtr->getMinimum() ) * fIntensityRange ), 
+					- inputPtr->getDataRange().getMinimum() ) * fIntensityRange ), 
 					static_cast<ushort>( static_cast<float>( (*inputPtr)( x, y, 3 ) 
-					- inputPtr->getMinimum() ) * fIntensityRange ) ) );
+					- inputPtr->getDataRange().getMinimum() ) * fIntensityRange ) ) );
     }
   displayPtr->setImage( processed );
 #endif  

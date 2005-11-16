@@ -150,21 +150,21 @@ FBEGIN;
     QImage tmpImage;  
     tmpImage.create( imagePtr->getExtent(0), imagePtr->getExtent(1), 32, 256*256*256 );
     float intRange = 1.0 / static_cast<float>
-      ( imagePtr->getMaximum() - imagePtr->getMinimum() + 1 ) * 256.0;    
+      ( imagePtr->getDataRange().getMaximum() - imagePtr->getDataRange().getMinimum() + 1 ) * 256.0;    
     for ( uint x = 0; x < imagePtr->getExtent(0); x++ )
       for ( uint y = 0; y < imagePtr->getExtent(1); y++ )
       {
         if ( imagePtr->getDataDimension() == 1 )
         {
           ushort value = static_cast<int>( static_cast<float>
-            ( (*imagePtr)(x,y) - imagePtr->getMinimum() ) * intRange );
+            ( (*imagePtr)(x,y) - imagePtr->getDataRange().getMinimum() ) * intRange );
           if ( value < 256 )
             tmpImage.setPixel( x, imagePtr->getExtent(1) - 1 - y, qRgb( value, value, value ) );
 #ifdef DEBUG
           else
           {
             alog << LWARN << "\n **** Pixel value " << value << " too high ("
-              << imagePtr->getMaximum() << ") ****" << endl;
+              << imagePtr->getDataRange().getMaximum() << ") ****" << endl;
           }
 #endif					
         }

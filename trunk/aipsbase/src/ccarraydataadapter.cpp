@@ -201,11 +201,11 @@ FBEGIN;
 			for( uint x = 0; x < theField->getExtent( 0 ); ++x )
 				if ( bSwapYAxis )
 					(*theField)( x, theField->getExtent( 1 ) - 1 - y, z ) = 
-						static_cast<typename dataTraits<U>::dataType>(	inputPtr[ x + y * theField->getExtent( 0 ) 
+						static_cast<typename U::dataType>(	inputPtr[ x + y * theField->getExtent( 0 ) 
 						+ z * theField->getExtent( 0 ) * theField->getExtent( 1 )] );
 				else
 					(*theField)( x, y, z ) = 
-						static_cast<typename dataTraits<U>::dataType>(	inputPtr[ x + y * theField->getExtent( 0 )
+						static_cast<typename U::dataType>(	inputPtr[ x + y * theField->getExtent( 0 )
 						+ z * theField->getExtent( 0 ) * theField->getExtent( 1 )] );
 FEND;
 	return theField;

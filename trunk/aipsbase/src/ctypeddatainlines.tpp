@@ -35,7 +35,7 @@ CTypedData<valueType>::CTypedData( const ushort usDimension_, const size_t* exte
   arraySize *= dataDimensionSize;
   dataVec.resize( arraySize );
   memset( &dataVec[0], 0, arraySize * sizeof( valueType ) );
-  setDataRange( 0, 1 );
+  setDataRange( traitType::ZERO, traitType::ONE );
 }
 
 /**
@@ -56,7 +56,7 @@ CTypedData<valueType>::CTypedData( const ushort usDimension_,
   arraySize *= dataDimensionSize;
   dataVec.resize( arraySize );
   memset( &dataVec[0], 0, arraySize * sizeof( valueType ) );
-  setDataRange( 0, 1 );
+  setDataRange( traitType::ZERO, traitType::ONE );
 }
 
 /**
@@ -73,7 +73,7 @@ CTypedData<valueType>::CTypedData( const size_t extent_, const size_t dataDimens
 	arraySize *= dataDimensionSize;
   dataVec.resize( arraySize );
   memset( &dataVec[0], 0, arraySize * sizeof( valueType ) );
-  setDataRange( 0, 1 );
+  setDataRange( traitType::ZERO, traitType::ONE );
 }
 
 /**
@@ -87,8 +87,9 @@ CTypedData<valueType>::CTypedData ( const CTypedData<valueType>& aDataSet ) thro
   arraySize = aDataSet.arraySize;
   dataVec.resize( arraySize );
   dataVec = aDataSet.dataVec;
-  setMaximum( aDataSet.getMaximum() );
-  setMinimum( aDataSet.getMinimum() );  
+  theDataRange = aDataSet.theDataRange;
+//   theMaximum = aDataSet.theMaximum;
+//   theMinimum = aDataSet.theMinimum;  
 }
 
 template<typename valueType> 
@@ -113,8 +114,9 @@ CTypedData<valueType>& CTypedData<valueType>::operator=
   usDimension = aDataSet.usDimension;
   dataDimensionSize = aDataSet.dataDimensionSize;
   extentVec = aDataSet.extentVec;
-  setMaximum( aDataSet.getMaximum() );
-  setMinimum( aDataSet.getMinimum() );
+  theDataRange = aDataSet.theDataRange;
+//   theMaximum = aDataSet.theMaximum;
+//   theMinimum = aDataSet.theMinimum;  
   arraySize = aDataSet.arraySize;
   dataVec.resize( arraySize );
   dataVec.assign( aDataSet.dataVec.begin(), aDataSet.dataVec.end() );  
@@ -203,21 +205,21 @@ ulong CTypedData<valueType>::getDataSize() const throw()
  * Only works if minimum was set with setMinimum() before, otherwise the return value is undefined.
  * \returns the minimum value of the dataset.
  */
-template<typename valueType> inline 
-const valueType& CTypedData<valueType>::getMinimum() const throw()
-{
-  return theMinimum;
-}
+// template<typename valueType> inline 
+// const valueType& CTypedData<valueType>::getMinimum() const throw()
+// {
+//   return theMinimum;
+// }
 
 /**
  * Only works if maximum was set with setMaximum() before, otherwise the return value is undefined.
  * \returns the maximum value of the dataset.
  */
-template<typename valueType> inline 
-const valueType& CTypedData<valueType>::getMaximum() const throw()
-{
-  return theMaximum;
-}
+// template<typename valueType> inline 
+// const valueType& CTypedData<valueType>::getMaximum() const throw()
+// {
+//   return theMaximum;
+// }
 
 /************
  * Mutators *
@@ -240,8 +242,9 @@ valueType& CTypedData<valueType>::set( const ushort usX, const ushort usY, const
     throw( OutOfRangeException( SERROR( "Index out of range"), CException::RECOVER, ERR_BADCOORDS ) );
   dataVec[usX + usY * extentVec[0] + usZ * extentVec[0] * extentVec[1]
     + usW * extentVec[0] * extentVec[1] * extentVec[2]] = newValue;
-  if ( newValue < theMinimum ) theMinimum = newValue;
-  if ( newValue > theMaximum ) theMaximum = newValue;
+  theDataRange.updateRange( newValue );
+//   if ( newValue < theMinimum ) theMinimum = newValue;
+//   if ( newValue > theMaximum ) theMaximum = newValue;
 }
 
 /**
@@ -250,7 +253,8 @@ valueType& CTypedData<valueType>::set( const ushort usX, const ushort usY, const
 template<typename valueType> inline 
 void CTypedData<valueType>::setMinimum( const valueType newMinimum ) throw()
 {
-  theMinimum = newMinimum;
+  //theMinimum = dataTraits<valueType>::toScalarType( newMinimum );
+  theDataRange.setMinimum( newMinimum );
 }
 
 /**
@@ -259,25 +263,27 @@ void CTypedData<valueType>::setMinimum( const valueType newMinimum ) throw()
 template<typename valueType> inline 
 void CTypedData<valueType>::setMaximum( const valueType newMaximum ) throw()
 {
-  theMaximum = newMaximum;
+  //theMaximum = dataTraits<valueType>::toScalarType( newMaximum );
+  theDataRange.setMaximum( newMaximum );
 }
 
 	/// Set a new minimum and maximum at once
 template<typename valueType> inline 
 void CTypedData<valueType>::setDataRange( const valueType newMinimum, const valueType newMaximum ) throw()
 {
-	theMaximum = newMaximum;
-	theMinimum = newMinimum;
+	setMaximum( newMaximum );
+	setMinimum( newMinimum );
 }
 
 /// Adjust range so that the given value lies definitely in data range
 template<typename valueType> inline 
 void CTypedData<valueType>::adjustDataRange( const valueType theValue ) throw()
 {
-	if ( theValue > theMaximum )
+	theDataRange.updateRange( theValue );
+/*	if ( theValue > theMaximum )
 		theMaximum = theValue;
 	if ( theValue < theMinimum )
-		theMinimum = theValue;		
+		theMinimum = theValue;		*/
 }
 
 /**
@@ -526,8 +532,8 @@ const valueType& CTypedData<valueType>::operator[]( const ulong ulIndex ) const 
 template<typename valueType> const std::string CTypedData<valueType>::dump() const throw()
 {
   std::ostringstream os;
-  os << "ulArraySize: " << arraySize << " dataVec ptr : " << &dataVec << "\n"
-    << "theMinimum ptr: " << &theMinimum << " theMaximum ptr: " << &theMaximum << std::endl;
+  os << "ulArraySize: " << arraySize << " dataVec ptr : " << &dataVec 
+    << std::endl;
   return CDataSet::dump() + os.str();
 }
 
@@ -537,8 +543,9 @@ template<typename valueType> const std::string CTypedData<valueType>::dump() con
 template<typename valueType> inline 
 void CTypedData<valueType>::swap( CTypedData<valueType>& aDataSet ) throw()
 {
-	std::swap( theMinimum, aDataSet.theMinimum );
-	std::swap( theMaximum, aDataSet.theMaximum );
+// 	std::swap( theMinimum, aDataSet.theMinimum );
+// 	std::swap( theMaximum, aDataSet.theMaximum );
+	std::swap( theDataRange, aDataSet.theDataRange );
 	std::swap( arraySize, aDataSet.arraySize );
 	dataVec.swap( aDataSet.dataVec );
 	std::swap( usDimension, aDataSet.usDimension );
@@ -657,3 +664,4 @@ typename CTypedData<valueType>::iterator CTypedData<valueType>::moveTo( const us
 // {
 // 	return CTypedData<T>::TypedDataIterator<T,U>( &(*anIterator) - amount, anIterator.getParent() );
 // }
+

@@ -119,8 +119,7 @@ template<typename TVar, typename TSet, typename TArray>
   typename TSet::iterator endIt = aSet->end();
   while( it != endIt )
   {
-    if ( *it > aSet->getMaximum() ) aSet->setMaximum( *it );
-    if ( *it < aSet->getMinimum() ) aSet->setMinimum( *it );
+  	aSet->adjustDataRange( *it );
     ++it;
   }
   return aSet;

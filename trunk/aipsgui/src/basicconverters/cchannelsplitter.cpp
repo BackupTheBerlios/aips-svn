@@ -92,16 +92,14 @@ template<typename T> void CChannelSplitter::splitup() throw()
 	for( ushort i = 0; i < usDims; ++i )
 	{
 		shared_ptr<T> outputPtr ( new T( inputPtr->getDimension(), inputPtr->getExtents(), 1 ) );
-		outputPtr->setMinimum( inputPtr->getMinimum() );
-		outputPtr->setMaximum( inputPtr->getMaximum() );
+		outputPtr->setDataRange( inputPtr->getDataRange() );
 		output.push_back( outputPtr );
 	}
 	if ( inputPtr->getDataDimension() > 3 )
 	{
 		shared_ptr<T> outputPtr ( new T( inputPtr->getDimension(), 
 			inputPtr->getExtents(),	inputPtr->getDataDimension() - 3 ) );
-		outputPtr->setMinimum( inputPtr->getMinimum() );
-		outputPtr->setMaximum( inputPtr->getMaximum() );
+		outputPtr->setDataRange( inputPtr->getDataRange() );
 		output.push_back( outputPtr );
 	}
 	

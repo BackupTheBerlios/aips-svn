@@ -295,6 +295,7 @@ void CCommonImageHandler::save( const std::string& sFilename, const TDataFile& t
 	anImage.syncPixels();
 
 	// Do the actual transformation
+	double dMaxIntensity = static_cast<double>( aDataSet->getDataRange().getMaximum() );
 	for( uint y = 0; y < aDataSet->getExtent(1); ++y )
 		for( uint x = 0; x < aDataSet->getExtent(0); ++x )
 		{
@@ -302,23 +303,23 @@ void CCommonImageHandler::save( const std::string& sFilename, const TDataFile& t
 			{
 				Magick::PixelPacket *pixel = pixel_cache + y * aDataSet->getExtent( 0 ) + x;
 				Magick::ColorRGB actColor(
-					static_cast<double>( (*aDataSet)( x, y, 0 ) ) / static_cast<double>( aDataSet->getMaximum() ),
-					static_cast<double>( (*aDataSet)( x, y, 1 ) ) / static_cast<double>( aDataSet->getMaximum() ), 0.0 );
+					static_cast<double>( (*aDataSet)( x, y, 0 ) ) / dMaxIntensity ,
+					static_cast<double>( (*aDataSet)( x, y, 1 ) ) / dMaxIntensity , 0.0 );
 				*pixel = actColor;
 			}
 			else if ( aDataSet->getDataDimension() > 2 )
 			{
 				Magick::PixelPacket *pixel = pixel_cache + y * aDataSet->getExtent( 0 ) + x;
 				Magick::ColorRGB actColor(
-					static_cast<double>( (*aDataSet)( x, y, 0 ) ) / static_cast<double>( aDataSet->getMaximum() ),
-					static_cast<double>( (*aDataSet)( x, y, 1 ) ) / static_cast<double>( aDataSet->getMaximum() ),
-					static_cast<double>( (*aDataSet)( x, y, 2 ) ) / static_cast<double>( aDataSet->getMaximum() ) );
+					static_cast<double>( (*aDataSet)( x, y, 0 ) ) / dMaxIntensity ,
+					static_cast<double>( (*aDataSet)( x, y, 1 ) ) / dMaxIntensity ,
+					static_cast<double>( (*aDataSet)( x, y, 2 ) ) / dMaxIntensity );
 				*pixel = actColor;
 			}
 			else
 			{
 				Magick::PixelPacket *pixel = pixel_cache + y * aDataSet->getExtent( 0 ) + x;
-				Magick::ColorGray actColor( static_cast<double>( (*aDataSet)( x, y ) ) / static_cast<double>( aDataSet->getMaximum() ) );
+				Magick::ColorGray actColor( static_cast<double>( (*aDataSet)( x, y ) ) / dMaxIntensity );
 				*pixel = actColor;
 			}
 		}
@@ -370,6 +371,7 @@ void CCommonImageHandler::saveImageSequence(  const std::string& sFilename, TIma
 		anImage.syncPixels();
 
 		// Do the actual transformation
+		double dMaxIntensity = static_cast<double>( aDataSet->getDataRange().getMaximum() );
 		for( uint y = 0; y < aDataSet->getExtent(1); ++y )
 			for( uint x = 0; x < aDataSet->getExtent(0); ++x )
 			{
@@ -377,23 +379,23 @@ void CCommonImageHandler::saveImageSequence(  const std::string& sFilename, TIma
 				{
 					Magick::PixelPacket *pixel = pixel_cache + y * aDataSet->getExtent( 0 ) + x;
 					Magick::ColorRGB actColor( 
-						static_cast<double>( (*aDataSet)( x, y, z, 0 ) ) / static_cast<double>( aDataSet->getMaximum() ),
-						static_cast<double>( (*aDataSet)( x, y, z, 1 ) ) / static_cast<double>( aDataSet->getMaximum() ), 0.0 );
+						static_cast<double>( (*aDataSet)( x, y, z, 0 ) ) / dMaxIntensity ,
+						static_cast<double>( (*aDataSet)( x, y, z, 1 ) ) / dMaxIntensity , 0.0 );
 					*pixel = actColor;
 				}
 				else if ( aDataSet->getDataDimension() > 2 )
 				{
 					Magick::PixelPacket *pixel = pixel_cache + y * aDataSet->getExtent( 0 ) + x;
 					Magick::ColorRGB actColor( 
-						static_cast<double>( (*aDataSet)( x, y, z, 0 ) ) / static_cast<double>( aDataSet->getMaximum() ),
-						static_cast<double>( (*aDataSet)( x, y, z, 1 ) ) / static_cast<double>( aDataSet->getMaximum() ),
-						static_cast<double>( (*aDataSet)( x, y, z, 2 ) ) / static_cast<double>( aDataSet->getMaximum() ) );
+						static_cast<double>( (*aDataSet)( x, y, z, 0 ) ) / dMaxIntensity ,
+						static_cast<double>( (*aDataSet)( x, y, z, 1 ) ) / dMaxIntensity ,
+						static_cast<double>( (*aDataSet)( x, y, z, 2 ) ) / dMaxIntensity );
 					*pixel = actColor;
 				}			
 				else
 				{
 					Magick::PixelPacket *pixel = pixel_cache + y * aDataSet->getExtent( 0 ) + x;
-					Magick::ColorGray actColor( static_cast<double>( (*aDataSet)( x, y, z ) ) / static_cast<double>( aDataSet->getMaximum() ) );
+					Magick::ColorGray actColor( static_cast<double>( (*aDataSet)( x, y, z ) ) / dMaxIntensity );
 					*pixel = actColor;
 				}
 			}

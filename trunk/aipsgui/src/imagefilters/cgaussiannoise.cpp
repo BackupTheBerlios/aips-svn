@@ -86,10 +86,7 @@ BENCHSTART;
 			lValue = static_cast<long>( *iit + der );
 		}	while( lValue < 0 || lValue > 65535 );
 		*oit = static_cast<ushort>( lValue );
-		if ( *oit > outputPtr->getMaximum() )
-  		outputPtr->setMaximum( *oit );
-		if ( *oit < outputPtr->getMinimum() )
-			outputPtr->setMinimum( *oit );								
+		outputPtr->adjustDataRange( *oit );
 		++iit; ++oit;
 	}
 	

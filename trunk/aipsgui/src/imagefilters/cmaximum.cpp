@@ -109,10 +109,7 @@ BENCHSTART;
 						firstValue = std::max( firstValue, (*inputPtr2)( x, y, z, usChannel ) );
 					}
 		    	(*outputPtr)( x, y, z, usChannel ) = firstValue;
-			    if ( firstValue > outputPtr->getMaximum() )
-  	    		outputPtr->setMaximum( firstValue );
-				  if ( firstValue < outputPtr->getMinimum() )
-		  	    outputPtr->setMinimum( firstValue );
+		    	outputPtr->adjustDataRange( firstValue );
 				}
 			}
   setOutput( outputPtr );

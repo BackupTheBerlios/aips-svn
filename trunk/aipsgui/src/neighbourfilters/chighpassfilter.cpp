@@ -97,8 +97,7 @@ void CHighPassFilter::apply() throw()
     alog << LWARN << SERROR( "invalid input data" ) << endl;
     return;
   }
-  outputPtr->setMaximum( inputPtr->getMaximum() );
-  outputPtr->setMinimum( inputPtr->getMinimum() );
+  outputPtr->setDataRange( inputPtr->getDataRange() );
   setOutput( outputPtr );
 FEND;
 }

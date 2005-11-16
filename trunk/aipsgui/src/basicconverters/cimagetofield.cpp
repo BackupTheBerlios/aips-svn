@@ -70,8 +70,8 @@ BENCHSTART;
 	double dMaxVal = parameters.getDouble( "MaximumValue" );
 	// Determine minimum and maximum conversion
 	double dFactor = ( dMaxVal - dMinVal ) 
-		/ static_cast<double>( inputPtr->getMaximum() - inputPtr->getMinimum() ); 
-	double dInputOffset = static_cast<double>( inputPtr->getMinimum() ) * -1.0;
+		/ static_cast<double>( inputPtr->getDataRange().getMaximum() - inputPtr->getDataRange().getMinimum() ); 
+	double dInputOffset = static_cast<double>( inputPtr->getDataRange().getMinimum() ) * -1.0;
 	double dOutputOffset = dMinVal;
 	// Create output field
 	TFieldPtr outputPtr( new TField ( inputPtr->getDimension(), inputPtr->getExtents(), 

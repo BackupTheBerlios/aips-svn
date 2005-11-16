@@ -76,8 +76,8 @@ BENCHSTART;
   variance = sqrt( variance );
 
   cerr << "Absolute: Mean " << mean << " Variance " << variance*1.7 << endl;
-  cerr << "Relative: Mean " << mean/static_cast<double>(inputPtr->getMaximum())
-  	<< " Variance " << variance*1.7/static_cast<double>(inputPtr->getMaximum()) << endl;
+  cerr << "Relative: Mean " << mean/static_cast<double>(inputPtr->getDataRange().getMaximum())
+  	<< " Variance " << variance*1.7/static_cast<double>(inputPtr->getDataRange().getMaximum()) << endl;
   setOutput( outputPtr );
 BENCHSTOP;
 }

@@ -255,14 +255,15 @@ CAnalyzeHandler::EDataType CAnalyzeHandler::determineDataType( CDataSet* theData
 		TImage* image = static_cast<TImage*>( theDataSet );
 		if ( image != NULL )
 		{
-			theHeader->setLong("MaxIntensity", image->getMaximum() );
-			theHeader->setLong("MinIntensity", image->getMinimum() );
-			if ( image->getMaximum() < numeric_limits<uint8_t>::max() ) 
+			CDataRange<TImage::dataType, TImage::traitType::isScalar> range = image->getDataRange();
+			theHeader->setLong("MaxIntensity", range.getMaximum() );
+			theHeader->setLong("MinIntensity", range.getMinimum() );
+			if ( range.getMaximum() < numeric_limits<uint8_t>::max() ) 
 			{ 
 				theHeader->setVoxelType( "UInt8" );
 				return DUInt8; 
 			}
-			if ( image->getMaximum() < numeric_limits<int16_t>::max() ) 
+			if ( range.getMaximum() < numeric_limits<int16_t>::max() ) 
 			{ 
 				theHeader->setVoxelType( "Int16" );
 				return DInt16; 
@@ -279,9 +280,10 @@ CAnalyzeHandler::EDataType CAnalyzeHandler::determineDataType( CDataSet* theData
 		TField* field = static_cast<TField*>( theDataSet );
 		if ( field != NULL )
 		{
-			theHeader->setLong("MaxIntensity", static_cast<long>( ceil( field->getMaximum()) ) );
-			theHeader->setLong("MinIntensity", static_cast<long>( floor( field->getMinimum()) ) );
-			if ( field->getMaximum() < numeric_limits<float>::max() )
+			CDataRange<TField::dataType, TField::traitType::isScalar> range = field->getDataRange();
+			theHeader->setLong("MaxIntensity", static_cast<long>( ceil( range.getMaximum()) ) );
+			theHeader->setLong("MinIntensity", static_cast<long>( floor( range.getMinimum()) ) );
+			if ( range.getMaximum() < numeric_limits<float>::max() )
 			{ 
 				theHeader->setVoxelType( "Float16" );
 				return DFloat16; 
@@ -307,8 +309,7 @@ shared_ptr<T> CAnalyzeHandler::flip( shared_ptr<T> original, bool bSwapX, bool b
 	cerr << "Original " << original->getDimension() << ": " << original->getExtent(0) << " x "
 		<< original->getExtent(1) << " x " << original->getExtent(2) << " X " << original->getDataDimension() << endl;
 	shared_ptr<T> copy ( new T( original->getDimension(), original->getExtents(), original->getDataDimension() ) );
-	copy->setMaximum( original->getMaximum() );
-	copy->setMinimum( original->getMinimum() );
+	copy->setDataRange( original->getDataRange() );
 	cerr << "Copy " << copy->getDimension() << ": " << copy->getExtent(0) << " x "
 		<< copy->getExtent(1) << " x " << copy->getExtent(2) << " X " << copy->getDataDimension() << endl;
 	std::vector<size_t> dimensionSize = copy->getExtents();
@@ -356,8 +357,7 @@ boost::shared_ptr<T> CAnalyzeHandler::rotate( boost::shared_ptr<T> original,
 		return original;
 	}	
 	shared_ptr<T> copy ( new T( original->getDimension(), dimensionSize, original->getDataDimension() ) );
-	copy->setMaximum( original->getMaximum() );
-	copy->setMinimum( original->getMinimum() );
+	copy->setDataRange( original->getDataRange() );
 	
 	for ( uint z = 0; z < dimensionSize[2]; ++z )
 	{

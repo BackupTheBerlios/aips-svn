@@ -62,11 +62,11 @@ BENCHSTART;
 
   TImagePtr outputPtr ( new TImage( inputPtr->getDimension(),
 		inputPtr->getExtents(), inputPtr->getDataDimension() ) );
-  outputPtr->setMinimum( inputPtr->getMinimum() );
+  outputPtr->setMinimum( inputPtr->getDataRange().getMinimum() );
   outputPtr->setMaximum( 0 );
   calculateHistogram( inputPtr );
-  ushort usMaxIntensity = ( inputPtr->getMaximum() );
-  usNewGrayValuesVec.resize( inputPtr->getMaximum() + 1 );
+  ushort usMaxIntensity = ( inputPtr->getDataRange().getMaximum() );
+  usNewGrayValuesVec.resize( usMaxIntensity + 1 );
   for ( ushort usChannel = 0; usChannel < inputPtr->getDataDimension(); usChannel++ )
   {
 		ushort usCnt = 0;
@@ -82,8 +82,7 @@ BENCHSTART;
 				usNewGrayValuesVec[i] = usCnt;
 			}
     }
-		if ( usCnt > outputPtr->getMaximum() )
-			outputPtr->setMaximum( usCnt );
+    outputPtr->adjustDataRange( usCnt );
     applyNewGrayValues( inputPtr, outputPtr, usChannel );
   }
   setOutput( outputPtr );

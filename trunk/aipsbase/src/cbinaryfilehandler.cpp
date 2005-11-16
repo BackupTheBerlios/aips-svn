@@ -59,9 +59,8 @@ FBEGIN;
   scanline.resize( scanlineSize );
 	typename SetType::iterator it = theTargetDataSPtr->begin();
 	typename SetType::iterator end = theTargetDataSPtr->end();
-	typedef typename dataTraits<SetType>::dataType SetDataType;
-	theTargetDataSPtr->setMaximum( numeric_limits<SetDataType>::min() );
-	theTargetDataSPtr->setMinimum( numeric_limits<SetDataType>::max() );
+	theTargetDataSPtr->setMaximum( numeric_limits<typename SetType::dataType>::min() );
+	theTargetDataSPtr->setMinimum( numeric_limits<typename SetType::dataType>::max() );
 DBG1( "Loading into dataset with dimensions " << theTargetDataSPtr->getExtent(0) << " x " 
 	<< theTargetDataSPtr->getExtent(1) << " x " << theTargetDataSPtr->getExtent(2) );
 	
@@ -89,12 +88,9 @@ DBG1( "Loading into dataset with dimensions " << theTargetDataSPtr->getExtent(0)
 			memcpy( &value, &scanline[scanlineIndex], sizeof( DataType ) );
 			if ( bFileEndianess ) 
 				swapEndianess( value );
-			*it = static_cast<SetDataType>( value ); 
+			*it = static_cast<typename SetType::dataType>( value ); 
 			scanlineIndex += sizeof( DataType );
-			if ( *it > theTargetDataSPtr->getMaximum() )
-				theTargetDataSPtr->setMaximum( *it );
-			if ( *it < theTargetDataSPtr->getMinimum() )
-				theTargetDataSPtr->setMinimum( *it );
+			theTargetDataSPtr->adjustDataRange( *it );
 			++it;
 		}
 	}

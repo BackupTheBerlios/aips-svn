@@ -85,7 +85,7 @@ BENCHSTART;
 		bModuleReady = true;
 		bRoiSelf = false;
 		roiPtr = static_pointer_cast<TImage>( getInput(1) );
-		if ( roiPtr.get() == NULL || roiPtr->getMaximum() > 1 )
+		if ( roiPtr.get() == NULL || roiPtr->getDataRange().getMaximum() > 1 )
 		{
 			bRoiSelf = true;
 		}		
@@ -110,7 +110,7 @@ BENCHSTART;
 		bModuleReady = true;
 		bRoiSelf = false;
 		roiPtr = static_pointer_cast<TImage>( getInput(1) );
-		if ( roiPtr == NULL || roiPtr->getMaximum() > 1 )
+		if ( roiPtr == NULL || roiPtr->getDataRange().getMaximum() > 1 )
 		{
 			bRoiSelf = true;
 		}		

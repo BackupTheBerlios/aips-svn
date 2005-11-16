@@ -81,8 +81,7 @@ BENCHSTART;
 		for( uint y = 0; y < extents[1]; ++y )
 			for( uint x = 0; x < extents[0]; ++x )
 				(*outputPtr)(x,y,z) = (*inputPtr)( x + coords[0], y + coords[2], z + coords[4] );	
-  outputPtr->setMaximum( inputPtr->getMaximum() );
-  outputPtr->setMinimum( inputPtr->getMinimum() );    
+  outputPtr->setDataRange( inputPtr->getDataRange() );				
   setOutput( outputPtr );
 BENCHSTOP;
 }

@@ -96,8 +96,7 @@ BENCHSTART;
 							break;
 					}					
 				}
-  outputPtr->setMaximum( inputPtr->getMaximum() );
-  outputPtr->setMinimum( inputPtr->getMinimum() );    
+	outputPtr->setDataRange( inputPtr->getDataRange() );
   setOutput( outputPtr );
 BENCHSTOP;
 }

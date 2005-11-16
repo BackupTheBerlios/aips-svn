@@ -45,10 +45,9 @@ BENCHSTART;
 
   TImagePtr outputPtr ( new TImage( inputPtr->getDimension(), inputPtr->getExtents(), 
 		inputPtr->getDataDimension() ) );
-  outputPtr->setMaximum( inputPtr->getMaximum() );
-  outputPtr->setMinimum( inputPtr->getMinimum() );
+  outputPtr->setDataRange( inputPtr->getDataRange() );
 
-  ushort usMaxIntensity = inputPtr->getMaximum();
+  ushort usMaxIntensity = inputPtr->getDataRange().getMaximum();
 	TImage::iterator inputIt = inputPtr->begin();
 	TImage::iterator outputIt = outputPtr->begin();
 	while( inputIt != inputPtr->end() )

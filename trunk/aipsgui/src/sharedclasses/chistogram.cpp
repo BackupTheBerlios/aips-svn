@@ -41,7 +41,7 @@ BENCHSTART;
     throw ( NullException( SERROR( "Got NULL reference from caller" ), CException::RECOVER ) );
 
   dMaxValue = -1.0;
-  size_t intensitySize = sourcePtr->getMaximum();
+  size_t intensitySize = sourcePtr->getDataRange().getMaximum();
   std::vector<ulong> noOfPixelsVec( intensitySize + 1 );
   histogramVec.resize( sourcePtr->getDataDimension() );
   size_t imageSize = sourcePtr->getExtent( 0 ) * sourcePtr->getExtent( 1 );

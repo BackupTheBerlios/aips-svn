@@ -68,7 +68,7 @@ cerr << "B" << endl;
 	bModuleReady = true;
 	bRoiSelf = false;
 	roiPtr = static_cast<TImage*>( getInput(1).get() );
-	if ( roiPtr == NULL || roiPtr->getMaximum() > 1 )
+	if ( roiPtr == NULL || roiPtr->getDataRange().getMaximum() > 1 )
 	{
 		bRoiSelf = true;
 	}

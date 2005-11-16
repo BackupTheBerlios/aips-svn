@@ -163,8 +163,7 @@ void CMorphology::morph2D( const TImage& input, const TImage& kernel ) throw()
                 	{
 	                  long lValue = work( x - s, y - t ) + kernel( s + 1, t + 1 );
 										if ( lValue > 65535 ) lValue = 65535;
-  	                if ( lValue > outputPtr->getMaximum() )
-    	                outputPtr->setMaximum( lValue );
+										outputPtr->adjustDataRange( lValue );
       	            if ( lValue > (*outputPtr)( x, y ) )
         		           (*outputPtr)( x, y ) = static_cast<ushort>( lValue );
             	    }
@@ -181,8 +180,7 @@ void CMorphology::morph2D( const TImage& input, const TImage& kernel ) throw()
                   	long lValue = work( x + s, y + t ) - kernel( s + 1, t + 1 );
 										if ( lValue < 0 ) lValue = 0;
 										else if ( lValue > 65535 ) lValue = 65535;
-  	                if ( lValue > outputPtr->getMaximum() )
-    	                outputPtr->setMaximum( lValue );
+										outputPtr->adjustDataRange( lValue );
       	            if ( lValue < (*outputPtr)( x, y ) )
         		           (*outputPtr)( x, y ) = static_cast<ushort>( lValue );
       	          }
@@ -258,8 +256,7 @@ void CMorphology::morph3D( const TImage& input, const TImage& kernel ) throw()
                 	{
 	                  long lValue = work( x - s, y - t, z - u ) + kernel( s + 1, t + 1, u + 1 );
 										if ( lValue > 65535 ) lValue = 65535;
-  	                if ( lValue > outputPtr->getMaximum() )
-    	                outputPtr->setMaximum( lValue );
+										outputPtr->adjustDataRange( lValue );
       	            if ( lValue > (*outputPtr)( x, y, z ) )
         		           (*outputPtr)( x, y, z ) = static_cast<ushort>( lValue );
             	    }
@@ -277,8 +274,7 @@ void CMorphology::morph3D( const TImage& input, const TImage& kernel ) throw()
                   	long lValue = work( x + s, y + t, z + u ) - kernel( s + 1, t + 1, u + 1 );
 										if ( lValue < 0 ) lValue = 0;
 										else if ( lValue > 65535 ) lValue = 65535;
-  	                if ( lValue > outputPtr->getMaximum() )
-    	                outputPtr->setMaximum( lValue );
+										outputPtr->adjustDataRange( lValue );
       	            if ( lValue > (*outputPtr)( x, y, z ) )
         		           (*outputPtr)( x, y, z ) = static_cast<ushort>( lValue );
       	          }

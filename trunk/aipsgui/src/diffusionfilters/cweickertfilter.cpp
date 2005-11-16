@@ -91,8 +91,8 @@ template<typename T> void CWeickertFilter::filter() throw()
 /*  if ( !checkInput( inputPtr, 2, 3 ) )
     return;*/
 		
-	typedef typename dataTraits<T>::dataType TVoxel;
-	typedef typename dataTraits<T>::increasedRangeType TInc;
+	typedef typename dataTraits<typename T::dataType>::dataType TVoxel;
+	typedef typename dataTraits<typename T::dataType>::increasedRangeType TInc;
 		
 	bModuleReady = true;  
   deleteOldOutput();
@@ -110,8 +110,9 @@ template<typename T> void CWeickertFilter::filter() throw()
   shared_ptr<T> outputPtr ( new T( inputPtr->getDimension(),
     inputPtr->getExtents(), inputPtr->getDataDimension() ) );
 /* Output Range Definition  */
-  outputPtr->setMaximum( inputPtr->getMaximum() );
-  outputPtr->setMinimum( inputPtr->getMinimum() );  
+	outputPtr->setDataRange( inputPtr->getDataRange() );
+//   outputPtr->setMaximum( inputPtr->getMaximum() );
+//   outputPtr->setMinimum( inputPtr->getMinimum() );  
 
 /* Generation of an Image data copie */
   T ImageCopie = (*inputPtr);
@@ -206,11 +207,12 @@ pow(dDeltaN(indice),2) * dAux ),dm) )));
 						else if ( pixelResult < numeric_limits<TVoxel>::min() )
 							pixelResult = numeric_limits<TVoxel>::min();
 							
-            if( outputPtr->getMaximum() < pixelResult )
-                  outputPtr->setMaximum( pixelResult );
-
-            if( outputPtr->getMinimum() > pixelResult )
-                  outputPtr->setMinimum( pixelResult );
+						
+//             if( outputPtr->getMaximum() < pixelResult )
+//                   outputPtr->setMaximum( pixelResult );
+// 
+//             if( outputPtr->getMinimum() > pixelResult )
+//                   outputPtr->setMinimum( pixelResult );
 
             (*outputPtr)( x,y,z, usChannel ) = pixelResult;
          }
@@ -279,11 +281,12 @@ pow(dDeltaN(indice),2) * dAux ),dm) )));
 						else if ( pixelResult < numeric_limits<TVoxel>::min() )
 							pixelResult = numeric_limits<TVoxel>::min();
 
-            if( outputPtr->getMaximum() < pixelResult )
-                  outputPtr->setMaximum( pixelResult );
-
-            if( outputPtr->getMinimum() > pixelResult )
-                  outputPtr->setMinimum( pixelResult );
+						outputPtr->adjustDataRange( pixelResult );
+//             if( outputPtr->getMaximum() < pixelResult )
+//                   outputPtr->setMaximum( pixelResult );
+// 
+//             if( outputPtr->getMinimum() > pixelResult )
+//                   outputPtr->setMinimum( pixelResult );
 
             (*outputPtr)( x,y,z, usChannel ) = pixelResult;
          }
@@ -368,11 +371,12 @@ pow(dDeltaN(indice),2) * dAux ),dm) )));
 						else if ( pixelResult < numeric_limits<TVoxel>::min() )
 							pixelResult = numeric_limits<TVoxel>::min();
 
-            if( outputPtr->getMaximum() < pixelResult )
-                  outputPtr->setMaximum( pixelResult );
-
-            if( outputPtr->getMinimum() > pixelResult )
-                  outputPtr->setMinimum( pixelResult );
+					outputPtr->adjustDataRange( pixelResult );
+//             if( outputPtr->getMaximum() < pixelResult )
+//                   outputPtr->setMaximum( pixelResult );
+// 
+//             if( outputPtr->getMinimum() > pixelResult )
+//                   outputPtr->setMinimum( pixelResult );
 
             (*outputPtr)( x,y,z, usChannel ) = pixelResult;
          }
@@ -417,11 +421,12 @@ pow(dDeltaN(indice),2) * dAux ),dm) )));
 						else if ( pixelResult < numeric_limits<TVoxel>::min() )
 							pixelResult = numeric_limits<TVoxel>::min();
 
-            if( outputPtr->getMaximum() < pixelResult )
-                  outputPtr->setMaximum( pixelResult );
-
-            if( outputPtr->getMinimum() > pixelResult )
-                  outputPtr->setMinimum( pixelResult );
+						outputPtr->adjustDataRange( pixelResult );
+//             if( outputPtr->getMaximum() < pixelResult )
+//                   outputPtr->setMaximum( pixelResult );
+// 
+//             if( outputPtr->getMinimum() > pixelResult )
+//                   outputPtr->setMinimum( pixelResult );
 
             (*outputPtr)( x,y, usChannel ) = pixelResult;
          }
@@ -476,11 +481,12 @@ pow(dDeltaN(indice),2) * dAux ),dm) )));
 						else if ( pixelResult < numeric_limits<TVoxel>::min() )
 							pixelResult = numeric_limits<TVoxel>::min();
 
-            if( outputPtr->getMaximum() < pixelResult )
-                  outputPtr->setMaximum( pixelResult );
-
-            if( outputPtr->getMinimum() > pixelResult )
-                  outputPtr->setMinimum( pixelResult );
+						outputPtr->adjustDataRange( pixelResult );
+//             if( outputPtr->getMaximum() < pixelResult )
+//                   outputPtr->setMaximum( pixelResult );
+// 
+//             if( outputPtr->getMinimum() > pixelResult )
+//                   outputPtr->setMinimum( pixelResult );
 
             (*outputPtr)( x,y, usChannel ) = pixelResult;
          }

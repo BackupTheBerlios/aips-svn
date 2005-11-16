@@ -66,10 +66,10 @@ void CViewHistogram::apply() throw()
   }	
 	bModuleReady = true;
   calculateHistogram( inputPtr );
-  int iValue = static_cast<int>( inputPtr->getMaximum() ) - 500;
+  int iValue = static_cast<int>( inputPtr->getDataRange().getMaximum() ) - 500;
   if ( iValue < 0 )
     iValue = 0;
-	theDialog->newImage( inputPtr->getMaximum(), iValue, dMaxValue, histogramVec );
+	theDialog->newImage( inputPtr->getDataRange().getMaximum(), iValue, dMaxValue, histogramVec );
 	FEND;
 }
 

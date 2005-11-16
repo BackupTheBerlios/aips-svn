@@ -67,8 +67,8 @@ BENCHSTART;
 	ulong ulMaxVal = parameters.getUnsignedLong( "MaximumValue" );
 	// Determine minimum and maximum conversion
 	double dFactor = static_cast<double>( ulMaxVal - ulMinVal ) 
-		/ ( inputPtr->getMaximum() - inputPtr->getMinimum() ); 
-	double dInputOffset = inputPtr->getMinimum() * -1.0;
+		/ ( inputPtr->getDataRange().getMaximum() - inputPtr->getDataRange().getMinimum() ); 
+	double dInputOffset = inputPtr->getDataRange().getMinimum() * -1.0;
 	double dOutputOffset = ulMinVal;
 	// Create output field
 	TImagePtr outputPtr( new TImage ( inputPtr->getDimension(), inputPtr->getExtents(), 

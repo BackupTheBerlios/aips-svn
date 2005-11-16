@@ -78,12 +78,12 @@ DBG("Input has data dimension " << tmp->getDataDimension() );
   }
 
 DBG("Image has data dimension " << tmp->getDataDimension() );
-  float intRange = 1.0 / static_cast<float>(tmp->getMaximum() - tmp->getMinimum() + 1) * 256.0;
-  if ( tmp->getMaximum() < 2 )
+  float intRange = 1.0 / static_cast<float>(tmp->getDataRange().getMaximum() - tmp->getDataRange().getMinimum() + 1) * 256.0;
+  if ( tmp->getDataRange().getMaximum() < 2 )
     intRange = 255.0;
-  else if ( ( tmp->getMaximum() - tmp->getMinimum() + 1 ) < 256 )
+  else if ( ( tmp->getDataRange().getMaximum() - tmp->getDataRange().getMinimum() + 1 ) < 256 )
     intRange = 1.0;
-DBG("Image intensity range is " << tmp->getMaximum() - tmp->getMinimum() + 1);
+DBG("Image intensity range is " << tmp->getDataRange().getMaximum() - tmp->getDataRange().getMinimum() + 1);
 DBG("Image intensity range normalization is " << intRange);
   for ( ushort x = 0; x < tmp->getExtent(0); x++ )
     for ( ushort y = 0; y < tmp->getExtent(1); y++ )
@@ -91,11 +91,11 @@ DBG("Image intensity range normalization is " << intRange);
       if ( tmp->getDataDimension() == 1 )
       {
         ushort value = static_cast<ushort>(
-          static_cast<float>((*tmp)(x,y) - tmp->getMinimum() ) * intRange );
+          static_cast<float>((*tmp)(x,y) - tmp->getDataRange().getMinimum() ) * intRange );
         if ( value < 256 ) processed.setPixel( x, tmp->getExtent(1) - 1 - y, value );
         else
         { alog << LWARN << "\n **** Pixel value " << value << " too high (" <<
-          tmp->getMaximum() << ") ****" << endl; }
+          tmp->getDataRange().getMaximum() << ") ****" << endl; }
       }
       else if ( tmp->getDataDimension() == 3 )
         processed.setPixel( x, tmp->getExtent(1) - 1 - y, qRgb( (*tmp)(x,y,0), (*tmp)(x,y,1), (*tmp)(x,y,2) ) );

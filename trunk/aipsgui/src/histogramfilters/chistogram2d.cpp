@@ -135,7 +135,7 @@ BENCHSTART;
 	}
 	calculateHistogram( tmp );
 	ushort usMin = 1;
-	ushort usMax = ( tmp->getMaximum() );
+	ushort usMax = ( tmp->getDataRange().getMaximum() );
 	// Do a gaussian smoothing on the histogram
 	// Compute gaussian mask
 	double dSigma = parameters.getDouble("HistoSmooth");

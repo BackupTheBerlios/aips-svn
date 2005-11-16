@@ -115,10 +115,7 @@ BENCHSTART;
     			else if ( lValue > 32767 ) 
 						lValue = 32767;
 		    	(*outputPtr)( x, y, z, usChannel ) = static_cast<short>( lValue );
-			    if ( (*outputPtr)( x, y, z, usChannel ) > outputPtr->getMaximum() )
-  	    		outputPtr->setMaximum( (*outputPtr)( x, y, z, usChannel ) );
-			    if ( (*outputPtr)( x, y, z, usChannel ) < outputPtr->getMinimum() )
-		  	    outputPtr->setMinimum( (*outputPtr)( x, y, z, usChannel ) );								
+		    	outputPtr->adjustDataRange( (*outputPtr)( x, y, z, usChannel ) );						
 				}
 			}
   setOutput( outputPtr );

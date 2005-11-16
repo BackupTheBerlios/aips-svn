@@ -95,20 +95,20 @@ void CParticleSnake::drawImage( TImagePtr imagePtr )
   {
     theImage.create( imagePtr->getExtent( 0 ), imagePtr->getExtent(1), 32, 256 * 256 * 256 );
     float fIntRange = 1.0 / static_cast<float>
-      ( imagePtr->getMaximum() - imagePtr->getMinimum() + 1 ) * 256.0;
+      ( imagePtr->getDataRange().getMaximum() - imagePtr->getDataRange().getMinimum() + 1 ) * 256.0;
     for ( uint x = 0; x < imagePtr->getExtent( 0 ); x++ )
       for ( uint y = 0; y < imagePtr->getExtent( 1 ); y++ )
       {
         if ( imagePtr->getDataDimension() == 1 )
         {
           ushort usValue = static_cast<ushort>( static_cast<float>
-            ( (*imagePtr)( x, y ) - imagePtr->getMinimum() ) * fIntRange );
+            ( (*imagePtr)( x, y ) - imagePtr->getDataRange().getMinimum() ) * fIntRange );
           if ( usValue < 256 ) 
 						theImage.setPixel( x, imagePtr->getExtent(1) - 1 - y, qRgb( usValue, usValue, usValue ) );
           else
           { 
 						alog << LWARN << "\n **** Pixel value " << usValue << " too high (" 
-							<< imagePtr->getMaximum() << ") ****" << endl; 
+							<< imagePtr->getDataRange().getMaximum() << ") ****" << endl; 
 					}
         }
         else if ( imagePtr->getDataDimension() == 3 )

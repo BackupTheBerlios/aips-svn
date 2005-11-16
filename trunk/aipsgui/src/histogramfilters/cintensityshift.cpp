@@ -77,7 +77,7 @@ BENCHSTART;
     dimensionSize, usOutputDataDimension ) );
 		
 	long lShift = parameters.getLong( "Shift" );
-	long lNewMax = inputPtr->getMaximum() + lShift;
+	long lNewMax = inputPtr->getDataRange().getMaximum() + lShift;
 	if ( lNewMax > 65535 ) lNewMax = 65535;
   outputPtr->setMaximum( lNewMax );
   outputPtr->setMinimum( 0 );

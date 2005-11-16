@@ -26,6 +26,9 @@
 #ifndef CVECTOR_H
 #define CVECTOR_H
 
+#include <aipsbase_config.h>
+
+#ifndef USE_BLITZ
 #define CVECTOR_VERSION "0.4"
 
 namespace aips 
@@ -114,4 +117,5 @@ CVector<DataType, dimension> operator*
 #include "cvectorinlines.tpp"
 
 }
+#endif
 #endif

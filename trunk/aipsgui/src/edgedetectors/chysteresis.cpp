@@ -63,8 +63,7 @@ BENCHSTART;
  	ushort h = inputPtr->getExtent(1);*/
 	boost::shared_ptr<TImage> outputPtr ( new TImage( 2, inputPtr->getExtents(), inputPtr->getDataDimension() ) );
 	
-  outputPtr->setMaximum( inputPtr->getMaximum() );	
-	outputPtr->setMinimum( inputPtr->getMinimum() );	
+	outputPtr->setDataRange( inputPtr->getDataRange() );
  	(*outputPtr) = 0;
 	long lot = parameters.getUnsignedLong( "Low" );
 	long hit = parameters.getUnsignedLong( "High" );

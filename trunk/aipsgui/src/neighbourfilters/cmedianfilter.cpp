@@ -65,8 +65,6 @@ BENCHSTART;
   TImagePtr outputPtr ( new TImage( inputPtr->getDimension(),
     inputPtr->getExtents(), inputPtr->getDataDimension() ) );
   (*outputPtr) = (*inputPtr);
-  outputPtr->setMaximum( inputPtr->getMaximum() );
-  outputPtr->setMinimum( inputPtr->getMinimum() );
 
   uint uiMaskSize = static_cast<uint>( ( 2 * parameters.getUnsignedLong("Radius") ) + 1 );  
   vector<ushort> usMask( uiMaskSize * uiMaskSize * uiMaskSize );

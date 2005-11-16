@@ -95,7 +95,7 @@ template<typename T> void CReduceVector::reduce() throw()
   deleteOldOutput();
   
   // Determine value range in input data
-  double dMaxNorm = norm( inputPtr->getMaximum() );
+  double dMaxNorm = inputPtr->getDataRange().getMaximum();
 
   // Create output field
 	TFieldPtr outputPtr( new TField ( inputPtr->getDimension(), inputPtr->getExtents(), 

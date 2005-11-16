@@ -62,11 +62,11 @@ TDataFile CTRasterHandler::load( const string& sFilename )
     CDataSet *aDataSet = NULL;
     if( ( usDataType == 0 ) && ( usVoxelSize == sizeof(uint) ) )
     {
-        aDataSet = new CTypedData<uint>( usDimension, extentVec );
+        aDataSet = new CTypedData<long>( usDimension, extentVec );
     }
     else if( ( usDataType == 1 ) && ( usVoxelSize == sizeof(int) ) )
     {
-        aDataSet = new CTypedData<int>( usDimension, extentVec );
+        aDataSet = new CTypedData<long>( usDimension, extentVec );
     }
     else if( ( usDataType == 2 ) && ( usVoxelSize == sizeof(float) ) )
     {
