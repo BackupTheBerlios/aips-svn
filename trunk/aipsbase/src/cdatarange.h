@@ -12,49 +12,49 @@
 
 namespace aips {
 
-template<typename valueType, bool isScalar>
+template<typename TValue, bool isScalar>
 class CDataRange
 {
 };
 
-template<typename valueType>
-class CDataRange<valueType,true>
+template<typename TValue>
+class CDataRange<TValue,true>
 {
 public:
 	CDataRange()
 	{
 	}
-	CDataRange( valueType theMinimum_, valueType theMaximum_ ) 
+	CDataRange( TValue theMinimum_, TValue theMaximum_ )
 		: theMinimum( theMinimum_ ), theMaximum( theMaximum_ )
 	{ 
 	}
-	CDataRange<valueType,true> operator=(const CDataRange<valueType,true>& aDataRange)
+	CDataRange<TValue,true> operator=(const CDataRange<TValue,true>& aDataRange)
 	{
 		theMinimum = aDataRange.theMinimum;
 		theMaximum = aDataRange.theMaximum;
 		return (*this);
 	}
-	void setMinimum( valueType theMinimum_ )
+	void setMinimum( TValue theMinimum_ )
 	{
 		theMinimum = theMinimum_;
 	}
-	void setMaximum( valueType theMaximum_ )
+	void setMaximum( TValue theMaximum_ )
 	{
 		theMaximum = theMaximum_;
 	}
-	valueType getMinimum()
+	TValue getMinimum()
 	{
 		return theMinimum;
 	}
-	valueType getMaximum()
+	TValue getMaximum()
 	{
 		return theMaximum;
 	}
-	bool isInRange( valueType value )
+	bool isInRange( TValue value )
 	{
 		return ( value >= theMinimum && value <= theMaximum );
 	}
-	void updateRange( valueType value )
+	void updateRange( TValue value )
 	{
 		if ( value < theMinimum )	
 			theMinimum = value;
@@ -62,60 +62,60 @@ public:
 			theMaximum = value;			
 	}
 private:
-	valueType theMinimum;
-	valueType theMaximum;
+	TValue theMinimum;
+	TValue theMaximum;
 };
 
-template<typename valueType>
-class CDataRange<valueType,false>
+template<typename TValue>
+class CDataRange<TValue,false>
 {
 public:
 	CDataRange()
 	{
 	}
-	CDataRange( valueType theMinimum_, valueType theMaximum_ ) 
+	CDataRange( TValue theMinimum_, TValue theMaximum_ )
 	{ 
 		theMinimum = toScalarType( theMinimum_ );
 		theMaximum = toScalarType( theMaximum_ );
 	}
-	CDataRange<valueType,false> operator=(const CDataRange<valueType,false>& aDataRange)
+	CDataRange<TValue,false> operator=(const CDataRange<TValue,false>& aDataRange)
 	{
 		theMinimum = aDataRange.theMinimum;
 		theMaximum = aDataRange.theMaximum;
 		return (*this);
 	}
-	void setMinimum( valueType theMinimum_ )
+	void setMinimum( TValue theMinimum_ )
 	{
-		theMinimum = dataTraits<valueType>::toScalarType( theMinimum_ );
+		theMinimum = dataTraits<TValue>::toScalarType( theMinimum_ );
 	}
-	void setMaximum( valueType theMaximum_ )
+	void setMaximum( TValue theMaximum_ )
 	{
-		theMaximum = dataTraits<valueType>::toScalarType( theMaximum_ );
+		theMaximum = dataTraits<TValue>::toScalarType( theMaximum_ );
 	}
-	typename dataTraits<valueType>::scalarDataType getMinimum()
+	typename dataTraits<TValue>::scalarDataType getMinimum()
 	{
 		return theMinimum;
 	}
-	typename dataTraits<valueType>::scalarDataType getMaximum()
+	typename dataTraits<TValue>::scalarDataType getMaximum()
 	{
 		return theMaximum;
 	}
-	bool isInRange( valueType value_ )
+	bool isInRange( TValue value_ )
 	{
-		typename dataTraits<valueType>::scalarDataType value = dataTraits<valueType>::toScalarType( value_ );
+		typename dataTraits<TValue>::scalarDataType value = dataTraits<TValue>::toScalarType( value_ );
 		return ( value >= theMinimum && value <= theMaximum );
 	}
-	void updateRange( valueType value_ )
+	void updateRange( TValue value_ )
 	{
-		typename dataTraits<valueType>::scalarDataType value = dataTraits<valueType>::toScalarType( value_ );
+		typename dataTraits<TValue>::scalarDataType value = dataTraits<TValue>::toScalarType( value_ );
 		if ( value < theMinimum )	
 			theMinimum = value;
 		if ( value > theMaximum )	
 			theMaximum = value;			
 	}
 private:
-	typename dataTraits<valueType>::scalarDataType theMinimum;
-	typename dataTraits<valueType>::scalarDataType theMaximum;
+	typename SDataTraits<TValue>::TScalarDataType theMinimum;
+	typename SDataTraits<TValue>::TScalarDataType theMaximum;
 };
 
 }

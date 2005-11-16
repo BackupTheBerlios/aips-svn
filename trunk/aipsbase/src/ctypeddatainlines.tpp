@@ -22,8 +22,8 @@
  * \param extentArr_ Extends of field dimensions
  * \param dataDimensionSize_ Dimension of each field entry (for nonscalar fields)
  */
-template<typename valueType>
-CTypedData<valueType>::CTypedData( const ushort usDimension_, const size_t* extentArr_,
+template<typename TValue>
+CTypedData<TValue>::CTypedData( const ushort usDimension_, const size_t* extentArr_,
   const size_t dataDimensionSize_ ) throw() 
 	: CDataSet( usDimension_, extentArr_, dataDimensionSize_, "CTypedData", CTYPEDDATA_VERSION, 
 	"CDataSet" )
@@ -34,8 +34,8 @@ CTypedData<valueType>::CTypedData( const ushort usDimension_, const size_t* exte
     arraySize *= extentVec[i];
   arraySize *= dataDimensionSize;
   dataVec.resize( arraySize );
-  memset( &dataVec[0], 0, arraySize * sizeof( valueType ) );
-  setDataRange( traitType::ZERO, traitType::ONE );
+  memset( &dataVec[0], 0, arraySize * sizeof( TValue ) );
+  setDataRange( TTrait::ZERO, TTrait::ONE );
 }
 
 /**
@@ -43,8 +43,8 @@ CTypedData<valueType>::CTypedData( const ushort usDimension_, const size_t* exte
  * \param extentVec_ Extends of field dimensions
  * \param dataDimensionSize_ Dimension of each field entry (for nonscalar fields)
  */
-template<typename valueType> 
-CTypedData<valueType>::CTypedData( const ushort usDimension_,
+template<typename TValue>
+CTypedData<TValue>::CTypedData( const ushort usDimension_,
   const std::vector<size_t> extentVec_, const size_t dataDimensionSize_ ) throw()
   : CDataSet( usDimension_, extentVec_, dataDimensionSize_, "CTypedData", CTYPEDDATA_VERSION,
   "CDataSet" )
@@ -55,8 +55,8 @@ CTypedData<valueType>::CTypedData( const ushort usDimension_,
     arraySize *= extentVec[i];
   arraySize *= dataDimensionSize;
   dataVec.resize( arraySize );
-  memset( &dataVec[0], 0, arraySize * sizeof( valueType ) );
-  setDataRange( traitType::ZERO, traitType::ONE );
+  memset( &dataVec[0], 0, arraySize * sizeof( TValue ) );
+  setDataRange( TTrait::ZERO, TTrait::ONE );
 }
 
 /**
@@ -64,23 +64,23 @@ CTypedData<valueType>::CTypedData( const ushort usDimension_,
  * \param extent_ extent of field dimension
  * \param dataDimensionSize_ Dimension of each field entry (for nonscalar fields)
  */
-template<typename valueType> 
-CTypedData<valueType>::CTypedData( const size_t extent_, const size_t dataDimensionSize_ ) throw()
+template<typename TValue>
+CTypedData<TValue>::CTypedData( const size_t extent_, const size_t dataDimensionSize_ ) throw()
 	: CDataSet( extent_, dataDimensionSize_, "CTypedData", CTYPEDDATA_VERSION,
 	"CDataSet" )
 {
 	arraySize = extent_;
 	arraySize *= dataDimensionSize;
   dataVec.resize( arraySize );
-  memset( &dataVec[0], 0, arraySize * sizeof( valueType ) );
-  setDataRange( traitType::ZERO, traitType::ONE );
+  memset( &dataVec[0], 0, arraySize * sizeof( TValue ) );
+  setDataRange( TTrait::ZERO, TTrait::ONE );
 }
 
 /**
  * \param aDataSet Object to copy
  */
-template<typename valueType> 
-CTypedData<valueType>::CTypedData ( const CTypedData<valueType>& aDataSet ) throw()
+template<typename TValue>
+CTypedData<TValue>::CTypedData ( const CTypedData<TValue>& aDataSet ) throw()
   : CDataSet( aDataSet.usDimension, aDataSet.extentVec, aDataSet.dataDimensionSize, 
 		"CTypedData", CTYPEDDATA_VERSION, "CDataSet" )
 {
@@ -88,12 +88,10 @@ CTypedData<valueType>::CTypedData ( const CTypedData<valueType>& aDataSet ) thro
   dataVec.resize( arraySize );
   dataVec = aDataSet.dataVec;
   theDataRange = aDataSet.theDataRange;
-//   theMaximum = aDataSet.theMaximum;
-//   theMinimum = aDataSet.theMinimum;  
 }
 
-template<typename valueType> 
-CTypedData<valueType>::~CTypedData() throw()
+template<typename TValue>
+CTypedData<TValue>::~CTypedData() throw()
 {
   dataVec.clear();
 }
@@ -105,9 +103,9 @@ CTypedData<valueType>::~CTypedData() throw()
 /**
  * \param aDataSet new value set
  */
-template<typename valueType> inline 
-CTypedData<valueType>& CTypedData<valueType>::operator=
-  ( const CTypedData<valueType> &aDataSet ) throw()
+template<typename TValue> inline
+CTypedData<TValue>& CTypedData<TValue>::operator=
+  ( const CTypedData<TValue> &aDataSet ) throw()
 {
   if ( &aDataSet == this ) return *this;
 
@@ -115,8 +113,6 @@ CTypedData<valueType>& CTypedData<valueType>::operator=
   dataDimensionSize = aDataSet.dataDimensionSize;
   extentVec = aDataSet.extentVec;
   theDataRange = aDataSet.theDataRange;
-//   theMaximum = aDataSet.theMaximum;
-//   theMinimum = aDataSet.theMinimum;  
   arraySize = aDataSet.arraySize;
   dataVec.resize( arraySize );
   dataVec.assign( aDataSet.dataVec.begin(), aDataSet.dataVec.end() );  
@@ -127,9 +123,9 @@ CTypedData<valueType>& CTypedData<valueType>::operator=
  * All field elements will be set to newDefault.
  * \param newDefault The new value for all data set elements
  */
-template<typename valueType> inline 
-CTypedData<valueType>& CTypedData<valueType>::operator=
-  ( const valueType newDefault ) throw()
+template<typename TValue> inline
+CTypedData<TValue>& CTypedData<TValue>::operator=
+  ( const TValue newDefault ) throw()
 {
   for ( ulong i = 0; i < arraySize; i++ )
   {
@@ -143,10 +139,10 @@ CTypedData<valueType>& CTypedData<valueType>::operator=
  *************/
 
 /** \returns the type of the data objects stored inside the dataset */
-template<typename valueType> inline
-const std::type_info& CTypedData<valueType>::getType() const throw()
+template<typename TValue> inline
+const std::type_info& CTypedData<TValue>::getType() const throw()
 {
-  return typeid( valueType );
+  return typeid( TValue );
 }
 
 /**
@@ -157,8 +153,8 @@ const std::type_info& CTypedData<valueType>::getType() const throw()
  * \param usW w-coordinate of element
  * \returns value of the indexed element
  */
-template<typename valueType> inline 
-const valueType& CTypedData<valueType>::get( const ushort usX, const ushort usY, const ushort usZ,
+template<typename TValue> inline
+const TValue& CTypedData<TValue>::get( const ushort usX, const ushort usY, const ushort usZ,
 	const ushort usW ) const throw(OutOfRangeException)
 {
   if ( usX > extentVec[0] || usY > extentVec[1] || usZ > extentVec[2] || usW > extentVec[3] )
@@ -171,8 +167,8 @@ const valueType& CTypedData<valueType>::get( const ushort usX, const ushort usY,
  * \param usChannel data channel to be retrieved ( ignore for scalar data )
  * \returns a typed handle to the data array
  */
-template<typename valueType> inline 
-valueType* CTypedData<valueType>::getArray( ushort usChannel ) throw( OutOfRangeException )
+template<typename TValue> inline
+TValue* CTypedData<TValue>::getArray( ushort usChannel ) throw( OutOfRangeException )
 {
   if ( usChannel >= dataDimensionSize )
     throw( OutOfRangeException( SERROR("Data dimension out of range"),
@@ -181,45 +177,25 @@ valueType* CTypedData<valueType>::getArray( ushort usChannel ) throw( OutOfRange
 }
 
 /** \returns a void handle to the data array */
-template<typename valueType> inline
-void* CTypedData<valueType>::getVoidArray() throw()
+template<typename TValue> inline
+void* CTypedData<TValue>::getVoidArray() throw()
 {
   return static_cast<void*>( &( dataVec[0] ) );
 }
 
 /** \returns the size of the internal Array (no. of elements) */
-template<typename valueType> inline 
-ulong CTypedData<valueType>::getArraySize() const throw()
+template<typename TValue> inline
+ulong CTypedData<TValue>::getArraySize() const throw()
 {
   return arraySize;
 }
 
 /** \returns the size of the data block (in bytes) */
-template<typename valueType> inline 
-ulong CTypedData<valueType>::getDataSize() const throw()
+template<typename TValue> inline
+ulong CTypedData<TValue>::getDataSize() const throw()
 {
-	return arraySize * sizeof( valueType );
+	return arraySize * sizeof( TValue );
 }
-
-/**
- * Only works if minimum was set with setMinimum() before, otherwise the return value is undefined.
- * \returns the minimum value of the dataset.
- */
-// template<typename valueType> inline 
-// const valueType& CTypedData<valueType>::getMinimum() const throw()
-// {
-//   return theMinimum;
-// }
-
-/**
- * Only works if maximum was set with setMaximum() before, otherwise the return value is undefined.
- * \returns the maximum value of the dataset.
- */
-// template<typename valueType> inline 
-// const valueType& CTypedData<valueType>::getMaximum() const throw()
-// {
-//   return theMaximum;
-// }
 
 /************
  * Mutators *
@@ -234,50 +210,48 @@ ulong CTypedData<valueType>::getDataSize() const throw()
  * \param usW w-coordinate of element
  * \returns value of the indexed element
  */
-template<typename valueType> inline 
-valueType& CTypedData<valueType>::set( const ushort usX, const ushort usY, const ushort usZ, 
-	const ushort usW, const valueType newValue ) throw(OutOfRangeException)
+template<typename TValue> inline
+TValue& CTypedData<TValue>::set( const ushort usX, const ushort usY, const ushort usZ,
+	const ushort usW, const TValue newValue ) throw(OutOfRangeException)
 {
   if ( usX > extentVec[0] || usY > extentVec[1] || usZ > extentVec[2] || usW > extentVec[3] )
     throw( OutOfRangeException( SERROR( "Index out of range"), CException::RECOVER, ERR_BADCOORDS ) );
   dataVec[usX + usY * extentVec[0] + usZ * extentVec[0] * extentVec[1]
     + usW * extentVec[0] * extentVec[1] * extentVec[2]] = newValue;
   theDataRange.updateRange( newValue );
-//   if ( newValue < theMinimum ) theMinimum = newValue;
-//   if ( newValue > theMaximum ) theMaximum = newValue;
 }
 
 /**
  * \param newMinimum the new Minimum
  */
-template<typename valueType> inline 
-void CTypedData<valueType>::setMinimum( const valueType newMinimum ) throw()
+template<typename TValue> inline
+void CTypedData<TValue>::setMinimum( const TValue newMinimum ) throw()
 {
-  //theMinimum = dataTraits<valueType>::toScalarType( newMinimum );
+  //theMinimum = SDataTraits<TValue>::toScalarType( newMinimum );
   theDataRange.setMinimum( newMinimum );
 }
 
 /**
  * \param newMaximum the new Maximum
  */
-template<typename valueType> inline 
-void CTypedData<valueType>::setMaximum( const valueType newMaximum ) throw()
+template<typename TValue> inline
+void CTypedData<TValue>::setMaximum( const TValue newMaximum ) throw()
 {
-  //theMaximum = dataTraits<valueType>::toScalarType( newMaximum );
+  //theMaximum = SDataTraits<TValue>::toScalarType( newMaximum );
   theDataRange.setMaximum( newMaximum );
 }
 
 	/// Set a new minimum and maximum at once
-template<typename valueType> inline 
-void CTypedData<valueType>::setDataRange( const valueType newMinimum, const valueType newMaximum ) throw()
+template<typename TValue> inline
+void CTypedData<TValue>::setDataRange( const TValue newMinimum, const TValue newMaximum ) throw()
 {
 	setMaximum( newMaximum );
 	setMinimum( newMinimum );
 }
 
 /// Adjust range so that the given value lies definitely in data range
-template<typename valueType> inline 
-void CTypedData<valueType>::adjustDataRange( const valueType theValue ) throw()
+template<typename TValue> inline
+void CTypedData<TValue>::adjustDataRange( const TValue theValue ) throw()
 {
 	theDataRange.updateRange( theValue );
 /*	if ( theValue > theMaximum )
@@ -290,15 +264,15 @@ void CTypedData<valueType>::adjustDataRange( const valueType theValue ) throw()
  * \param extentArr_ Array of new dataset extents
  * \param alignment Alignment of old data in the new dataset
  */
-template<typename valueType> inline 
-void CTypedData<valueType>::resize( const size_t* extentArr_, const EDataAlign 
+template<typename TValue> inline
+void CTypedData<TValue>::resize( const size_t* extentArr_, const EDataAlign
 	alignment ) throw()
 {
 	size_t newArraySize = 1;
   for ( ushort i = 0; i < usDimension; i++ )
     newArraySize *= extentArr_[i];
   newArraySize *= dataDimensionSize;	
-  std::vector<valueType> newDataVec( arraySize );
+  std::vector<TValue> newDataVec( arraySize );
 	size_t maxExtent[usDimension];
 	for( size_t dims = 0; dims < dataDimensionSize; ++dims )
 	{
@@ -327,15 +301,15 @@ void CTypedData<valueType>::resize( const size_t* extentArr_, const EDataAlign
  * \param extentVec_ Vector of new dataset extents
  * \param alignment Alignment of old data in the new dataset
  */
-template<typename valueType> inline 
-void CTypedData<valueType>::resize( const std::vector<size_t> extentVec_,
+template<typename TValue> inline
+void CTypedData<TValue>::resize( const std::vector<size_t> extentVec_,
 	const EDataAlign alignment )	throw()
 {
 	size_t newArraySize = 1;
   for ( ushort i = 0; i < usDimension; i++ )
     newArraySize *= extentVec_[i];
   newArraySize *= dataDimensionSize;	
-  std::vector<valueType> newDataVec( arraySize );
+  std::vector<TValue> newDataVec( arraySize );
 	size_t maxExtent[usDimension];
 	for( size_t dims = 0; dims < dataDimensionSize; ++dims )
 	{
@@ -363,8 +337,8 @@ void CTypedData<valueType>::resize( const std::vector<size_t> extentVec_,
 /**
  * \param addToDataDimension Increase of dimension
  */
-template<typename valueType> inline 
-void CTypedData<valueType>::increaseDataDimension( const size_t addToDataDimension ) throw()
+template<typename TValue> inline
+void CTypedData<TValue>::increaseDataDimension( const size_t addToDataDimension ) throw()
 {
 	if ( addToDataDimension == 0 ) 
 		return;
@@ -378,10 +352,10 @@ void CTypedData<valueType>::increaseDataDimension( const size_t addToDataDimensi
 /**
  * \param subFromDataDimension Decrease of dimension
  */
-template<typename valueType> inline 
-void CTypedData<valueType>::decreaseDataDimension( const size_t subFromDataDimension ) throw()
+template<typename TValue> inline
+void CTypedData<TValue>::decreaseDataDimension( const size_t subFromDataDimension ) throw()
 {
-	typedef typename std::vector<valueType>::iterator localIterator;
+	typedef typename std::vector<TValue>::iterator localIterator;
 	
 	if ( subFromDataDimension == 0 ) 
 		return;
@@ -389,7 +363,7 @@ void CTypedData<valueType>::decreaseDataDimension( const size_t subFromDataDimen
 	for( uint i = 0; i < usDimension; ++i )
 		dimensionSize *= getExtent( i );
 	dataDimensionSize -= subFromDataDimension;	
-	std::vector<valueType> newDataVec( dimensionSize * dataDimensionSize );
+	std::vector<TValue> newDataVec( dimensionSize * dataDimensionSize );
 	localIterator newIt = newDataVec.begin();
 	localIterator oldIt = dataVec.begin();
 	while( newIt != newDataVec.end() )
@@ -409,8 +383,8 @@ void CTypedData<valueType>::decreaseDataDimension( const size_t subFromDataDimen
  * \param usX index of element
  * \returns a reference to the indexed element
  */
-template<typename valueType> inline 
-valueType& CTypedData<valueType>::operator()( const ushort usX ) throw()
+template<typename TValue> inline
+TValue& CTypedData<TValue>::operator()( const ushort usX ) throw()
 {
   return dataVec[usX];
 }
@@ -421,8 +395,8 @@ valueType& CTypedData<valueType>::operator()( const ushort usX ) throw()
  * \param usY y-coordinate of element
  * \returns a reference to the indexed element
  */
-template<typename valueType> inline 
-valueType& CTypedData<valueType>::operator()( const ushort usX, const ushort usY ) throw()
+template<typename TValue> inline
+TValue& CTypedData<TValue>::operator()( const ushort usX, const ushort usY ) throw()
 {
   return dataVec[usX + usY * extentVec[0]];
 }
@@ -434,8 +408,8 @@ valueType& CTypedData<valueType>::operator()( const ushort usX, const ushort usY
  * \param usZ z-coordinate of element
  * \returns a reference to the indexed element
  */
-template<typename valueType> inline 
-valueType& CTypedData<valueType>::operator()( const ushort usX, const ushort usY, 
+template<typename TValue> inline
+TValue& CTypedData<TValue>::operator()( const ushort usX, const ushort usY,
 	const ushort usZ ) throw()
 {
   return dataVec[usX + usY * extentVec[0] + usZ * extentVec[0] * extentVec[1]];
@@ -449,8 +423,8 @@ valueType& CTypedData<valueType>::operator()( const ushort usX, const ushort usY
  * \param usW w-coordinate of element
  * \returns a reference to the indexed element
  */
-template<typename valueType> inline 
-valueType& CTypedData<valueType>::operator()( const ushort usX, const ushort usY, 
+template<typename TValue> inline
+TValue& CTypedData<TValue>::operator()( const ushort usX, const ushort usY,
 	const ushort usZ, const ushort usW ) throw()
 {
   return dataVec[usX + usY * extentVec[0] + usZ * extentVec[0] * extentVec[1]
@@ -462,8 +436,8 @@ valueType& CTypedData<valueType>::operator()( const ushort usX, const ushort usY
  * \param usX x-coordinate of element
  * \returns a reference to the indexed element
  */
-template<typename valueType> inline 
-const valueType& CTypedData<valueType>::operator()( const ushort usX ) const throw()
+template<typename TValue> inline
+const TValue& CTypedData<TValue>::operator()( const ushort usX ) const throw()
 {
   return dataVec[usX];
 }
@@ -474,8 +448,8 @@ const valueType& CTypedData<valueType>::operator()( const ushort usX ) const thr
  * \param usY y-coordinate of element
  * \returns a reference to the indexed element
  */
-template<typename valueType> inline 
-const valueType& CTypedData<valueType>::operator()( const ushort usX, const ushort usY ) 
+template<typename TValue> inline
+const TValue& CTypedData<TValue>::operator()( const ushort usX, const ushort usY )
 	const throw()
 {
   return dataVec[usX + usY * extentVec[0]];
@@ -488,8 +462,8 @@ const valueType& CTypedData<valueType>::operator()( const ushort usX, const usho
  * \param usZ z-coordinate of element
  * \returns a reference to the indexed element
  */
-template<typename valueType> inline 
-const valueType& CTypedData<valueType>::operator()( const ushort usX, const ushort usY, 
+template<typename TValue> inline
+const TValue& CTypedData<TValue>::operator()( const ushort usX, const ushort usY,
 	const ushort usZ ) const throw()
 {
   return dataVec[usX + usY * extentVec[0] + usZ * extentVec[0] * extentVec[1]];
@@ -503,8 +477,8 @@ const valueType& CTypedData<valueType>::operator()( const ushort usX, const usho
  * \param usW w-coordinate of element
  * \returns a reference to the indexed element
  */
-template<typename valueType> inline 
-const valueType& CTypedData<valueType>::operator()( const ushort usX, const ushort usY, 
+template<typename TValue> inline
+const TValue& CTypedData<TValue>::operator()( const ushort usX, const ushort usY,
 	const ushort usZ, const ushort usW ) const throw()
 {
   return dataVec[usX + usY * extentVec[0] + usZ * extentVec[0] * extentVec[1]
@@ -512,15 +486,15 @@ const valueType& CTypedData<valueType>::operator()( const ushort usX, const usho
 }
 
 /** \param ulIndex index to retrieve */
-template<typename valueType> inline 
-valueType& CTypedData<valueType>::operator[]( const ulong ulIndex ) throw()
+template<typename TValue> inline
+TValue& CTypedData<TValue>::operator[]( const ulong ulIndex ) throw()
 {
 	return dataVec[ ulIndex ];
 }
 
 /** \param ulIndex index to retrieve */
-template<typename valueType> inline 
-const valueType& CTypedData<valueType>::operator[]( const ulong ulIndex ) const throw()
+template<typename TValue> inline
+const TValue& CTypedData<TValue>::operator[]( const ulong ulIndex ) const throw()
 {
 	return dataVec[ ulIndex ];
 }		
@@ -529,7 +503,7 @@ const valueType& CTypedData<valueType>::operator[]( const ulong ulIndex ) const 
  * Other methods *
  *****************/
 
-template<typename valueType> const std::string CTypedData<valueType>::dump() const throw()
+template<typename TValue> const std::string CTypedData<TValue>::dump() const throw()
 {
   std::ostringstream os;
   os << "ulArraySize: " << arraySize << " dataVec ptr : " << &dataVec 
@@ -540,8 +514,8 @@ template<typename valueType> const std::string CTypedData<valueType>::dump() con
 /**
  * \param aDataSet the other data set
  */
-template<typename valueType> inline 
-void CTypedData<valueType>::swap( CTypedData<valueType>& aDataSet ) throw()
+template<typename TValue> inline
+void CTypedData<TValue>::swap( CTypedData<TValue>& aDataSet ) throw()
 {
 // 	std::swap( theMinimum, aDataSet.theMinimum );
 // 	std::swap( theMaximum, aDataSet.theMaximum );
@@ -562,29 +536,29 @@ void CTypedData<valueType>::swap( CTypedData<valueType>& aDataSet ) throw()
  *******************************/
 
 /** \returns iterator for begin of array */
-template<typename valueType> inline
-typename CTypedData<valueType>::iterator CTypedData<valueType>::begin() throw()
+template<typename TValue> inline
+typename CTypedData<TValue>::iterator CTypedData<TValue>::begin() throw()
 {
   return ( iterator( &dataVec[0], this ) );
 }
 
 /** \returns iterator for end of array */
-template<typename valueType> inline
-typename CTypedData<valueType>::iterator CTypedData<valueType>::end() throw()
+template<typename TValue> inline
+typename CTypedData<TValue>::iterator CTypedData<TValue>::end() throw()
 {
   return ( iterator( &dataVec[0]+arraySize, this ) );
 }
 
 /** \returns reverse iterator for begin of array */
-template<typename valueType> inline
-typename CTypedData<valueType>::reverse_iterator CTypedData<valueType>::rbegin() throw()
+template<typename TValue> inline
+typename CTypedData<TValue>::reverse_iterator CTypedData<TValue>::rbegin() throw()
 {
   return ( reverse_iterator( end() ) );
 }
 
 /** \returns reverse iterator for end of array */
-template<typename valueType> inline
-typename CTypedData<valueType>::reverse_iterator CTypedData<valueType>::rend() throw()
+template<typename TValue> inline
+typename CTypedData<TValue>::reverse_iterator CTypedData<TValue>::rend() throw()
 {
   return ( reverse_iterator( begin() ) );
 }
@@ -593,8 +567,8 @@ typename CTypedData<valueType>::reverse_iterator CTypedData<valueType>::rend() t
  * \returns an iterator to the given position 
  * \param usX position in 1D - dataset
  */
-template<typename valueType> inline
-typename CTypedData<valueType>::iterator CTypedData<valueType>::moveTo( const ushort usX ) throw()
+template<typename TValue> inline
+typename CTypedData<TValue>::iterator CTypedData<TValue>::moveTo( const ushort usX ) throw()
 {
 	return iterator( &dataVec[usX], this );
 }
@@ -604,8 +578,8 @@ typename CTypedData<valueType>::iterator CTypedData<valueType>::moveTo( const us
  * \param usX position in 1D - dataset
  * \param usY position in 1D - dataset
  */
-template<typename valueType> inline
-typename CTypedData<valueType>::iterator CTypedData<valueType>::moveTo( const ushort usX, 
+template<typename TValue> inline
+typename CTypedData<TValue>::iterator CTypedData<TValue>::moveTo( const ushort usX,
 	const ushort usY ) throw()
 {
 	return iterator( &dataVec[usX+usY*extentVec[0]], this );
@@ -617,8 +591,8 @@ typename CTypedData<valueType>::iterator CTypedData<valueType>::moveTo( const us
  * \param usY position in 1D - dataset
  * \param usZ position in 1D - dataset
  */
-template<typename valueType> inline
-typename CTypedData<valueType>::iterator CTypedData<valueType>::moveTo( const ushort usX, 
+template<typename TValue> inline
+typename CTypedData<TValue>::iterator CTypedData<TValue>::moveTo( const ushort usX,
 	const ushort usY,	const ushort usZ ) throw()
 {
 	return iterator( &dataVec[usX+usY*extentVec[0]+usZ*extentVec[0]*extentVec[1]], this );
@@ -631,37 +605,11 @@ typename CTypedData<valueType>::iterator CTypedData<valueType>::moveTo( const us
  * \param usZ position in 1D - dataset
  * \param usW position in 1D - dataset
  */
-template<typename valueType> inline
-typename CTypedData<valueType>::iterator CTypedData<valueType>::moveTo( const ushort usX, 
+template<typename TValue> inline
+typename CTypedData<TValue>::iterator CTypedData<TValue>::moveTo( const ushort usX,
 	const ushort usY,	const ushort usZ, const ushort usW ) throw()
 {
 	return iterator( &dataVec[usX+usY*extentVec[0]+usZ*extentVec[0]*extentVec[1]
 		+usW*extentVec[0]*extentVec[1]*extentVec[2]], this );
 }
-
-/*********************************
- * CTypedData::TypedDataIterator *
- *********************************/
-
-/**
- * \param iterator iterator to move
- * \param amount amount to move iterator by (gets added to iterator position)
- */
-// template<typename T, typename U>
-// CTypedData<T>::TypedDataIterator<T,U> operator+( CTypedData<T>::TypedDataIterator<T,U> anIterator,
-// 	ptrdiff_t amount )
-// {
-// 	return CTypedData<T>::TypedDataIterator<T,U>( &(*anIterator) + amount, anIterator.getParent() );
-// }
-
-/**
- * \param iterator iterator to move
- * \param amount amount to move iterator by (gets subtracted from iterator position)
- */
-// template<typename T, typename U>
-// CTypedData<T>::TypedDataIterator<T,U> operator-( CTypedData<T>::TypedDataIterator<T,U> anIterator, 
-// 	ptrdiff_t amount )
-// {
-// 	return CTypedData<T>::TypedDataIterator<T,U>( &(*anIterator) - amount, anIterator.getParent() );
-// }
 

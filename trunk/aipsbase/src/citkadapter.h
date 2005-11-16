@@ -54,7 +54,7 @@ public:
   virtual ~CITKAdapter()
     throw();
 /* Accessors */
-  /// Sets the external data pointer to the given dataset (short input)
+  /// Sets the external data pointer to the given dataset
   template<typename itkImageType>
   void setExternalData( typename itkImageType::Pointer anImage )
     throw( NullException ); 
@@ -70,6 +70,9 @@ private:
   /// Template function to do the actual conversion
   template<typename internalDataType, typename itkImageType, typename dataType>
   typename itkImageType::Pointer doActualConversion()
+    throw();
+  template<typename internalDataType, typename itkImageType, typename dataType>
+  typename itkImageType::Pointer setExternalToInternalData( uint uiDimensions, size_t* dims, uint dataDimension )
     throw();
 };
 

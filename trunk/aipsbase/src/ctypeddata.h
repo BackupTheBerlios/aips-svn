@@ -36,6 +36,9 @@
  *          2005-05-23 Added constructor for 1D-datasets                *
  *                     Added methods setDataRange() and                 *
  *                      adjustDataRange()                               *
+ *          2005-11-16 Added CRangeData support. Removed getMinimum     *
+ *                      and getMaximum. Added convenience functions     *
+ *                      for data range and convenience types            *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -61,15 +64,15 @@ namespace aips {
 /**
  * A dataset representing a multidimensional array of a specific type
  */
-template<typename valueType>
+template<typename TValue>
 class CTypedData : public CDataSet
 {
 private:
 	/// Standard constructor
 	CTypedData();
 public:
- 	typedef valueType dataType;
- 	typedef dataTraits<valueType> traitType;
+ 	typedef TValue TData;
+ 	typedef SDataTraits<TValue> TTrait;
 
 	/// Enumeration types
 	enum EDataAlign { DataAlignFront = 0, DataAlignCenter, DataAlignBack };
@@ -83,27 +86,27 @@ public:
   /// Constructor
   CTypedData( const size_t extent_, const size_t dataDimensionSize_ = 1) throw();
   /// Copy constructor
-  CTypedData( const CTypedData<valueType>& otherDataSet )
+  CTypedData( const CTypedData<TValue>& otherDataSet )
     throw();
   /// Destructor
   virtual ~CTypedData()
     throw();
 /* Operators (non-access) */
   /// Operator=
-  inline CTypedData<valueType>& operator=( const CTypedData<valueType> &otherDataSet )
+  inline CTypedData<TValue>& operator=( const CTypedData<TValue> &otherDataSet )
     throw();
   /// Operator= to set all field values to a new default value
-  inline CTypedData<valueType>& operator=( const valueType newDefault )
+  inline CTypedData<TValue>& operator=( const TValue newDefault )
     throw();
 /* Accessors */
   /// Returns the data type of the stored elements
   virtual const std::type_info& getType() const
     throw();
   /// Constant access operator with range checking
-  inline const valueType& get( const ushort usX, const ushort usY, const ushort usZ,
+  inline const TValue& get( const ushort usX, const ushort usY, const ushort usZ,
     const ushort usW ) const throw(OutOfRangeException);
   /// Returns a typed handle to the data array
-  inline valueType* getArray( ushort usChannel = 0 )
+  inline TValue* getArray( ushort usChannel = 0 )
     throw( OutOfRangeException );
   /// Returns a void handle to the data array
   virtual void* getVoidArray() throw();
@@ -113,29 +116,23 @@ public:
 	/// Returns the size of the data block (in bytes)
 	inline ulong getDataSize() const
 		throw();
-  /// Returns the field minimum value
-/*  inline const valueType& getMinimum() const
-    throw();*/
-  /// Returns the field maximum value
-/*  inline const valueType& getMaximum() const
-    throw();*/
 /* Mutators */
   /// Access operator with range checking and automatic min/max assignment
-  inline valueType& set( const ushort usX, const ushort usY, const ushort usZ, const ushort usW,
-    const valueType newValue ) throw(OutOfRangeException);
+  inline TValue& set( const ushort usX, const ushort usY, const ushort usZ, const ushort usW,
+    const TValue newValue ) throw(OutOfRangeException);
   /// Sets a new minimum value for the field
-  inline void setMinimum( const valueType newMinimum )
+  inline void setMinimum( const TValue newMinimum )
     throw();
   /// Sets a new maximum value for the field
-  inline void setMaximum( const valueType newMaximum )
+  inline void setMaximum( const TValue newMaximum )
     throw();
 	/// Set a new minimum and maximum at once
-  inline void setDataRange( const valueType newMinimum, const valueType newMaximum )
+  inline void setDataRange( const TValue newMinimum, const TValue newMaximum )
     throw();
   /// Adjust range so that the given value lies definitely in data range
-  inline void adjustDataRange( const valueType theValue )
+  inline void adjustDataRange( const TValue theValue )
     throw();  
-  inline bool isInDataRange( const valueType theValue )
+  inline bool isInDataRange( const TValue theValue )
   	throw()
   {
   	return theDataRange.isInRange( theValue );
@@ -154,34 +151,34 @@ public:
 		throw();
 /* Access operators */
   /// Access operator without range checking (1D)
-  inline valueType& operator()( const ushort usX )
+  inline TValue& operator()( const ushort usX )
     throw();
   /// Access operator without range checking (2D)
-  inline valueType& operator()( const ushort usX, const ushort usY )
+  inline TValue& operator()( const ushort usX, const ushort usY )
     throw();
   /// Access operator without range checking (3D)
-  inline valueType& operator()( const ushort usX, const ushort usY, const ushort usZ )
+  inline TValue& operator()( const ushort usX, const ushort usY, const ushort usZ )
     throw();
   /// Access operator without range checking (4D)
-  inline valueType& operator()( const ushort usX, const ushort usY, const ushort usZ,
+  inline TValue& operator()( const ushort usX, const ushort usY, const ushort usZ,
     const ushort usW ) throw();
   /// Constant access operator without range checking (1D)
-  inline const valueType& operator()( const ushort usX ) const
+  inline const TValue& operator()( const ushort usX ) const
     throw();
   /// Constant access operator without range checking (2D)
-  inline const valueType& operator()( const ushort usX, const ushort usY ) const
+  inline const TValue& operator()( const ushort usX, const ushort usY ) const
     throw();
   /// Constant access operator without range checking (3D)
-  inline const valueType& operator()( const ushort usX, const ushort usY, const ushort usZ )
+  inline const TValue& operator()( const ushort usX, const ushort usY, const ushort usZ )
     const throw();
   /// Constant access operator without range checking (4D)
-  inline const valueType& operator()( const ushort usX, const ushort usY,
+  inline const TValue& operator()( const ushort usX, const ushort usY,
     const ushort usZ, const ushort usW ) const
     throw();
 	/// Operator[] for C-Style array access to the dataset
-  valueType& operator[]( const ulong ulIndex ) throw();
+  TValue& operator[]( const ulong ulIndex ) throw();
   /// Const access operator[] for C-Style array access to the dataset 
-  const valueType& operator[]( const ulong ulIndex ) const throw();
+  const TValue& operator[]( const ulong ulIndex ) const throw();
 /* Iterators */
 	/** An random iterator for CTypedData */
 	template<typename T, typename U > class TypedDataIterator 
@@ -451,9 +448,9 @@ public:
 	
 	/* Iterator definitions */
 	/// Normal iterator
-	typedef TypedDataIterator<valueType, valueType*> iterator;
+	typedef TypedDataIterator<TValue, TValue*> iterator;
 	/// Reverse iterator
-  typedef std::reverse_iterator<TypedDataIterator<valueType, valueType*> > reverse_iterator;
+  typedef std::reverse_iterator<TypedDataIterator<TValue, TValue*> > reverse_iterator;
 
 /* Iterator generating methods */
   iterator begin() throw();
@@ -477,19 +474,19 @@ public:
   virtual const std::string dump() const
     throw();
 	/// Swaps the data with another data set of the same type
-	void swap( CTypedData<valueType>& aDataSet ) 
+	void swap( CTypedData<TValue>& aDataSet )
 		throw();
-	CDataRange<valueType,dataTraits<valueType>::isScalar> getDataRange() { return theDataRange; }
-	void setDataRange( const CDataRange<valueType,dataTraits<valueType>::isScalar>& aDataRange) 
+	CDataRange<TValue,CDataTraits<TValue>::isScalar> getDataRange() { return theDataRange; }
+	void setDataRange( const CDataRange<TValue,CDataTraits<TValue>::isScalar>& aDataRange)
 	{ 
 		theDataRange = aDataRange;
 	}
 private:
   size_t arraySize;               ///< Size of the data array (no. of elements)
-  std::vector<valueType> dataVec; ///< The data array
+  std::vector<TValue> dataVec; ///< The data array
 //  scalarType theMinimum; ///< Dataset minimum value
 //  scalarType theMaximum; ///< Dataset maximum value
-  CDataRange<valueType,dataTraits<valueType>::isScalar> theDataRange;
+  CDataRange<TValue,CDataTraits<TValue>::isScalar> theDataRange;
 };
 
 

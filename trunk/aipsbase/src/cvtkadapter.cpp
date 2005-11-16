@@ -38,15 +38,21 @@ CVTKAdapter::~CVTKAdapter() throw()
 {
 }
 
-void CVTKAdapter::setExternalData( vtkStructuredPoints* aVTKImage ) throw( NullException )
+void CVTKAdapter::setExternalData( vtkImageData* aVTKImage ) throw( NullException )
 {
+FBEGIN;
   if ( !aVTKImage )
     throw( NullException("No image given") );
-  externalDataPtr = aVTKImage;  
+/*  if ( externalDataPtr )
+    externalDataPtr->Delete();*/
+  externalDataPtr = aVTKImage;
+//   externalDataPtr->Register( NULL );
+FEND;  
 }
     
 TDataSetPtr CVTKAdapter::convertToInternal()
 {
+ FBEGIN;
   TDataSetPtr aDataSet;
   if ( !externalDataPtr )
   {
@@ -55,6 +61,7 @@ TDataSetPtr CVTKAdapter::convertToInternal()
   }
   
   int *iVtkVolumeDimensions = externalDataPtr->GetDimensions();
+DBG3( "VTK dimensions are " << iVtkVolumeDimensions[0] << " x " << iVtkVolumeDimensions[1] << " x " << iVtkVolumeDimensions[2] );
   std::vector<size_t> dimensionSize;
   dimensionSize.push_back( static_cast<size_t>( iVtkVolumeDimensions[0] ) );
   dimensionSize.push_back( static_cast<size_t>( iVtkVolumeDimensions[1] ) );
@@ -69,16 +76,19 @@ TDataSetPtr CVTKAdapter::convertToInternal()
   // Convert vtkDataArray to CDataSet
   if ( externalDataPtr->GetScalarType() == VTK_UNSIGNED_SHORT )
   {
+DBG3( "Data type is ushort" );
     vtkShortArray* myArray = static_cast<vtkShortArray*>( p->GetScalars() );
     aDataSet = this->convertVTKImage<short, TImage, vtkShortArray>( myArray, dimensionSize );
   }
   else if ( externalDataPtr->GetScalarType() == VTK_FLOAT )
   {
+DBG3( "Data type is float" );
     vtkFloatArray* myArray = static_cast<vtkFloatArray*>( p->GetScalars() );
     aDataSet = this->convertVTKImage<double, TField, vtkFloatArray>( myArray, dimensionSize );
   }
   else if ( externalDataPtr->GetScalarType() == VTK_DOUBLE )
   {
+DBG3( "Data type is double" );
     vtkDoubleArray* myArray = static_cast<vtkDoubleArray*>( p->GetScalars() );
     aDataSet = this->convertVTKImage<double, TField, vtkDoubleArray>( myArray, dimensionSize );
   }
@@ -94,8 +104,9 @@ TDataSetPtr CVTKAdapter::convertToInternal()
   #endif
   }
   // Clean up
-  externalDataPtr->Delete();
-  return aDataSet;
+  //externalDataPtr->Delete();
+ FEND;
+  return aDataSet; 
 }
 
 /**
@@ -106,13 +117,16 @@ TDataSetPtr CVTKAdapter::convertToInternal()
 template<typename TVar, typename TSet, typename TArray> 
   boost::shared_ptr<TSet> CVTKAdapter::convertVTKImage( TArray* aVtkArray, std::vector<size_t> dim ) const
 {
+FBEGIN;
   boost::shared_ptr<TSet> aSet ( new TSet( 3, dim ) );
+DBG3( "Internal data is " << aSet->getExtent(0) << " x " <<  aSet->getExtent(1) << " x " << aSet->getExtent(2) );
   vtkIdType max = aVtkArray->GetNumberOfTuples();
   typename TSet::iterator it = aSet->begin();
   for( vtkIdType id = 0; id < max; ++id, ++it )
   {
     *it = *( aVtkArray->GetPointer( id ) );
   }
+DBG3( "Setting data minima and maxima" );  
   aSet->setMinimum( std::numeric_limits<TVar>::max() );
   aSet->setMaximum( 0 );
   it = aSet->begin(); 
@@ -122,10 +136,11 @@ template<typename TVar, typename TSet, typename TArray>
   	aSet->adjustDataRange( *it );
     ++it;
   }
+FEND;
   return aSet;
 }
 
-vtkStructuredPoints* CVTKAdapter::convertToExternal() throw( NullException )
+vtkImageData* CVTKAdapter::convertToExternal() throw( NullException )
 {
   if ( !internalDataSPtr )
     throw( NullException( "No pointer to internal data set" ) );
@@ -141,7 +156,7 @@ vtkStructuredPoints* CVTKAdapter::convertToExternal() throw( NullException )
   size_t siz = dimensionSize[0] * dimensionSize[1] * dimensionSize[2];
 //cerr << dimensionSize[0] << " " << dimensionSize[1] << " " << dimensionSize[2] << endl;
   // Create vtk structured points structure
-  vtkStructuredPoints* sp = vtkStructuredPoints::New();
+  vtkImageData* sp = vtkImageData::New();
   sp->SetDimensions( dimensionSize[0], dimensionSize[1], dimensionSize[2] );
   if ( internalDataSPtr->getDimension() == 2 )
   {
@@ -159,17 +174,18 @@ vtkStructuredPoints* CVTKAdapter::convertToExternal() throw( NullException )
   sp->AllocateScalars();
   // Assign dataset to structured points
   vtkPointData* p=sp->GetPointData();
-  vtkUnsignedShortArray* sArray = NULL;
-  vtkDoubleArray* fArray = NULL;
+    
   if ( checkType<TField>( internalDataSPtr ) )
   {
+DBG3("Converting to double");
     TFieldPtr floatSet = boost::static_pointer_cast<TField>( internalDataSPtr );
-    fArray = vtkDoubleArray::New();
+    vtkDoubleArray* fArray = vtkDoubleArray::New();
     fArray->SetArray( floatSet->getArray(), siz, 1 );
     p->SetScalars( fArray );
   }
   else if ( checkType<TImage>( internalDataSPtr ) )
   {
+DBG3("Converting to short");    
     TImagePtr shortSet = boost::static_pointer_cast<TImage>( internalDataSPtr );
     TImage::iterator it = shortSet->begin();
     ushort* array = new ushort[siz];
@@ -179,10 +195,9 @@ vtkStructuredPoints* CVTKAdapter::convertToExternal() throw( NullException )
       *ot = static_cast<ushort>( *it );
       ++it; ++ot;
     }
-    sArray = vtkUnsignedShortArray::New();
-    sArray->SetArray( array, siz, 1 );
+    vtkUnsignedShortArray* sArray = vtkUnsignedShortArray::New();
+    sArray->SetArray( array, siz, 0 );
     p->SetScalars( sArray );
-    delete array;
   }
   else
   {

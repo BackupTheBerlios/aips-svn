@@ -22,6 +22,7 @@
 #include "vtkFloatArray.h"
 #include "vtkDoubleArray.h"
 #include "vtkStructuredPoints.h"
+#include "vtkImageData.h"
 
 namespace aips {
 
@@ -48,16 +49,16 @@ public:
     throw();
 /* Accessors */
   /// Sets the external data pointer to the given dataset (short input)
-  void setExternalData( vtkStructuredPoints* aVTKImage )
+  void setExternalData( vtkImageData* aVTKImage )
     throw( NullException );
 /* Other methods */
   /// Converts the external data into an internal representation
   virtual TDataSetPtr convertToInternal();
   /// Returns external short array representing our internal data  
-  vtkStructuredPoints* convertToExternal()
+  vtkImageData* convertToExternal()
     throw( NullException );
 private:
-  vtkStructuredPoints* externalDataPtr; ///< Pointer to external vtk image
+  vtkImageData* externalDataPtr; ///< Pointer to external vtk image
   /// Converts a given vtkDataArray into an AIPS image volume
  template<typename TVar, typename TSet, typename TArray>
   boost::shared_ptr<TSet> convertVTKImage( TArray* aVtkArray, std::vector<size_t> dim ) const;

@@ -23,17 +23,17 @@ namespace aips {
 /** 
  * Unspecialized trait template 
  * The following traits should be defined in any specialization
- * dataType (typedef) type used to store the value of a single data member
- * increasedRangeType (typedef) type used to temporarely store the value of a single data member.
+ * TData (typedef) type used to store the value of a single data member
+ * TIncreasedRange (typedef) type used to temporarely store the value of a single data member.
  *   This is usually of bigger range the voxelType
  */
 template<typename T> 
-struct dataTraits
+struct SDataTraits
 {		
-	typedef T dataType; //< This is the data type of a single element
-	typedef NullType increasedRangeType; //< This is a type to store element data of increased range
-	typedef dataType scalarDataType; //< This is the type to convert to after scalarization of more complex types
-	static scalarDataType toScalarType( const dataType& data );
+	typedef T TDataType; //< This is the data type of a single element
+	typedef NullType TIncreasedRangeType; //< This is a type to store element data of increased range
+	typedef TDataType TScalarDataType; //< This is the type to convert to after scalarization of more complex types
+	static TScalarDataType toScalarType( const TDataType& data );
 /*	const T One;
 	const T Zero;*/
 	enum { isScalar = false }; //< Is our data scalar
@@ -43,14 +43,14 @@ struct dataTraits
 
 /** Data traits for ushort datasets */
 template<>
-struct dataTraits<short>
+struct SDataTraits<short>
 {
-	typedef short dataType; //< This is the data type of a single element
-	typedef long increasedRangeType;
-/*	typedef dataType scalarDataType; //< This is the type to convert to after scalarization of more complex types
-	static scalarDataType toScalarType( const dataType& data ) { return data; }*/
-	static const dataType ONE;
-	static const dataType ZERO;
+	typedef short TDataType; //< This is the data type of a single element
+	typedef long TIncreasedRangeType;
+/*	typedef TDataType TScalarDataType; //< This is the type to convert to after scalarization of more complex types
+	static TScalarDataType toScalarType( const TDataType& data ) { return data; }*/
+	static const TDataType ONE;
+	static const TDataType ZERO;
 	enum { isScalar = true };
 	enum { isComparable = true };
 	enum { isNumeric = true };
@@ -58,14 +58,14 @@ struct dataTraits<short>
 
 /** Data traits for scalar integer data */
 template<>
-struct dataTraits<long>
+struct SDataTraits<long>
 {
-	typedef long dataType; //< This is the data type of a single element
-	typedef long increasedRangeType;
-// 	typedef dataType scalarDataType; //< This is the type to convert to after scalarization of more complex types
-// 	static scalarDataType toScalarType( const dataType& data ) { return data; }
-	static const dataType ONE;
-	static const dataType ZERO;
+	typedef long TDataType; //< This is the data type of a single element
+	typedef long TIncreasedRangeType;
+// 	typedef TDataType TScalarDataType; //< This is the type to convert to after scalarization of more complex types
+// 	static TScalarDataType toScalarType( const TDataType& data ) { return data; }
+	static const TDataType ONE;
+	static const TDataType ZERO;
 	enum { isScalar = true };
 	enum { isComparable = true };
 	enum { isNumeric = true };
@@ -73,14 +73,14 @@ struct dataTraits<long>
 
 /** Data traits for double datasets */
 template<>
-struct dataTraits<TFloatType>
+struct SDataTraits<TFloatType>
 {
-	typedef TFloatType dataType; //< This is the data type of a single element
-	typedef TFloatType increasedRangeType;
-/*	typedef dataType scalarDataType; //< This is the type to convert to after scalarization of more complex types
-	static scalarDataType toScalarType( const dataType& data ) { return data; }*/
-	static const dataType ONE;
-	static const dataType ZERO;
+	typedef TFloatType TDataType; //< This is the data type of a single element
+	typedef TFloatType TIncreasedRangeType;
+/*	typedef TDataType TScalarDataType; //< This is the type to convert to after scalarization of more complex types
+	static TScalarDataType toScalarType( const TDataType& data ) { return data; }*/
+	static const TDataType ONE;
+	static const TDataType ZERO;
 	enum { isScalar = true };
 	enum { isComparable = true };
 	enum { isNumeric = true };
@@ -88,24 +88,24 @@ struct dataTraits<TFloatType>
 
 #ifdef USE_DOUBLE
 template<>
-struct dataTraits<float>
+struct SDataTraits<float>
 {
-	typedef float dataType; //< This is the data type of a single element
-	typedef float increasedRangeType;
-	static const dataType ONE;
-	static const dataType ZERO;
+	typedef float TDataType; //< This is the data type of a single element
+	typedef float TIncreasedRangeType;
+	static const TDataType ONE;
+	static const TDataType ZERO;
 	enum { isScalar = true };
 	enum { isComparable = true };
 	enum { isNumeric = true };
 };
 #else
 template<>
-struct dataTraits<double>
+struct SDataTraits<double>
 {
-	typedef double dataType; //< This is the data type of a single element
-	typedef double increasedRangeType;
-	static const dataType ONE;
-	static const dataType ZERO;
+	typedef double TDataTypeType; //< This is the data type of a single element
+	typedef double TIncreasedRangeType;
+	static const TDataTypeType ONE;
+	static const TDataTypeType ZERO;
 	enum { isScalar = true };
 	enum { isComparable = true };
 	enum { isNumeric = true };
@@ -114,15 +114,15 @@ struct dataTraits<double>
 
 /** Data traits for complex datasets */
 template<>
-struct dataTraits< std::complex<TFloatType> >
+struct SDataTraits< std::complex<TFloatType> >
 {
-	typedef std::complex<TFloatType> dataType; //< This is the data type of a single element
-	typedef std::complex<TFloatType> increasedRangeType;
-	typedef TFloatType scalarDataType;
-	static scalarDataType toScalarType( const std::complex<TFloatType>& data ) 
+	typedef std::complex<TFloatType> TDataTypeType; //< This is the data type of a single element
+	typedef std::complex<TFloatType> TIncreasedRangeType;
+	typedef TFloatType TScalarDataType;
+	static TScalarDataType toScalarType( const std::complex<TFloatType>& data )
 		{ return static_cast<TFloatType>( ( data.real() + data.imag() ) / 2.0 ); }
-	static const dataType ONE;
-	static const dataType ZERO;
+	static const TDataTypeType ONE;
+	static const TDataTypeType ZERO;
 	enum { isScalar = true };
 	enum { isComparable = false };
 	enum { isNumeric = true };
@@ -130,14 +130,14 @@ struct dataTraits< std::complex<TFloatType> >
 
 /** Data traits for 2D vector datasets */
 template<>
-struct dataTraits<TVector2D>
+struct SDataTraits<TVector2D>
 {
-	typedef TVector2D dataType; //< This is the data type of a single element
-	typedef TVector2D increasedRangeType;
-	typedef TFloatType scalarDataType;
-	static scalarDataType toScalarType( const TVector2D& data ) { return norm( data ); }
-	static const dataType ONE;
-	static const dataType ZERO;
+	typedef TVector2D TDataTypeType; //< This is the data type of a single element
+	typedef TVector2D TIncreasedRangeType;
+	typedef TFloatType TScalarDataType;
+	static TScalarDataType toScalarType( const TVector2D& data ) { return norm( data ); }
+	static const TDataTypeType ONE;
+	static const TDataTypeType ZERO;
 	enum { isScalar = false };
 	enum { isComparable = false };
 	enum { isNumeric = true };
@@ -145,14 +145,14 @@ struct dataTraits<TVector2D>
 
 /** Data traits for 2D point datasets */
 template<>
-struct dataTraits<TPoint2D>
+struct SDataTraits<TPoint2D>
 {
-	typedef TPoint2D dataType; //< This is the data type of a single element
-	typedef TPoint2D increasedRangeType;
-	typedef TFloatType scalarDataType;
-	static scalarDataType toScalarType( const TPoint2D& data ) { return norm( data ); }
-	static const dataType ONE;
-	static const dataType ZERO;
+	typedef TPoint2D TDataTypeType; //< This is the data type of a single element
+	typedef TPoint2D TIncreasedRangeType;
+	typedef TFloatType TScalarDataType;
+	static TScalarDataType toScalarType( const TPoint2D& data ) { return norm( data ); }
+	static const TDataTypeType ONE;
+	static const TDataTypeType ZERO;
 	enum { isScalar = false };
 	enum { isComparable = false };
 	enum { isNumeric = true };
@@ -160,14 +160,14 @@ struct dataTraits<TPoint2D>
 
 /** Data traits for 3D vector datasets */
 template<>
-struct dataTraits<TVector3D>
+struct SDataTraits<TVector3D>
 {
-	typedef TVector3D dataType; //< This is the data type of a single element
-	typedef TVector3D increasedRangeType;
-	typedef TFloatType scalarDataType;
-	static scalarDataType toScalarType( const TVector3D& data ) { return norm( data ); }
-	static const dataType ONE;
-	static const dataType ZERO;
+	typedef TVector3D TDataTypeType; //< This is the data type of a single element
+	typedef TVector3D TIncreasedRangeType;
+	typedef TFloatType TScalarDataType;
+	static TScalarDataType toScalarType( const TVector3D& data ) { return norm( data ); }
+	static const TDataTypeType ONE;
+	static const TDataTypeType ZERO;
 	enum { isScalar = false };
 	enum { isComparable = false };
 	enum { isNumeric = true };
@@ -175,14 +175,14 @@ struct dataTraits<TVector3D>
 
 /** Data traits for 3D point datasets */
 template<>
-struct dataTraits<TPoint3D>
+struct SDataTraits<TPoint3D>
 {
-	typedef TPoint3D dataType; //< This is the data type of a single element
-	typedef TPoint3D increasedRangeType;
-	typedef TFloatType scalarDataType;
-	static scalarDataType toScalarType( const TPoint3D& data ) { return norm( data ); }
-	static const dataType ONE;
-	static const dataType ZERO;
+	typedef TPoint3D TDataTypeType; //< This is the data type of a single element
+	typedef TPoint3D TIncreasedRangeType;
+	typedef TFloatType TScalarDataType;
+	static TScalarDataType toScalarType( const TPoint3D& data ) { return norm( data ); }
+	static const TDataTypeType ONE;
+	static const TDataTypeType ZERO;
 	enum { isScalar = false };
 	enum { isComparable = false };
 	enum { isNumeric = true };
@@ -190,13 +190,13 @@ struct dataTraits<TPoint3D>
 
 /** Data traits for string array datasets */
 template<>
-struct dataTraits<std::string>
+struct SDataTraits<std::string>
 {
-	typedef std::string dataType; //< This is the data type of a single element
-	typedef std::string increasedRangeType;
-// 	typedef NullType scalarDataType;
-	static const dataType ONE;
-	static const dataType ZERO;
+	typedef std::string TDataTypeType; //< This is the data type of a single element
+	typedef std::string TIncreasedRangeType;
+// 	typedef NullType TScalarDataType;
+	static const TDataTypeType ONE;
+	static const TDataTypeType ZERO;
 	enum { isScalar = false };
 	enum { isComparable = false };
 	enum { isNumeric = false };
