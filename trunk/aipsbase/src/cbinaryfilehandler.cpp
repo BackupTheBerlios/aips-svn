@@ -59,8 +59,8 @@ FBEGIN;
   scanline.resize( scanlineSize );
 	typename SetType::iterator it = theTargetDataSPtr->begin();
 	typename SetType::iterator end = theTargetDataSPtr->end();
-	theTargetDataSPtr->setMaximum( numeric_limits<typename SetType::dataType>::min() );
-	theTargetDataSPtr->setMinimum( numeric_limits<typename SetType::dataType>::max() );
+	theTargetDataSPtr->setMaximum( numeric_limits<typename SetType::TDataType>::min() );
+	theTargetDataSPtr->setMinimum( numeric_limits<typename SetType::TDataType>::max() );
 DBG1( "Loading into dataset with dimensions " << theTargetDataSPtr->getExtent(0) << " x " 
 	<< theTargetDataSPtr->getExtent(1) << " x " << theTargetDataSPtr->getExtent(2) );
 	
@@ -88,7 +88,7 @@ DBG1( "Loading into dataset with dimensions " << theTargetDataSPtr->getExtent(0)
 			memcpy( &value, &scanline[scanlineIndex], sizeof( DataType ) );
 			if ( bFileEndianess ) 
 				swapEndianess( value );
-			*it = static_cast<typename SetType::dataType>( value ); 
+			*it = static_cast<typename SetType::TDataType>( value ); 
 			scanlineIndex += sizeof( DataType );
 			theTargetDataSPtr->adjustDataRange( *it );
 			++it;
@@ -112,7 +112,7 @@ FBEGIN;
 	std::vector<unsigned char> scanline;	
   size_t scanlineSize = theSourceDataSPtr->getExtent(0) * theVoxelSize;
   scanline.resize( scanlineSize );
-  typedef typename dataTraits<SetType>::dataType SetDataType;
+  typedef typename SetType::TDataType SetDataType;
 	typename SetType::iterator it = theSourceDataSPtr->begin();
 	typename SetType::iterator end = theSourceDataSPtr->end();
 DBG1( "Saving dataset with dimensions " << theSourceDataSPtr->getExtent(0) << " x " 

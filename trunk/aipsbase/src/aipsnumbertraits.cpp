@@ -14,8 +14,14 @@
 
 using namespace aips;
 
-const short SDataTraits<short>::ONE = 1;
-const short SDataTraits<short>::ZERO = 0;
+const int8_t SDataTraits<int8_t>::ONE = 1;
+const int8_t SDataTraits<int8_t>::ZERO = 0;
+
+const int16_t SDataTraits<int16_t>::ONE = 1;
+const int16_t SDataTraits<int16_t>::ZERO = 0;
+
+const int32_t SDataTraits<int32_t>::ONE = 1;
+const int32_t SDataTraits<int32_t>::ZERO = 0;
 
 const TFloatType SDataTraits<TFloatType>::ONE = 1.0;
 const TFloatType SDataTraits<TFloatType>::ZERO = 0.0;
@@ -28,26 +34,23 @@ const double SDataTraits<double>::ONE = 1.0;
 const double SDataTraits<double>::ZERO = 0.0;
 #endif
 
-const long SDataTraits<long>::ONE = 1;
-const long SDataTraits<long>::ZERO = 0;
-
 const std::string SDataTraits<std::string>::ONE = "";
 const std::string SDataTraits<std::string>::ZERO = "";
 
-const std::complex<TFloatType> SDataTraits<std::complex<TFloatType> >::ONE
-	( 1.414213562373095048763788073031832936977, 1.414213562373095048763788073031832936977 );
-const std::complex<TFloatType> SDataTraits<std::complex<TFloatType> >::ZERO
-	( 0.0, 0.0 );
+#define SQRT2 1.414213562373095048763788073031832936977
 
-const TVector2D SDataTraits<TVector2D>::ONE ( 1.414213562373095048763788073031832936977 );
+const std::complex<TFloatType> SDataTraits<std::complex<TFloatType> >::ONE ( SQRT2, SQRT2 );
+const std::complex<TFloatType> SDataTraits<std::complex<TFloatType> >::ZERO	( 0.0, 0.0 );
+
+const TVector2D SDataTraits<TVector2D>::ONE ( SQRT2 );
 const TVector2D SDataTraits<TVector2D>::ZERO ( 0.0 );
 
 const TVector3D SDataTraits<TVector3D>::ONE ( 1.732050807568877293573725295594556428114 );
 const TVector3D SDataTraits<TVector3D>::ZERO ( 0.0 );
 
-const TPoint2D SDataTraits<TPoint2D>::ONE ( 1, 1 );
+const TPoint2D SDataTraits<TPoint2D>::ONE ( 1, 0 );
 const TPoint2D SDataTraits<TPoint2D>::ZERO ( 0, 0 );
 
-const TPoint3D SDataTraits<TPoint3D>::ONE ( 1, 1, 1 );
+const TPoint3D SDataTraits<TPoint3D>::ONE ( 1, 0, 0 );
 const TPoint3D SDataTraits<TPoint3D>::ZERO ( 0, 0, 0 );
 

@@ -34,7 +34,7 @@
 #define CBINARYFILEHANDLER_H
 
 // AIPS includes
-#include "aipsdatatraits.h"
+#include "aipstypelist.h"
 #include "cfilehandler.h"
 
 namespace aips {

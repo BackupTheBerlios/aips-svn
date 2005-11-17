@@ -5,7 +5,7 @@
  *                                                                      *
  * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
  *                                                                      *
- * Version: 0.12                                                        *
+ * Version: 0.13                                                        *
  * Status: Beta                                                         *
  * Created: 2004-01-16                                                  *
  * Changed:                                                             *
@@ -43,7 +43,7 @@
 #ifndef AIPSNUMERIC_H
 #define AIPSNUMERIC_H
 // System includes
-#include <stdint.h> // Primitive types with definitive size
+#include <boost/cstdint.hpp> // Primitive types with definitive size
 
 // Standard library includes
 #include <cmath>    // floor(), sqrt()
@@ -55,13 +55,39 @@
  
 namespace aips {
 
+#ifdef USE_BLITZ
+/**
+ * Definition of our own storage format. Using x as the first index AND the fastest
+ * varying index is more useful when working with images. Except for the base flag
+ * this is identical to a FortranArray of Blitz++
+ */
+template<int N_rank>
+class AIPSArray : public blitz::GeneralArrayStorage<N_rank>
+{
+private:
+  typedef blitz::GeneralArrayStorage<N_rank> T_base;
+  typedef _bz_typename T_base::noInitializeFlag noInitializeFlag;
+  using T_base::ordering_;
+  using T_base::ascendingFlag_;
+  using T_base::base_;
+public:
+  AIPSArray()
+    : blitz::GeneralArrayStorage<N_rank>( noInitializeFlag() )
+  {
+    for (int i=0; i < N_rank; ++i)
+      ordering_(i) = i;
+    ascendingFlag_ = true;
+    base_ = 0;
+  }
+};
+#endif
 
 /*******************
  * Useful typedefs *
  *******************/
 
 /// A single signed integer value for pipeline usage
-typedef CSingleValue<long> TInteger; 
+typedef CSingleValue<int32_t> TInteger; 
 /// A single double value for pipeline usage
 typedef CSingleValue<TFloatType> TDouble;
 /// A single complex value for pipeline usage
@@ -69,7 +95,7 @@ typedef CSingleValue<std::complex<TFloatType> > TComplex;
 /// A single string value for pipeline usage
 typedef CSingleValue<std::string> TSingleString;
 /// A scalar integer field for pipeline usage
-typedef CTypedData<short> TImage;
+typedef CTypedData<int16_t> TImage;
 /// A scalar floating point field for pipeline usage
 typedef CTypedData<TFloatType> TField;
 /// A complex field for pipeline usage

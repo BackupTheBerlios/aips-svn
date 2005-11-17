@@ -86,28 +86,28 @@ public:
 	}
 	void setMinimum( TValue theMinimum_ )
 	{
-		theMinimum = dataTraits<TValue>::toScalarType( theMinimum_ );
+		theMinimum = SDataTraits<TValue>::toScalarType( theMinimum_ );
 	}
 	void setMaximum( TValue theMaximum_ )
 	{
-		theMaximum = dataTraits<TValue>::toScalarType( theMaximum_ );
+		theMaximum = SDataTraits<TValue>::toScalarType( theMaximum_ );
 	}
-	typename dataTraits<TValue>::scalarDataType getMinimum()
+	typename SDataTraits<TValue>::TScalarDataType getMinimum()
 	{
 		return theMinimum;
 	}
-	typename dataTraits<TValue>::scalarDataType getMaximum()
+	typename SDataTraits<TValue>::TScalarDataType getMaximum()
 	{
 		return theMaximum;
 	}
 	bool isInRange( TValue value_ )
 	{
-		typename dataTraits<TValue>::scalarDataType value = dataTraits<TValue>::toScalarType( value_ );
+		typename SDataTraits<TValue>::TScalarDataType value = SDataTraits<TValue>::toScalarType( value_ );
 		return ( value >= theMinimum && value <= theMaximum );
 	}
 	void updateRange( TValue value_ )
 	{
-		typename dataTraits<TValue>::scalarDataType value = dataTraits<TValue>::toScalarType( value_ );
+		typename SDataTraits<TValue>::TScalarDataType value = SDataTraits<TValue>::toScalarType( value_ );
 		if ( value < theMinimum )	
 			theMinimum = value;
 		if ( value > theMaximum )	

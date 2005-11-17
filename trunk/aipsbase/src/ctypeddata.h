@@ -71,8 +71,8 @@ private:
 	/// Standard constructor
 	CTypedData();
 public:
- 	typedef TValue TData;
- 	typedef SDataTraits<TValue> TTrait;
+ 	typedef TValue TDataType;
+ 	typedef SDataTraits<TValue> TTraitType;
 
 	/// Enumeration types
 	enum EDataAlign { DataAlignFront = 0, DataAlignCenter, DataAlignBack };
@@ -476,8 +476,8 @@ public:
 	/// Swaps the data with another data set of the same type
 	void swap( CTypedData<TValue>& aDataSet )
 		throw();
-	CDataRange<TValue,CDataTraits<TValue>::isScalar> getDataRange() { return theDataRange; }
-	void setDataRange( const CDataRange<TValue,CDataTraits<TValue>::isScalar>& aDataRange)
+	CDataRange<TValue,SDataTraits<TValue>::isScalar> getDataRange() { return theDataRange; }
+	void setDataRange( const CDataRange<TValue,SDataTraits<TValue>::isScalar>& aDataRange)
 	{ 
 		theDataRange = aDataRange;
 	}
@@ -486,7 +486,7 @@ private:
   std::vector<TValue> dataVec; ///< The data array
 //  scalarType theMinimum; ///< Dataset minimum value
 //  scalarType theMaximum; ///< Dataset maximum value
-  CDataRange<TValue,CDataTraits<TValue>::isScalar> theDataRange;
+  CDataRange<TValue,SDataTraits<TValue>::isScalar> theDataRange;
 };
 
 

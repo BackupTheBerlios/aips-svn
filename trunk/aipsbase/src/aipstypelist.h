@@ -1,11 +1,11 @@
 /************************************************************************
- * File: aipsdatatraits.h                                               *
+ * File: aipstypelist.h                                                 *
  * Project: AIPS aipsbase library                                       *
- * Description: Trait classes for commonly used dataset types           *
+ * Description: Type list definitions to ease templated module dev.     *
  *                                                                      *
  * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
  *                                                                      *
- * Version: 0.4                                                         *
+ * Version: 0.5                                                         *
  * Status:  Beta                                                        *
  * Created: 2005-01-14                                                  *
  * Changed: 2005-01-26 Added dataTraits for TComplexImage               *
@@ -14,6 +14,8 @@
  *                      and TStringField                                *
  *          2005-07-07 Added traits for TSingleString                   *
  *                     Added function checkType                         * 
+ *          2005-11-15 Moved traits to seperate file                    *
+ *          2005-11-17 Renamed file to aipstypelist.h                   *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -21,8 +23,8 @@
  * (at your option) any later version.                                  *
  ************************************************************************/
  
-#ifndef AIPSDATATRAITS_H
-#define AIPSDATATRAITS_H
+#ifndef AIPSTYPELIST_H
+#define AIPSTYPELIST_H
 
 #include<aipsnulltype.h>
 #include<aipsnumeric.h>
@@ -62,10 +64,8 @@ template<typename Head, typename Tail, unsigned int index> struct TypeAt<TypeLis
 	typedef typename TypeAt<Tail, index - 1>::Result Result;
 };
 
-
 /** Typelist of all supported field types */
 typedef TypeList<TImage, TypeList<TComplexImage, TypeList<TField, TypeList<TField2D, TypeList<TField3D, TypeList<TStringField, NullType> > > > > > datasetTL;
-
 
 }
 #endif

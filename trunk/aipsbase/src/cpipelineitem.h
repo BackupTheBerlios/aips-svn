@@ -54,7 +54,7 @@
 
 // AIPS includes
 #include <boost/weak_ptr.hpp>
-#include "aipsdatatraits.h"
+#include "aipstypelist.h"
 //#include "ctypeddata.h"
 #include "ctypedmap.h"
 #include "cmoduledialog.h"

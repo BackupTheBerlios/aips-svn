@@ -22,7 +22,7 @@
 
 // AIPS includes
 #include "cdataadapter.h"
-#include "aipsdatatraits.h"
+#include "aipstypelist.h"
 
 namespace aips { 
 

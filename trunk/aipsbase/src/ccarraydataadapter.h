@@ -25,7 +25,7 @@
 
 #define AIPSCCARRAYDATAADAPTER_VERSION "0.2"
 
-#include <aipsdatatraits.h>
+#include <aipstypelist.h>
 #include <cstructureddataadapter.h>
 
 namespace aips {

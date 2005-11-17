@@ -160,7 +160,7 @@ protected:
  */
 template<typename T> inline bool checkType( const CDataSet& aDataSet ) throw()
 {
-	return( aDataSet.getType() == typeid( typename dataTraits<typename T::dataType>::dataType ) );
+	return( aDataSet.getType() == typeid( typename T::TDataType ) );
 }
 
 /**
@@ -171,7 +171,7 @@ template<typename T> inline bool checkType( const CDataSet& aDataSet ) throw()
  */
 template<typename T> inline bool checkType( const CDataSet* aDataSet ) throw()
 {
-	return( aDataSet->getType() == typeid( typename dataTraits<typename T::dataType>::dataType ) );
+	return( aDataSet->getType() == typeid( typename T::TDataType ) );
 }
 
 /**
@@ -182,7 +182,7 @@ template<typename T> inline bool checkType( const CDataSet* aDataSet ) throw()
  */
 template<typename T> inline bool checkType( const boost::shared_ptr<CDataSet> aDataSet ) throw()
 {
-	return( aDataSet->getType() == typeid( typename dataTraits<typename T::dataType>::dataType ) );
+	return( aDataSet->getType() == typeid( typename T::TDataType ) );
 }
 
 
