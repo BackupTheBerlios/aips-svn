@@ -31,7 +31,7 @@
 #endif
 
 /**
- * Easy debugging macros ( with three debug levels )
+ * Simple debugging macros ( with three debug levels )
  * The following macros will be defined in respect of the debug level:
  * DBG-Level   Macro
  *   DEBUG     DBG(), DBG1()

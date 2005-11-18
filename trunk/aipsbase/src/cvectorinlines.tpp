@@ -100,7 +100,7 @@ template<typename DataType, ushort dimension> inline
  * \return value at given index
  */
 template<typename DataType, ushort dimension> inline 
-	const double& CVector<DataType, dimension>::operator[]( const ushort usIndex ) const throw()
+	const double CVector<DataType, dimension>::operator[]( const ushort usIndex ) const throw()
 {
   return theData[usIndex];
 }

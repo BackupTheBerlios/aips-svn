@@ -1,12 +1,12 @@
 /************************************************************************
  * File: aipsautovalue.h                                                *
  * Project: AIPS basic library                                          *
- * Description: A value type that checks if it has been initialized     *
+ * Description: A value type that checks if it has been initialised     *
  *              properly                                                *
  *                                                                      *
  * Author: Hendrik Belitz <hendrik@darkon.info>                         *
  *                                                                      *
- * Version: 0.2                                                         *
+ * Version: 0.3                                                         *
  * Status : Alpha                                                       *
  * Created: 2005-05-17                                                  *
  * Based on: A suggestion of Hyman Rosen made on                        *
@@ -15,6 +15,7 @@
  *  2005-11-17 Renamed file to aipsautovalue.h                          *
  *             Implementation moved to aipsautovalueinlines.tpp         *
  *             Added documentation                                      *
+ *  2005-11-18 Added more documentation                                 *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -29,12 +30,19 @@
 namespace aips {
 
 /**
- * A value type that checks if it has been initialized properly
+ * \brief A value type that checks if it has been initialised properly.
+ *
+ * In many cases the usage of uninitialised variables can lead to runtime errors which are
+ * difficult to detect. Using CAutoValue can be of help in such cases, as it throws
+ * an exception if the encapsuled variable was not initialised properly.
+ * \todo Write test cases
  */
 template <typename TDataType>
 class CAutoValue
 {
 public:
+	/** \name Structors */
+	//@{
 	/// Standard constructor. Calling this will result in getting an uninitialised variable
 	CAutoValue();
 	/// Copy constructor which will set the object to an initialised state.
@@ -43,20 +51,27 @@ public:
 	/// Assignment operator which will set the object to an initialised state.
 	template<typename U>
 	CAutoValue& operator=( const U& aValue );
+	//@}
+	/** \name Operator functions */
+	//@{
 	/// Return the current value
 	operator TDataType&();
 	/// Return the current value (const version)
 	operator const TDataType&() const;
+	//@}
+	/** \name Other functions */
+	//@{
 	/// Returns if the variable has been initialised
 	bool defined() const;
 	/// Resets the variable into an uninitialised state
 	void clear();
+	//@}
 private:
 	bool bIsDefined;    ///< Is this variable initialised?
 	TDataType theValue;	///< The stored value
 };
 
-#include <aipsautovalueinlines.tpp>
+#include "aipsautovalueinlines.tpp"
 }
 
 #endif

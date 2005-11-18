@@ -8,7 +8,7 @@
  *                                                                      *
  * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
  *                                                                      *
- * Version: 0.4                                                         *
+ * Version: 0.5                                                         *
  * Created: 2004-01-04                                                  *
  * Changed: 2004-04-19 Division operator added                          *
  *          2004-04-20 CVector is no longer derived from CBase          *
@@ -16,6 +16,7 @@
  *                     Class now stores the correct data type           *
  *                     Method getType added                             *
  *          2004-04-28 Updated documentation                            *
+ *          2005-11-18 Added T_numtype for Blitz++ compability          *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -29,7 +30,7 @@
 #include <aipsbase_config.h>
 
 #ifndef USE_BLITZ
-#define CVECTOR_VERSION "0.4"
+#define CVECTOR_VERSION "0.5"
 
 namespace aips 
 {
@@ -41,6 +42,7 @@ namespace aips
 template<typename DataType, ushort dimension> class CVector
 {
 public:
+	typedef DataType T_numtype; //< Data type of the actual CVector. Inserted for compability with Blitz++
 /* Structors */
   /// Constructor
   CVector( double dX = 0.0, double dY = 0.0, double dZ = 0.0 ) 
@@ -74,7 +76,7 @@ public:
   /// Access operator without range checking
   double& operator[]( const ushort usIndex ) throw();
   /// Const access operator without range checking
-  const double& operator[]( const ushort usIndex ) const throw();
+  const double operator[]( const ushort usIndex ) const throw();
 /* Operators/Identity */
   /// Operator== to check for equality of two vectors
   bool operator==( CVector<DataType, dimension>& aVector ) const throw();

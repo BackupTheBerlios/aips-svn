@@ -75,8 +75,8 @@ public:
 	}
 	CDataRange( TValue theMinimum_, TValue theMaximum_ )
 	{ 
-		theMinimum = toScalarType( theMinimum_ );
-		theMaximum = toScalarType( theMaximum_ );
+		theMinimum = SDataTraits<TValue>::TDistanceType::distanceFromZero( theMinimum_ );
+		theMaximum = SDataTraits<TValue>::TDistanceType::distanceFromZero( theMaximum_ );
 	}
 	CDataRange<TValue,false> operator=(const CDataRange<TValue,false>& aDataRange)
 	{
@@ -86,11 +86,11 @@ public:
 	}
 	void setMinimum( TValue theMinimum_ )
 	{
-		theMinimum = SDataTraits<TValue>::toScalarType( theMinimum_ );
+		theMinimum = SDataTraits<TValue>::TDistanceType::distanceFromZero( theMinimum_ );
 	}
 	void setMaximum( TValue theMaximum_ )
 	{
-		theMaximum = SDataTraits<TValue>::toScalarType( theMaximum_ );
+		theMaximum = SDataTraits<TValue>::TDistanceType::distanceFromZero( theMaximum_ );
 	}
 	typename SDataTraits<TValue>::TScalarDataType getMinimum()
 	{
@@ -102,12 +102,14 @@ public:
 	}
 	bool isInRange( TValue value_ )
 	{
-		typename SDataTraits<TValue>::TScalarDataType value = SDataTraits<TValue>::toScalarType( value_ );
+		typename SDataTraits<TValue>::TScalarDataType value = 
+			SDataTraits<TValue>::TDistanceType::distanceFromZero( value_ );
 		return ( value >= theMinimum && value <= theMaximum );
 	}
 	void updateRange( TValue value_ )
 	{
-		typename SDataTraits<TValue>::TScalarDataType value = SDataTraits<TValue>::toScalarType( value_ );
+		typename SDataTraits<TValue>::TScalarDataType value = 
+			SDataTraits<TValue>::TDistanceType::distanceFromZero( value_ );
 		if ( value < theMinimum )	
 			theMinimum = value;
 		if ( value > theMaximum )	

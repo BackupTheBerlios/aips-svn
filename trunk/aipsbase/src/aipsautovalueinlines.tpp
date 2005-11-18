@@ -1,4 +1,4 @@
-/** \post POSTCOND: object is marked as being uninitialised */
+/** \post object is marked as being uninitialised */
 template <typename TDataType>
 CAutoValue<TDataType>::CAutoValue() : bIsDefined( false )
 {
@@ -6,8 +6,8 @@ CAutoValue<TDataType>::CAutoValue() : bIsDefined( false )
 
 /** 
  * \param aValue value used to initialise the object 
- * \pre PRECOND: aValue can be casted implicitly into the value type of the current object
- * \post POSTCOND: new value is stored in object and object is marked as being initialised
+ * \pre aValue can be casted implicitly into the value type of the current object
+ * \post new value is stored in object and object is marked as being initialised
  */
 template<typename TDataType>
 template<typename U>
@@ -18,8 +18,8 @@ CAutoValue<TDataType>::CAutoValue( const U& aValue )
 
 /** 
  * \param aValue value to assign 
- * \pre PRECOND: aValue can be casted implicitly into the value type of the current object
- * \post POSTCOND: new value is stored in object
+ * \pre aValue can be casted implicitly into the value type of the current object
+ * \post new value is stored in object
  */
 template<typename TDataType>
 template<typename U>
@@ -64,7 +64,7 @@ bool CAutoValue<TDataType>::defined() const
 }
 	
 /** 
- * \post POSTCOND: object is returned to uninitialised state
+ * \post object is returned to uninitialised state
  */
 template <typename TDataType>
 void CAutoValue<TDataType>::clear()

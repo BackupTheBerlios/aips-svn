@@ -5,7 +5,7 @@
  *                                                                      *
  * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
  *                                                                      *
- * Version: 0.2                                                         *
+ * Version: 0.3                                                         *
  * Status: Beta                                                         *
  * Created: 2005-11-15                                                  *
  * Changed:                                                             *
@@ -13,12 +13,7 @@
  *        2005-11-16 Updated naming scheme and documentation            *
  *                   Added TScalarDataType and toScalarType to          *
  *                    non-scalar data types                             *
- *        IMPORTANT These trait classes no longer represent data sets,  *
- *                   but give traits for (alpha)numerical types         *
- *                   directly! Make sure that your code is updated      *
- *                   accordingsly ( dataTraits<CTypedMap<bla> > becomes *
- *                   SDataTraits<bla> or                                *
- *                   SDataTraots<CTypedMap<bla>::TDataType> )           *
+ *        2005-11-18 Updated documentation                              *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -27,228 +22,301 @@
  ************************************************************************/
 #ifndef AIPSNUMBERTRAITS_H
 #define AIPSNUMBERTRAITS_H
+#include <complex>
 #include <aipsvectordefs.h>
 #include <aipsnulltype.h>
+#include <aipsdistancefunctions.h>
 
 namespace aips {
 
-/******************************
- * Trait classes for datasets *
- ******************************/
-
-/** 
- * Unspecialized trait template 
- * The following traits should be defined in any specialization
- * TData (typedef) type used to store the value of a single data member
- * TIncreasedRange (typedef) type used to temporarely store the value of a single data member.
- *   This is usually of bigger range the voxelType
+/**
+ * \defgroup datatraits Data traits
+ * \brief This group contains all data trait classes
+ *
+ * Data traits are designed after the following pattern
+ * \code
+ * struct SDataTraits
+ * {		
+ *	typedef T TDataType;  <-- This is the data type of a single element
+ *	typedef NullType TIncreasedRangeType; <-- This is a type to store element data of increased range
+ *	typedef TDataType TScalarDataType; <-- This is the type to convert to after scalarization of more complex types
+ *	static const TDataType ONE();  <-- Representation of one value
+ *	static const TDataType ZERO(); <-- Representation of zero value
+ *	enum { isScalar = false }; <-- Is our data scalar?
+ *	enum { isComparable = false }; <-- Is our data comparable?
+ *	enum { isNumeric = false }; <-- Is our data numeric?
+ * }; 
+ * \endcode
  */
-template<typename T> 
+ 
+/** 
+ * \brief Unspecialized trait template.
+ * \ingroup datatraits
+ * \attention These trait classes no longer represent data sets, but give traits for (alpha)numerical types         
+ * directly! Make sure that your code is updated accordingsly: 
+ * \code dataTraits<CTypedMap<foo> > \endcode becomes 
+ * \code SDataTraits<foo> \endcode or \code SDataTraots<CTypedMap<foo>::TDataType> \endcode.
+ * \todo Tests for specialised and general data traits
+ */
+template<typename T, typename TDistance = SDefaultDistFunc<T> > 
 struct SDataTraits
 {		
-	typedef T TDataType; ///< This is the data type of a single element
-	typedef NullType TIncreasedRangeType; ///< This is a type to store element data of increased range
-	typedef TDataType TScalarDataType; ///< This is the type to convert to after scalarization of more complex types
-	/// Conversion from a non-scalar to a scalar type (e.g. vector norm)
-	static TScalarDataType toScalarType( const TDataType& data );	
-	enum { isScalar = false }; ///< Is our data scalar?
-	enum { isComparable = false }; ///< Is our data comparable?
-	enum { isNumeric = false }; ///< Is our data numeric?
+	typedef T TDataType; ///< Actual data type
+	typedef NullType TIncreasedRangeType; ///< Data type to use for out-of-range computations 
+	typedef TDataType TScalarDataType; ///< Data type to use for scalar representation of TDataType
+	typedef TDistance TDistanceType; ///< Type of distance measurement
+	enum { isScalar = false }; ///< Is the type scalar?
+	enum { isComparable = false }; ///< Are comparison operators defined for this type?
+	enum { isNumeric = false }; ///< Is this a numeric type
 };
 
-/** Data traits for byte datasets */
-template<>
-struct SDataTraits<int8_t>
+/** 
+ * \ingroup datatraits
+ * \brief Data traits for byte datasets 
+ *
+ * Specialised from SDataTraits.
+ */
+template<typename TDistance>
+struct SDataTraits<int8_t, TDistance>
 {
 	typedef int8_t TDataType; 
 	typedef int16_t TIncreasedRangeType;
-	static const TDataType ONE;  ///< Representation of one value
-	static const TDataType ZERO; ///< Representation of zero value
+	typedef TDistance TDistanceType;
+	static const TDataType ONE(){ return 1; }
+	static const TDataType ZERO(){ return 0; }
 	enum { isScalar = true };
 	enum { isComparable = true };
 	enum { isNumeric = true };
 };
 
-/** Data traits for short datasets */
-template<>
-struct SDataTraits<int16_t>
+/** 
+ * \ingroup datatraits
+ * \brief Data traits for short datasets 
+ *
+ * Specialised from SDataTraits.
+ */
+template<typename TDistance>
+struct SDataTraits<int16_t, TDistance>
 {
 	typedef int16_t TDataType; 
 	typedef int32_t TIncreasedRangeType;
-	static const TDataType ONE;  ///< Representation of one value
-	static const TDataType ZERO; ///< Representation of zero value
+	typedef TDistance TDistanceType;
+	static const TDataType ONE(){ return 1; }
+	static const TDataType ZERO(){ return 0; }
 	enum { isScalar = true };
 	enum { isComparable = true };
 	enum { isNumeric = true };
 };
 
-/** Data traits for scalar integer data */
-template<>
-struct SDataTraits<int32_t>
+/** 
+ * \ingroup datatraits
+ * \brief Data traits for scalar integer data 
+ *
+ * Specialised from SDataTraits.
+ */
+template<typename TDistance>
+struct SDataTraits<int32_t, TDistance >
 {
 	typedef int32_t TDataType; 
 	typedef int32_t TIncreasedRangeType;
-	static const TDataType ONE;  ///< Representation of one value
-	static const TDataType ZERO; ///< Representation of zero value
+	typedef TDistance TDistanceType;
+	static const TDataType ONE(){ return 1; }
+	static const TDataType ZERO(){ return 0; }
 	enum { isScalar = true };
 	enum { isComparable = true };
 	enum { isNumeric = true };
 };
 
-/** Data traits for double datasets */
-template<>
-struct SDataTraits<TFloatType>
+/** 
+ * \ingroup datatraits
+ * \brief Data traits for double datasets 
+ *
+ * Specialised from SDataTraits.
+ */
+template<typename TDistance>
+struct SDataTraits<TFloatType, TDistance >
 {
 	typedef TFloatType TDataType; 
 	typedef TFloatType TIncreasedRangeType;
-	static const TDataType ONE;  ///< Representation of one value
-	static const TDataType ZERO; ///< Representation of zero value
+	typedef TDistance TDistanceType;
+	static const TDataType ONE(){ return 1.0; }  
+	static const TDataType ZERO(){ return 0.0; } 
 	enum { isScalar = true };
 	enum { isComparable = true };
 	enum { isNumeric = true };
 };
 
 #ifdef USE_DOUBLE
-template<>
-struct SDataTraits<float>
+/** 
+ * \ingroup datatraits
+ * \brief Data traits for float datasets (used if TFloatType equals double) 
+ *
+ * Specialised from SDataTraits.
+ */
+template<typename TDistance>
+struct SDataTraits<float, TDistance >
 {
 	typedef float TDataType; 
 	typedef float TIncreasedRangeType;
-	static const TDataType ONE;  ///< Representation of one value
-	static const TDataType ZERO; ///< Representation of zero value
+	typedef TDistance TDistanceType;
+	static const TDataType ONE(){ return 1.0; }  
+	static const TDataType ZERO(){ return 0.0; } 
 	enum { isScalar = true };
 	enum { isComparable = true };
 	enum { isNumeric = true };
 };
 #else
-template<>
-struct SDataTraits<double>
+/** 
+ * \ingroup datatraits
+ * \brief Data traits for double datasets (used if TFloatType equals float) 
+ *
+ * Specialised from SDataTraits.
+ */
+template<typename TDistance>
+struct SDataTraits<double, TDistance >
 {
-	typedef double TDataTypeType; 
+	typedef double TDataType; 
 	typedef double TIncreasedRangeType;
-	static const TDataTypeType ONE;  ///< Representation of one value
-	static const TDataTypeType ZERO; ///< Representation of zero value
+	typedef TDistance TDistanceType;
+	static const TDataType ONE(){ return 1.0; }  
+	static const TDataType ZERO(){ return 0.0; } 
 	enum { isScalar = true };
 	enum { isComparable = true };
 	enum { isNumeric = true };
 };
 #endif
 
-/** Data traits for complex datasets */
-template<>
-struct SDataTraits< std::complex<TFloatType> >
+/** 
+ * \ingroup datatraits
+ * \brief Data traits for complex datasets 
+ *
+ * Specialised from SDataTraits.
+ * \todo Remove these nasty numerical constants in ONE()
+ */
+template<typename TDistance>
+struct SDataTraits< std::complex<TFloatType>, TDistance >
 {
-	typedef std::complex<TFloatType> TDataTypeType; 
+	typedef std::complex<TFloatType> TDataType; 
 	typedef std::complex<TFloatType> TIncreasedRangeType;
 	typedef TFloatType TScalarDataType;
-	static TScalarDataType toScalarType( const std::complex<TFloatType>& data )
-		{ return static_cast<TFloatType>( ( data.real() + data.imag() ) / 2.0 ); }
-	static const TDataTypeType ONE;  ///< Representation of one value (number with a modulus == 1.0)
-	static const TDataTypeType ZERO; ///< Representation of zero value (norm/modulus of complex number)
+	typedef TDistance TDistanceType;
+	/// Representation of one value (number with a modulus == 1.0)
+	static const TDataType ONE(){ return TDataType( 1.414213562373095048763788073031832936977, 1.414213562373095048763788073031832936977 ); }
+	/// Representation of zero value (norm/modulus of complex number)
+	static const TDataType ZERO(){ return TDataType( 0.0, 0.0 ); }
 	enum { isScalar = true };
 	enum { isComparable = false };
 	enum { isNumeric = true };
 };
 
-/** Data traits for 2D vector datasets */
-template<>
-struct SDataTraits<TVector2D>
+/** 
+ * \ingroup datatraits
+ * \brief Data traits for 2D vector datasets 
+ *
+ * Specialised from SDataTraits.
+ * \todo Remove these nasty numerical constants in ONE()
+ */
+template<typename TDistance>
+struct SDataTraits<TVector2D, TDistance>
 {
-	typedef TVector2D TDataTypeType; 
+	typedef TVector2D TDataType; 
 	typedef TVector2D TIncreasedRangeType;
 	typedef TFloatType TScalarDataType;
-	static TScalarDataType toScalarType( const TVector2D& data ) { return norm( data ); }
-	static const TDataTypeType ONE;  ///< Representation of one value (unit vector)
-	static const TDataTypeType ZERO; ///< Representation of zero value (zero vector)
+	typedef TDistance TDistanceType;
+	/// Representation of one value (unit vector)
+	static const TDataType ONE(){ return TVector2D( 1.414213562373095048763788073031832936977 ); };  
+	/// Representation of zero value (zero vector)
+	static const TDataType ZERO(){ return TVector2D( 0.0 ); }; 
 	enum { isScalar = false };
 	enum { isComparable = false };
 	enum { isNumeric = true };
 };
-
-// template<typename T>
-// struct CheckerBoardDistanceFunctor
-// {
-// 	typename T::T_numtype operator() ( const T& a, const T& b )
-// 	{
-// 		typename T::T_numtype theResult = static_cast<typename T::T_numtype>( 0.0 );
-// 		typename T::const_iterator aend = a.end();
-// 		typename T::const_iterator bit = b.begin();
-// 		for( typename T::const_iterator ait = a.begin(); ait != aend; ++ait, ++bit )
-// 		{
-// 			theResult += abs( *ait - *bit );
-// 		}
-// 		return theResult;
-// 	}
-// };
 
 /** 
- * Data traits for 2D point datasets 
- * Mind that the scalar type is also an integer value (ceiling of the corresponding Euclidan norm)
+ * \ingroup datatraits
+ * \brief Data traits for 2D point datasets. 
+ *
+ * Specialised from SDataTraits.
+ * Mind that the TScalarType is also an integer value (distances are given using the chessboard distance).
  */
-template<>
-struct SDataTraits<TPoint2D>
+template<typename TDistance>
+struct SDataTraits<TPoint2D, TDistance>
 {
-	typedef TPoint2D TDataTypeType; 
+	typedef TPoint2D TDataType; 
 	typedef TPoint2D TIncreasedRangeType;
 	typedef TPoint2D::T_numtype TScalarDataType;
-	static const TDataTypeType ONE;  ///< Representation of one value (unit vector)
-	static const TDataTypeType ZERO; ///< Representation of zero value (zero vector)
-	static TScalarDataType toScalarType( const TPoint2D& data )
-	{ 
-		return static_cast<TScalarDataType>( ceil( norm( data ) ) ); 
-	}
+	typedef TDistance TDistanceType;
+	/// Representation of one value (unit vector)
+	static const TDataType ONE(){ return TPoint2D( 1, 0 ); }  
+	/// Representation of zero value (zero vector)
+	static const TDataType ZERO(){ return TPoint2D( 0, 0 ); } 
 	enum { isScalar = false };
 	enum { isComparable = false };
 	enum { isNumeric = true };
 };
 
-/** Data traits for 3D vector datasets */
-template<>
-struct SDataTraits<TVector3D>
+/** 
+ * \ingroup datatraits 
+ * \brief Data traits for 3D vector datasets 
+ *
+ * Specialised from SDataTraits.
+ * \todo Remove these nasty numerical constants in ONE()
+ */
+template<typename TDistance>
+struct SDataTraits<TVector3D, TDistance>
 {
 	typedef TVector3D TDataTypeType; 
 	typedef TVector3D TIncreasedRangeType;
 	typedef TFloatType TScalarDataType;
-	static TScalarDataType toScalarType( const TVector3D& data ) 
-	{ 
-		return static_cast<TScalarDataType>( norm( data ) ); 
-	}
-	static const TDataTypeType ONE;  ///< Representation of one value (unit vector)
-	static const TDataTypeType ZERO; ///< Representation of zero value (zero vector)
+	typedef TDistance TDistanceType;
+	/// Representation of one value (unit vector)
+	static const TDataTypeType ONE(){ return TVector3D( 1.732050807568877293573725295594556428114 ); }
+	/// Representation of zero value (zero vector)
+	static const TDataTypeType ZERO(){ return TVector3D( 0.0 ); }
 	enum { isScalar = false };
 	enum { isComparable = false };
 	enum { isNumeric = true };
 };
 
 /** 
- * Data traits for 3D point datasets 
- * Mind that the scalar type is also an integer value (ceiling of the corresponding Euclidan norm)
+ * \ingroup datatraits
+ * \brief Data traits for 3D point datasets 
+ *
+ * Specialised from SDataTraits.
+ * Mind that the TScalarType is also an integer value (distances are given using the chessboard distance).
  */
-template<>
-struct SDataTraits<TPoint3D>
+template<typename TDistance>
+struct SDataTraits<TPoint3D, TDistance>
 {
-	typedef TPoint3D TDataTypeType; 
+	typedef TPoint3D TDataType; 
 	typedef TPoint3D TIncreasedRangeType;
 	typedef TPoint3D::T_numtype TScalarDataType;
-	static TScalarDataType toScalarType( const TPoint3D& data ) 
-	{ 
-		return static_cast<TScalarDataType>( ceil( norm( data ) ) ); 
-	}
-	static const TDataTypeType ONE;  ///< Representation of one value (unit vector)
-	static const TDataTypeType ZERO; ///< Representation of zero value (zero vector)
+	typedef TDistance TDistanceType;
+	/// Representation of one value (unit vector)
+	static const TDataType ONE(){ return TPoint3D( 1, 0, 0 ); } 
+	/// Representation of zero value (zero vector)
+	static const TDataType ZERO(){ return TPoint3D( 0, 0, 0 ); } 	
 	enum { isScalar = false };
 	enum { isComparable = false };
 	enum { isNumeric = true };
 };
 
-/** Data traits for string array datasets */
-template<>
-struct SDataTraits<std::string>
+/** 
+ * \ingroup datatraits
+ * \brief Data traits for string array datasets 
+ *
+ * Specialised from SDataTraits
+ */
+template<typename TDistance>
+struct SDataTraits<std::string, TDistance>
 {
-	typedef std::string TDataTypeType; 
+	typedef std::string TDataType; 
 	typedef std::string TIncreasedRangeType;
-	static const TDataTypeType ONE;  ///< Representation of one value (empty string)
-	static const TDataTypeType ZERO; ///< Representation of zero value (empty string)
+	typedef TDistance TDistanceType;
+	/// Representation of one value (empty string)
+	static const TDataType ONE(){ return ""; };  
+	/// Representation of zero value (empty string)	
+	static const TDataType ZERO(){ return ""; }; 
 	enum { isScalar = false };
 	enum { isComparable = false };
 	enum { isNumeric = false };

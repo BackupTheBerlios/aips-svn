@@ -35,7 +35,7 @@ CTypedData<TValue>::CTypedData( const ushort usDimension_, const size_t* extentA
   arraySize *= dataDimensionSize;
   dataVec.resize( arraySize );
   memset( &dataVec[0], 0, arraySize * sizeof( TValue ) );
-  setDataRange( TTraitType::ZERO, TTraitType::ONE );
+  setDataRange( TTraitType::ZERO(), TTraitType::ONE() );
 }
 
 /**
@@ -56,7 +56,7 @@ CTypedData<TValue>::CTypedData( const ushort usDimension_,
   arraySize *= dataDimensionSize;
   dataVec.resize( arraySize );
   memset( &dataVec[0], 0, arraySize * sizeof( TValue ) );
-  setDataRange( TTraitType::ZERO, TTraitType::ONE );
+  setDataRange( TTraitType::ZERO(), TTraitType::ONE() );
 }
 
 /**
@@ -73,7 +73,7 @@ CTypedData<TValue>::CTypedData( const size_t extent_, const size_t dataDimension
 	arraySize *= dataDimensionSize;
   dataVec.resize( arraySize );
   memset( &dataVec[0], 0, arraySize * sizeof( TValue ) );
-  setDataRange( TTraitType::ZERO, TTraitType::ONE );
+  setDataRange( TTraitType::ZERO(), TTraitType::ONE() );
 }
 
 /**
