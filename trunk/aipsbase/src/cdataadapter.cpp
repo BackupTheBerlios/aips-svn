@@ -31,7 +31,3 @@ CDataAdapter::CDataAdapter( const std::string &sClassName_, const std::string &s
   : CBase( sClassName_, sClassVersion_, sDerivedFrom_ ) 
 {
 }
-
-CDataAdapter::~CDataAdapter() throw()
-{
-}

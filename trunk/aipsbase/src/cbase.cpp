@@ -5,7 +5,7 @@
  *                                                                      *
  * Author: Hendrik Belitz                                               *
  *                                                                      *
- * Created: 09.09.03                                                    *
+ * Created: 2003-09-09                                                  *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -18,18 +18,26 @@
 using namespace std;
 using namespace aips;
 
+/*************
+ * Structors *
+ *************/
+
 /**
+ * Verbosity is turned off by default in non-debug code. If DL1 is activated, verbosity is turned on by
+ * default.
  * \param sClassName_ Class name
  * \param sClassVersion_ Class version
  * \param sDerivedFrom_ Parent classes
+ * \post All member variables are initialised
  */
 CBase::CBase( const string &sClassName_, const string &sClassVersion_,
   const string &sDerivedFrom_ ) throw()
-  : sClassName( sClassName_ ), sClassVersion( sClassVersion_ ), sDerivedFrom( sDerivedFrom_ )
-{
-}
-
-CBase::~CBase() throw()
+  : sClassName( sClassName_ ), sClassVersion( sClassVersion_ ), sDerivedFrom( sDerivedFrom_ ),
+#ifdef DL1  
+  bVerbose( true )
+#else
+  bVerbose( false )
+#endif
 {
 }
 
@@ -59,6 +67,39 @@ const string& CBase::getClassVersion() throw()
 const string& CBase::getClassParents() throw()
 {
   return sDerivedFrom;
+}
+
+/**
+ * \return true if verbosity is turned on
+ */
+bool CBase::isVerbose() throw()
+{
+  return bVerbose;
+}
+
+/************
+ * Mutators *
+ ************/
+
+/**
+ * \param bVerbose_ new verbosity status
+ * \post verbosity level bVerbose was updated
+ */
+void CBase::setVerbosity( bool bVerbose_ ) throw()
+{
+  bVerbose = bVerbose_;
+}
+
+/** \post verbosity is enabled */
+void CBase::turnVerbosityOn() throw()
+{
+  bVerbose = true;
+}
+
+/** \post verbosity is disabled */
+void CBase::turnVerbosityOff() throw()
+{
+  bVerbose = false;
 }
 
 /*****************

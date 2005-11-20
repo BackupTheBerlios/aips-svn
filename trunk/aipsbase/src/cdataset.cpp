@@ -25,10 +25,13 @@ using namespace aips;
 /**
  * \param usDimension_ field dimension
  * \param extentArr_ field extents ( == range of each dimension )
- * \param dataDimensionSize_ dimension of each field entry
+ * \param dataDimensionSize_ dimension of each field entry (defaults to 1)
  * \param sClassName_ name of the class (type information)
  * \param sClassVersion_ version number of the class (type information)
  * \param sDerivedFrom_ name of the classes this class is derived from (type information)
+ * \post All member variables are initialised.
+ * \post Origin initialised with \f$ \vec{0} \f$.
+ * \post Base element dimension initialised with \f$ \vec{1} \f$.
  */
 CDataSet::CDataSet( const ushort usDimension_, const size_t* extentArr_,
   const size_t dataDimensionSize_, const std::string &sClassName_, 
@@ -37,6 +40,7 @@ CDataSet::CDataSet( const ushort usDimension_, const size_t* extentArr_,
   : CBase( sClassName_, sClassVersion_, sDerivedFrom_ ), usDimension( usDimension_ ),
   extentVec( usDimension_ + 1 ), baseElementDimensionsVec( usDimension_ ), originVec( usDimension_ ), dataDimensionSize( dataDimensionSize_ )
 {
+FBEGIN;
   for ( ushort i = 0; i < usDimension; i++ )
   {
     extentVec[i] = extentArr_[i];
@@ -44,15 +48,34 @@ CDataSet::CDataSet( const ushort usDimension_, const size_t* extentArr_,
     originVec[i] = 0.0;
   }
 	extentVec[usDimension] = dataDimensionSize;
+  if ( isVerbose() )
+  {
+    alog << LINFO << "Creating instance " << static_cast<void*>( this ) << " of class CDataSet" << endl;
+    alog << "- Dimension " << usDimension << endl;
+    alog << "- Extents ";
+    for ( uint i = 0; i < usDimension; ++i )
+      alog << extentVec[i] << " ";
+    alog << endl << "- Origin ";
+    for ( uint i = 0; i < usDimension; ++i )
+      alog << originVec[i] << " ";
+    alog << endl << "- Origin ";
+    for ( uint i = 0; i < usDimension; ++i )
+      alog << baseElementDimensionsVec[i] << " ";
+    alog << endl << "- Data dimension " << dataDimensionSize << endl;    
+  }
+FEND;  
 }
 
 /**
  * \param usDimension_ field dimension
  * \param extentVec_ field extents ( == range of each dimension )
- * \param dataDimensionSize_ dimension of each field entry
+ * \param dataDimensionSize_ dimension of each field entry (defaults to 1)
  * \param sClassName_ name of the class (type information)
  * \param sClassVersion_ version number of the class (type information)
  * \param sDerivedFrom_ name of the classes this class is derived from (type information)
+ * \post All member variables are initialised.
+ * \post Origin initialised with \f$ \vec{0} \f$.
+ * \post Base element dimension initialised with \f$ \vec{1} \f$.
  */
 CDataSet::CDataSet( const ushort usDimension_, const vector<size_t> extentVec_,
   const size_t dataDimensionSize_, const std::string &sClassName_, 
@@ -62,26 +85,55 @@ CDataSet::CDataSet( const ushort usDimension_, const vector<size_t> extentVec_,
   usDimension( usDimension_ ), extentVec( extentVec_ ), baseElementDimensionsVec( usDimension_ ), originVec( usDimension_ ),
   dataDimensionSize( dataDimensionSize_ )  
 {
+FBEGIN;
 	for ( ushort i = 0; i < usDimension; i++ )
   {
     baseElementDimensionsVec[i] = 1.0;
     originVec[i] = 0.0;
   }
   extentVec.push_back( dataDimensionSize );
+  if ( isVerbose() )
+  {
+    alog << LINFO << "Creating instance " << static_cast<void*>( this ) << " of class CDataSet" << endl;
+    alog << dump() << endl;
+  }
+FEND;
 }
 
-/// Constructor (for one-dimensional data sets)
+/**
+ * \param usDimension_ field dimension
+ * \param extentVec_ field extents ( == range of each dimension )
+ * \param dataDimensionSize_ dimension of each field entry (defaults to 1)
+ * \param sClassName_ name of the class (type information)
+ * \param sClassVersion_ version number of the class (type information)
+ * \param sDerivedFrom_ name of the classes this class is derived from (type information)
+ * \post All member variables are initialised.
+ * \post usDimension defaults to 1.
+ * \post Origin initialised with 0.
+ * \post Base element dimension initialised with 1.
+ */
 CDataSet::CDataSet( const size_t extent_, const size_t dataDimensionSize_,
 	const std::string &sClassName_, const std::string &sClassVersion_, const std::string &sDerivedFrom_ ) throw()
   : CBase( sClassName_, sClassVersion_, sDerivedFrom_ ), usDimension( 1 ), extentVec( 2 ),
   	baseElementDimensionsVec( 1 ), originVec( 1 ), dataDimensionSize( dataDimensionSize_ )
 {
+FBEGIN;
 	extentVec[0] = extent_;
 	extentVec[1] = dataDimensionSize_;
   baseElementDimensionsVec[0] = 1.0;
   originVec[0] = 0.0;
+  if ( isVerbose() )
+  {
+    alog << LINFO << "Creating instance " << static_cast<void*>( this ) << " of class CDataSet" << endl;
+    alog << dump() << endl;
+  }
+FEND;
 }
 
+/**
+ * \param aDataSet data set to copy.
+ * \post All member variables are initialised with the copied values.
+ */
 CDataSet::CDataSet( const CDataSet& aDataSet ) throw()
   : CBase( "CDataSet", "0.4", "CBase" )
 {
@@ -91,13 +143,22 @@ FBEGIN;
   extentVec = aDataSet.extentVec;
   originVec = aDataSet.originVec;
   baseElementDimensionsVec = aDataSet.baseElementDimensionsVec;
+  if ( isVerbose() )
+  {
+    alog << LINFO << "Creating instance " << static_cast<void*>( this ) << " of class CDataSet" << endl;
+    alog << dump() << endl;
+  }
 FEND;
 }
 
 CDataSet::~CDataSet() throw()
 {
+FBEGIN;
+  if ( isVerbose() )
+    alog << LINFO << "Destroying instance " << static_cast<void*>( this ) << " of class CDataSet" << endl;
   extentVec.clear();
   baseElementDimensionsVec.clear();
+FEND;  
 }
 
 /*************
@@ -146,20 +207,27 @@ std::vector<double> CDataSet::getBaseElementDimensions() const throw()
  * \returns value of the requested dimension
  * \throws OutOfRangeException if usIndex is greater than dataset dimension minus one
  */
-double CDataSet::getBaseElementDimension( const ushort usIndex ) const throw( OutOfRangeException )
+double CDataSet::getBaseElementDimension( const ushort usIndex ) const
+  throw( OutOfRangeException )
 {
   if ( usIndex > ( usDimension - 1 ) )
     throw( OutOfRangeException( SERROR("Index out of range"), CException::RECOVER, ERR_BADDIMENSION ) );
   return baseElementDimensionsVec[usIndex];
 }
 
+/** \returns vector of origin coordinates */
 std::vector<double> CDataSet::getOrigin() const throw()
 {
   return originVec;
 }
 
+/**
+ * \param usIndex index of requested dimension
+ * \returns origin coordinate of the requested dimension
+ * \throws OutOfRangeException if usIndex is greater than dataset dimension minus one
+ */
 double CDataSet::getOrigin( const ushort usIndex ) const
-    throw( OutOfRangeException )
+  throw( OutOfRangeException )
 {
   if ( usIndex > ( usDimension - 1 ) )
     throw( OutOfRangeException( SERROR("Index out of range"), CException::RECOVER, ERR_BADDIMENSION ) );
@@ -174,6 +242,7 @@ double CDataSet::getOrigin( const ushort usIndex ) const
  * \param usIndex index of dimension to update
  * \param dValue new dimension value
  * \throws OutOfRangeException if usIndex is greater than dataset dimension minus one
+ * \post given base element dimension was updated
  */
 void CDataSet::setBaseElementDimension( const ushort usIndex, const double dValue ) throw( OutOfRangeException )
 {
@@ -185,6 +254,7 @@ void CDataSet::setBaseElementDimension( const ushort usIndex, const double dValu
 /**
  * \param dimensionsVec vector of updated dimensions
  * \throws OutOfRangeException if vector of updated dimensions has the wrong size
+ * \post base element dimensions were updated
  */
 void CDataSet::setBaseElementDimensions( const std::vector<double> dimensionsVec ) throw( OutOfRangeException )
 {
@@ -197,6 +267,7 @@ void CDataSet::setBaseElementDimensions( const std::vector<double> dimensionsVec
 /**
  * \param dimensionsVec double array of updated origin
  * \throws OutOfRangeException if vector of updated dimensions has the wrong size
+ * \post base element dimensions were updated
  */
 void CDataSet::setBaseElementDimensions( const double* dimensionsVec_ ) throw()
 {
@@ -208,6 +279,7 @@ void CDataSet::setBaseElementDimensions( const double* dimensionsVec_ ) throw()
  * \param usIndex index of dimension to update
  * \param dValue new dimension value
  * \throws OutOfRangeException if usIndex is greater than dataset dimension minus one
+ * \post origin coordinate was updated
  */
 void CDataSet::setOrigin( const ushort usIndex, const double dValue ) throw( OutOfRangeException )
 {
@@ -219,6 +291,7 @@ void CDataSet::setOrigin( const ushort usIndex, const double dValue ) throw( Out
 /**
  * \param originVec_ vector of updated origin
  * \throws OutOfRangeException if vector of updated dimensions has the wrong size
+ * \post origin coordinates were updated
  */
 void CDataSet::setOrigin( const std::vector<double> originVec_ ) throw( OutOfRangeException )
 {
@@ -231,6 +304,7 @@ void CDataSet::setOrigin( const std::vector<double> originVec_ ) throw( OutOfRan
 /**
  * \param dimensionsVec double array of updated origin
  * \throws OutOfRangeException if vector of updated dimensions has the wrong size
+ * \post origin coordinates were updated
  */
 void CDataSet::setOrigin( const double* originVec_ ) throw()
 {
@@ -243,18 +317,22 @@ void CDataSet::setOrigin( const double* originVec_ ) throw()
  **************************/
  
 /**
- * \param aDataSet dataset to be assigned
+ * \param aDataSet data set to be assigned
+ * \post All values were initialised with the new values
  */
 CDataSet& CDataSet::operator=( CDataSet& aDataSet ) throw()
-{
+{  
   if ( &aDataSet == this )
     return *this;
-    
+      
   usDimension = aDataSet.usDimension;
   extentVec = aDataSet.extentVec;
   dataDimensionSize = aDataSet.dataDimensionSize;
   originVec = aDataSet.originVec;
-  return *this;
+
+  if ( isVerbose() )
+    alog << LINFO << dump() << endl;
+  return *this;  
 }
 
 /***************** 
@@ -266,7 +344,19 @@ CDataSet& CDataSet::operator=( CDataSet& aDataSet ) throw()
  */
 const string CDataSet::dump() const throw()
 {
-  return CBase::dump() + "Dimension: " + boost::lexical_cast<string>( usDimension ) + " DataDimension " 
-		+ boost::lexical_cast<string>( dataDimensionSize ) + "\n" + "Extend size: " 
-		+ boost::lexical_cast<string>( extentVec.size() ) + "\n";
+  ostringstream os;
+  
+  os << "- Dimension " << usDimension << endl;
+  os << "- Extents ";
+  for ( uint i = 0; i < usDimension; ++i )
+    os << extentVec[i] << " ";
+  os << endl << "- Origin ";
+  for ( uint i = 0; i < usDimension; ++i )
+    os << originVec[i] << " ";
+  os << endl << "- Origin ";
+  for ( uint i = 0; i < usDimension; ++i )
+    os << baseElementDimensionsVec[i] << " ";
+  os << endl << "- Data dimension " << dataDimensionSize << endl;
+
+  return CBase::dump() + os.str();
 }

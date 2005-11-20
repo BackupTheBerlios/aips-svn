@@ -5,7 +5,7 @@
  *                                                                      *
  * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
  *                                                                      *
- * Version: 0.9                                                         *
+ * Version: 0.10                                                        *
  * Status : Beta                                                        *
  * Created: 2003-11-25                                                  *
  * Changed:                                                             *
@@ -26,9 +26,11 @@
  *        2004-04-22 Removed unneccessary includes                      *
  *        2005-03-23 Added data vector for base elements dimensions     *
  *                    (e.g. physical voxel size)                        *
- *        2005-05-23 Added constructor for 1D-datasets                  *
+ *        2005-05-23 Added constructor for 1D-data sets                 *
  *                   Added parameter default to getExtent()             *
  *        2005-08-01 Minor code improvements                            *
+ *        2005-11-20 Update documentation                               *
+ *                   Added verbose output                               *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -38,12 +40,15 @@
 #ifndef CDATASET_H
 #define CDATASET_H
 
+#define CDATASET_VERSION "0.10"
+
 // Standard includes
-#include <vector> // std::vector
+#include <vector>
+#include <sstream>
 
 // Boost includes
-#include <boost/lexical_cast.hpp> // boost::lexical_cast<>
-#include <boost/shared_ptr.hpp>   // boost::shared_ptr<>
+#include <boost/lexical_cast.hpp> 
+#include <boost/shared_ptr.hpp>   
 
 // AIPS includes
 #include "clog.h"
@@ -57,13 +62,16 @@ namespace aips {
 const ushort DATAWIDTH  = 0; ///< First dimension of a data set
 const ushort DATAHEIGHT = 1; ///< Second dimension of a data set
 const ushort DATADEPTH  = 2; ///< Third dimension of a data set
+const ushort DATATIME   = 3; ///< Fourth dimension of a data set
 
 /**
- * An abstract base class for generic data fields. A data set is an abstract
- * entity that can contain arbitraty data. Dimension and type of data can
- * vary from field to field. Each field entry can be a scalar value or a
- * vector of any type. Real data will be stored in the inherited classes
- * CTypedData<> and CSingleValue<>
+ * \brief An abstract base class for generic data fields.
+ *
+ * A data set is an abstract entity that can contain arbitraty data. Dimension and type of data can
+ * vary from field to field. Each field entry can be a scalar value or a vector of any type. Real
+ * data will be stored in the inherited classes CTypedData<> and CSingleValue<>.
+ *
+ * \todo Write test cases and sample code.
  */
 class CDataSet : public CBase
 {
@@ -71,21 +79,22 @@ private:
 	/// Standard constructor
 	CDataSet();
 public:
-/* Structors */
+/** \name Structors */
+  //@{
   /// Constructor
   CDataSet( const ushort usDimension_, const size_t* extentArr_,
-    const size_t dataDimensionSize_, const std::string &sClassName_ = "CDataSet", 
-		const std::string &sClassVersion_ = "0.8",
+    const size_t dataDimensionSize_ = 1, const std::string &sClassName_ = "CDataSet", 
+		const std::string &sClassVersion_ = CDATASET_VERSION,
     const std::string &sDerivedFrom_ = "CBase") throw();
   /// Constructor (2nd argument overloaded)
   CDataSet( const ushort usDimension_, const std::vector<size_t> extentVec_,
-    const size_t dataDimensionSize_, const std::string &sClassName_ = "CDataSet", 
-		const std::string &sClassVersion_ = "0.8",
+    const size_t dataDimensionSize_ = 1, const std::string &sClassName_ = "CDataSet",
+		const std::string &sClassVersion_ = CDATASET_VERSION,
     const std::string &sDerivedFrom_ = "CBase") throw();
   /// Constructor (for one-dimensional data sets)
-  CDataSet( const size_t extent_, const size_t dataDimensionSize_,
+  CDataSet( const size_t extent_, const size_t dataDimensionSize_ = 1,
   	const std::string &sClassName_ = "CDataSet",
-		const std::string &sClassVersion_ = "0.8",
+		const std::string &sClassVersion_ = CDATASET_VERSION,
     const std::string &sDerivedFrom_ = "CBase") throw();   
   /// Copy Constructor
   CDataSet( const CDataSet& aDataSet )
@@ -93,7 +102,9 @@ public:
   /// Destructor
   virtual ~CDataSet()
     throw();
-/* Accessors */
+  //@}
+/** \name Accessors */
+  //@{
   /// Get data type. Pure virtual method.
   virtual const std::type_info& getType() const
     throw() =0;
@@ -118,33 +129,46 @@ public:
   /// Get one dimension of the base element
   double getBaseElementDimension( const ushort usIndex ) const
   	throw( OutOfRangeException );
-  /// Get the origin of the dataset
+  /// Get the origin of the data set
   std::vector<double> getOrigin() const
     throw();
-  /// Get a coordinate of the origin of the dataset
+  /// Get a coordinate of the origin of the data set
   double getOrigin( const ushort usIndex ) const
     throw( OutOfRangeException );
-/* Mutators */
+  //@}
+/** \name Mutators */
+  //@{
+  /// Set a specific base element dimension
 	void setBaseElementDimension( const ushort usIndex, const double dValue )
 		throw( OutOfRangeException );
+  /// Set all base element dimensions (vector version)
 	void setBaseElementDimensions( const std::vector<double> dimensionsVec )
 		throw( OutOfRangeException );
+  /// Set all base element dimensions (array version)
   void setBaseElementDimensions( const double* dimensionsVec_ )
     throw();
+  /// Set a specific origin coordinate
   void setOrigin( const ushort usIndex, const double dValue )
     throw( OutOfRangeException );
+  /// Set all origin coordinates (vector version)
   void setOrigin( const std::vector<double> originVec_ )
     throw( OutOfRangeException );
+  /// Set all origin coordinates (array version)
   void setOrigin( const double* originVec_ )
-    throw(); 
-/* Operators (Assignment) */
-  /// Assignment operator for datasets    
+    throw();
+  //@}
+/** \name Assignment operators */
+  //@{
+  /// Assignment operator for data sets    
   CDataSet& operator=( CDataSet& aDataSet )
     throw();
-/* Other Methods */
+  //@}
+/** \name Other Methods */
+  //@{
   /// Reimplemented from CBase
   virtual const std::string dump() const
     throw();
+  //@}
 protected:
   ushort usDimension;            ///< Dimension of the data set
   std::vector<size_t> extentVec; ///< Size of each dimension
@@ -153,10 +177,13 @@ protected:
   size_t dataDimensionSize;      ///< Dimension of each field entry
 };
 
+/** \name Type checking functions */
+//@{
+
 /**
- * Function to compare field/scalar types with a given dataset type
+ * Function to compare field/scalar types with a given data set type
  * Call with checkType<FieldType>( data )
- * \param aDataSet dataset to check
+ * \param aDataSet data set to check
  */
 template<typename T> inline bool checkType( const CDataSet& aDataSet ) throw()
 {
@@ -164,10 +191,10 @@ template<typename T> inline bool checkType( const CDataSet& aDataSet ) throw()
 }
 
 /**
- * Function to compare field/scalar types with a given dataset type
+ * Function to compare field/scalar types with a given data set type
  * Call with checkType<FieldType>( data )
  * Overloaded function for pointer types
- * \param aDataSet dataset to check
+ * \param aDataSet data set to check
  */
 template<typename T> inline bool checkType( const CDataSet* aDataSet ) throw()
 {
@@ -175,16 +202,16 @@ template<typename T> inline bool checkType( const CDataSet* aDataSet ) throw()
 }
 
 /**
- * Function to compare field/scalar types with a given dataset type
+ * Function to compare field/scalar types with a given data set type
  * Call with checkType<FieldType>( data )
  * Overloaded function for boost::shared_ptr pointer types
- * \param aDataSet dataset to check
+ * \param aDataSet data set to check
  */
 template<typename T> inline bool checkType( const boost::shared_ptr<CDataSet> aDataSet ) throw()
 {
 	return( aDataSet->getType() == typeid( typename T::TDataType ) );
 }
-
+//@}
 
 } // end of namespace aips
 #endif

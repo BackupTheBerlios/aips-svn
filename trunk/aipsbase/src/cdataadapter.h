@@ -5,8 +5,8 @@
  *                                                                      *
  * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
  *                                                                      *
- * Version: 0.2                                                         *
- * Status : Alpha                                                       *
+ * Version: 0.3                                                         *
+ * Status : Beta                                                        *
  * Created: 2004-01-22                                                  *
  * Changed:                                                             *
  *        2004-01-26 saveData now throws an exception if given          *
@@ -18,6 +18,7 @@
  *        2004-11-22 load and save now handle multiple data types       *
  *        2004-11-24 Class now uses boost::shared_ptr                   *
  *        2004-11-25 Corrected some errors in load() and save()         *
+ *        2005-11-20 Updated documentation                              *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -27,6 +28,8 @@
  
 #ifndef CDATAADAPTER_H
 #define CDATAADAPTER_H
+
+#define CDATAADAPTER_VERSION "0.3"
 
 // Standard includes
 #include <string> // std::string
@@ -38,28 +41,33 @@ namespace aips {
 
 /**
  * CDataAdapter is an abstract interface to exchange data between the aips data structures 
- * (like CDataSet and CMesh) and other libraries/applications (e.g. AVS, ITK, VTK). 
+ * (like CDataSet and CMesh) and other libraries/applications (e.g. ITK, VTK, ImageMagick).
  * For specific data types and external libraries this class will be specialized.
  * 
- * This class provides a bidirectional interface. 
- * By this it can be used to convert internal structures into external structures and vice versa.
+ * This class provides a bidirectional interface which can be used to convert internal
+ * structures into external structures and vice versa.
  */
 class CDataAdapter : public CBase
 {
 private:
+
 	/// Standard constructor
 	CDataAdapter();
 	/// Copy constructor
 	CDataAdapter( const CDataAdapter& );
 	/// Assignment operator
-	//CDataAdapter operator=( const CDataAdapter& ); //icc returning abtract class is not allowed
+	CDataAdapter& operator=( const CDataAdapter& );
 public:
-/* Structors */
+/** \name Structors */
+  //@{
 	/// Constructor
-  CDataAdapter( const std::string &sClassName_ = "CDataAdapter", const std::string &sClassVersion_ = "0.1", 
-		const std::string &sDerivedFrom_ = "CBase" ) throw();	
+  CDataAdapter( const std::string &sClassName_ = "CDataAdapter",
+    const std::string &sClassVersion_ = CDATAADAPTER_VERSION, const std::string &sDerivedFrom_ = "CBase" )
+    throw();
 	/// Destructor
-  virtual ~CDataAdapter() throw() = 0;
+  virtual ~CDataAdapter()
+    throw() = 0;
+  //@}  
 };
 
 } 

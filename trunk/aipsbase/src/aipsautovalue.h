@@ -25,6 +25,7 @@
 #ifndef AIPSAUTOVALUE_H
 #define AIPSAUTOVALUE_H
 
+// Standard library includes
 #include <stdexcept>
 
 namespace aips {
@@ -35,13 +36,13 @@ namespace aips {
  * In many cases the usage of uninitialised variables can lead to runtime errors which are
  * difficult to detect. Using CAutoValue can be of help in such cases, as it throws
  * an exception if the encapsuled variable was not initialised properly.
- * \todo Write test cases
+ * \todo Write test cases and example code.
  */
 template <typename TDataType>
 class CAutoValue
 {
-public:
-	/** \name Structors */
+public:  
+/** \name Structors */
 	//@{
 	/// Standard constructor. Calling this will result in getting an uninitialised variable
 	CAutoValue();
@@ -52,14 +53,14 @@ public:
 	template<typename U>
 	CAutoValue& operator=( const U& aValue );
 	//@}
-	/** \name Operator functions */
+/** \name Operator functions */
 	//@{
 	/// Return the current value
 	operator TDataType&();
 	/// Return the current value (const version)
 	operator const TDataType&() const;
 	//@}
-	/** \name Other functions */
+/** \name Other functions */
 	//@{
 	/// Returns if the variable has been initialised
 	bool defined() const;

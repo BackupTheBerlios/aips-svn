@@ -5,7 +5,7 @@
  *                                                                      *
  * Author: Hendrik Belitz                                               *
  *                                                                      *
- * Version: 0.13                                                        *
+ * Version: 0.14                                                        *
  * Status:  Beta                                                        *
  * Created: 2003-09-09                                                  *
  * Changed:                                                             *
@@ -25,6 +25,9 @@
  *                   Made contructor protected                          *
  *        2004-11-25 Exchanged SigC++ for boost::signal                 *
  *        2005-03-28 Removed all signaling stuff                        *
+ *        2005-11-20 Correction of constructor parameter defaults       *
+ *                   Added and updated documentation                    *
+ *                   Added runtime verbosity functions                  *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -35,9 +38,9 @@
 #ifndef CBASE_H
 #define CBASE_H
 
-#define CBASE_VERSION "0.13"
+#define CBASE_VERSION "0.14"
 
-// Include aipsbase_config.h (for USE_BLITZ or USE_STANDALONE, BENCHMARK and USE_FLOAT)
+// Include aipsbase_config.h 
 #include "aipsbase_config.h"
 
 // AIPS includes
@@ -47,28 +50,34 @@
 namespace aips {
 
 /**
- * A class for easy runtime version checking. This class should is an abstract base class 
- * of all AIPS-classes (except CVector for effeciency purposes). You cannot instantiate any
- * objects of this class since the destructor is pure virtual.
+ * \brief A class for easy runtime version checking.
+ *
+ * This class should is an abstract base class 
+ * of all bigger AIPS-classes (with the exception of all policy and trait classes which are not
+ * involved in the main class hierarchy. CVector also isn't a child of CBase for efficiency
+ * purposes). You cannot instantiate any objects of this class since the destructor is pure virtual.
  */
 class CBase 
 {
 private:
-  /// Standard constructor 
+  /// Standard constructor
   CBase();
   /// Copy constructor
   CBase( const CBase& );
   /// Assignment operator
   CBase& operator=( const CBase& );
 public:
-/* Structors */
+/** \name Structors */
+  //@{
   /// Constructor
-  CBase( const std::string &sClassName_, const std::string &sClassVersion_ = CBASE_VERSION,
-    const std::string &sDerivedFrom_ = "CBase" ) throw();
+  CBase( const std::string &sClassName_ = "CBase", const std::string &sClassVersion_ = CBASE_VERSION,
+    const std::string &sDerivedFrom_ = "-" ) throw();
   /// Destructor. Pure virtual to generate an abstract base class
   virtual ~CBase() 
     throw() = 0;
-/* Accessors */
+  //@}
+/** \name Accessors */
+  //@{
   /// Returns the class name
   const std::string& getClassName()
     throw();
@@ -78,14 +87,33 @@ public:
   /// Returns the classes parents
   const std::string& getClassParents()
     throw();
-/* Other Methods */    
+  /// Return current verbosity setting
+  bool isVerbose()
+    throw();  
+  //@}
+/** \name Mutators */
+  //@{
+  /// Set verbosity to the given parameter
+  void setVerbosity( bool bVerbose_ )
+    throw();
+  /// Turn on verbose output
+  void turnVerbosityOn()
+    throw();
+  /// Turn off verbose output
+  void turnVerbosityOff()
+    throw();
+  //@}    
+/** \name Other Methods */
+  //@{
   /// Produces an information string about the actual object. This is mainly meant for debugging purposes
   virtual const std::string dump() const
     throw();
+  //@}
 private:
-  std::string sClassName;   ///< Class name
-  std::string sClassVersion;///< Class version
-  std::string sDerivedFrom; ///< Direct parents of class
+  std::string sClassName;    ///< Class name
+  std::string sClassVersion; ///< Class version
+  std::string sDerivedFrom;  ///< Direct parents of class
+  bool bVerbose;             ///< Does the class have to produce verbose output?
 };
 
 }
