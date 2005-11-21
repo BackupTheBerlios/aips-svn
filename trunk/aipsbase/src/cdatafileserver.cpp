@@ -30,7 +30,7 @@ typedef vector<boost::shared_ptr<CFileHandler> > THandlerVec;
 
 /**
  * Private default constructor.
- * Only usable by the friend function
+ * Only usable by the friend function.
  */
 CDataFileServer::CDataFileServer() throw()
   : CBase( "CDataFileServer", "0.5", "CBase" )
@@ -50,7 +50,8 @@ CDataFileServer::~CDataFileServer() throw()
  *****************/
  
 /**
- * \param handlerPtr A new file handler. This instance will be deleted automatically at program
+ * \param handlerPtr A new file handler.
+ * \attention This instance given to this member function will be deleted automatically at program
  * termination so DO NOT try to do this by hand or to use non-dynamic objects here!
  * \exception NullException if aHandler is NULL
  */
@@ -79,7 +80,6 @@ void CDataFileServer::removeHandler( boost::shared_ptr<CFileHandler> handlerSPtr
 }
 
 /**
- * The correct file handler will be determined automatically.
  * \param sFilename Data file name. This MUST have an file extension.
  * \returns A pair of the loaded data set and the corresponding header.
  * \exception FileException on load error, illegal filename or not supported file type.
@@ -128,9 +128,9 @@ TDataFile CDataFileServer::loadDataSet( const string& sFilename )
 }
 
 /**
- * The correct file handler will be determined automatically by the file extension.
  * \param sFilename Data file name. This MUST have an file extension.
- * \param theData Pair of a data set and a header information class. If the pointer to the header is NULL, default values will be used.
+ * \param theData Pair of a data set and a header information class.
+ * If the pointer to the header is NULL, default values will be used.
  * \returns The loaded data set.
  * \exception FileException on file error, illegal filename or not supported file type.
  */

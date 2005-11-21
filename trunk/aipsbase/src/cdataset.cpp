@@ -353,7 +353,7 @@ const string CDataSet::dump() const throw()
   os << endl << "- Origin ";
   for ( uint i = 0; i < usDimension; ++i )
     os << originVec[i] << " ";
-  os << endl << "- Origin ";
+  os << endl << "- Base element dimension ";
   for ( uint i = 0; i < usDimension; ++i )
     os << baseElementDimensionsVec[i] << " ";
   os << endl << "- Data dimension " << dataDimensionSize << endl;

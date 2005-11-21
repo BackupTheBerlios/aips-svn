@@ -16,12 +16,35 @@
 
 namespace aips {
 
+/*************
+ * Structors *
+ *************/
+
+using namespace std;
+
+/**
+ * \param extentsVec_ vector representing the extents of the region
+ * \param originVec_ vector representing the point of origin of the region 
+ * \throws OutOfRangeException if dimensions of extents and origin differ
+ * \post All data members are initialised properly.
+ */
 CDataSetRegion::CDataSetRegion( const std::vector<size_t>& extentsVec_, 
-	const std::vector<size_t>& originVec_ ) throw() 	
+	const std::vector<size_t>& originVec_ ) throw( OutOfRangeException ) 	
 	: CBase( "CDataSetRegion","0.1","CBase" ), extentsVec( extentsVec_ ), originVec( originVec_ )
 {
+  if ( extentsVec.size() != originVec.size() )
+    throw( OutOfRangeException( SERROR("Dimensions of extents and origin are not equal"),
+      CException::RECOVER, ERR_BADDIMENSION ) );
+  if ( isVerbose() )
+    alog << LINFO << dump() << endl;
 }
 	
+/**
+ * \param extentsArr_ array representing the extents of the region
+ * \param originArr_ array representing the point of origin of the region
+ * \param dimensionSize size of the given arrays
+ * \post All data members are initialised properly.
+ */
 CDataSetRegion::CDataSetRegion( const size_t* extentsArr_, const size_t* originArr_, 
 	const size_t dimensionSize ) throw() : CBase( "CDataSetRegion","0.1","CBase" )
 {
@@ -30,73 +53,159 @@ CDataSetRegion::CDataSetRegion( const size_t* extentsArr_, const size_t* originA
 		extentsVec.push_back( extentsArr_[i] );
 		originVec.push_back( originArr_[i] );
 	}
+  if ( isVerbose() )
+    alog << LINFO << dump() << endl;
 }
-	
-CDataSetRegion::CDataSetRegion( const CDataSetRegion& newRegion ) throw()
-	: CBase( "CDataSetRegion","0.1","CBase" ), extentsVec( newRegion.extentsVec ), 
-		originVec( newRegion.originVec )
+ 
+/**
+ * \param aNewRegion CDataSetRegion instance to copy
+ * \post All data members are initialised properly.
+ */
+CDataSetRegion::CDataSetRegion( const CDataSetRegion& aNewRegion ) throw()
+	: CBase( "CDataSetRegion","0.1","CBase" ), extentsVec( aNewRegion.extentsVec ),
+		originVec( aNewRegion.originVec )
 {
+  if ( isVerbose() )
+    alog << LINFO << dump() << endl;
 }
   
 CDataSetRegion::~CDataSetRegion() throw()
 {
+  if ( isVerbose() )
+    alog << LINFO << "Deleting instance " << static_cast<void*>( this ) << " of CDataSetRegion" << endl;
 }
 	
-void CDataSetRegion::resetOrigin( const std::vector<size_t>& originVec_ ) throw( OutOfRangeException )
+/*****************
+ * Other methods *
+ *****************/
+
+/**
+ * \param originVec_ new position of region origin
+ * \throws OutOfRangeException if dimension of parameter doesn't match that of the region's extents
+ * \post new origin set
+ */
+void CDataSetRegion::resetOrigin( const std::vector<size_t>& originVec_ )
+  throw( OutOfRangeException )
 {
+  if ( originVec_.size() != extentsVec.size() )
+    throw( OutOfRangeException( SERROR("Dimensions of extents and origin are not equal"),
+      CException::RECOVER, ERR_BADDIMENSION ) );
 	originVec = originVec_;
+  if ( isVerbose() )
+    alog << LINFO << dump() << endl;
 }
 	
+/**
+ * \param originArr_ new position of region origin
+ * \param dimensionSize size of originArr_
+ * \throws OutOfRangeException if dimension of parameter doesn't match that of the region's extents
+ * \post new origin set
+ */ 
 void CDataSetRegion::resetOrigin( const size_t* originArr_, const size_t dimensionSize )	
 	throw( OutOfRangeException )	
 {
 	if ( dimensionSize != originVec.size() )
-		throw( OutOfRangeException( SERROR("dimensionSize too big"), CException::RECOVER, ERR_BADDIMENSION ) );
+		throw( OutOfRangeException( SERROR("Dimensions of extents and origin are not equal"),
+      CException::RECOVER, ERR_BADDIMENSION ) );
 		
 	for( size_t i = 0; i < dimensionSize; ++i )
 	{
 		originVec[i] = originArr_[i];
 	}
+  if ( isVerbose() )
+    alog << LINFO << dump() << endl;
 }
-	
-void CDataSetRegion::resetExtents( const std::vector<size_t>& extentsVec_ ) throw( OutOfRangeException )
+
+/**
+ * \param extentsVec_ new extents of the region
+ * \throws OutOfRangeException if dimension of parameter doesn't match that of the region's extents
+ * \post new extents set
+ */
+void CDataSetRegion::resetExtents( const std::vector<size_t>& extentsVec_ )
+  throw( OutOfRangeException )
 {
 	if ( extentsVec_.size() != extentsVec.size() )
-		throw( OutOfRangeException( SERROR("Extents vector has wrong dimension"),
+		throw( OutOfRangeException( SERROR("Dimensions of extents and origin are not equal"),
 			CException::RECOVER, ERR_BADDIMENSION ) );
 		
 	extentsVec = extentsVec_;
+  if ( isVerbose() )
+    alog << LINFO << dump() << endl;
 }
-	
+
+/**
+ * \param extentsArr_ new extents of the region
+ * \param dimensionSize size of extentsArr_
+ * \throws OutOfRangeException if dimension of parameter doesn't match that of the region's extents
+ * \post new extents set
+ */  
 void CDataSetRegion::resetExtents( const size_t* extentsArr_, const size_t dimensionSize )	
 	throw( OutOfRangeException )
 {
 	if ( dimensionSize != extentsVec.size() )
-		throw( OutOfRangeException( SERROR("dimensionSize too big"), CException::RECOVER, ERR_BADDIMENSION ) );
+		throw( OutOfRangeException( SERROR("Dimensions of extents and origin are not equal"),
+      CException::RECOVER, ERR_BADDIMENSION ) );
 		
 	for( size_t i = 0; i < dimensionSize; ++i )
 	{
 		extentsVec[i] = extentsArr_[i];
 	}
+  if ( isVerbose() )
+    alog << LINFO << dump() << endl;
 }	
-	
-void CDataSetRegion::resetRegion( const std::vector<size_t>& originVec_, 
+
+/**
+ * \param extentsVec_ vector representing the extents of the region
+ * \param originVec_ vector representing the point of origin of the region 
+ * \throws OutOfRangeException if dimensions of extents and origin differ
+ * \post All data members are resetted properly.
+ */
+void CDataSetRegion::resetRegion( const std::vector<size_t>& originVec_,
 	const std::vector<size_t>& extentsVec_ ) throw( OutOfRangeException )
 {
+  if ( extentsVec.size() != originVec.size() )
+    throw( OutOfRangeException( SERROR("Dimensions of extents and origin are not equal"),
+      CException::RECOVER, ERR_BADDIMENSION ) );
 	originVec = originVec_;
 	extentsVec = extentsVec_;
+  if ( isVerbose() )
+    alog << LINFO << dump() << endl;
 }
-	
+
+/**
+ * \param extentsArr_ array representing the extents of the region
+ * \param originArr_ array representing the point of origin of the region
+ * \param dimensionSize size of the given arrays
+ * \post All data members are resetted properly.
+ */ 
 void CDataSetRegion::resetRegion( const size_t* extentsArr_, const size_t* originArr_, 
-	const size_t dimensionSize ) throw( OutOfRangeException )		
+	const size_t dimensionSize ) throw()		
 {
-	if ( dimensionSize != extentsVec.size() )
-		throw( OutOfRangeException( SERROR("dimensionSize too big"), CException::RECOVER, ERR_BADDIMENSION ) );
 	for( size_t i = 0; i < dimensionSize; ++i )
 	{
 		extentsVec[i] = extentsArr_[i];
 		originVec[i] = originArr_[i];
 	}	
+  if ( isVerbose() )
+    alog << LINFO << dump() << endl;
 }
 
+/**
+ * \returns information string
+ */
+const std::string CDataSetRegion::dump() const throw()
+{
+  ostringstream os;
+  ushort usDimension = extentsVec.size();
+  os << "- Dimension " << usDimension << endl;
+  os << "- Extents ";
+  for ( uint i = 0; i < usDimension; ++i )
+    os << extentsVec[i] << " ";
+  os << endl << "- Origin ";
+  for ( uint i = 0; i < usDimension; ++i )
+    os << originVec[i] << " ";
+  os << endl;
+
+  return CBase::dump() + os.str();
+}
 };

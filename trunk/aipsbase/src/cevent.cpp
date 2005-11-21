@@ -33,6 +33,7 @@ using boost::lexical_cast;
  * \param classVersion_ version number of the class (type information)
  * \param derivedFrom_ name of the classes this class is derived from (type information)
  * \throws NullException if generator_ is NULL since each event needs a generator
+ * \post All members are initialised properly
  */
 CEvent::CEvent( CSubject* generator_, uint uiEventType_, const string& className_, const string& classVersion_,
 	const string& derivedFrom_ ) throw( NullException )
@@ -40,23 +41,35 @@ CEvent::CEvent( CSubject* generator_, uint uiEventType_, const string& className
 {
 	if( generator == NULL )
 		throw( NullException( SERROR("Generator subject is NULL"), CException::FATAL, ERR_CALLERNULL ) );
+  if ( isVerbose() )
+    std::cerr  << dump() << endl;
 }
 
 CEvent::~CEvent() throw()
 {
+  if ( isVerbose() )
+    std::cerr  << "Instance " << static_cast<void*>(this) << " of CEvent is going to be deleted" << endl;
 }
 
-/** \param anEvent event to copy */
+/**
+ * \param anEvent event to copy
+ * \post All members are initialised properly
+ */
 CEvent::CEvent( const CEvent& anEvent ) throw()
-	: CBase( "CEvent", "0.3", "CBase" ), generator( anEvent.generator ), uiEventType( anEvent.uiEventType )
+	: CBase( "CEvent", AIPSCEVENT_VERSION, "CBase" ), generator( anEvent.generator ), uiEventType( anEvent.uiEventType )
 {
+  if ( isVerbose() )
+    std::cerr  << dump() << endl;
 }
 
 /*************
  * Operators *
  *************/
  
-/** \param anEvent event to copy */
+/**
+ * \param anEvent event to copy
+ * \post All members were reseted using the copied data
+ */
 CEvent CEvent::operator=( const CEvent& anEvent ) throw()
 {
 	if ( &anEvent != this )
@@ -64,6 +77,8 @@ CEvent CEvent::operator=( const CEvent& anEvent ) throw()
 		this->generator = anEvent.generator;
 		this->uiEventType = anEvent.uiEventType;
 	}
+  if ( isVerbose() )
+    std::cerr  << dump() << endl;
 	return *this;
 }
 
@@ -110,7 +125,7 @@ const std::string CEvent::dump() const throw()
  * \throws NullException if generator_ is NULL since each event needs a generator
  */
 CNewLogEvent::CNewLogEvent( CSubject* generator_, const std::string& sLogString_ ) throw( NullException )
-	: CEvent( generator_, ENewLogEvent, "CNewLogEvent", "0.3", "CEvent" ),
+	: CEvent( generator_, ENewLogEvent, "CNewLogEvent", AIPSCEVENT_VERSION, "CEvent" ),
 		sLogString( sLogString_ )
 {
 	if( generator_ == NULL )
@@ -126,6 +141,8 @@ CNewLogEvent::CNewLogEvent( const CNewLogEvent& anEvent ) throw()
 
 CNewLogEvent::~CNewLogEvent() throw()
 {
+  if ( isVerbose() )
+    std::cerr  << "Instance " << static_cast<void*>(this) << " of CLogEvent is going to be deleted" << endl;
 }
 
 /*************
@@ -137,6 +154,8 @@ CNewLogEvent CNewLogEvent::operator=( const CNewLogEvent& anEvent ) throw()
 {
 	if ( this != &anEvent )
 		this->sLogString = anEvent.sLogString;
+  if ( isVerbose() )
+    std::cerr  << dump() << endl;
 	return *this;
 }
 
@@ -175,7 +194,7 @@ const std::string CNewLogEvent::dump() const throw()
  * \throws NullException if generator_ is NULL since each event needs a generator
  */
 CDataChangedEvent::CDataChangedEvent( CSubject* generator_ ) throw( NullException )
-	: CEvent( generator_, EDataChangedEvent, "CDataChangedEvent", "0.3", "CEvent" )
+	: CEvent( generator_, EDataChangedEvent, "CDataChangedEvent", AIPSCEVENT_VERSION, "CEvent" )
 {
 	if( generator_ == NULL )
 		throw( NullException( SERROR("Generator subject is NULL"), CException::FATAL, ERR_CALLERNULL ) );
@@ -189,6 +208,8 @@ CDataChangedEvent::CDataChangedEvent( const CDataChangedEvent& anEvent ) throw()
 
 CDataChangedEvent::~CDataChangedEvent() throw()
 {
+  if ( isVerbose() )
+    std::cerr  << "Instance " << static_cast<void*>(this) << " of CDataChangedEvent is going to be deleted" << endl;
 }
 
 #ifndef NOPROGRESS
@@ -207,7 +228,8 @@ CDataChangedEvent::~CDataChangedEvent() throw()
  * \throws NullException if generator_ is NULL since each event needs a generator
  */
 CProgressStartEvent::CProgressStartEvent( CSubject* generator_, uint uiMaxProgress_ ) throw( NullException )
-	: CEvent( generator_, EProgressStartEvent, "CProgressStartEvent", "0.3", "CEvent" ), uiMaxProgress( uiMaxProgress_ )
+	: CEvent( generator_, EProgressStartEvent, "CProgressStartEvent", AIPSCEVENT_VERSION, "CEvent" ),
+    uiMaxProgress( uiMaxProgress_ )
 {
 	if( generator_ == NULL )
 		throw( NullException( SERROR("Generator subject is NULL"), CException::FATAL, ERR_CALLERNULL ) );
@@ -215,13 +237,15 @@ CProgressStartEvent::CProgressStartEvent( CSubject* generator_, uint uiMaxProgre
 
 /** \param anEvent event to copy */
 CProgressStartEvent::CProgressStartEvent( const CProgressStartEvent& anEvent ) throw()
-	: CEvent( anEvent.getGenerator(), EProgressStartEvent, "CProgressStartEvent", "0.3", "CEvent" ),
+	: CEvent( anEvent.getGenerator(), EProgressStartEvent, "CProgressStartEvent", AIPSCEVENT_VERSION, "CEvent" ),
 		uiMaxProgress( anEvent.uiMaxProgress )
 {
 }
 
 CProgressStartEvent::~CProgressStartEvent() throw()
 {
+  if ( isVerbose() )
+    std::cerr  << "Instance " << static_cast<void*>(this) << " of CProgressStartEvent is going to be deleted" << endl;
 }
 
 /*************
@@ -271,7 +295,7 @@ const std::string CProgressStartEvent::dump() const throw()
  * \throws NullException if generator_ is NULL since each event needs a generator
  */
 CProgressResetEvent::CProgressResetEvent( CSubject* generator_ ) throw( NullException )
-	: CEvent( generator_, EProgressResetEvent, "CProgressResetEvent", "0.3", "CEvent" )
+	: CEvent( generator_, EProgressResetEvent, "CProgressResetEvent", AIPSCEVENT_VERSION, "CEvent" )
 {
 	if( generator_ == NULL )
 		throw( NullException( SERROR("Generator subject is NULL"), CException::FATAL, ERR_CALLERNULL ) );
@@ -285,6 +309,8 @@ CProgressResetEvent::CProgressResetEvent( const CProgressResetEvent& anEvent ) t
 
 CProgressResetEvent::~CProgressResetEvent() throw()
 {
+  if ( isVerbose() )
+    std::cerr  << "Instance " << static_cast<void*>(this) << " of CProgressResetEvent is going to be deleted" << endl;
 }
 
 /********************************************************************************************************
@@ -301,7 +327,7 @@ CProgressResetEvent::~CProgressResetEvent() throw()
  * \throws NullException if generator_ is NULL since each event needs a generator
  */
 CProgressEvent::CProgressEvent( CSubject* generator_, uint uiValue_ ) throw( NullException )
-	: CEvent( generator_, EProgressEvent, "CProgressEvent", "0.3", "CEvent" ), uiValue( uiValue_ )
+	: CEvent( generator_, EProgressEvent, "CProgressEvent", AIPSCEVENT_VERSION, "CEvent" ), uiValue( uiValue_ )
 {
 	if( generator_ == NULL )
 		throw( NullException( SERROR("Generator subject is NULL"), CException::FATAL, ERR_CALLERNULL ) );
@@ -309,12 +335,14 @@ CProgressEvent::CProgressEvent( CSubject* generator_, uint uiValue_ ) throw( Nul
 
 /** \param anEvent event to copy */
 CProgressEvent::CProgressEvent( const CProgressEvent& anEvent ) throw()
-	: CEvent( anEvent.getGenerator(), EProgressEvent, "CProgressEvent", "0.3", "CEvent" ), uiValue( anEvent.uiValue )
+	: CEvent( anEvent.getGenerator(), EProgressEvent, "CProgressEvent", AIPSCEVENT_VERSION, "CEvent" ), uiValue( anEvent.uiValue )
 {
 }
 
 CProgressEvent::~CProgressEvent() throw()
 {
+  if ( isVerbose() )
+    std::cerr  << "Instance " << static_cast<void*>(this) << " of CProgressEvent is going to be deleted" << endl;
 }
 
 /*************

@@ -16,6 +16,7 @@
 /** 
  * \param usOriginIndex Dimensional index of request
  * \returns Position of origin for the given index
+ * \throws OutOfRangeException if given index is out of range
  */
 inline size_t CDataSetRegion::getOrigin( ushort usOriginIndex ) throw( OutOfRangeException )
 { 
@@ -28,6 +29,7 @@ inline size_t CDataSetRegion::getOrigin( ushort usOriginIndex ) throw( OutOfRang
 /**
  * \param usExtentIndex Dimensional index of request
  * \returns Region extent for the given index
+ * \throws OutOfRangeException if given index is out of range
  */ 
 inline size_t CDataSetRegion::getExtent( ushort usExtentIndex ) throw( OutOfRangeException )
 { 
@@ -38,7 +40,7 @@ inline size_t CDataSetRegion::getExtent( ushort usExtentIndex ) throw( OutOfRang
 }		
 	
 /** \returns Position of region origin */
-inline std::vector<size_t> CDataSetRegion::getOrigin()	throw() 
+inline std::vector<size_t> CDataSetRegion::getOrigin() throw()
 { 
 	return originVec; 
 }

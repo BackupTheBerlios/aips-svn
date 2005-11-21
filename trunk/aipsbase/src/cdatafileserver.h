@@ -26,6 +26,7 @@
  *                   Method getHandler() added                          *
  *        2005-08-01 Updated documentation                              *
  *                   Minor code improvements                            *
+ *        2005-11-21 Updated documentation                              *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -42,7 +43,9 @@
 namespace aips {
 
 /**
- * A generic file handler. This class is implemented as a Meyers-Singleton
+ * \brief A generic file handler.
+ *
+ * This class is implemented as a Meyers-Singleton
  * so you only have one instance per application. Simply add childs of
  * CFileHandler at application startup to gain full functionality.
  *
@@ -52,6 +55,8 @@ namespace aips {
  * File loading is more robust in respect to this. If a file
  * handler produces an exception on reading a file, the file server tries to
  * use another handler. This mechanism does not work for file saving!
+ *
+ * \todo Write test cases and example code
  */
 class CDataFileServer : public CBase
 {
@@ -66,15 +71,20 @@ private:
   CDataFileServer& operator=( const CDataFileServer& )
     throw();
 public:
-/* Structors */
+/** \name Structors */
+  //@{
   /// Destructor
   virtual ~CDataFileServer()
     throw();
-/* Accessors */
+  //@}
+/** \name Accessors */
+  //@{
 	/// Returns the given handler
 	boost::shared_ptr<CFileHandler> getHandler( uint uiIndex_ )
 		throw( OutOfRangeException );
-/* Other Methods */
+  //@}  
+/** \name Other Methods */
+  //@{
   /// Adds a new fileHandler to the vector of available file handlers
   void addHandler( boost::shared_ptr<CFileHandler> handlerSPtr )
     throw( NullException );
@@ -96,11 +106,13 @@ public:
   /// Reimplemented from CBase
   virtual const std::string dump() const
     throw();
-
-/* Friend functions */  
+  //@}  
+/** \name Friend functions */
+  //@{
   /// Returns a reference to the file server
   friend aips::CDataFileServer& getFileServer()
     throw();
+  //@}
 private:
 	/// Vector of all registered file handlers 
 	static std::vector<boost::shared_ptr<CFileHandler> > fileHandlerSPtrVec; 
