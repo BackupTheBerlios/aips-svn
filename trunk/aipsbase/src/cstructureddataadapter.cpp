@@ -1,12 +1,10 @@
 /************************************************************************
- * File: cstructureddataadapter.h                                       *
+ * File: cstructureddataadapter.cpp                                     *
  * Project: AIPS                                                        *
  * Description: Abstract adapter for structured data sets               *
  *                                                                      *
  * Author: Hendrik Belitz                                               *
  *                                                                      *
- * Version: 0.1                                                         *
- * Status : PreAlpha                                                    *
  * Created: 2004-22-12                                                  *
  * Changed:                                                             *
  ************************************************************************
@@ -30,11 +28,13 @@ using boost::shared_ptr;
  * \param sClassName_ class name
  * \param sClassVersion_ class version
  * \param sDerivedFrom_ parent class
+ * \post all members are initialised properly
  */
 CStructuredDataAdapter::CStructuredDataAdapter( const string &sClassName_, const string &sClassVersion_, 
 	const string &sDerivedFrom_ ) throw() 
-	: CDataAdapter( sClassName_, sClassVersion_, sDerivedFrom_ )
+	: CDataAdapter( sClassName_, sClassVersion_, sDerivedFrom_ ), bSwapYAxis( false )
 {
+  internalDataSPtr.reset();
 }
    
 /**
@@ -42,24 +42,36 @@ CStructuredDataAdapter::CStructuredDataAdapter( const string &sClassName_, const
  * \param sClassName_ class name
  * \param sClassVersion_ class version
  * \param sDerivedFrom_ parent class
+ * \post all members are initialised properly
  */
 CStructuredDataAdapter::CStructuredDataAdapter( TDataSetPtr internalDataSPtr_,
 	const string &sClassName_, const string &sClassVersion_, const string &sDerivedFrom_ ) throw() 
-  : CDataAdapter( sClassName_, sClassVersion_, sDerivedFrom_ ), internalDataSPtr ( internalDataSPtr_ )
+  : CDataAdapter( sClassName_, sClassVersion_, sDerivedFrom_ ),
+    internalDataSPtr ( internalDataSPtr_ ), bSwapYAxis( false )
 {
 }
 
-CStructuredDataAdapter::~CStructuredDataAdapter() throw() {}
+CStructuredDataAdapter::~CStructuredDataAdapter() throw()
+{  
+}
 
 /*****************
  * Other methods *
  *****************/
  
-/** \param internalDataPtr_ new dataset to use for conversions into external format */
+/**
+ * \param internalDataPtr_ new dataset to use for conversions into external format
+ * \post new data set is used
+ */
 void CStructuredDataAdapter::setInternalData( TDataSetPtr internalDataSPtr_ )
 {
 	internalDataSPtr = internalDataSPtr_;
 }
+
+/**
+ * \param bSwapYAxis_ set new value for swapping the y axis 
+ * \post new axis swapping 
+ */
 
 void CStructuredDataAdapter::setYSwapping( bool bSwapYAxis_ ) 
 { 

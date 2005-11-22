@@ -72,6 +72,7 @@ const ushort DATATIME   = 3; ///< Fourth dimension of a data set
  * data will be stored in the inherited classes CTypedData<> and CSingleValue<>.
  *
  * \todo Write test cases and sample code.
+ * \todo Add an swap axis function.
  */
 class CDataSet : public CBase
 {

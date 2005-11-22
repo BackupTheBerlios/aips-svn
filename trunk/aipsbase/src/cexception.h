@@ -6,7 +6,7 @@
  *                                                                      *
  * Author: Hendrik Belitz                                               *
  *                                                                      *
- * Version: 0.16                                                        *
+ * Version: 0.17                                                        *
  * Status : Beta                                                        *
  * Created: 2003-09-12                                                  *
  * Based on: SDL++ exception.h                                          *
@@ -39,6 +39,7 @@
  *                     CException::operator=                            *
  *          2004-11-22 Removed setinfo. Updated constructor accordingly *
  *          2005-07-07 Added runtime type exception                     *
+ *          2005-11-22 Updated documentation                            *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -48,13 +49,15 @@
 
 #ifndef CEXCEPTION_H
 #define CEXCEPTION_H
+#define CEXCEPTION_VERSION "0.17"
 
 // Standard library includes
-#include <exception> /// For std::exception
-#include <stdexcept> /// For other standard exceptions
+#include <exception> 
+#include <stdexcept>
+#include <iostream>
 
 // System includes
-#include <sys/types.h> /// Type abbreviations
+#include <sys/types.h> 
 
 // AIPS includes
 #include "cbase.h"
@@ -64,11 +67,13 @@ namespace aips {
   
 
 /**
- * Exception base class. Normally instances of this class
- * should not be thrown but could be catched for easy
+ * \brief Exception base class.
+ *
+ * Normally instances of this class should not be thrown but could be catched for easy
  * error handling (since all exceptions are derived from this class).
- * You could also catch std::exception since CException is a child of
- * this class.
+ * You could also catch std::exception since CException is a child of this class.
+ *
+ * \todo Write test cases and examples.
  */
 class CException : public std::exception, public CBase
 {
@@ -78,28 +83,33 @@ public:
  	 * Could be used in catch blocks to determine further error handling routines
  	 */
 	enum TExceptionType { UNKNOWN, WARNING, RECOVER, FATAL };
-/* Structors */
+/** \name Structors */
+  //@{
   /// Constructor
   CException ( std::string sError_ = "Generic AIPS Exception",
     TExceptionType theExceptionType_ = UNKNOWN, uint uiErrorNumber_ = 100, 
 		const std::string &sClassName_ = "CException", 
-		const std::string &sClassVersion_ = "0.6.1", 
+		const std::string &sClassVersion_ = CEXCEPTION_VERSION, 
 		const std::string &sDerivedFrom_ = "std::exception, CBase" )
     throw();
   /// Copy constructor
   CException ( const CException& otherException,
 		const std::string &sClassName_ = "CException", 
-		const std::string &sClassVersion_ = "0.6.1", 
+		const std::string &sClassVersion_ = CEXCEPTION_VERSION, 
 		const std::string &sDerivedFrom_ = "std::exception, CBase"  )
     throw();
   /// Destructor 
   virtual ~CException ()
     throw();
-/* Operators */
+  //@}
+/** \name Operators */
+  //@{
 	/// Assignment operator
   CException& operator= ( CException& otherException )
-    throw(); 
-/* Accessors */
+    throw();
+  //@}
+/** \name Accessors */
+  //@{
   /// Returns the error code 
   uint getErrorNumber() const
     throw(); 
@@ -109,17 +119,20 @@ public:
   /// Returns an error string 
   virtual const char* what() const
     throw();
-/* Other methods */
+  //@}
+/** \name Other methods */
+  //@{
   /// Reimplemented from CBase 
   virtual const std::string dump() const
-    throw(); 
+    throw();
+  //@}
 private:
   std::string sErrorString;        ///< Error string returned by what()
   TExceptionType theExceptionType; ///< Type of Exception
   uint uiErrorNumber;              ///< Error code
 };
 
-/** Class for initialization exceptions */
+/** \brief Class for initialization exceptions */
 class BadInitException : public CException
 {
 public:
@@ -134,7 +147,7 @@ public:
     throw();
 };
 
-/** Class for out of range (e.g. array bounds) exceptions */
+/** \brief Class for out of range (e.g. array bounds) exceptions */
 class OutOfRangeException : public CException
 {
 public:
@@ -149,7 +162,7 @@ public:
     throw();
 };
 
-/** Class for file exceptions */
+/** \brief Class for file exceptions */
 class FileException : public CException
 {
 public:
@@ -164,7 +177,7 @@ public:
     throw();
 };
 
-/** Class for plugin and library exceptions */
+/** \brief Class for plugin and library exceptions */
 class PlugInException : public CException
 {
 public:
@@ -179,7 +192,7 @@ public:
     throw();
 };
 
-/** Class for exceptions thrown on calls to invalid or uninitialised members */
+/** \brief Class for exceptions thrown on calls to invalid or uninitialised members */
 class NotPresentException : public CException
 {
 public:
@@ -194,7 +207,7 @@ public:
     throw();
 };
 
-/** Class for exceptions thrown on detected NULL references */
+/** \brief Class for exceptions thrown on detected NULL references */
 class NullException : public CException
 {
 public:
@@ -209,7 +222,7 @@ public:
     throw();
 };
 
-/** Class for exceptions thrown on mismatching or wrong runtime types */
+/** \brief Class for exceptions thrown on mismatching or wrong runtime types */
 class RunTimeTypeException : public CException
 {
 public:
