@@ -34,7 +34,6 @@
 #define CDISPLAY_H
 
 // AIPS includes
-#include <aipsdatatraits.h>
 #include <ctarget.h>
 #include <cdisplaydialog.h>
 // lib includes

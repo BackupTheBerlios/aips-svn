@@ -101,8 +101,7 @@ FEND;
 }
 
 /**
- * \param usDimension_ field dimension
- * \param extentVec_ field extents ( == range of each dimension )
+ * \param extent_ field extents ( == range of each dimension )
  * \param dataDimensionSize_ dimension of each field entry (defaults to 1)
  * \param sClassName_ name of the class (type information)
  * \param sClassVersion_ version number of the class (type information)
@@ -252,27 +251,27 @@ void CDataSet::setBaseElementDimension( const ushort usIndex, const double dValu
 }
 
 /**
- * \param dimensionsVec vector of updated dimensions
+ * \param dimensionsVec_ vector of updated dimensions
  * \throws OutOfRangeException if vector of updated dimensions has the wrong size
  * \post base element dimensions were updated
  */
-void CDataSet::setBaseElementDimensions( const std::vector<double> dimensionsVec ) throw( OutOfRangeException )
+void CDataSet::setBaseElementDimensions( const std::vector<double> dimensionsVec_ ) throw( OutOfRangeException )
 {
-  if ( dimensionsVec.size() != baseElementDimensionsVec.size() )
+  if ( dimensionsVec_.size() != baseElementDimensionsVec.size() )
     throw( OutOfRangeException( SERROR("Dimension vector has wrong number of elements"),
     	CException::RECOVER, ERR_BADDIMENSION ) );
-	baseElementDimensionsVec = dimensionsVec;
+	baseElementDimensionsVec = dimensionsVec_;
 }
 
 /**
- * \param dimensionsVec double array of updated origin
+ * \param dimensionsArr_ double array of updated origin
  * \throws OutOfRangeException if vector of updated dimensions has the wrong size
  * \post base element dimensions were updated
  */
-void CDataSet::setBaseElementDimensions( const double* dimensionsVec_ ) throw()
+void CDataSet::setBaseElementDimensions( const double* dimensionsArr_ ) throw()
 {
   for( uint i = 0; i < usDimension; ++i )
-    baseElementDimensionsVec[i] = dimensionsVec_[i];
+    baseElementDimensionsVec[i] = dimensionsArr_[i];
 }
 
 /**
@@ -302,7 +301,7 @@ void CDataSet::setOrigin( const std::vector<double> originVec_ ) throw( OutOfRan
 }
 
 /**
- * \param dimensionsVec double array of updated origin
+ * \param originVec_ double array of updated origin
  * \throws OutOfRangeException if vector of updated dimensions has the wrong size
  * \post origin coordinates were updated
  */

@@ -52,6 +52,7 @@ private:
   /// Standard constructor
   CSingleValue();
 public:
+  typedef valueType TDataType;
 /* Structors */
   /// Constructor for scalar values
   explicit CSingleValue( valueType theValue_ )

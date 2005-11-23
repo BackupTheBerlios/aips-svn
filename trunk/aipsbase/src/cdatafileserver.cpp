@@ -50,7 +50,7 @@ CDataFileServer::~CDataFileServer() throw()
  *****************/
  
 /**
- * \param handlerPtr A new file handler.
+ * \param handlerSPtr A new file handler.
  * \attention This instance given to this member function will be deleted automatically at program
  * termination so DO NOT try to do this by hand or to use non-dynamic objects here!
  * \exception NullException if aHandler is NULL
@@ -63,7 +63,7 @@ void CDataFileServer::addHandler( boost::shared_ptr<CFileHandler> handlerSPtr ) 
 }
 
 /**
- * \param handlerPtr A new file handler. This instance will be deleted automatically.
+ * \param handlerSPtr A new file handler. This instance will be deleted automatically.
  * \exception NullException if aHandler is NULL or handler wasn't found
  */
 void CDataFileServer::removeHandler( boost::shared_ptr<CFileHandler> handlerSPtr ) throw( NullException )
@@ -207,7 +207,7 @@ CDataFileServer& aips::getFileServer() throw()
 }
 
 /**
- * \param uiIndex index of requested handler
+ * \param uiIndex_ index of requested handler
  * \returns the handler adressed by uiIndex_
  * \throws OutOfRangeException if uiIndex_ is too large
  */

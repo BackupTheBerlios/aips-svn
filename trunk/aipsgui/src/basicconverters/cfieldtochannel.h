@@ -19,7 +19,6 @@
 #define CFIELDTOCHANNEL_H
 
 #include <cconverter.h>
-#include <aipsdatatraits.h>
 #include <cglobalprogress.h>
 #include "libid.h"
 

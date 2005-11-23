@@ -20,7 +20,6 @@
 #define CGAUSSDERIVATIVE_H
 
 // AIPS includes
-#include <aipsdatatraits.h>
 #include <cfilter.h>
 #include <cglobalprogress.h>
 #ifdef BENCHMARK

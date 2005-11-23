@@ -19,7 +19,6 @@
 #ifndef CCHANNELSPLITTER_H
 #define CCHANNELSPLITTER_H
 
-#include <aipsdatatraits.h>
 #include <cconverter.h>
 
 #include "libid.h"

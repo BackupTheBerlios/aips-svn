@@ -21,7 +21,7 @@
 // AIPS includes
 #include <cfilter.h>
 #include <diffusiondefs.h>
-#include <aipsdatatraits.h>
+#include <aipsnumbertraits.h>
 #include <cglobalprogress.h>
 #ifdef BENCHMARK
 #include <boost/timer.hpp>

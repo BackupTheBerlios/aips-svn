@@ -25,7 +25,6 @@
 // AIPS includes
 #include <cfilter.h>
 #include <aipsnumeric.h>
-#include <aipsdatatraits.h>
 
 // lib includes
 #include "libid.h"

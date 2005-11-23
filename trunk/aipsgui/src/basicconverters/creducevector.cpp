@@ -15,7 +15,7 @@
  ************************************************************************/
 
 #include "creducevector.h"
-#include <aipsdatatraits.h>
+#include "cglobalprogress.h"
 
 using namespace std;
 using namespace boost;
@@ -60,9 +60,9 @@ BENCHSTART;
   dynamic_cast<TField2D*>( getInput().get() );  
   TField2D* ptr = static_cast<TField2D*>( getInput().get() );
   cerr << &(*ptr) << endl;
-	if ( getInput() && getInput()->getType() == typeid( dataTraits<TField2D>::dataType ) )
+	if ( getInput() && getInput()->getType() == typeid( TField2D::TDataType ) )
 		reduce<TField2D>();
-	else if ( getInput() && getInput()->getType() == typeid( dataTraits<TField3D>::dataType ) )
+	else if ( getInput() && getInput()->getType() == typeid( TField3D::TDataType ) )
 		reduce<TField3D>();		
 	else
   {

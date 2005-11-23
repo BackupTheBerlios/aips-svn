@@ -68,7 +68,7 @@ void CVectorFieldHandler::save( const std::string& sFilename, const TDataFile& t
   const throw( FileException )
 {
 FBEGIN;
-	if ( theData.first->getType() != typeid( dataTraits<TField3D>::dataType ) )
+	if ( theData.first->getType() != typeid( TField3D::TDataType ) )
 	{
     alog << LWARN << SERROR( "<on checking input type> Given data set is no 3D field."
 			" Floating point fields are not supported by this format" ) << endl;	

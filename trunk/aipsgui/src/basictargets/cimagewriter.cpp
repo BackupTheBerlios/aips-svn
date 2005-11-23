@@ -96,7 +96,7 @@ const std::string CImageWriter::dump() const throw()
 
 template<typename T> void CImageWriter::actualSaver() throw()
 {
-	if ( !myInput || myInput->getType() != typeid( typename dataTraits<T>::dataType ) )
+	if ( !myInput || myInput->getType() != typeid( typename T::TDataType ) )
 		return;
 	shared_ptr<T> inputPtr = static_pointer_cast<T>( myInput );
   if ( !checkInput<T>( inputPtr ) ) // No data, no operation...

@@ -65,7 +65,7 @@ BENCHSTART;
 		alog << LWARN << SERROR("Input field is no vector field") << endl;
 		return;
 	}	
-	if ( getInput()->getType() == typeid( dataTraits<TField2D>::dataType ) && getInput()->getDimension() == 2 )
+	if ( getInput()->getType() == typeid( TField2D::TDataType ) && getInput()->getDimension() == 2 )
 	{
   	TField2DPtr inputPtr = static_pointer_cast<TField2D>( getInput() );
   	if ( inputPtr.get() == NULL )
@@ -123,7 +123,7 @@ BENCHSTART;
   	setOutput( outputPtr1 );
 		setOutput( outputPtr2, 1 );
   }
-	else if ( getInput()->getType() == typeid( dataTraits<TField3D>::dataType ) )
+	else if ( getInput()->getType() == typeid( TField3D::TDataType ) )
 	{
   	TField3DPtr inputPtr = static_pointer_cast<TField3D>( getInput() );
   	if ( inputPtr == NULL )

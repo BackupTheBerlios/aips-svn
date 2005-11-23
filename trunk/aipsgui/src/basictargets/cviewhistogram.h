@@ -22,7 +22,6 @@
 #define CVIEWHISTOGRAM_H
 
 // AIPS includes
-#include <aipsdatatraits.h>
 #include <ctarget.h>
 #include <chistogram.h>
 

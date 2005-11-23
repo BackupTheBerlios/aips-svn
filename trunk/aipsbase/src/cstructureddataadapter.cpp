@@ -60,7 +60,7 @@ CStructuredDataAdapter::~CStructuredDataAdapter() throw()
  *****************/
  
 /**
- * \param internalDataPtr_ new dataset to use for conversions into external format
+ * \param internalDataSPtr_ new dataset to use for conversions into external format
  * \post new data set is used
  */
 void CStructuredDataAdapter::setInternalData( TDataSetPtr internalDataSPtr_ )

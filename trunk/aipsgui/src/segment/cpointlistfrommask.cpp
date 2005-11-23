@@ -47,7 +47,7 @@ void CPointListFromMask::apply() throw()
 {
 FBEGIN;
 	bModuleReady = false;
-	if ( getInput()->getType() != typeid( dataTraits<TImage>::dataType ) )
+	if ( getInput()->getType() != typeid( TImage::TDataType ) )
 		return;
   TImagePtr inputPtr = static_pointer_cast<TImage>( getInput() );
   if ( !checkInput<TImage>(inputPtr, 2, 2, 1, 1 ) )

@@ -25,7 +25,7 @@
 #define CSOBELGRADIENT_H
 
 // AIPS includes
-#include <aipsdatatraits.h>
+#include <aipsnumbertraits.h>
 #include <cfilter.h>
 #include <cglobalprogress.h>
 

@@ -24,7 +24,7 @@ using namespace boost;
 template<unsigned int index> void CSwapEndianess::call() throw()
 {	
 	swapDataFunctor<typename TypeAt<datasetTL, index>::Result, 
-		dataTraits<typename TypeAt<datasetTL, index>::Result>::isNumeric > functor;
+		SDataTraits<typename TypeAt<datasetTL, index>::Result>::isNumeric > functor;
 	if ( !functor(this) )
 		call<index-1>();
 }
@@ -32,7 +32,7 @@ template<unsigned int index> void CSwapEndianess::call() throw()
 template<> void CSwapEndianess::call<0>() throw()
 {
 	typedef TypeAt<datasetTL, 0>::Result TDataType;
-	swapDataFunctor<TDataType, dataTraits<TDataType>::isNumeric> functor;
+	swapDataFunctor<TDataType, SDataTraits<TDataType>::isNumeric> functor;
 	if ( !functor(this) )
 		alog << LWARN << "Dataset type not supported by module" << endl;
 }
@@ -83,7 +83,7 @@ bool CSwapEndianess::swapDataFunctor<SetType, true>::operator()(CSwapEndianess* 
 		return false;
 
 	// Define local data type 
-	typedef typename dataTraits<SetType>::dataType TVoxel;
+	typedef typename SetType::TDataType TVoxel;
 	shared_ptr<SetType> inputSPtr = static_pointer_cast<SetType>( parent->getInput() );
 	
 	parent->bModuleReady = true;

@@ -43,7 +43,7 @@ void CDisplay::apply() throw()
   // Test for correct input
 	bModuleReady = false;
   if ( getInput() )
-	if ( getInput()->getType() == typeid( dataTraits<TImage>::dataType ) )
+	if ( getInput()->getType() == typeid( TImage::TDataType ) )
 	{
   	TImagePtr inputPtr = static_pointer_cast<TImage>( getInput() );
   	if ( inputPtr && inputPtr->getDataDimension() >= 1
@@ -53,7 +53,7 @@ void CDisplay::apply() throw()
   		myDialog->updateView( inputPtr );
 	  }
 	}
-	else if ( getInput()->getType() == typeid( dataTraits<TField>::dataType ) )
+	else if ( getInput()->getType() == typeid( TField::TDataType ) )
 	{
 		TFieldPtr fieldPtr = static_pointer_cast<TField>( getInput() );
 		if ( fieldPtr && fieldPtr->getDataDimension() >= 1
@@ -70,7 +70,7 @@ void CDisplay::apply() throw()
    	return;
 	}
   if ( getInput(1) ) 
-  if ( getInput(1)->getType() == typeid( dataTraits<TImage>::dataType ) )
+  if ( getInput(1)->getType() == typeid( TImage::TDataType ) )
   {
     TImagePtr inputPtr = static_pointer_cast<TImage>( getInput(1) );
     if ( inputPtr && inputPtr->getDataDimension() >= 1
@@ -80,7 +80,7 @@ void CDisplay::apply() throw()
       myDialog->updateView( inputPtr, false );
     }
   }
-  else if ( getInput(1)->getType() == typeid( dataTraits<TField>::dataType ) )
+  else if ( getInput(1)->getType() == typeid( TField::TDataType ) )
   {
     TFieldPtr fieldPtr = static_pointer_cast<TField>( getInput(1) );
     if ( fieldPtr && fieldPtr->getDataDimension() >= 1

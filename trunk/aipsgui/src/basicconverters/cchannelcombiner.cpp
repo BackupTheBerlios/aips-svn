@@ -27,7 +27,7 @@ using namespace boost;
 template<unsigned int index> void CChannelCombiner::call() throw()
 {	
 	combine<typename TypeAt<datasetTL, index>::Result, 
-		dataTraits<typename TypeAt<datasetTL, index>::Result>::isComparable> c;
+		SDataTraits<typename TypeAt<datasetTL, index>::Result>::isComparable> c;
 	if ( !c(this) )
 		call<index-1>();
 }
@@ -35,7 +35,7 @@ template<unsigned int index> void CChannelCombiner::call() throw()
 template<> void CChannelCombiner::call<0>() throw()
 {
 	typedef TypeAt<datasetTL, 0>::Result TDataType;
-	combine<TDataType, dataTraits<TDataType>::isComparable> c;
+	combine<TDataType, SDataTraits<TDataType>::isComparable> c;
 	if ( !c(this) )
 		alog << LWARN << "Dataset type not supported by module" << endl;
 }
@@ -93,8 +93,8 @@ bool CChannelCombiner::combine<T, true>::operator() ( CChannelCombiner* parent )
 	if ( !parent->getInput() )
 		return false;
 	const std::type_info& inputType = parent->getInput( 0 )->getType();
-	if ( inputType != typeid( typename dataTraits<T>::dataType ) ||
-		parent->getInput( 1 )->getType() != typeid( typename dataTraits<T>::dataType ) )
+	if ( inputType != typeid( typename T::TDataType ) ||
+		parent->getInput( 1 )->getType() != typeid( typename T::TDataType ) )
 	{
 		alog << LWARN << "Illegal input type" << endl;
 		return false;
@@ -189,8 +189,8 @@ cerr << "F" << endl;
 template<typename T> bool CChannelCombiner::combine<T,false>::operator() ( CChannelCombiner* parent ) throw()
 {
 	const std::type_info& inputType = parent->getInput( 0 )->getType();
-	if ( inputType != typeid( typename dataTraits<T>::dataType ) ||
-		parent->getInput( 1 )->getType() != typeid( typename dataTraits<T>::dataType ) )
+	if ( inputType != typeid( typename T::TDataType ) ||
+		parent->getInput( 1 )->getType() != typeid( typename T::TDataType ) )
 	{
 		alog << LWARN << "Illegal input type" << endl;
 		return false;

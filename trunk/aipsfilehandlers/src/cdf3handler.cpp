@@ -60,7 +60,7 @@ void CDF3Handler::save( const std::string& sFilename, const TDataFile& theData )
   const throw( FileException )
 {
 FBEGIN;
-	if ( !( theData.first->getType() == typeid( dataTraits<TImage>::dataType ) ) )
+	if ( !( theData.first->getType() == typeid( TImage::TDataType ) ) )
 	{
 		alog << LWARN << "Illegal input for image writer" << endl;
 		return;

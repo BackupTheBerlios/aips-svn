@@ -23,7 +23,6 @@
 #define CCHANNELCOMBINER_H
 
 #include <cconverter.h>
-#include <aipsdatatraits.h>
 
 #include "libid.h"
 using namespace aips;

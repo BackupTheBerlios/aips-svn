@@ -20,7 +20,6 @@
 
 // AIPS includes
 #include <cconverter.h>
-#include <aipsdatatraits.h>
 #include <cglobalprogress.h>
 
 // lib includes

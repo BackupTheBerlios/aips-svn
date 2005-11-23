@@ -272,7 +272,7 @@ void CCommonImageHandler::save( const std::string& sFilename, const TDataFile& t
   const throw( FileException )
 {
 	// Check input image and initialize image magick classes
-	if ( !( theData.first->getType() == typeid( dataTraits<TImage>::dataType ) ) )
+	if ( !( theData.first->getType() == typeid( TImage::TDataType ) ) )
 	{
 		alog << LWARN << "Illegal input type for CommonImage writer" << endl;
 		return;

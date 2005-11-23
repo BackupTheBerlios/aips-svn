@@ -49,7 +49,7 @@ void CHysteresis::apply() throw()
 {
 BENCHSTART;
 	bModuleReady = false;
-	if ( getInput()->getType() != typeid( dataTraits<TImage>::dataType ) )
+	if ( getInput()->getType() != typeid( TImage::TDataType ) )
 		return;
   TImage* inputPtr = static_cast<TImage*>( getInput().get() );
   if ( inputPtr == NULL || inputPtr->getDimension() != 2 )

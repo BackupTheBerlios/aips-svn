@@ -164,7 +164,7 @@ inline bool CPipelineItem::checkInput( T inputPtr, ushort usMinDim,
 		alog << LWARN << "Input set error: <No input>" << std::endl; 
 		return false;
 	}	
-	if ( inputPtr->getType() != typeid( typename T::TDataType ) )
+	if ( inputPtr->getType() != typeid( typename T::element_type::TDataType ) )
 	{
 		alog << LWARN << "Input set error: <Type mismatch>" << std::endl;
 		return false;

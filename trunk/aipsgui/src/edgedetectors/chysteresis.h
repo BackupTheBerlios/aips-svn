@@ -19,7 +19,7 @@
 #define CHYSTERESIS_H
 
 // AIPS includes
-#include <aipsdatatraits.h>
+#include <aipsnumbertraits.h>
 #include <cfilter.h>
 #include <cglobalprogress.h>
 #ifdef BENCHMARK

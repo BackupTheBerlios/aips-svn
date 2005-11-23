@@ -131,7 +131,7 @@ void CSliceSelector::updateOrientation ( int iOrientation )
 /** \param volumePtr smart pointer to dataset that should be sliced */
 template<typename T> bool CSliceSelector::slice() throw()
 {
-	if ( !getInput() || getInput()->getType() != typeid( typename dataTraits<T>::dataType ) )
+	if ( !getInput() || getInput()->getType() != typeid( typename T::TDataType ) )
 	{
 		return false;
 	}
@@ -140,7 +140,7 @@ template<typename T> bool CSliceSelector::slice() throw()
   if ( !checkInput<T>( inputVolumePtr, 2, 3 ) )
     return false;
 		
-	typedef typename T::dataType TVoxel;
+	typedef typename T::TDataType TVoxel;
 	
 	bModuleReady = true;
 	// Check if dataset is already 2D. We don't need to do anything in this case...
@@ -162,13 +162,13 @@ template<typename T> bool CSliceSelector::slice() throw()
 	  setOutput( orientationOutputPtr, 2 );	
 		return true;
   }
-  if ( getInput(1) && getInput(1)->getType() == typeid( dataTraits<TInteger>::dataType ) )
+  if ( getInput(1) && getInput(1)->getType() == typeid( TInteger::TDataType ) )
   {
 		TIntegerPtr curSlice = static_pointer_cast<TInteger>( getInput(1) );
 		if ( curSlice != NULL )
 			parameters.setUnsignedLong("SliceNumber", (*curSlice)(0) );
 	}
-	if ( getInput(2) && getInput(2)->getType() == typeid( dataTraits<TInteger>::dataType ) )
+	if ( getInput(2) && getInput(2)->getType() == typeid( TInteger::TDataType ) )
 	{
 		TIntegerPtr curOri = static_pointer_cast<TInteger>( getInput(2) );
 		if ( curOri != NULL )

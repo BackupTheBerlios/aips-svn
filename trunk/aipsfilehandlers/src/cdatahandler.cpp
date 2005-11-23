@@ -145,7 +145,7 @@ FBEGIN;
     throw( FileException( SERROR( "<.data> only supports monochannel images" ), CException::RECOVER ) );
 
   // Define and initialize variables
- 	if ( !( theData.first->getType() == typeid( dataTraits<TImage>::dataType ) ) )
+ 	if ( !( theData.first->getType() == typeid( TImage::TDataType ) ) )
 	{
 		alog << LWARN << "Illegal input for image writer" << endl;
 		return;

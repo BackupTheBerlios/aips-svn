@@ -54,7 +54,6 @@
 #include "clog.h"
 #include <aipsnumbertraits.h>
 
-/// AIPS namespace for all libaipsbase classes
 namespace aips {
 
 // Some symbolic constants for dimension access
@@ -143,10 +142,10 @@ public:
 	void setBaseElementDimension( const ushort usIndex, const double dValue )
 		throw( OutOfRangeException );
   /// Set all base element dimensions (vector version)
-	void setBaseElementDimensions( const std::vector<double> dimensionsVec )
+	void setBaseElementDimensions( const std::vector<double> dimensionsVec_ )
 		throw( OutOfRangeException );
   /// Set all base element dimensions (array version)
-  void setBaseElementDimensions( const double* dimensionsVec_ )
+  void setBaseElementDimensions( const double* dimensionsArr_ )
     throw();
   /// Set a specific origin coordinate
   void setOrigin( const ushort usIndex, const double dValue )

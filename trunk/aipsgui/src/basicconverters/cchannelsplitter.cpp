@@ -74,7 +74,7 @@ CPipelineItem* CChannelSplitter::newInstance( ulong ulID ) const throw()
 
 template<typename T> void CChannelSplitter::splitup() throw()
 {
-	if ( !getInput() || getInput()->getType() != typeid( typename dataTraits<T>::dataType ) )
+	if ( !getInput() || getInput()->getType() != typeid( typename T::TDataType ) )
 		return;
 	shared_ptr<T> inputPtr = static_pointer_cast<T>( getInput() );
 	if ( !checkInput<T>( inputPtr, 2, 3 ) )

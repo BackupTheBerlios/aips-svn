@@ -34,7 +34,6 @@
 
 // AIPS includes
 #include <cconverter.h>
-#include <aipsdatatraits.h>
 
 // Library includes
 #include "libid.h"

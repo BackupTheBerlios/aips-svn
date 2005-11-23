@@ -29,7 +29,6 @@
 
 // AIPS includes
 #include <ctarget.h>
-#include <aipsdatatraits.h>
 #include <cdatafileserver.h>
 #include "cimagewriterdialog.h"
 

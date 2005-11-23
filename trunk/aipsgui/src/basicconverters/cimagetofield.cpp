@@ -58,7 +58,7 @@ void CImageToField::apply() throw()
 {
 BENCHSTART;
 	bModuleReady = false;
-	if ( !getInput() || getInput()->getType() != typeid( dataTraits<TImage>::dataType ) )
+	if ( !getInput() || getInput()->getType() != typeid( TImage::TDataType ) )
 		return;
 	shared_ptr<TImage> inputPtr = static_pointer_cast<TImage>( getInput() );
   if ( !checkInput<TImage>( inputPtr ) )

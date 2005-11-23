@@ -109,7 +109,7 @@ void CSimpleDatHandler::save( const std::string& sFilename, const TDataFile& the
 {
 FBEGIN;
 cerr << "A" << endl;
-	if ( !theData.first || theData.first->getType() != typeid( dataTraits<TImage>::dataType ) )
+	if ( !theData.first || theData.first->getType() != typeid( TImage::TDataType ) )
 	{
     alog << LWARN << SERROR( "Given data set is no unsigned short 2D/3D image." 
 			" Floating point fields are not supported by this format" ) << endl;	

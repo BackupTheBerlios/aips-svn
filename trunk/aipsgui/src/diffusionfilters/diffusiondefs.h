@@ -20,6 +20,7 @@
 #define DIFFUSIONDEFS_H
 
 #include <aipsnumeric.h>
+#include <aipsbase_config.h>
 
 namespace aips 
 {

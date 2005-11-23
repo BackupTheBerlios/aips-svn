@@ -28,7 +28,6 @@
 // AIPS includes
 #include <ctarget.h>
 #include <aipsnumeric.h>
-#include <aipsdatatraits.h>
 #include <cimagedisplay.h>
 #include "cdisplayvectordialog.h"
 

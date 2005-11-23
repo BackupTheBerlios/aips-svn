@@ -250,12 +250,12 @@ void CAnalyzeHandler::save( const std::string& sFilename, const TDataFile& theDa
 
 CAnalyzeHandler::EDataType CAnalyzeHandler::determineDataType( CDataSet* theDataSet, CImageHeader* theHeader ) const
 {
-	if ( theDataSet->getType() == typeid( dataTraits<TImage>::dataType ) )
+	if ( theDataSet->getType() == typeid( TImage::TDataType ) )
 	{
 		TImage* image = static_cast<TImage*>( theDataSet );
 		if ( image != NULL )
 		{
-			CDataRange<TImage::dataType, TImage::traitType::isScalar> range = image->getDataRange();
+			CDataRange<TImage::TDataType, TImage::TTraitType::isScalar> range = image->getDataRange();
 			theHeader->setLong("MaxIntensity", range.getMaximum() );
 			theHeader->setLong("MinIntensity", range.getMinimum() );
 			if ( range.getMaximum() < numeric_limits<uint8_t>::max() ) 
@@ -275,12 +275,12 @@ CAnalyzeHandler::EDataType CAnalyzeHandler::determineDataType( CDataSet* theData
 			}
 		}
 	}
-	else if ( theDataSet->getType() == typeid( dataTraits<TField>::dataType ) )
+	else if ( theDataSet->getType() == typeid( TField::TDataType ) )
 	{
 		TField* field = static_cast<TField*>( theDataSet );
 		if ( field != NULL )
 		{
-			CDataRange<TField::dataType, TField::traitType::isScalar> range = field->getDataRange();
+			CDataRange<TField::TDataType, TField::TTraitType::isScalar> range = field->getDataRange();
 			theHeader->setLong("MaxIntensity", static_cast<long>( ceil( range.getMaximum()) ) );
 			theHeader->setLong("MinIntensity", static_cast<long>( floor( range.getMinimum()) ) );
 			if ( range.getMaximum() < numeric_limits<float>::max() )

@@ -10,7 +10,7 @@
  ***********************************************************************/
  
 #include "cweickertfilter.h"
-#include <aipsdatatraits.h>
+#include <aipsnumbertraits.h>
 #include <cmath>
 
 using namespace std;
@@ -85,14 +85,14 @@ CPipelineItem* CWeickertFilter::newInstance( ulong ulID ) const throw()
 
 template<typename T> void CWeickertFilter::filter() throw()
 {
-	if ( getInput()->getType() != typeid( typename dataTraits<T>::dataType ) )
+	if ( getInput()->getType() != typeid( typename T::TDataType ) )
 		return;
   shared_ptr<T> inputPtr = static_pointer_cast<T>( getInput() );
 /*  if ( !checkInput( inputPtr, 2, 3 ) )
     return;*/
 		
-	typedef typename dataTraits<typename T::dataType>::dataType TVoxel;
-	typedef typename dataTraits<typename T::dataType>::increasedRangeType TInc;
+	typedef typename T::TDataType TVoxel;
+	typedef typename SDataTraits<TVoxel>::TIncreasedRangeType TInc;
 		
 	bModuleReady = true;  
   deleteOldOutput();

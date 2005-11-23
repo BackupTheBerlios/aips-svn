@@ -56,7 +56,7 @@ void CViewHistogram::apply() throw()
 {
 	FBEGIN;
 	bModuleReady = false;
-	if ( !getInput() || getInput()->getType() != typeid( dataTraits<TImage>::dataType ) )
+	if ( !getInput() || getInput()->getType() != typeid( TImage::TDataType ) )
 		return;
   TImagePtr inputPtr = static_pointer_cast<TImage>( getInput() );
   if ( inputPtr.get() == NULL || inputPtr->getDimension() < 2 || inputPtr->getDimension() > 4 )

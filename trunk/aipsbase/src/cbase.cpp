@@ -41,6 +41,10 @@ CBase::CBase( const string &sClassName_, const string &sClassVersion_,
 {
 }
 
+CBase::~CBase() throw()
+{
+}
+
 /************* 
  * Accessors *
  *************/
