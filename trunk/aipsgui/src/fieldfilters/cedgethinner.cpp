@@ -19,6 +19,23 @@
 using namespace std;
 using namespace boost;
 
+double interpolatedVoxelValue2D( int x, int y, const TVector2D& direction, TField2DPtr image )
+{
+	double xpos = static_cast<double>( x ) + (direction[0]*sqrt(2.0) );
+	double ypos = static_cast<double>( y ) + (direction[1]*sqrt(2.0) );
+	return norm( (*image)( static_cast<uint>( round( xpos ) ), 
+		static_cast<uint>( round( ypos ) ) ) );
+}
+
+double interpolatedVoxelValue3D( int x, int y, int z, const TVector3D& direction, TField3DPtr image )
+{
+	double xpos = static_cast<double>( x ) + ( direction[0] * sqrt( 3.0 ) );
+	double ypos = static_cast<double>( y ) + ( direction[1] * sqrt( 3.0 ) );
+	double zpos = static_cast<double>( z ) + ( direction[2] * sqrt( 3.0 ) );
+	return norm( (*image)( static_cast<uint>( round( xpos ) ), 
+		static_cast<uint>( round( ypos ) ), static_cast<uint>( round( zpos ) ) ) );
+}
+
 /**
  * Consrtuctor
  * \param ulID unique module ID
@@ -53,171 +70,64 @@ void CEdgeThinner::apply() throw()
 BENCHSTART;	
 	bModuleReady = false;
   shared_ptr<TField2D> inputPtr = static_pointer_cast<TField2D>( getInput() );
-  if ( inputPtr.get() == NULL || inputPtr->getDimension() != 2 )
+  if ( inputPtr && inputPtr->getDimension() == 2 )
   {
-    alog << LWARN << "Input type is no 2D image!" << endl;
-    return;
+		bModuleReady = true;
+  	deleteOldOutput();
+	  shared_ptr<TField2D> outputPtr ( new TField2D( 2, inputPtr->getExtents() ) );
+		(*outputPtr) = VEC_ZERO2D;
+		outputPtr->setMaximum( TVector2D( 1.0, 1.0 ) );
+		outputPtr->setMinimum( VEC_ZERO2D );
+		for( ushort y = 1; y < (outputPtr->getExtent(1)-1); ++y )
+			for( ushort x = 1; x < (outputPtr->getExtent(0)-1); ++x )
+			{
+				if ( norm( (*inputPtr)(x,y) ) > DBL_EPSILON )
+				{
+					TVector2D dir = (*inputPtr)(x,y) / norm( (*inputPtr)(x,y) );
+					double intensity = norm( (*inputPtr)(x,y) );
+					double l = interpolatedVoxelValue2D( x, y, dir, inputPtr );
+					dir *= -1.0;
+					double r = interpolatedVoxelValue2D( x, y, dir, inputPtr );
+					if ( intensity >= l && intensity >= r )
+						(*outputPtr)(x,y) = (*inputPtr)(x,y);
+				}
+			}	
+ 		setOutput( outputPtr );
   }
-	bModuleReady = true;
-  deleteOldOutput();
-  shared_ptr<TField2D> outputPtr ( new TField2D( 2, inputPtr->getExtents() ) );
-	(*outputPtr) = VEC_ZERO2D;
-	outputPtr->setMaximum( TVector2D( 1.0, 1.0 ) );
-	outputPtr->setMinimum( VEC_ZERO2D );
-	for( ushort y = 1; y < (outputPtr->getExtent(1)-1); ++y )
-		for( ushort x = 1; x < (outputPtr->getExtent(0)-1); ++x )
-		{
-			double intensity = norm((*inputPtr)(x,y));
-			double l,r;
-			// Get Edge direction
-			switch( sector( (*inputPtr)(x,y) ) )
-			{
-				case 0:
-				case 4:
-					l = norm((*inputPtr)(x-1,y)); r = norm((*inputPtr)(x+1,y));
-					break;
-				case 1:
-				case 5:
-					l = norm((*inputPtr)(x-1,y-1)); r = norm((*inputPtr)(x+1,y+1));
-					break;
-				case 2:
-				case 6:
-					l = norm((*inputPtr)(x,y+1)); r = norm((*inputPtr)(x,y-1));
-					break;
-				case 3:
-				case 7:
-					l = norm((*inputPtr)(x-1,y+1)); r = norm((*inputPtr)(x+1,y-1));
-					break;
-				default:
-					terminate();
-			}
-			// Find neighbors in edge direction und supress pixel if needed
-			if ( intensity >= l && intensity >= r )
-				(*outputPtr)(x,y) = (*inputPtr)(x,y);
-		}	
-/*	CTypedData<ushort> swapped (2, inputPtr->getExtents() );
-	swapped = false;
-  (*outputPtr) = (*inputPtr);
-	for( ushort y = 1; y < (outputPtr->getExtent(1)-1); ++y )
-		for( ushort x = 1; x < (outputPtr->getExtent(0)-1); ++x )
-		{
-			if ( quadNorm( (*outputPtr)(x,y) ) > DBL_EPSILON )
-			{
-			TVector2D base = (*outputPtr)(x,y);
-			TVector2D xp = (*outputPtr)(x+1,y);
-			TVector2D yp = (*outputPtr)(x,y+1);
-			TVector2D dp = (*outputPtr)(x+1,y+1);
-			TVector2D d2p = (*outputPtr)(x+1,y-1);
-			if ( ( sector(base) == 0 || sector(base) == 4 ) && sector(base) == sector(xp) &&
-				norm(base)/norm(xp) < 10.0 && norm(base)/norm(xp) >= 1.0 )				
-			{
-				if ( sector(base) == 0 && !swapped(x+1,y) )
+  else
+  {
+  	shared_ptr<TField3D> inputPtr = static_pointer_cast<TField3D>( getInput() );
+  	if ( inputPtr && inputPtr->getDimension() == 3 )
+	  {
+			bModuleReady = true;
+  		deleteOldOutput();
+		  shared_ptr<TField3D> outputPtr ( new TField3D( 3, inputPtr->getExtents() ) );
+			(*outputPtr) = VEC_ZERO3D;
+			outputPtr->setMaximum( TVector3D( 1.0, 1.0, 1.0 ) );
+			outputPtr->setMinimum( VEC_ZERO3D );
+			for( ushort z = 1; z < (outputPtr->getExtent(2)-1); ++z )
+			for( ushort y = 1; y < (outputPtr->getExtent(1)-1); ++y )
+				for( ushort x = 1; x < (outputPtr->getExtent(0)-1); ++x )
 				{
-					(*outputPtr)(x+1,y) *= 0.0; swapped(x+1,y)=true;
-				}
-				else if ( sector(base) == 4 && !swapped(x,y) )
-				{
-					(*outputPtr)(x,y) *= 0.0; swapped(x,y)=true;
-				}
-			}			
-			else if ( ( sector(base) == 2 || sector(base) == 6 ) && sector(base) == sector(yp) &&
-				norm(base)/norm(yp) < 10.0 && norm(base)/norm(yp) >= 1.0 )				
-			{
-				if ( sector(base) == 2 && !swapped(x,y+1) )
-				{
-					(*outputPtr)(x,y+1) *= 0.0; swapped(x,y+1)=true;
-				}
-				else if ( sector(base) == 6  && !swapped(x,y) )
-				{
-					(*outputPtr)(x,y) *= 0.0; swapped(x,y)=true;			
-				}
-			}
-			else if ( ( sector(base) == 1 || sector(base) == 5 ) && sector(base) == sector(dp) &&
-				norm(base)/norm(dp) < 10.0 && norm(base)/norm(dp) >= 1.0 )				
-			{
-				if ( sector(base) == 1 && !swapped(x+1,y+1) )
-				{
-					(*outputPtr)(x+1,y+1) *= 0.0; swapped(x+1,y+1)=true;			
-				}
-				else if ( sector(base) == 5 && !swapped(x,y) )
-				{
-					(*outputPtr)(x,y) *= 0.0;	swapped(x,y)=true;			
-				}
-			}
-			else if ( ( sector(base) == 7 || sector(base) == 3 ) && sector(base) == sector(d2p) &&
-				norm(base)/norm(d2p) < 10.0 && norm(base)/norm(d2p) >= 1.0 )				
-			{
-				if ( sector(base) == 7  && !swapped(x+1,y-1) )
-				{
-					(*outputPtr)(x+1,y-1) = 0.0 * (*inputPtr)(x+1,y-1);
-					swapped(x+1,y-1)=true;			
-				}
-				else if ( sector(base) == 3  && !swapped(x,y))
-				{
-					(*outputPtr)(x,y) = 0.0 * (*inputPtr)(x,y);				
-					swapped(x,y)=true;			
-				}
-			}
-			}
-		}
- // Und jetzt noch die Überbleibsel glätten
- // Hier sollte eine größere Nachbarschaft betrachtet werden und der Vektor in die 
- // in der NB dominierende Richtung gedreht werden.
- for( ushort y = 1; y < (outputPtr->getExtent(1)-1); ++y )
-	for( ushort x = 1; x < (outputPtr->getExtent(0)-1); ++x )
-	{
-		if ( swapped(x,y) == false )
-		{
-			ushort sec = sector( (*outputPtr)(x,y) );
-			if ( sec == 0 || sec == 1 || sec == 7 )
-			{
-				ushort su = sector( (*outputPtr)(x,y-1) );
-				ushort sd = sector( (*outputPtr)(x,y+1) );
-				if ( in( int(su), 3, 5 ) && in ( int(sd), 3, 5 ) )
-					(*outputPtr)(x,y) *= 0.0;
-			}
-			if ( in( int(sec), 3, 5 ) )
-			{
-				ushort su = sector( (*outputPtr)( x, y - 1 ) );
-				ushort sd = sector( (*outputPtr)( x, y + 1 ) );
-				if ( ( su == 0 || su == 1 || su == 7 ) && ( sd == 0 || sd == 1 || sd == 7 ) ) 
-					(*outputPtr)(x,y) *= 0.0;
-			}
-			if ( in( int(sec), 1, 3 ) )
-			{
-				ushort su = sector( (*outputPtr)(x-1,y) );
-				ushort sd = sector( (*outputPtr)(x+1,y) );
-				if ( in( int(su), 5, 7 ) && in ( int(sd), 5, 7 ) )
-					(*outputPtr)(x,y) *= 0.0;				
-			}
-			if ( in( int(sec), 5, 7 ) )
-			{
-				ushort su = sector( (*outputPtr)(x-1,y) );
-				ushort sd = sector( (*outputPtr)(x+1,y) );
-				if ( in( int(su), 1, 3 ) && in ( int(sd), 1, 3 ) )
-					(*outputPtr)(x,y) *= 0.0;				
-			}
-		}
- 	}
-	for( ushort y = 1; y < (outputPtr->getExtent(1)-1); ++y )
-		for( ushort x = 1; x < (outputPtr->getExtent(0)-1); ++x )
-	{
-		ushort nb = 0;
-		if( quadNorm( (*outputPtr)(x,y) ) > DBL_EPSILON )
-		{
-			if ( quadNorm( (*outputPtr)(x-1,y) ) <= DBL_EPSILON )
-				nb++;
-			if ( quadNorm( (*outputPtr)(x+1,y) ) <= DBL_EPSILON )
-				nb++;
-			if ( quadNorm( (*outputPtr)(x,y-1) ) <= DBL_EPSILON )
-				nb++;
-			if ( quadNorm( (*outputPtr)(x,y+1) ) <= DBL_EPSILON )
-				nb++;
-		if ( nb > 2 )
-			(*outputPtr)(x,y) *= 0.0;
-		}
-	}*/
-  setOutput( outputPtr );
+					if ( norm( (*inputPtr)(x,y,z ) ) > DBL_EPSILON )
+					{
+						TVector3D dir = (*inputPtr)(x,y,z ) / norm( (*inputPtr)(x,y,z) );
+						double intensity = norm( (*inputPtr)(x,y,z) );
+						double l = interpolatedVoxelValue3D( x, y, z,dir, inputPtr );
+						dir *= -1.0;
+						double r = interpolatedVoxelValue3D( x, y, z,dir, inputPtr );
+						if ( intensity >= l && intensity >= r )
+							(*outputPtr)(x,y,z) = (*inputPtr)(x,y,z);
+					}
+				}	
+ 			setOutput( outputPtr );
+ 		}
+	  else
+  	{
+    	alog << LWARN << "Input type is no 2D or 3D image!" << endl;
+    	return;
+  	}
+  }
 BENCHSTOP;
 }
 

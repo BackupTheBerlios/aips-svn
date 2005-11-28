@@ -153,6 +153,7 @@ void CPipeScroller::dragEnterEvent( QDragEnterEvent* eventPtr ) throw()
 void CPipeScroller::addItem( ulong ulID, CPipelineItem* itemPtr, int iX, int iY,
   std::string sName, ulong ulType, ulong ulLib, ulong ulModule ) throw()
 {
+	cerr << ">> CPipeScroller::addItem" << endl;
   // New id is greater than our actual max id
   if ( ulID > ulMaxID )
     ulMaxID = ulID;
@@ -175,6 +176,7 @@ void CPipeScroller::addItem( ulong ulID, CPipelineItem* itemPtr, int iX, int iY,
   // Send signals
   emit( itemAdded( itemWidgetPtr ) );
   emit( itemRenamed( ulID, sName ) );
+  cerr << "<< CPipeScroller::addItem" << endl;
 FEND;
 }
 

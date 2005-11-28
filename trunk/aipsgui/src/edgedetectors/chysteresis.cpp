@@ -15,6 +15,7 @@
 #include "chysteresis.h"
 
 using namespace std;
+using namespace boost;
 
 /* Structors */
 
@@ -51,44 +52,91 @@ BENCHSTART;
 	bModuleReady = false;
 	if ( getInput()->getType() != typeid( TImage::TDataType ) )
 		return;
-  TImage* inputPtr = static_cast<TImage*>( getInput().get() );
-  if ( inputPtr == NULL || inputPtr->getDimension() != 2 )
+  TImagePtr inputPtr = static_pointer_cast<TImage>( getInput() );
+  if ( checkInput<TImage>( inputPtr, 2, 3 ) )
   {
     alog << LWARN << "Input type is no 2D or 3D image!" << endl;
-    return;
+    //return;
   }
 	bModuleReady = true;	
   deleteOldOutput();	
-/* 	ushort w = inputPtr->getExtent(0);
- 	ushort h = inputPtr->getExtent(1);*/
-	boost::shared_ptr<TImage> outputPtr ( new TImage( 2, inputPtr->getExtents(), inputPtr->getDataDimension() ) );
-	
+	TImagePtr outputPtr ( 
+		new TImage( inputPtr->getDimension(), inputPtr->getExtents(), inputPtr->getDataDimension() ) );
 	outputPtr->setDataRange( inputPtr->getDataRange() );
- 	(*outputPtr) = 0;
+	(*outputPtr) = 0;
 	long lot = parameters.getUnsignedLong( "Low" );
 	long hit = parameters.getUnsignedLong( "High" );
-	for( ushort y = 1; y < outputPtr->getExtent(1); ++y )
-		for( ushort x = 1; x < outputPtr->getExtent(0); ++x )
-		{
-			if ( (*inputPtr)(x,y) > hit )
-				(*outputPtr)(x,y) = (*inputPtr)(x,y);
-			else if ( (*inputPtr)(x,y) >= lot )
+  if ( inputPtr->getDimension() == 2 )
+  {
+		for( ushort y = 1; y < outputPtr->getExtent(1); ++y )
+			for( ushort x = 1; x < outputPtr->getExtent(0); ++x )
 			{
-				ushort nb = 0;
-				if ( (*inputPtr)(x+1,y) > hit ) nb++;
-				if ( (*inputPtr)(x-1,y) > hit ) nb++;
-				if ( (*inputPtr)(x,y+1) > hit ) nb++;
-				if ( (*inputPtr)(x,y-1) > hit ) nb++;
-				if ( (*inputPtr)(x+1,y+1) > hit ) nb++;
-				if ( (*inputPtr)(x+1,y-1) > hit ) nb++;
-				if ( (*inputPtr)(x-1,y+1) > hit ) nb++;
-				if ( (*inputPtr)(x-1,y-1) > hit ) nb++;
-				if ( nb )
+				if ( (*inputPtr)(x,y) > hit )
 					(*outputPtr)(x,y) = (*inputPtr)(x,y);
+				else if ( (*inputPtr)(x,y) >= lot )
+				{
+					ushort nb = 0;
+					if ( (*inputPtr)(x+1,y) > hit ) nb++;
+					if ( (*inputPtr)(x-1,y) > hit ) nb++;
+					if ( (*inputPtr)(x,y+1) > hit ) nb++;
+					if ( (*inputPtr)(x,y-1) > hit ) nb++;
+					if ( (*inputPtr)(x+1,y+1) > hit ) nb++;
+					if ( (*inputPtr)(x+1,y-1) > hit ) nb++;
+					if ( (*inputPtr)(x-1,y+1) > hit ) nb++;
+					if ( (*inputPtr)(x-1,y-1) > hit ) nb++;
+					if ( nb )
+						(*outputPtr)(x,y) = (*inputPtr)(x,y);
+				}
 			}
-		}
-APP_PROC();	
-PROG_RESET();
+		APP_PROC();	
+	}
+	else
+  {
+  	for( ushort z = 1; z < outputPtr->getExtent(2)-1; ++z )
+			for( ushort y = 1; y < outputPtr->getExtent(1)-1; ++y )
+				for( ushort x = 1; x < outputPtr->getExtent(0)-1; ++x )
+				{
+					if ( (*inputPtr)(x,y,z) > hit )
+						(*outputPtr)(x,y,z) = (*inputPtr)(x,y,z);
+					else if ( (*inputPtr)(x,y,z) >= lot )
+					{
+						ushort nb = 0;
+						if ( (*inputPtr)(x+1,y,z) > hit ) nb++;
+						if ( (*inputPtr)(x-1,y,z) > hit ) nb++;
+						if ( (*inputPtr)(x,y+1,z) > hit ) nb++;
+						if ( (*inputPtr)(x,y-1,z) > hit ) nb++;
+						if ( (*inputPtr)(x+1,y+1,z) > hit ) nb++;
+						if ( (*inputPtr)(x+1,y-1,z) > hit ) nb++;
+						if ( (*inputPtr)(x-1,y+1,z) > hit ) nb++;
+						if ( (*inputPtr)(x-1,y-1,z) > hit ) nb++;
+						
+						if ( (*inputPtr)(x,y,z-1) > hit ) nb++;
+						if ( (*inputPtr)(x+1,y,z-1) > hit ) nb++;
+						if ( (*inputPtr)(x-1,y,z-1) > hit ) nb++;
+						if ( (*inputPtr)(x,y+1,z-1) > hit ) nb++;
+						if ( (*inputPtr)(x,y-1,z-1) > hit ) nb++;
+						if ( (*inputPtr)(x+1,y+1,z-1) > hit ) nb++;
+						if ( (*inputPtr)(x+1,y-1,z-1) > hit ) nb++;
+						if ( (*inputPtr)(x-1,y+1,z-1) > hit ) nb++;
+						if ( (*inputPtr)(x-1,y-1,z-1) > hit ) nb++;
+						
+						if ( (*inputPtr)(x,y,z+1) > hit ) nb++;
+						if ( (*inputPtr)(x+1,y,z+1) > hit ) nb++;
+						if ( (*inputPtr)(x-1,y,z+1) > hit ) nb++;
+						if ( (*inputPtr)(x,y+1,z+1) > hit ) nb++;
+						if ( (*inputPtr)(x,y-1,z+1) > hit ) nb++;
+						if ( (*inputPtr)(x+1,y+1,z+1) > hit ) nb++;
+						if ( (*inputPtr)(x+1,y-1,z+1) > hit ) nb++;
+						if ( (*inputPtr)(x-1,y+1,z+1) > hit ) nb++;
+						if ( (*inputPtr)(x-1,y-1,z+1) > hit ) nb++;
+						
+						if ( nb )
+							(*outputPtr)(x,y,z) = (*inputPtr)(x,y,z);
+				}
+			}
+		APP_PROC();	
+	}
+	PROG_RESET();
   setOutput( outputPtr );	
 BENCHSTOP;		
 }

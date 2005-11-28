@@ -34,6 +34,7 @@ CPipeItemWidget::CPipeItemWidget( ulong ulID_, std::string sTitle_, ushort usFan
   : QWidget( parentPtr, sName ), ulID( ulID_ ), sTitle( sTitle_ ), usFanIn( usFanIn_ ),
     usFanOut( usFanOut_ ), ulType( ulType_ ), ulLib( ulLib_), ulModule( ulModule_ )
 {
+	cerr << ">> CPipeItemWidget::CPipeItemWidget" << endl;
   setFixedSize(140,40);
   if ( usFanOut > 0 )
   {
@@ -68,6 +69,7 @@ CPipeItemWidget::CPipeItemWidget( ulong ulID_, std::string sTitle_, ushort usFan
         this, SIGNAL( connectionDeleted( CConnectorWidget* ) ) );
     }
   }
+  cerr << "<< CPipeItemWidget::CPipeItemWidget" << endl;
 }
 
 /* Destructor */

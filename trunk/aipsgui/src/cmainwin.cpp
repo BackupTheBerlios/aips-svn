@@ -519,6 +519,8 @@ void CMainWin::dumpGraph() throw()
  */
 void CMainWin::process( ulong ulID ) throw()
 {
+	if ( !executeCheckPtr->isChecked() )
+		return;
 /*cerr << "Updating " << modulePtrMap[ulID].get()->getModuleName() << endl;
 	modulePtrMap[ulID].get()->update();*/
 	if ( currentlyRunning )
@@ -1277,6 +1279,7 @@ alog << LFIXME << "This version handling is rather basic" << endl;
 				pipelineViewPtr->deletePipeline();
         return;
     }		
+    alog << LINFO << "Adding " << tmpModulePtr->getModuleName() << endl;
     pipelineViewPtr->addItem( ulID, tmpModulePtr.get(), uiX, uiY, sName, ulType, ulLib, ulModule );
 DBG("Node id " << ulID << " Type " << uiType << " idStr " << sIDStr << " x " << uiX
   << " y " << uiY );	 
