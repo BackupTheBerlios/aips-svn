@@ -40,6 +40,8 @@ CBinaryMorphology::CBinaryMorphology( ulong ulID ) throw()
   parameters.initUnsignedLong( "Iterations", 1UL, 1UL, 1000UL );
   parameters.initUnsignedLong( "Kernel height", 1UL, 1UL, 255UL );
 	parameters.initBool( "Only background", false );
+	parameters.initUnsignedLong( "What", 1UL, -32767UL, 32767UL );
+	parameters.initUnsignedLong( "From", 0UL, -32767UL, 32767UL );
 
   inputsVec[0].portType = CPipelineItem::IOInteger;
 	inputsVec[1].portType = CPipelineItem::IOInteger;
@@ -97,8 +99,7 @@ void CBinaryMorphology::morph2D( const TImage& input, const TImage& kernel ) thr
   deleteOldOutput();
 
   TImagePtr outputPtr ( new TImage( input ) );
-	outputPtr->setMinimum( 0 );
-	outputPtr->setMaximum( 1 );
+	outputPtr->getDataRange().setMaximum( input.getDataRange().getMaximum() );
 	(*outputPtr) = 0;
   TImage work( input );
 	
@@ -110,6 +111,8 @@ void CBinaryMorphology::morph2D( const TImage& input, const TImage& kernel ) thr
   
 	bool bSearchFor = parameters.getBool( "Type" );
 	ulong ulMaxIterations = parameters.getUnsignedLong( "Iterations" );	
+	ulong what = parameters.getUnsignedLong( "What" );	
+	ulong from = parameters.getUnsignedLong( "From" );	
   
 	PROG_MAX( ulMaxIterations );
 	bool bOnlyBG = parameters.getBool( "Only background" );
@@ -159,7 +162,7 @@ void CBinaryMorphology::morph2D( const TImage& input, const TImage& kernel ) thr
          	}
 	        else 
   	      {
-						(*outputPtr)( x, y ) = 1;
+						(*outputPtr)( x, y ) = work( x, y );
 						bool bValue = false;
     	      for ( short t = -1; t < 2; ++t )
       	      for ( short s = -1; s < 2; ++s )
@@ -168,7 +171,7 @@ void CBinaryMorphology::morph2D( const TImage& input, const TImage& kernel ) thr
             	    && static_cast<short>(x) + s < static_cast<short>(work.getExtent(0))
               	  && static_cast<short>(y) + t < static_cast<short>(work.getExtent(1)) )
                 	{
-	                  if ( work( x + s, y + t ) == 0 ) 
+	                  if ( work( x + s, y + t ) == from && work( x,y ) == what ) 
 											bValue = true;
       	          }
 						if ( bValue )

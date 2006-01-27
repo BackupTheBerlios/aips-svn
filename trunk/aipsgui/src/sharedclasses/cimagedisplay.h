@@ -32,7 +32,7 @@
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qcolor.h>
-
+#include <qslider.h>
 
 namespace aips {
   
@@ -79,6 +79,8 @@ private:
   std::vector<QColor> paletteVec; ///< The palette to use
   QImage image;                   ///< The image to show
   // Widgets
+  QSlider* slicerPtr;
+  QComboBox* orientationBoxPtr;   ///< Combo box 
   QVBox* aColumnPtr;              ///< Layout manager
   QLabel* imageLabelPtr;          ///< Label to display the image
   QLabel* zoomBoxLabelPtr;        ///< Label for zoom box

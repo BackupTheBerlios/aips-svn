@@ -476,7 +476,7 @@ public:
 	/// Swaps the data with another data set of the same type
 	void swap( CTypedData<TValue>& aDataSet )
 		throw();
-	CDataRange<TValue,SDataTraits<TValue>::isScalar> getDataRange() { return theDataRange; }
+	CDataRange<TValue,SDataTraits<TValue>::isScalar> getDataRange() const { return theDataRange; }
 	void setDataRange( const CDataRange<TValue,SDataTraits<TValue>::isScalar>& aDataRange)
 	{ 
 		theDataRange = aDataRange;

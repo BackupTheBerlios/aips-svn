@@ -31,6 +31,11 @@ CImageDisplay::CImageDisplay() throw()
   aColumnPtr->setGeometry(0,0,width(),height());
   aColumnPtr->setMargin(8);
 
+	slicerPtr = new QSlider( aColumnPtr, Qt::Horizontal );
+  orientationBoxPtr = new QComboBox( aColumnPtr );
+  orientationBoxPtr->insertItem( "Transversal", 0 );
+  orientationBoxPtr->insertItem( "Coronal", 1 );
+  orientationBoxPtr->insertItem( "Saggital", 2 );
   processedPicPtr = new QScrollView ( aColumnPtr );
   processedPicPtr->setHScrollBarMode( QScrollView::Auto );
   processedPicPtr->setVScrollBarMode( QScrollView::Auto );

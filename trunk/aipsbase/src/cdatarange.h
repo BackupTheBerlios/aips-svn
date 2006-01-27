@@ -42,11 +42,11 @@ public:
 	{
 		theMaximum = theMaximum_;
 	}
-	TValue getMinimum()
+	TValue getMinimum() const
 	{
 		return theMinimum;
 	}
-	TValue getMaximum()
+	TValue getMaximum() const
 	{
 		return theMaximum;
 	}
@@ -92,11 +92,11 @@ public:
 	{
 		theMaximum = SDataTraits<TValue>::TDistanceType::distanceFromZero( theMaximum_ );
 	}
-	typename SDataTraits<TValue>::TScalarDataType getMinimum()
+	typename SDataTraits<TValue>::TScalarDataType getMinimum() const
 	{
 		return theMinimum;
 	}
-	typename SDataTraits<TValue>::TScalarDataType getMaximum()
+	typename SDataTraits<TValue>::TScalarDataType getMaximum() const
 	{
 		return theMaximum;
 	}

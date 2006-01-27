@@ -9,6 +9,9 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
+
+// TODO: Support for vector fields and data with more than one channel
+
 #ifndef AIPSCVTKADAPTER_H
 #define AIPSCVTKADAPTER_H
 #define CVTKADAPTER_VERSION "0.1"
@@ -17,19 +20,27 @@
 #include <cstructureddataadapter.h>
 
 #include "vtkPointData.h"
+#include "vtkBitArray.h"
+#include "vtkCharArray.h"
+#include "vtkUnsignedCharArray.h"
 #include "vtkShortArray.h"
 #include "vtkUnsignedShortArray.h"
+#include "vtkIntArray.h"
+#include "vtkUnsignedIntArray.h"
+#include "vtkLongArray.h"
+#include "vtkUnsignedLongArray.h"
 #include "vtkFloatArray.h"
 #include "vtkDoubleArray.h"
 #include "vtkStructuredPoints.h"
 #include "vtkImageData.h"
+#include "vtkObjectBase.h"
 
 namespace aips {
 
 /**
 @author Hendrik Belitz
 */
-class CVTKAdapter : public CStructuredDataAdapter
+class CVTKAdapter : public CStructuredDataAdapter, public vtkObjectBase
 {
 private:
   /// Copy constructor
@@ -60,7 +71,7 @@ public:
 private:
   vtkImageData* externalDataPtr; ///< Pointer to external vtk image
   /// Converts a given vtkDataArray into an AIPS image volume
- template<typename TVar, typename TSet, typename TArray>
+ template<typename TSet, typename TArray>
   boost::shared_ptr<TSet> convertVTKImage( TArray* aVtkArray, std::vector<size_t> dim ) const;
 };
 
