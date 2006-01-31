@@ -15,3 +15,7 @@ INCLUDE(
 SET(aipsbase_USE_FILE
 	"@CMAKE_INSTALL_PREFIX@/lib/aipsbase/aipsbaseUse.cmake"
 )
+
+SET(aipsbase_USE_VTK "@USE_VTK@")
+SET(aipsbase_USE_ITK "@USE_ITK@")
+SET(aipsbase_USE_IM "@USE_IM@")

@@ -22,6 +22,7 @@
 #ifndef AIPSCITKADAPTER_H
 #define AIPSCITKADAPTER_H
 #include <aipsbase_config.h>
+
 #ifdef USE_ITK
 #define ITKADAPTER_VERSION "0.2"
 
@@ -37,7 +38,7 @@ namespace aips {
 
 /**
  * Structured data adapter for ITK images
- *@author Hendrik Belitz
+ * @author Hendrik Belitz
  */
 class CITKAdapter : public CStructuredDataAdapter
 {
@@ -70,11 +71,13 @@ public:
   typename itkImageType::Pointer convertToExternal()
     throw( NullException );
 private:
+	/// Actual conversion from AIPS to ITK
 	template<typename itkImageType, typename DataType, int Dimension>
   typename itkImageType::Pointer actualExternalConversion();
+  /// Actual conversion from ITK to AIPS
   template<typename itkImageType>
   TDataSetPtr actualInternalConversion();
-  itk::DataObject::Pointer externalData;
+  itk::DataObject::Pointer externalData; ///< Pointer to external ITK data
 };
 
 

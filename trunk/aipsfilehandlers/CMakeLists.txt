@@ -21,30 +21,32 @@ OFF)
 
 SET( DEBUG_LEVEL 0 CACHE STRING "Level of debugging output (This is either 0 (no output) or 1,2,3)")
 
-OPTION(USE_IMAGEMAGICK
-	"Use the image magick++ library for handling of standard image formats"
-OFF)
-
-OPTION(USE_VTK
-	"Use VTK for handling VTK files"
-OFF)
-
-OPTION(USE_ITK
-	"Use ITK for medical image IO"
-OFF)
+# OPTION(USE_IMAGEMAGICK
+# 	"Use the image magick++ library for handling of standard image formats"
+# OFF)
+# 
+# OPTION(USE_VTK
+# 	"Use VTK for handling VTK files"
+# OFF)
+# 
+# OPTION(USE_ITK
+# 	"Use ITK for medical image IO"
+# OFF)
 
 INCLUDE( ${aipsbase_USE_FILE} )
 
+
+
 #Look for Magick++ library and includes
-IF(USE_IMAGEMAGICK)
+IF(aipsbase_USE_IM)
   INCLUDE( FindImageMagickLib.cmake )
   INCLUDE_DIRECTORIES( ${IMAGEMAGICKLIB_INCLUDE_DIR} )
   LINK_LIBRARIES( ${IMAGEMAGICKLIB_CXX_LIBRARY} ${IMAGEMAGICKLIB_C_LIBRARY} ${IMAGEMAGICKLIB_X11_LIBRARY} )
 	SET( HAVE_IM 1 )
-ENDIF(USE_IMAGEMAGICK)
+ENDIF(USE_IM)
 #endof Magick++ search
 
-IF(USE_VTK)
+IF(aipsbase_USE_VTK)
 	INCLUDE(${CMAKE_ROOT}/Modules/FindVTK.cmake)
 	IF(!VTK_FOUND)
 		MESSAGE( SEND_ERROR "Cannot find VTK library" )
@@ -56,7 +58,7 @@ IF(USE_VTK)
  	LINK_LIBRARIES( vtkCommon vtkIO )	
 ENDIF(USE_VTK)
 
-IF(USE_ITK)
+IF(aipsbase_USE_ITK)
 	INCLUDE(${CMAKE_ROOT}/Modules/FindITK.cmake)
 	IF(!ITK_FOUND)
 		MESSAGE( SEND_ERROR "Cannot find ITK library" )
@@ -68,7 +70,6 @@ IF(USE_ITK)
  	LINK_LIBRARIES( ITKIO )	
 ENDIF(USE_ITK)
 
-LINK_DIRECTORIES( /usr/local/lib/vtk /usr/local/lib/InsightToolkit )
 LINK_LIBRARIES( aipsbase pthread )
 
 INCLUDE_DIRECTORIES( ${PROJECT_BINARY_DIR} ${PROJECT_SOURCE_DIR}/src ) 

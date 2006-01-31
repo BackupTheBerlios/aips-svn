@@ -16,11 +16,13 @@ IF(!aipsfilehandlers_FOUND)
 	MESSAGE( SEND_ERROR "aipsfilehandlers library is needed for compilation" )
 ENDIF(!aipsfilehandlers_FOUND)	
 
+
 INCLUDE( ${aipsbase_USE_FILE} )
 INCLUDE( ${aipsfilehandlers_USE_FILE} )
-INCLUDE_DIRECTORIES( /usr/local/include/vtk /usr/local/include/InsightToolkit )
-LINK_LIBRARIES( -laipsbase -laipsfilehandlers )
-LINK_DIRECTORIES( -L/usr/local/lib/vtk -L/usr/local/lib/InsightToolkit -L/usr/X11R6/lib )
+#INCLUDE_DIRECTORIES( ${aipsbase_INCLUDE_DIRS} )
+#INCLUDE_DIRECTORIES( /usr/local/include/vtk /usr/local/include/InsightToolkit )
+LINK_LIBRARIES( aipsbase aipsfilehandlers )
+#LINK_DIRECTORIES( -L/usr/local/lib/vtk -L/usr/local/lib/InsightToolkit -L/usr/X11R6/lib )
 
 SET( DEBUG_LEVEL 0 CACHE STRING "Level of debugging output (This is either 0 (no output) or 1,2,3)")
 
