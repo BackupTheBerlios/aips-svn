@@ -28,14 +28,14 @@ using namespace boost;
 namespace aips {
 
 CVTKAdapter::CVTKAdapter( TDataSetPtr internalDataSPtr_ ) throw()
-  : CStructuredDataAdapter( internalDataSPtr_, "CVTKAdapter", CVTKADAPTER_VERSION, "CStructuredDataAdapter" ), vtkObjectBase(),
+  : CStructuredDataAdapter( internalDataSPtr_, "CVTKAdapter", CVTKADAPTER_VERSION, "CStructuredDataAdapter" ), 
     externalDataPtr( NULL )
 {
 }
 
 
 CVTKAdapter::CVTKAdapter() throw()
-  : CStructuredDataAdapter( "CVTKAdapter", CVTKADAPTER_VERSION, "CStructuredDataAdapter" ), vtkObjectBase(),
+  : CStructuredDataAdapter( "CVTKAdapter", CVTKADAPTER_VERSION, "CStructuredDataAdapter" ), 
   	externalDataPtr( NULL )
 {
 }
@@ -46,7 +46,7 @@ CVTKAdapter::~CVTKAdapter() throw()
   if ( externalDataPtr )
   {
 DBG3( "New external data refcnt: " << externalDataPtr->GetReferenceCount() );
-    externalDataPtr->Delete();
+    externalDataPtr->UnRegister( NULL );
   }
 }
 
@@ -62,12 +62,12 @@ FBEGIN;
   if ( externalDataPtr )
   {
 DBG3( "Old external data refcnt: " << externalDataPtr->GetReferenceCount() );  
-    externalDataPtr->Delete();
+    externalDataPtr->UnRegister( NULL );
   }
   externalDataPtr = aVTKImage;
   if ( externalDataPtr )
   {
-  	externalDataPtr->Register( this );
+  	externalDataPtr->Register( NULL );
 DBG3( "New external data refcnt: " << externalDataPtr->GetReferenceCount() );
   }
 FEND;  

@@ -9,7 +9,10 @@
  * Status : Alpha                                                       *
  * Created: 2005-09-03                                                  *
  * Changed: 2005-09-18 Added debugging output                           *
- * ToDo: Add more specific error codes                                  *
+ *          2006-01-30 Corrected many errors. Added TImage and TField   *
+ *                     support.                                         *
+ * TODO: Add more specific error codes                                  *
+ * TODO: Add support for more data types                                *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -28,6 +31,7 @@
 #include <itkImage.h>
 #include <itkImportImageFilter.h>
 #include <itkCastImageFilter.h>
+#include <itkDataObject.h>
 
 namespace aips {
 
@@ -60,20 +64,17 @@ public:
     throw( NullException ); 
 /* Other methods */
   /// Converts the external data into an internal representation
-  virtual TDataSetPtr convertToInternal();
+  virtual TDataSetPtr convertToInternal() throw( NullException );
   /// Returns external short array representing our internal data
   template<typename itkImageType>
-  void convertToExternal( typename itkImageType::Pointer& anImage )
+  typename itkImageType::Pointer convertToExternal()
     throw( NullException );
 private:
-  TDataSetPtr externalDataPtr; ///< Pointer to external itk image
-  /// Template function to do the actual conversion
-  template<typename internalDataType, typename itkImageType, typename dataType>
-  typename itkImageType::Pointer doActualConversion()
-    throw();
-  template<typename internalDataType, typename itkImageType, typename dataType>
-  typename itkImageType::Pointer setExternalToInternalData( uint uiDimensions, size_t* dims, uint dataDimension )
-    throw();
+	template<typename itkImageType, typename DataType, int Dimension>
+  typename itkImageType::Pointer actualExternalConversion();
+  template<typename itkImageType>
+  TDataSetPtr actualInternalConversion();
+  itk::DataObject::Pointer externalData;
 };
 
 

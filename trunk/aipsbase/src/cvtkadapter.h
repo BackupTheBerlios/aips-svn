@@ -33,14 +33,13 @@
 #include "vtkDoubleArray.h"
 #include "vtkStructuredPoints.h"
 #include "vtkImageData.h"
-#include "vtkObjectBase.h"
 
 namespace aips {
 
 /**
 @author Hendrik Belitz
 */
-class CVTKAdapter : public CStructuredDataAdapter, public vtkObjectBase
+class CVTKAdapter : public CStructuredDataAdapter
 {
 private:
   /// Copy constructor
