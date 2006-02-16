@@ -9,14 +9,14 @@ ADD_DEFINITIONS(-Wall -DQT_THREAD_SUPPORT)
 
 SET( DEBUG_LEVEL 0 CACHE STRING "Level of debugging output (This is either 0 (no output) or 1,2,3)")
 
-FIND_PATH(OPEN_MESH_INCLUDES OpenMesh/Core/Mesh/Types/TriMesh_ArrayKernelT.hh
-	${HOME}/include
-  /usr/include
-  /usr/local/include
-  DOC "Directory containing OpenMesh/Core/Mesh/Types/TriMesh_ArrayKernelT.hh")
-IF( NOT OPEN_MESH_INCLUDES )
- MESSAGE( SEND_ERROR "OpenMesh is needed for compilation" )
-ENDIF( NOT OPEN_MESH_INCLUDES )
+#FIND_PATH(OPEN_MESH_INCLUDES OpenMesh/Core/Mesh/Types/TriMesh_ArrayKernelT.hh
+#	${HOME}/include
+#  /usr/include
+#  /usr/local/include
+#  DOC "Directory containing OpenMesh/Core/Mesh/Types/TriMesh_ArrayKernelT.hh")
+#IF( NOT OPEN_MESH_INCLUDES )
+# MESSAGE( SEND_ERROR "OpenMesh is needed for compilation" )
+#ENDIF( NOT OPEN_MESH_INCLUDES )
 
 # FIND_LIBRARY(OPEN_MESH_LIBRARY
 # 	NAMES OpenMesh_Core

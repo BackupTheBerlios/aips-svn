@@ -168,8 +168,8 @@ void CImageData::loadDataSet( std::string sFilename )
 	}
 	imageData->GetScalarRange( scalarRange );
 	cerr << "Range is " << scalarRange[0] << " - " << scalarRange[1] << endl;
-	scalarRange[0] = theImage->getMinimum();
-	scalarRange[1] = theImage->getMaximum();
+	scalarRange[0] = theImage->getDataRange().getMinimum();
+	scalarRange[1] = theImage->getDataRange().getMaximum();
 	cerr << "Range is " << scalarRange[0] << " - " << scalarRange[1] << endl;
 	slicers[2]->SetResliceAxesOrigin( extent[0]/2.0, 0.0, 0.0 );
 	slicers[1]->SetResliceAxesOrigin( 0.0, extent[1]/2.0, 0.0 );

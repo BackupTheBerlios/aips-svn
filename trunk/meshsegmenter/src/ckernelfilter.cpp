@@ -62,8 +62,8 @@ FBEGIN;
 		dataPtr->getExtent(2) };
   TImagePtr outputPtr ( new TImage( 3, dataPtr->getExtents(), 
 		dataPtr->getDataDimension() ) );
-	outputPtr->setMinimum( dataPtr->getMinimum() );
-	outputPtr->setMaximum( dataPtr->getMaximum() );
+	outputPtr->getDataRange().setMinimum( dataPtr->getDataRange().getMinimum() );
+	outputPtr->getDataRange().setMaximum( dataPtr->getDataRange().getMaximum() );
 
   ushort usRadius = ( kernel.cols() - 1 ) / 2; // Filter kernel size
 
@@ -104,10 +104,10 @@ DBG2("Starting filter BLITZ++");
           dTmp += work( k, l, m ) * kernel( i, j, n );
       }
       output( position ) = static_cast<ushort>( std::abs( static_cast<long>( dTmp ) ) );
-      if ( output( position ) > outputPtr->getMaximum() )
-        outputPtr->setMaximum( output( position ) );
-			else if ( output( position ) < outputPtr->getMinimum() )
-        outputPtr->setMinimum( output( position ) );
+      if ( output( position ) > outputPtr->getDataRange().getMaximum() )
+        outputPtr->getDataRange().setMaximum( output( position ) );
+			else if ( output( position ) < outputPtr->getDataRange().getMinimum() )
+        outputPtr->getDataRange().setMinimum( output( position ) );
     }
 		cerr << "<<<" << endl;
   }
@@ -129,8 +129,8 @@ BENCHSTART;
 	size_t usDims[] = { dataPtr->getExtent(0), dataPtr->getExtent(1) };
 
 	TImagePtr outputPtr ( new TImage( 2, dataPtr->getExtents(), dataPtr->getDataDimension() ) );
-	outputPtr->setMinimum( dataPtr->getMinimum() );
-	outputPtr->setMaximum( dataPtr->getMaximum() );
+	outputPtr->getDataRange().setMinimum( dataPtr->getDataRange().getMinimum() );
+	outputPtr->getDataRange().setMaximum( dataPtr->getDataRange().getMaximum() );
 
   ushort usRadius = ( kernel.cols() - 1 ) / 2; // Filter kernel size
 	PROG_MAX( dataPtr->getDataDimension() );
@@ -157,10 +157,10 @@ BENCHSTART;
           dTmp += static_cast<double>( work( k, l ) ) * kernel( i, j );
       }
       (*oit) = static_cast<ushort>( std::abs( static_cast<long>( dTmp ) ) );
-      if ( (*oit) > outputPtr->getMaximum() )
-        outputPtr->setMaximum( (*oit) );
-			else if ( (*oit) < outputPtr->getMinimum() )
-        outputPtr->setMinimum( (*oit) );
+      if ( (*oit) > outputPtr->getDataRange().getMaximum() )
+        outputPtr->getDataRange().setMaximum( (*oit) );
+			else if ( (*oit) < outputPtr->getDataRange().getMinimum() )
+        outputPtr->getDataRange().setMinimum( (*oit) );
     }
   }
 PROG_RESET();	
@@ -187,8 +187,8 @@ BENCHSTART;
     usDims[2] = 1;
   TImagePtr outputPtr ( new TImage( dataPtr->getDimension(), 
 		dataPtr->getExtents(), dataPtr->getDataDimension() ) );
-	outputPtr->setMinimum( dataPtr->getMinimum() );
-	outputPtr->setMaximum( dataPtr->getMaximum() );		
+	outputPtr->getDataRange().setMinimum( dataPtr->getDataRange().getMinimum() );
+	outputPtr->getDataRange().setMaximum( dataPtr->getDataRange().getMaximum() );		
 	(*outputPtr) = 0;
   ushort usRadius[3] ={ ( kernel.getExtent(0) - 1 ) / 2,
 		( kernel.getExtent(1) - 1 ) / 2 }; // Filter kernel size

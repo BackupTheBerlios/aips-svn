@@ -20,7 +20,9 @@
 #ifndef CISOSURFACE_H
 #define CISOSURFACE_H
 
-#include <aipsdatatraits.h>
+#include <vector>
+#include <aipsnumbertraits.h>
+#include <aipsnumeric.h>
 
 using namespace aips;
 
