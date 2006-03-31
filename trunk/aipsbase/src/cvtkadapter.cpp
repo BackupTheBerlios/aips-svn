@@ -270,9 +270,17 @@ DBG3("Converting to double");
   {
 DBG3("Converting to short");    
     TImagePtr shortSet = static_pointer_cast<TImage>( internalDataSPtr );
-    vtkShortArray* sArray = vtkShortArray::New();
-    sArray->SetArray( shortSet->getArray(), dataSize, 1 );
+    double* array = new double[dataSize];
+    //memcpy( array, shortSet->getArray(), dataSize );
+    TImage::iterator it = shortSet->begin();
+    for( int k = 0; k < dataSize; ++k, ++it )
+    {
+    	array[k] = static_cast<double>(*it);
+    }
+    vtkDoubleArray* sArray = vtkDoubleArray::New();
+    sArray->SetArray( array , dataSize, 0 );
     p->SetScalars( sArray );
+    sArray->Delete();
   }
   else
   {
@@ -280,7 +288,6 @@ DBG3("Converting to short");
     alog << LWARN << "Cannot convert given datatype" << endl;
     return NULL;
   }
-  
   return sp;
 }
 

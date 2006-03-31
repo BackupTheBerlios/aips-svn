@@ -72,8 +72,10 @@ public:
     throw( NullException );
 private:
 	/// Actual conversion from AIPS to ITK
-	template<typename itkImageType, typename DataType, int Dimension>
-  typename itkImageType::Pointer actualExternalConversion();
+/*	template<typename itkImageType, typename DataType>
+  typename itkImageType::Pointer actualExternalConversion2D();*/
+	template<typename itkImageType, typename DataType>
+  typename itkImageType::Pointer actualExternalConversion3D();
   /// Actual conversion from ITK to AIPS
   template<typename itkImageType>
   TDataSetPtr actualInternalConversion();

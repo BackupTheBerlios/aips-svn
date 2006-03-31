@@ -54,8 +54,8 @@ CEdgeThinner::CEdgeThinner( ulong ulID ) throw()
 
   parameters.initDouble( "Threshold", M_PI/8.0, 0, 2*M_PI );
 
-  inputsVec[0].portType = IO2DVector;
-  outputsVec[0].portType = IO2DVector;
+  inputsVec[0].portType = IOVector;
+  outputsVec[0].portType = IOVector;
 
 }
 

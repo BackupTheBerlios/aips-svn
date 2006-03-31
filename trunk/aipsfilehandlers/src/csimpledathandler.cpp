@@ -86,7 +86,7 @@ DBG("About to flip");
 		for( ushort z = 0; z < dimensionSize[2]; ++z )
 			for( ushort y = 0; y < dimensionSize[1]; ++y )
 				for( ushort x = 0; x < dimensionSize[0]; ++x )
-					(*flippedImage)( x, dimensionSize[1] - 1 - y, dimensionSize[2] - 1 - z ) = (*aDataSet)( x, y, z );
+					(*flippedImage)( x, y, dimensionSize[2] - 1 - z ) = (*aDataSet)( x, y, z );
 DBG("Flipped");
 FEND;
 		return make_pair( flippedImage, aHeader );
