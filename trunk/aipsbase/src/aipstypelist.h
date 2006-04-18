@@ -16,6 +16,7 @@
  *                     Added function checkType                         * 
  *          2005-11-15 Moved traits to seperate file                    *
  *          2005-11-17 Renamed file to aipstypelist.h                   *
+ *          2006-04-04 Added some image/field-specific type lists       *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -66,6 +67,12 @@ template<typename Head, typename Tail, unsigned int index> struct TypeAt<TypeLis
 
 /** Typelist of all supported field types */
 typedef TypeList<TImage, TypeList<TComplexImage, TypeList<TField, TypeList<TField2D, TypeList<TField3D, TypeList<TStringField, NullType> > > > > > datasetTL;
+
+/** Typelist of all scalar field types (= images) */
+typedef TypeList<TImage, TypeList<TField, TypeList<TSmallImage, NullType> > > imageTL;
+
+/** Typelist of all vector field types (= vector fields) */
+typedef TypeList<TField2D, TypeList<TField3D, NullType> > vectorfieldTL;
 
 }
 #endif

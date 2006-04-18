@@ -166,7 +166,8 @@ inline bool CPipelineItem::checkInput( T inputPtr, ushort usMinDim,
 	}	
 	if ( inputPtr->getType() != typeid( typename T::element_type::TDataType ) )
 	{
-		alog << LWARN << "Input set error: <Type mismatch>" << std::endl;
+		alog << LWARN << "Input set error: <Type mismatch> - " << typeid(inputPtr->getType()).name() << " <> " << 
+			typeid( typename T::element_type::TDataType ).name() << std::endl;
 		return false;
 	}	
 	if ( ( usMinDim && inputPtr->getDimension() < usMinDim ) 
@@ -179,7 +180,7 @@ inline bool CPipelineItem::checkInput( T inputPtr, ushort usMinDim,
 	if ( ( usMinDataDim && inputPtr->getDataDimension() < usMinDataDim )
 		|| ( usMaxDataDim && inputPtr->getDataDimension() > usMaxDataDim ) )
 	{
-		alog << LWARN << "Input data has wrong dimension " << inputPtr->getDataDimension() << ". Legal range is "
+		alog << LWARN << "Input data has wrong data dimension " << inputPtr->getDataDimension() << ". Legal range is "
 			<< usMinDataDim << " - " << usMaxDataDim << std::endl; 
 		return false;
 	}

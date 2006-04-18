@@ -38,6 +38,7 @@
  *        2005-06-10 Complete update to new pipelining architecture     *
  *        2005-07-07 Added new IO types                                 *
  *                   Added runtime type checking for io ports           *
+ *        2006-04-04 Added some convenience macros (type lists, newInst *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -68,6 +69,36 @@ namespace aips {
 class CPipelineItem;
 
 typedef boost::shared_ptr<CPipelineItem> TPipelineItemPtr;
+
+/** 
+ * Macro for typelist calling scheme - declaration in .h-file 
+ * \param CALL name of resulting call function
+ */
+#define DECLARE_CALL_MACRO( CALL ) template<unsigned int index> void CALL() throw();
+
+/** 
+ * Macro for typelist calling scheme - definition in .cpp-file
+ * \param CALL name of resulting call function
+ * \param FUNCTION template function to call
+ * \param LIST type list to use
+ */
+#define DEFINE_CALL_MACRO( CALL, FUNCTION, LIST ) template<unsigned int index> void CALL() throw()\
+{\
+	if ( !FUNCTION<typename TypeAt<LIST, index>::Result>() )\
+		CALL<index-1>();\
+}\
+template<> void CALL<0>() throw()\
+{\
+	typedef TypeAt<LIST, 0>::Result TDataType;\
+	if ( !FUNCTION<TDataType>() )\
+		alog << LWARN << "Dataset type not supported by module" << endl;\
+}
+
+/** Macro to define the newInstance function conveniently in derived classes */
+#define NEW_INSTANCE( CLASS ) virtual CPipelineItem* CLASS::newInstance( ulong ulID = 0 ) const throw()\
+{\
+  return new CLASS( ulID );\
+}
 
 /** An abstract base for all processing pipeline items */
 class CPipelineItem : public CSubject

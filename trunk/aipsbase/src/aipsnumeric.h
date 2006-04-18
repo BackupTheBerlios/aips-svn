@@ -94,7 +94,9 @@ typedef CSingleValue<TFloatType> TDouble;
 typedef CSingleValue<std::complex<TFloatType> > TComplex;
 /// A single string value for pipeline usage
 typedef CSingleValue<std::string> TSingleString;
-/// A scalar integer field for pipeline usage
+/// A scalar unsigned byte field for pipeline usage (8 bit unsigned)
+typedef CTypedData<uint8_t> TSmallImage;
+/// A scalar integer field for pipeline usage (16 bit signed)
 typedef CTypedData<int16_t> TImage;
 /// A scalar floating point field for pipeline usage
 typedef CTypedData<TFloatType> TField;
@@ -108,6 +110,7 @@ typedef CTypedData<TVector3D> TField3D;
 typedef CTypedData<std::string> TStringField;
 
 typedef boost::shared_ptr<CDataSet>           TDataSetPtr; ///< Smart pointer to an unspecified data set
+typedef boost::shared_ptr<TSmallImage>     TSmallImagePtr; ///< Smart pointer to integer images
 typedef boost::shared_ptr<TImage>               TImagePtr; ///< Smart pointer to integer images
 typedef boost::shared_ptr<TField>               TFieldPtr; ///< Smart pointer to floating point images
 typedef boost::shared_ptr<TComplexImage> TComplexImagePtr; ///< Smart pointer to complex images

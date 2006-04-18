@@ -72,6 +72,25 @@ struct SDataTraits
 
 /** 
  * \ingroup datatraits
+ * \brief Data traits for unsigned byte datasets 
+ *
+ * Specialised from SDataTraits.
+ */
+template<typename TDistance>
+struct SDataTraits<uint8_t, TDistance>
+{
+	typedef uint8_t TDataType; 
+	typedef int16_t TIncreasedRangeType;
+	typedef TDistance TDistanceType;
+	static const TDataType ONE(){ return 1; }
+	static const TDataType ZERO(){ return 0; }
+	enum { isScalar = true };
+	enum { isComparable = true };
+	enum { isNumeric = true };
+};
+
+/** 
+ * \ingroup datatraits
  * \brief Data traits for byte datasets 
  *
  * Specialised from SDataTraits.
