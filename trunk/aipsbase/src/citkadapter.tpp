@@ -32,6 +32,15 @@ FBEGIN;
 		else 
 			alog << LWARN << "Could only convert 3D data" << std::endl;
 	}
+	else if ( internalDataSPtr->getType() == typeid( TSmallImage::TDataType ) )
+	{
+/*		if ( internalDataSPtr->getDimension() == 2 )
+			return actualExternalConversion2D<itkImageType, TField::TDataType>();
+		else */if ( internalDataSPtr->getDimension() == 3 )
+			return actualExternalConversion3D<itkImageType, TSmallImage::TDataType>();
+		else 
+			alog << LWARN << "Could only convert 3D data" << std::endl;
+	}
 	else if ( internalDataSPtr->getType() == typeid( TField::TDataType ) )
 	{
 /*		if ( internalDataSPtr->getDimension() == 2 )

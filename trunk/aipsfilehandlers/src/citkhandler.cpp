@@ -166,7 +166,7 @@ void CITKHandler::save( const string& sFilename, const TDataFile& theData )
 			
 	if ( theData.first->getType() == typeid( short ) )
 	{		
-    typedef itk::Image<short,3> ImageType;
+/*    typedef itk::Image<short,3> ImageType;
  		typedef itk::ImportImageFilter<short,3> ImportFilterType;
  		TImagePtr image = static_pointer_cast<TImage>( theData.first );
  		ImportFilterType::Pointer importFilter = ImportFilterType::New();
@@ -183,25 +183,77 @@ void CITKHandler::save( const string& sFilename, const TDataFile& theData )
  		importFilter->SetOrigin( origin );
  		double spacing[3] = {1.0,1.0,1.0};
  		importFilter->SetSpacing( spacing );
-     importFilter->SetImportPointer( image->getArray(), siz, false );
-//    CITKAdapter myAdapter( theData.first );
-//    typedef itk::Image<short,3> ImageType;
-    typedef itk::ImageFileWriter<ImageType> FileWriter;
-    ImageType::Pointer myimage;
-//    myAdapter.convertToExternal<ImageType>( myimage );
-    myimage = importFilter->GetOutput();
-    FileWriter::Pointer writer = FileWriter::New();
-		writer->SetFileName( sFilename.c_str() );
-  	writer->SetInput( myimage );
-		try
-		{
-			writer->Update();
+     importFilter->SetImportPointer( image->getArray(), siz, false );*/
+    
+    TImagePtr image = static_pointer_cast<TImage>( theData.first );
+    if ( image->getDataRange().getMaximum() < 256 )
+    {
+    	cerr << "Image is byte" << endl;
+    	TSmallImagePtr sm( new TSmallImage( image->getDimension(), image->getExtents() ) );
+    	TImage::iterator ot = image->begin();
+    	for( TSmallImage::iterator it = sm->begin(); it != sm->end(); ++it, ++ot )
+    		(*it)=static_cast<uint8_t>( (*ot) );
+/*	    typedef itk::Image<uint8_t,3> ImageType;
+  	  typedef itk::ImageFileWriter<ImageType> FileWriter;
+    	ImageType::Pointer myimage;    	
+    	typedef itk::ImportImageFilter<uint8_t,3> ImportFilterType;
+ 		 TImagePtr image = static_pointer_cast<TImage>( theData.first );
+ 		 ImportFilterType::Pointer importFilter = ImportFilterType::New();
+ 		 ImportFilterType::SizeType size;
+ 		 for( uint i = 0; i < 3; ++i )
+ 		 	size[i] = dimensionSize[i];
+ 		 ImportFilterType::IndexType start;
+ 		 start.Fill(0);
+ 		 ImportFilterType::RegionType region;
+ 		 region.SetIndex( start );
+ 		 region.SetSize( size );
+ 		 importFilter->SetRegion( region );
+ 		 double origin[3] = {0.0,0.0,0.0};
+ 		 importFilter->SetOrigin( origin );
+ 		 double spacing[3] = {1.0,1.0,1.0};
+	 	 importFilter->SetSpacing( spacing );
+     importFilter->SetImportPointer( sm->getArray(), siz, false );
+	    myimage = importFilter->GetOutput();*/
+	    CITKAdapter myAdapter( sm );
+			typedef itk::Image<uint8_t,3> ImageType;
+  	  typedef itk::ImageFileWriter<ImageType> FileWriter;
+    	ImageType::Pointer myimage;
+	    myimage = myAdapter.convertToExternal<ImageType>();
+	    FileWriter::Pointer writer = FileWriter::New();
+			writer->SetFileName( sFilename.c_str() );
+  		writer->SetInput( myimage );
+			try
+			{
+				writer->Update();
+			}
+			catch( itk::ExceptionObject& err )
+			{
+				cout << err << endl;
+				throw( FileException( 
+					"CITKHandler - Unknown image format in dataset. Image was not saved" ) );
+			}
 		}
-		catch( itk::ExceptionObject& err )
-		{
-			cout << err << endl;
-			throw( FileException( 
-				"CITKHandler - Unknown image format in dataset. Image was not saved" ) );
+    else
+    {
+	    CITKAdapter myAdapter( image );
+			typedef itk::Image<short,3> ImageType;
+  	  typedef itk::ImageFileWriter<ImageType> FileWriter;
+    	ImageType::Pointer myimage;
+	    myimage = myAdapter.convertToExternal<ImageType>();
+	//    myimage = importFilter->GetOutput();
+	    FileWriter::Pointer writer = FileWriter::New();
+			writer->SetFileName( sFilename.c_str() );
+  		writer->SetInput( myimage );
+			try
+			{
+				writer->Update();
+			}
+			catch( itk::ExceptionObject& err )
+			{
+				cout << err << endl;
+				throw( FileException( 
+					"CITKHandler - Unknown image format in dataset. Image was not saved" ) );
+			}
 		}
 	}
 	else if( theData.first->getType() == typeid( double ) )

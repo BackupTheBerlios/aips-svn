@@ -15,7 +15,7 @@
 #include <aipsfilehandlers_config.h>
 #ifdef HAVE_ITK
 #include <cbinaryfilehandler.h>
-/*#include <citkadapter.h>*/
+#include <citkadapter.h>
 
 namespace aips {
 

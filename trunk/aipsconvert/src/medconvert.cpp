@@ -26,7 +26,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include <cdatafileserver.h>
-#include <canalyzehandler.h>
+#include <citkhandler.h>
 #include <csimpledathandler.h>
 #include <cdatahandler.h>
 /*#include <cadfhandler.h>*/
@@ -54,12 +54,14 @@ int main(int argc, char *argv[])
 		cout << " -c%1 %2 %3 combine slices %1 to %2 into a single volume file containing %3 slices" << endl;
 		cout << " -f%1 %2 fill mask starting at position %1;%2 in a single volume file" << endl;
 		cout << " -g output should be an slice-by-slice contour" << endl;
+		cout << " -a%1 add a blank border of given size" << endl;
 		return EXIT_SUCCESS;
 	}
   
 //	uint force = 0;
 	bool bSwapEndianess = false;
 	bool bCombine = false;
+	bool bBorder = false;
 	bool ipset = false;
 	bool bFill = false;
 	bool bContour = false;
@@ -68,6 +70,7 @@ int main(int argc, char *argv[])
 	uint sliceMax = 0;
 	uint fillx = 0;
 	uint filly = 0;
+	uint bordersize = 0;
 	string input, output;
 	for( int i = 1; i < argc; ++i )
 	{
@@ -77,6 +80,14 @@ int main(int argc, char *argv[])
 			{
 				bSwapEndianess = true;
 			}			
+			else
+			if ( argv[i][1] == 'a' )
+			{
+				bBorder=true;
+				char tmps[10];
+				strcpy( tmps, &(argv[i][2]) );
+				bordersize = atoi( tmps );
+			}
 			else
 			if ( argv[i][1] == 'c' )
 			{
@@ -126,7 +137,7 @@ int main(int argc, char *argv[])
 	string filename = input.substr( 0, input.find_last_of('.') );
 	cerr << "Ext: " << extension << " file: " << filename << endl;
 	
-	shared_ptr<CAnalyzeHandler> h1 ( new CAnalyzeHandler );	
+	shared_ptr<CITKHandler> h1 ( new CITKHandler );	
 	shared_ptr<CSimpleDatHandler> h2 ( new CSimpleDatHandler );	
 	shared_ptr<CDataHandler> h3 ( new CDataHandler );
 	shared_ptr<CDF3Handler> h4 ( new CDF3Handler );
@@ -191,6 +202,22 @@ int main(int argc, char *argv[])
 						if ( (*img)(x,y-1,z) == 1 ) cnt++;
 						if ( (*img)(x,y+1,z) == 1 ) cnt++;
 						if ( cnt < 4 ) (*out)(img->getExtent(0)-1-x,img->getExtent(1)-1-y,z)=1;
+					}
+			file.first = out;
+		}
+		else if ( bBorder )
+		{
+			vector<size_t> extents(3);
+			extents[0] = file.first->getExtent(0)+2*bordersize;
+			extents[1] = file.first->getExtent(1)+2*bordersize;
+			extents[2] = file.first->getExtent(2)+2*bordersize;
+			TImagePtr img = static_pointer_cast<TImage>(file.first);
+			TImagePtr out ( new TImage( 3, extents ) );
+			for( uint z = 0; z < img->getExtent(2); ++z )
+				for( uint y = 0; y < img->getExtent(1); ++y )
+					for( uint x = 0; x < img->getExtent(0); ++x )
+					{
+						(*out)(x+bordersize,y+bordersize,z+bordersize)=(*img)(x,y,z);
 					}
 			file.first = out;
 		}
