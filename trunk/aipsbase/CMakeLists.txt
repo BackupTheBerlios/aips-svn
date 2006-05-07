@@ -128,45 +128,45 @@ ENDIF(USE_BLITZ)
 IF(USE_XMLPP)
 	FIND_LIBRARY(XMLPP_LIBRARY
 		NAMES xml++-2.6 xml++
-		PATHS /usr/lib /usr/local/lib
+		PATHS /usr/lib /usr/local/lib /opt/gnome/lib
 		DOC "Path to the libxml++-2.6 library"
 	)
 	FIND_LIBRARY(XML2_LIBRARY
 		NAMES xml2
-		PATHS /usr/lib /usr/local/lib
+		PATHS /usr/lib /usr/local/lib /opt/gnome/lib
 		DOC "Path to the libxml2 library"
 	)
 	FIND_LIBRARY(GLIBMM_LIBRARY
 		NAMES glibmm-2.4 glibmm 
-		PATHS /usr/lib /usr/local/lib
+		PATHS /usr/lib /usr/local/lib /opt/gnome/lib
 		DOC "Path to the glibmm-2.4 library"
 	)
 	FIND_PATH(XML2_INCLUDES 
   	SAX.h 
-		/usr/include/libxml2/libxml /usr/local/include/libxml2/libxml
+		/usr/include/libxml2/libxml /usr/local/include/libxml2/libxml /opt/gnome/include/libxml2/libxml
   	DOC "Path where libxml2 include files can be found"
 	)
 	FIND_PATH(XMLPP_INCLUDES 
   	libxml++/libxml++.h 
-		/usr/include/libxml++-2.6 /usr/local/include/libxml++-2.6
+		/usr/include/libxml++-2.6 /usr/local/include/libxml++-2.6 /opt/gnome/include/libxml++-2.6
   	DOC "Path where libxml++-2.6 include files can be found"
 	)
 	FIND_PATH(GLIBMM_INCLUDES 
   	glibmm/arrayhandle.h
-		/usr/include/glibmm-2.4 /usr/local/include/glibmm-2.4
+		/usr/include/glibmm-2.4 /usr/local/include/glibmm-2.4 /opt/gnome/include/glibmm-2.4
   	DOC "Path where glibmm-2.4 include files can be found"
 	)
 	FIND_PATH(GLIBMM_CONFIG_INCLUDES 
   	glibmmconfig.h   	
-		/usr/lib/glibmm-2.4/include /usr/local/lib/glibmm-2.4/include
+		/usr/lib/glibmm-2.4/include /usr/local/lib/glibmm-2.4/include /opt/gnome/lib/glibmm-2.4/include
 	)	
 	FIND_PATH(GLIB_INCLUDES
 		glib/gmacros.h
-		/usr/include/glib-2.0 /usr/local/include/glib-2.0
+		/usr/include/glib-2.0 /usr/local/include/glib-2.0 /opt/gnome/include/glib-2.0
 	)
 	FIND_PATH(GLIB_CONFIG_INCLUDES
 		glibconfig.h
-		/usr/lib/glib-2.0/include /usr/local/lib/glib-2.0/include
+		/usr/lib/glib-2.0/include /usr/local/lib/glib-2.0/include /opt/gnome/lib/glib-2.0/include
 	)
 	IF( NOT GLIB_INCLUDES AND GLIB_CONFIG_INCLUDES )
 		MESSAGE( SEND_ERROR "Could not find glib include files" )
