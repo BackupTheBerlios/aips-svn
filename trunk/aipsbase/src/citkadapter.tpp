@@ -2,8 +2,8 @@ template<typename itkImageType>
 void CITKAdapter::setExternalData( typename itkImageType::Pointer anImage )
     throw( NullException )
 {  
-	if ( anImage.IsNull() )
-		throw( NullException() );
+/*	if ( anImage.IsNull() ) // TODO Doesn't work in GCC 3.3
+		throw( NullException() );*/
 	externalData = anImage;
 }
 
@@ -15,8 +15,8 @@ template<typename itkImageType>
 typename itkImageType::Pointer CITKAdapter::convertToExternal() throw( NullException )
 {
 FBEGIN;
-	if ( !internalDataSPtr )
-		throw( NullException() );
+/*	if ( !internalDataSPtr )
+		throw( NullException() );*/
 	if ( internalDataSPtr->getDimension() != itkImageType::IndexType::GetIndexDimension() )
 	{
 		alog << LWARN << "Could not convert data between "

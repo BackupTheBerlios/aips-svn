@@ -124,7 +124,8 @@ int main(int argc, char *argv[])
 			<< " A - Anterior / P - Posterior \n"
 			<< " S - Superior / I - Inferior \n"
 			<< " R - Right / L - Left \n"
-			<< " ABC may be ommited. In that case, we try to determine the image orientation automatocally (This WILL fail in most cases)." << endl;
+			<< " ABC may be ommited. In that case, we try to determine the image orientation "
+			<< " automatocally (This WILL fail in most cases)." << endl;
 		return 0;
 	}
 	OrientImageFilter<ImageType,ImageType>::Pointer orienter =
@@ -135,7 +136,7 @@ int main(int argc, char *argv[])
 	{
 		orienter->UseImageDirectionOn();
 		outputDir = determineOrientation( argv[1] );
-		cout << argv[2] << " (??) -> " << argv[3] << " (" << argv[1] << ")" << endl;
+		cout << argv[2] << " ( ??? ) -> " << argv[3] << " ( " << argv[1] << " )" << endl;
 	  orienter->SetDesiredCoordinateOrientation( outputDir );
 	  myReader->SetFileName( argv[2] );
   	myWriter->SetFileName( argv[3] );

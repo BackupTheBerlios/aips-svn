@@ -36,8 +36,8 @@ CITKAdapter::~CITKAdapter() throw()
 TDataSetPtr CITKAdapter::convertToInternal() throw( NullException )
 {  
 	TDataSetPtr anImage;
-	if ( externalData.IsNull() )
-		throw( NullException() );
+/*	if ( externalData.IsNull() )
+		throw( NullException() );*/ //TODO GCC3.3 fails
 	
 	if ( typeid( *externalData ) == typeid( itk::Image<short,2> ) )
 		return actualInternalConversion< itk::Image<short,2> >();
