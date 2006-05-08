@@ -1,8 +1,5 @@
 PROJECT(aipsbase)
 
-SET ( CMAKE_C_COMPILER gcc-4.0 )
-SET ( CMAKE_CXX_COMPILER g++-4.0 )
-
 # Include some usefil CMake modules 
 INCLUDE(${CMAKE_ROOT}/Modules/CMakeDetermineCXXCompiler.cmake)
 INCLUDE(${CMAKE_ROOT}/Modules/CMakeDetermineSystem.cmake)
@@ -44,6 +41,15 @@ OPTION(BUILD_DOC "Build documentation with Doxygen (takes very long!)"	OFF )
 # We need to link with libz.so and set the appropiate include path
 LINK_LIBRARIES( ${ZLIB_LIBRARIES} )
 INCLUDE_DIRECTORIES( ${ZLIB_INCLUDE_DIR} )
+
+#Look for Magick++ library and includes
+IF(aipsbase_USE_IM)
+  INCLUDE( FindImageMagickLib.cmake )
+  INCLUDE_DIRECTORIES( ${IMAGEMAGICKLIB_INCLUDE_DIR} )
+  LINK_LIBRARIES( ${IMAGEMAGICKLIB_CXX_LIBRARY} ${IMAGEMAGICKLIB_C_LIBRARY} ${IMAGEMAGICKLIB_X11_LIBRARY} )
+	SET( HAVE_IM 1 )
+ENDIF(aipsbase_USE_IM)
+#endof Magick++ search
 
 #BEGIN Checking for components of the boost libarries
 FIND_PATH(BOOST_LEXICAL_CAST boost/lexical_cast.hpp
