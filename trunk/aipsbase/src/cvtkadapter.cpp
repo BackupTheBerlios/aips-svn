@@ -14,7 +14,7 @@
 #ifdef USE_VTK
 
 #ifndef vtkFloatingPointType
-#warning "Old VTK detected. This will still work, although upgrading to VTK 4.4+ is strongly recommended
+#warning "Old VTK detected. This will still work, although upgrading to VTK 4.4+ is strongly recommended"
 #define VTK_OLD
 #define vtkFloatingPointType vtkFloatingPointType
 typedef float vtkFloatingPointType;
@@ -103,58 +103,91 @@ DBG3( "VTK dimensions are " << iVtkVolumeDimensions[0] << " x " << iVtkVolumeDim
 	{
 		case VTK_BIT:
 DBG3( "Data type is bit" );
+			if ( 1 ) // Needed for older compilers (e.g. GCC3.3.x)!
+			{
 	    vtkBitArray* myBitArray = static_cast<vtkBitArray*>( p->GetScalars() );
   	  aDataSet = this->convertVTKImage<TImage, vtkBitArray>( myBitArray, dimensionSize );
+  	  }
   	  break;
 		case VTK_CHAR:
 DBG3( "Data type is char" );
+			if ( 1 )
+			{
 	    vtkCharArray* myCharArray = static_cast<vtkCharArray*>( p->GetScalars() );
   	  aDataSet = this->convertVTKImage<TImage, vtkCharArray>( myCharArray, dimensionSize );
+  	  }
   	  break;
 		case VTK_UNSIGNED_CHAR:
 DBG3( "Data type is uchar" );
+			if ( 1 )
+			{
 	    vtkUnsignedCharArray* myUCharArray = static_cast<vtkUnsignedCharArray*>( p->GetScalars() );
   	  aDataSet = this->convertVTKImage<TImage, vtkUnsignedCharArray>( myUCharArray, dimensionSize );
+  	  }
   	  break;
 		case VTK_SHORT:
 DBG3( "Data type is short" );
+			if ( 1 )
+			{
 	    vtkShortArray* myShortArray = static_cast<vtkShortArray*>( p->GetScalars() );
   	  aDataSet = this->convertVTKImage<TImage, vtkShortArray>( myShortArray, dimensionSize );
+  	  }
   	  break;
 		case VTK_UNSIGNED_SHORT:
 DBG3( "Data type is ushort" );
+			if ( 1 )
+			{
 	    vtkUnsignedShortArray* myUShortArray = static_cast<vtkUnsignedShortArray*>( p->GetScalars() );
   	  aDataSet = this->convertVTKImage<TField, vtkUnsignedShortArray>( myUShortArray, dimensionSize );
+  	  }
   	  break;
 		case VTK_INT:
 DBG3( "Data type is int" );
+			if ( 1 )
+			{
 	    vtkIntArray* myIntArray = static_cast<vtkIntArray*>( p->GetScalars() );
   	  aDataSet = this->convertVTKImage<TField, vtkIntArray>( myIntArray, dimensionSize );
+  	  }
   	  break;
 		case VTK_UNSIGNED_INT:
 DBG3( "Data type is uint" );
+			if ( 1 )
+			{
 	    vtkUnsignedIntArray* myUIntArray = static_cast<vtkUnsignedIntArray*>( p->GetScalars() );
   	  aDataSet = this->convertVTKImage<TField, vtkUnsignedIntArray>( myUIntArray, dimensionSize );
+  	  }
   	  break;
 		case VTK_LONG:
 DBG3( "Data type is long" );
+			if ( 1 )
+			{
 	    vtkLongArray* myLongArray = static_cast<vtkLongArray*>( p->GetScalars() );
   	  aDataSet = this->convertVTKImage<TField, vtkLongArray>( myLongArray, dimensionSize );
+  	  }
   	  break;
 		case VTK_UNSIGNED_LONG:
 DBG3( "Data type is ulong" );
+			if ( 1 )
+			{
 	    vtkUnsignedLongArray* myULongArray = static_cast<vtkUnsignedLongArray*>( p->GetScalars() );
   	  aDataSet = this->convertVTKImage<TField, vtkUnsignedLongArray>( myULongArray, dimensionSize );
+  	  }
   	  break;
 		case VTK_FLOAT:
 DBG3( "Data type is float" );
+			if ( 1 )
+			{
     	vtkFloatArray* myFloatArray = static_cast<vtkFloatArray*>( p->GetScalars() );
     	aDataSet = this->convertVTKImage<TField, vtkFloatArray>( myFloatArray, dimensionSize );
+    	}
     	break;
 		case VTK_DOUBLE:		
 DBG3( "Data type is double" );
+			if ( 1 )
+			{
   	  vtkDoubleArray* myDoubleArray = static_cast<vtkDoubleArray*>( p->GetScalars() );
 	    aDataSet = this->convertVTKImage<TField, vtkDoubleArray>( myDoubleArray, dimensionSize );
+	    }
 	    break;
 		default:
 			alog << LERR << "VTK data type is unknown" << endl;

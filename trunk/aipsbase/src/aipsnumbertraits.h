@@ -22,7 +22,11 @@
  ************************************************************************/
 #ifndef AIPSNUMBERTRAITS_H
 #define AIPSNUMBERTRAITS_H
+
+// Standard includes 
+#include <stdint.h>
 #include <complex>
+// AIPS includes 
 #include <aipsvectordefs.h>
 #include <aipsnulltype.h>
 #include <aipsdistancefunctions.h>
