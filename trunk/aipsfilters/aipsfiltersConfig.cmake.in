@@ -1,0 +1,17 @@
+SET(aipsfilters_INCLUDE_DIRS
+	"@CMAKE_INSTALL_PREFIX@/include/aipsfilters"
+)
+
+SET(aipsfilters_LIBRARY_DIRS "@CMAKE_INSTALL_PREFIX@/lib")
+
+SET(aipsfilters_BUILD_SETTINGS_FILE
+	"@CMAKE_INSTALL_PREFIX@/lib/aipsfilters/aipsfiltersBuildSettings.cmake"
+)
+
+INCLUDE(
+	"@CMAKE_INSTALL_PREFIX@/lib/aipsfilters/aipsfiltersLibraryDepends.cmake"
+)
+
+SET(aipsfilters_USE_FILE
+	"@CMAKE_INSTALL_PREFIX@/lib/aipsfilters/aipsfiltersUse.cmake"
+)
