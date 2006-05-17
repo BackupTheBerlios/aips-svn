@@ -207,6 +207,9 @@ void CTypedMap::setString( const std::string& sKey, const std::string& sValue ) 
 {
 	if ( !isDefined( sKey ) )
 		keyVec.push_back( sKey );
+  else if ( getValueType( sKey ) != typeid( std::string ) )
+    alog << LWARN << "Type change for key <" << sKey << ">. New type is std::string, old type was "
+      << getValueType( sKey ).name() << endl;
   valueMap[sKey] = "s" + sValue;
 }
 
@@ -218,6 +221,9 @@ void CTypedMap::setDouble( const std::string& sKey, const double dValue ) throw(
 {
 	if ( !isDefined( sKey ) )
 		keyVec.push_back( sKey );
+  else if ( getValueType( sKey ) != typeid( double ) )
+    alog << LWARN << "Type change for key <" << sKey << ">. New type is double, old type was "
+      << getValueType( sKey ).name() << endl;    
 	ostringstream os;
   os << "d" << dValue;
   valueMap[sKey] = os.str();
@@ -231,6 +237,9 @@ void CTypedMap::setLong( const std::string& sKey, const long lValue ) throw()
 {
 	if ( !isDefined( sKey ) )
 		keyVec.push_back( sKey );
+  else if ( getValueType( sKey ) != typeid( long ) )
+    alog << LWARN << "Type change for key <" << sKey << ">. New type is long, old type was "
+      << getValueType( sKey ).name() << endl;    
   ostringstream os;
   os << "l" << lValue;
 	valueMap[sKey] = os.str();
@@ -244,6 +253,9 @@ void CTypedMap::setUnsignedLong( const std::string& sKey, const ulong ulValue ) 
 {
 	if ( !isDefined( sKey ) )
 		keyVec.push_back( sKey );
+  else if ( getValueType( sKey ) != typeid( ulong ) )
+    alog << LWARN << "Type change for key <" << sKey << ">. New type is unsigned long, old type was "
+      << getValueType( sKey ).name() << endl;    
   ostringstream os;
   os << "u" << ulValue;
 	valueMap[sKey] = os.str();
@@ -257,6 +269,9 @@ void CTypedMap::setBool( const std::string& sKey, const bool bValue ) throw()
 {
 	if ( !isDefined( sKey ) )
 		keyVec.push_back( sKey );
+  else if ( getValueType( sKey ) != typeid( bool ) )
+    alog << LWARN << "Type change for key <" << sKey << ">. New type is bool, old type was "
+      << getValueType( sKey ).name() << endl;    
   ostringstream os;
   os << "b" << bValue;
 	valueMap[sKey] = os.str();

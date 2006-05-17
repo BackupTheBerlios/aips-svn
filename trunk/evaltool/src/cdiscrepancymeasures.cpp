@@ -68,21 +68,18 @@ FEND;
 
 template<typename ImageType> bool CDiscrepancyMeasures::compute() throw()
 {
+FBEGIN;
   shared_ptr<ImageType> inputSPtr = static_pointer_cast<ImageType>( getInput() );
 	shared_ptr<ImageType> referenceSPtr = static_pointer_cast<ImageType>( getInput(1) );
-  if ( !checkInput<ImageType>( inputSPtr, 2, 3 ) || !checkInput<ImageType>( referenceSPtr, 2, 3 ) )
+  
+  if ( !checkInput<ImageType>( inputSPtr, 2, 3 ) || !checkInput<ImageType>( referenceSPtr, 2, 3 )
+    || inputSPtr->getExtents() != referenceSPtr->getExtents() )
     return false;
-  if ( inputSPtr->getExtent(0) != referenceSPtr->getExtent(0)
-  	|| inputSPtr->getExtent(1) != referenceSPtr->getExtent(1) )
-  	return false;
-  if( inputSPtr->getDimension() > 2 && inputSPtr->getExtent(2) != referenceSPtr->getExtent(2) )
-  	return false;
+  
   bModuleReady = true;
 	// Coefficients
   double dDiceCoefficient = 0.0;
   double dTanimotoCoefficient = 0.0;
-  // Compute region size and dice coefficient. Also mark boundary voxels for later
-  // distance computation
   std::list<TPoint3D> anInputList;
   std::list<TPoint3D> aReferenceList;
   ulong ulInputRegionSize = 0;
@@ -95,7 +92,9 @@ template<typename ImageType> bool CDiscrepancyMeasures::compute() throw()
   ulong ulFalseNegatives = 0;
   typename ImageType::TDataType theLabel =
     static_cast<typename ImageType::TDataType>( parameters.getUnsignedLong( "Label" ) );
-  cerr << "Computing area sizes... ";
+  DBG3( "Computing area sizes." );
+  // Compute region size and dice coefficient. Also mark boundary voxels for later
+  // distance computation
   typename ImageType::iterator inputIt = inputSPtr->begin();
   typename ImageType::iterator referenceIt = referenceSPtr->begin();
   while( inputIt != inputSPtr->end() )
@@ -135,65 +134,57 @@ template<typename ImageType> bool CDiscrepancyMeasures::compute() throw()
   	++inputIt;
   	++referenceIt;
   }
-  cerr << "done.\nFound " << anInputList.size() << " segmentation and " << aReferenceList.size()
-   << " reference voxels" << endl;
-  cerr << "Computing coefficients... ";
+  DBG3( "Found " << anInputList.size() << " segmentation and " << aReferenceList.size()
+   << " reference voxels." );
+  DBG3( "Computing coefficients." );
   // Compute Dice and Tanimoto coefficient
 	dDiceCoefficient = static_cast<double>( 2 * ulSharedRegionSize )
 		/ static_cast<double>( ulInputRegionSize + ulReferenceRegionSize );
 	dTanimotoCoefficient = static_cast<double>( ulSharedRegionSize )
 		/ static_cast<double>( ulCombinedArea );
   // Compute distance measures between the two surfaces
-  std::list<TPoint3D>::iterator it = anInputList.begin();
-  std::list<TPoint3D>::iterator jt = aReferenceList.begin();
-  double dMinDist = inputSPtr->getExtent(0)*inputSPtr->getExtent(1)*inputSPtr->getExtent(2);
+  std::list<TPoint3D>::iterator it;
+  std::list<TPoint3D>::iterator jt;
+  double dMinDist = inputSPtr->getSize();
   double dSumDist = 0.0;
   double dMaxMin = 0.0;
-  while( it != anInputList.end() )
-  {
-  	jt = aReferenceList.begin();
+  for( it = anInputList.begin(); it != anInputList.end(); ++it )
+  {  	
   	dMinDist = inputSPtr->getExtent(0)*inputSPtr->getExtent(1)*inputSPtr->getExtent(2);
-		while( jt != aReferenceList.end() )
+		for( jt = aReferenceList.begin(); jt != aReferenceList.end(); ++jt )
 		{
 			double dDistance = sqrt( ((*it)[0]-(*jt)[0])*((*it)[0]-(*jt)[0])
 				+	((*it)[1]-(*jt)[1])*((*it)[1]-(*jt)[1])
 				+ ((*it)[2]-(*jt)[2])*((*it)[2]-(*jt)[2]) );
 			if ( dMinDist > dDistance )
 				dMinDist = dDistance;
-			++jt;
 		}
 		dSumDist += dMinDist;
 		dMaxMin = std::max( dMaxMin, dMinDist );
-		++it;
   }
   double dSumDistA = dSumDist;
   double dHDA = dMaxMin;
   dSumDist = 0.0;
-  dMaxMin = 0.0;
-  jt = aReferenceList.begin();
-  cerr << dSumDistA << dMaxMin << "... ";
-  while( jt != aReferenceList.end() )
+  dMaxMin = 0.0;  
+  for( jt = aReferenceList.begin(); jt != aReferenceList.end(); ++jt )
   {
-  	it = anInputList.begin();
   	dMinDist = inputSPtr->getExtent(0)*inputSPtr->getExtent(1)*inputSPtr->getExtent(2);
-		while( it != anInputList.end() )
+		for( it = anInputList.begin(); it != anInputList.end(); ++it )
 		{
 			double dDistance = sqrt( static_cast<double>( ((*it)[0]-(*jt)[0])*((*it)[0]-(*jt)[0])
 				+	((*it)[1]-(*jt)[1])*((*it)[1]-(*jt)[1])
 				+ ((*it)[2]-(*jt)[2])*((*it)[2]-(*jt)[2]) ) );
 			if ( dMinDist > dDistance )
 				dMinDist = dDistance;
-			++it;
 		}
 		dSumDist += dMinDist;
 		dMaxMin = std::max( dMaxMin, dMinDist );
-		++jt;
   }
-  cerr << dSumDist << dMaxMin << "done." << endl;
   double dSumDistB = dSumDist;
   double dHDB = dMaxMin;
   double dHausdorffDistance = std::max( dHDA, dHDB );
   double dMeanDistance = ( dSumDistA + dSumDistB ) / ( ulReferenceRegionSize + ulInputRegionSize );
+  // Put all computed metrics into parameter list
 	parameters.setDouble( "DiceCoefficient", dDiceCoefficient );
 	parameters.setDouble( "TanimotoCoefficient", dTanimotoCoefficient );
 	parameters.setDouble( "HausdorffDistance", dHausdorffDistance );
@@ -206,8 +197,9 @@ template<typename ImageType> bool CDiscrepancyMeasures::compute() throw()
 	parameters.setUnsignedLong( "CombinedArea", ulCombinedArea );
 	parameters.setUnsignedLong( "FalsePositives", ulFalsePositives );
 	parameters.setUnsignedLong( "FalseNegatives", ulFalseNegatives );
+FEND;  
   return true;
 }
 
-DEFINE_CALL_MACRO( CDiscrepancyMeasures::call, CDiscrepancyMeasures::compute, imageTL )
+DEFINE_CALL_MACRO( CDiscrepancyMeasures::call, CDiscrepancyMeasures::compute, imageTL );
 

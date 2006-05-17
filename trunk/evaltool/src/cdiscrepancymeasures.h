@@ -51,10 +51,10 @@ public:
   /// Reimplemented from CPipelineItem  
   virtual void apply() 
     throw();
-  NEW_INSTANCE( CDiscrepancyMeasures )
+  NEW_INSTANCE( CDiscrepancyMeasures );
   //@}
 private:
-  DECLARE_CALL_MACRO( call )
+  DECLARE_CALL_MACRO( call );
   template<typename ImageType> bool compute()
     throw();
 };

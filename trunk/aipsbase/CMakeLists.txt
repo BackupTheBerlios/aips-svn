@@ -92,6 +92,14 @@ IF( NOT BOOST_OPTIONAL )
  MESSAGE( SEND_ERROR "boost::optional<> is mandatory for installation" )
 ENDIF( NOT BOOST_OPTIONAL )
 
+FIND_PATH(BOOST_LAMBDA boost/lambda/lambda.hpp
+  /usr/include
+  /usr/local/include
+        DOC "Directory containing boost/lambda/lambda.hpp")
+IF( NOT BOOST_LAMBDA )
+ MESSAGE( SEND_ERROR "boost::lambda is mandatory for installation" )
+ENDIF( NOT BOOST_LAMBDA )
+
 FIND_PATH(BOOST_STATIC_ASSERT boost/static_assert.hpp
   /usr/include
   /usr/local/include

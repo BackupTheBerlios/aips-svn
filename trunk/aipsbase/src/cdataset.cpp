@@ -17,6 +17,7 @@
 
 using namespace std;
 using namespace aips;
+using namespace boost::lambda;
 
 /*************
  * Structors *
@@ -231,6 +232,14 @@ double CDataSet::getOrigin( const ushort usIndex ) const
   if ( usIndex > ( usDimension - 1 ) )
     throw( OutOfRangeException( SERROR("Index out of range"), CException::RECOVER, ERR_BADDIMENSION ) );
   return originVec[usIndex];
+}
+
+/** \returns the number of elements (e.g. pixels, voxels) in the dataset */
+size_t CDataSet::getSize() const throw()
+{
+  size_t dataSize = 0;
+  for_each( extentVec.begin(), extentVec.end(), dataSize += _1 );
+  return dataSize;
 }
 
 /************

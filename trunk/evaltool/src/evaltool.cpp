@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2004 by Hendrik Belitz                                  *
- *   h.belitz@fz-juelich.de                                                *
+ *   Copyright (C) 2006 by Hendrik Belitz                                  *
+ *   hbelitz@users.berlios.de                                              *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,12 +19,11 @@
  ***************************************************************************/
 
 #include <iostream>
-#include <cstdlib>
-#include <cstring>
-#include <queue>
 #include <fstream>
 #include <vector>
 #include <string>
+#include <cstdlib>
+#include <cstring>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/program_options.hpp>
@@ -71,7 +70,7 @@ bool parseCommandLine( int argc, char *argv[] )
 
   if ( vm.count( "help" ) )
   {
-    cout << "evaltool - slice-by-slice evaluation of two volume images" << endl;
+    cout << "evaltool - computes evaluation metrics for two given voxel images" << endl;
     cout << theOptionsDescription << endl;
     return false;
   }
@@ -82,7 +81,10 @@ bool parseCommandLine( int argc, char *argv[] )
   if ( vm.count( "outputfile" ) )
     sOutputFile = vm["outputfile"].as<string>();
   else
+  {
     cout << "No outputfile given, output will be written to stdout" << endl;
+    sOutputFile = "";    
+  }
 
   if ( vm.count( "inputfile" ) )
   {
@@ -103,19 +105,6 @@ int main(int argc, char *argv[])
   if ( !parseCommandLine( argc, argv ) )
     return EXIT_FAILURE;
 
-  cerr << "Inputs: <" << theInputFileNamesVec[0] << "><" << theInputFileNamesVec[1] << ">" << endl;
-  cerr << "Output: <" << sOutputFile << ">" << endl;
-  cerr << "Append: " << bAppendToOutput << endl;
-  cerr << "Label: " << uiLabel << endl;
-  
-/*	if ( argc < 3 || argc > 7 )
-	{
-		cout << "evaltool - slice-by-slice evaluation of two volume images" << endl;
-		cout << "command syntax:" << endl;
-		cout << "aipsconvert inputfile1.ext inputfile2.ext outputfile.txt" << endl;
-		return EXIT_SUCCESS;
-	}*/
-
   shared_ptr<CAnalyzeHandler> h1 ( new CAnalyzeHandler );
 	shared_ptr<CSimpleDatHandler> h2 ( new CSimpleDatHandler );	
 	shared_ptr<CDataHandler> h3 ( new CDataHandler );
@@ -130,18 +119,49 @@ int main(int argc, char *argv[])
 	eval.setInput( getFileServer().loadDataSet( theInputFileNamesVec[0] ).first );
 	eval.setInput( getFileServer().loadDataSet( theInputFileNamesVec[1] ).first, 1 );
 	eval.apply();
-	cerr << "DiceCoefficient     " << parameters->getDouble( "DiceCoefficient" ) << endl;
-	cerr << "TanimotoCoefficient " << parameters->getDouble( "TanimotoCoefficient" ) << endl;
-	cerr << "HausdorffDistance   " << parameters->getDouble( "HausdorffDistance" ) << endl;
-	cerr << "MeanDistance        " << parameters->getDouble( "MeanDistance" ) << endl;
-	cerr << "InputRegionSize     " << parameters->getUnsignedLong( "InputRegionSize" ) << endl;
-	cerr << "ReferenceRegionSize " << parameters->getUnsignedLong( "ReferenceRegionSize" ) << endl;
-	cerr << "SharedRegionSize    " << parameters->getUnsignedLong( "SharedRegionSize" ) << endl;
-	cerr << "InputSurface        " << parameters->getUnsignedLong( "InputSurface" ) << endl;
-	cerr << "ReferenceSurface    " << parameters->getUnsignedLong( "ReferenceSurface" ) << endl;
-	cerr << "CombinedArea        " << parameters->getUnsignedLong( "CombinedArea"  ) << endl;
-	cerr << "FalsePositives      " << parameters->getUnsignedLong( "FalsePositives" ) << endl;
-	cerr << "FalseNegatives      " << parameters->getUnsignedLong( "FalseNegatives" ) << endl;
-	//getFileServer().saveDataSet( output, file );
+  
+  if ( sOutputFile == "" )
+  {
+  	cout << "DiceCoefficient     " << parameters->getDouble( "DiceCoefficient" ) << endl;
+	  cout << "TanimotoCoefficient " << parameters->getDouble( "TanimotoCoefficient" ) << endl;
+  	cout << "HausdorffDistance   " << parameters->getDouble( "HausdorffDistance" ) << endl;
+	  cout << "MeanDistance        " << parameters->getDouble( "MeanDistance" ) << endl;
+    cout << "InputRegionSize     " << parameters->getUnsignedLong( "InputRegionSize" ) << endl;
+    cout << "ReferenceRegionSize " << parameters->getUnsignedLong( "ReferenceRegionSize" ) << endl;
+    cout << "SharedRegionSize    " << parameters->getUnsignedLong( "SharedRegionSize" ) << endl;
+    cout << "InputSurface        " << parameters->getUnsignedLong( "InputSurface" ) << endl;
+    cout << "ReferenceSurface    " << parameters->getUnsignedLong( "ReferenceSurface" ) << endl;
+    cout << "CombinedArea        " << parameters->getUnsignedLong( "CombinedArea"  ) << endl;
+    cout << "FalsePositives      " << parameters->getUnsignedLong( "FalsePositives" ) << endl;
+    cout << "FalseNegatives      " << parameters->getUnsignedLong( "FalseNegatives" ) << endl;
+    return EXIT_SUCCESS;
+  }
+  ofstream* theOutputFile;
+  if ( bAppendToOutput )
+    theOutputFile = new ofstream( sOutputFile.c_str(), ios_base::out );
+  else
+  {
+    theOutputFile = new ofstream( sOutputFile.c_str() );
+    (*theOutputFile) << "Input image,Reference image,Dice coefficient,Tanimoto coefficient,Hausdorff distance,Mean distance,";
+    (*theOutputFile) << "Input region size,Reference region size,Shared region size,Input surface,Reference surface,Combined area,";
+    (*theOutputFile) << "False positives,False negatives" << endl;
+  }
+    
+  (*theOutputFile) << theInputFileNamesVec[0] << "," << theInputFileNamesVec[1] << ",";
+  (*theOutputFile) << parameters->getDouble( "DiceCoefficient" ) << ",";
+  (*theOutputFile) << parameters->getDouble( "TanimotoCoefficient" ) << ",";
+  (*theOutputFile) << parameters->getDouble( "HausdorffDistance" ) << ",";
+  (*theOutputFile) << parameters->getDouble( "MeanDistance" ) << ",";
+  (*theOutputFile) << parameters->getUnsignedLong( "InputRegionSize" ) << ",";
+  (*theOutputFile) << parameters->getUnsignedLong( "ReferenceRegionSize" ) << ",";
+  (*theOutputFile) << parameters->getUnsignedLong( "SharedRegionSize" ) << ",";
+  (*theOutputFile) << parameters->getUnsignedLong( "InputSurface" ) << ",";
+  (*theOutputFile) << parameters->getUnsignedLong( "ReferenceSurface" ) << ",";
+  (*theOutputFile) << parameters->getUnsignedLong( "CombinedArea" ) << ",";
+  (*theOutputFile) << parameters->getUnsignedLong( "FalsePositives" ) << ",";
+  (*theOutputFile) << parameters->getUnsignedLong( "FalseNegatives" ) << endl;
+  theOutputFile->close();
+  delete theOutputFile;
+  
   return EXIT_SUCCESS;
 }

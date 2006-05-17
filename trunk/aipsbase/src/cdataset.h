@@ -3,7 +3,7 @@
  * Project: AIPS                                                        *
  * Description: Classes supporting generic data fields                  *
  *                                                                      *
- * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
+ * Author: Hendrik Belitz (hbelitz@users.berlios.de)                    *
  *                                                                      *
  * Version: 0.10                                                        *
  * Status : Beta                                                        *
@@ -31,6 +31,7 @@
  *        2005-08-01 Minor code improvements                            *
  *        2005-11-20 Update documentation                               *
  *                   Added verbose output                               *
+ *        2006-05-17 Added convenicence method getSize()                *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -48,7 +49,8 @@
 
 // Boost includes
 #include <boost/lexical_cast.hpp> 
-#include <boost/shared_ptr.hpp>   
+#include <boost/shared_ptr.hpp>
+#include <boost/lambda/lambda.hpp>
 
 // AIPS includes
 #include "clog.h"
@@ -135,6 +137,9 @@ public:
   /// Get a coordinate of the origin of the data set
   double getOrigin( const ushort usIndex ) const
     throw( OutOfRangeException );
+  /// Get the number of elements in the data set
+  size_t getSize() const
+    throw();
   //@}
 /** \name Mutators */
   //@{

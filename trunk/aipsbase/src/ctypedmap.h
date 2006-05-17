@@ -33,6 +33,8 @@
  *          2004-12-07 Removed load and save methods                    *
  *          2005-06-06 Corrected an error in assignment operator        *
  *          2005-07-08 Load and save data as XML added                  *
+ *          2006-04-18 Output of warning if setting an existing key     *
+ *                     changes key type.                                *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *

@@ -24,9 +24,9 @@
 #include "cviewhistogram.h"
 #include "cdisplayvectorfield.h"
 #include "cdisplay.h"
-#include "cmeandistance.h"
-#include "cdicecoefficient.h"
-#include "chausdorffdistance.h"
+// #include "cmeandistance.h"
+// #include "cdicecoefficient.h"
+// #include "chausdorffdistance.h"
 
 using namespace std;
 using namespace boost;
@@ -65,7 +65,7 @@ void initFactory()
 	workPtr.reset( new CViewHistogram( 0 ) );
 	factoryMap["CViewHistogram"] = workPtr;
 	classNames.push_back("CViewHistogram");	
-	workPtr.reset( new CMeanDistance( 0 ) );
+/*	workPtr.reset( new CMeanDistance( 0 ) );
 	factoryMap["CMeanDistance"] = workPtr;
 	classNames.push_back("CMeanDistance");	
 	workPtr.reset( new CDiceCoefficient( 0 ) );
@@ -73,7 +73,7 @@ void initFactory()
 	classNames.push_back("CDiceCoefficient");	
 	workPtr.reset( new CHausdorffDistance( 0 ) );
 	factoryMap["CHausdorffDistance"] = workPtr;
-	classNames.push_back("CHausdorffDistance");	
+	classNames.push_back("CHausdorffDistance");	*/
 }
 
 void unloadFactory()
