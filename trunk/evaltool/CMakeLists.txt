@@ -24,7 +24,7 @@ IF( NOT BOOST_PROGRAM_OPTIONS )
  MESSAGE( SEND_ERROR "boost::program_options namespace is mandatory for compilation" )
 ENDIF( NOT BOOST_PROGRAM_OPTIONS )
 FIND_LIBRARY( BOOST_PROGRAM_OPTIONS_LIB
-    NAMES boost_program_options
+    NAMES boost_program_options boost_program_options-gcc
     PATHS /usr/lib/ /usr/local/lib/
     DOC "Path to the boost::program_options library")
 IF( NOT BOOST_PROGRAM_OPTIONS_LIB )

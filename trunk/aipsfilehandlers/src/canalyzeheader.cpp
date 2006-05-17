@@ -187,7 +187,7 @@ DBG3( " Dataset orientation is " << (int)header.hist.orient );
 			setVoxelType( "Float32" );
 			break;
 		default:
-			setVoxelType( "Unknown" );	
+		setVoxelType( "Int16" );//	setVoxelType( "Unknown" );	
 	}
 	setDouble( "VoxelOffset", header.dime.vox_offset );
 	setUnsignedLong( "Orientation", header.hist.orient );
