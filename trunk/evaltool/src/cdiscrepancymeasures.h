@@ -25,6 +25,7 @@ using namespace aips;
  * Outputs:
  *    See parameters
  * Parameters:
+ * 0. Label: Label to evaluate
  * 1. SegmentationVolume: Volume of segmentation (in voxels)
  * 2. ReferenceVolume: Volume of reference (in voxels)
  * 3. DistanceHD: Hausdorff distance

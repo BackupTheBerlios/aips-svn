@@ -23,125 +23,113 @@
 #include <cstring>
 #include <queue>
 #include <fstream>
+#include <vector>
+#include <string>
 
 #include <boost/shared_ptr.hpp>
+#include <boost/program_options.hpp>
 
 #include <cdatafileserver.h>
 #include <canalyzehandler.h>
 #include <csimpledathandler.h>
 #include <cdatahandler.h>
-/*#include <cadfhandler.h>*/
-#include <cdf3handler.h>
-#include <ccommonimagehandler.h>
-#include <ctrasterhandler.h>
-#include <cvtkhandler.h>
-#include <cvinterfilehandler.h>
-#include <vector>
-#include <string>
 #include <ctypedmap.h>
-/*#include "cmeandistance.h"
-#include "chausdorffdistance.h"
-#include "cdicecoefficient.h"
-#include "cregionsize.h"*/
 #include "cdiscrepancymeasures.h"
 
 using namespace std;
 using namespace aips;
 using namespace boost;
+using namespace boost::program_options;
 
-// void rg( std::queue<TPoint2D> work, TImagePtr inputPtr, TImagePtr outputPtr )
-// {
-// 	ulong ulRegionThreshold = 0;
-// 	while( !work.empty() )
-// 	{
-// 	 	TPoint2D p = work.front(); work.pop();
-// 		if ( ( p[0] > 0 )
-// 		  && ( (*outputPtr)( p[0]-1, p[1] ) == 0 )
-// 			&& ( static_cast<ulong>(abs((*inputPtr)( p[0]-1, p[1])-(*inputPtr)( p[0], p[1])))<=ulRegionThreshold ) )
-// 		{
-// 			work.push( TPoint2D( p[0]-1, p[1] ) ); (*outputPtr)( p[0]-1, p[1] ) = 1;
-// 		}
-// 		if ( ( p[0] < static_cast<long>(inputPtr->getExtent(0)-1) )
-// 		  && ( (*outputPtr)( p[0]+1, p[1] ) == 0 )
-// 			&& ( static_cast<ulong>(abs((*inputPtr)( p[0]+1, p[1])-(*inputPtr)( p[0], p[1])))<=ulRegionThreshold ) )
-// 		{
-// 			work.push( TPoint2D( p[0]+1, p[1] ) ); (*outputPtr)( p[0]+1, p[1] ) = 1;
-// 		}
-// 		if ( ( p[1] > 0 )
-// 	  	&& ( (*outputPtr)( p[0], p[1]-1 ) == 0 )
-// 			&& ( static_cast<ulong>(abs((*inputPtr)( p[0], p[1]-1)-(*inputPtr)( p[0], p[1])))<=ulRegionThreshold ) )
-// 		{
-// 			work.push( TPoint2D( p[0], p[1]-1 ) ); (*outputPtr)( p[0], p[1]-1 ) = 1;
-// 		}
-// 		if ( ( p[1] < static_cast<long>(inputPtr->getExtent(1)-1) )
-// 		  && ( (*outputPtr)( p[0], p[1]+1 ) == 0 )
-// 			&& ( static_cast<ulong>(abs((*inputPtr)( p[0], p[1]+1)-(*inputPtr)( p[0], p[1])))<=ulRegionThreshold ) )
-// 		{
-// 			work.push( TPoint2D( p[0], p[1]+1 ) ); (*outputPtr)( p[0], p[1]+1 ) = 1;
-// 		}
-// 	}
-// }
+bool bAppendToOutput;
+uint uiLabel;
+string sOutputFile;
+vector<string> theInputFileNamesVec;
+
+bool parseCommandLine( int argc, char *argv[] )
+{
+  boost::program_options::options_description theOptionsDescription( "Valid options" );
+  theOptionsDescription.add_options()
+    ( "help,h", "produces this help message" )
+    ( "inputfile,i", 
+      boost::program_options::value<vector<string> >(), "files to do computation on. These need to be exactly two files" )
+    ( "outputfile,o",
+      boost::program_options::value<string>(), "text file to write results to" )
+    ( "append,a", "append results to output file" )
+    ( "label,l", boost::program_options::value<uint>( &uiLabel )->default_value(1), "label to evaluate (defaults to 1)" )
+  ;
+
+  boost::program_options::positional_options_description thePositionalOptions;
+  thePositionalOptions.add("inputfile", -1);
+
+  boost::program_options::variables_map vm;
+  boost::program_options::store( command_line_parser( argc, argv ).options( theOptionsDescription ).positional(
+    thePositionalOptions ).run(), vm );
+  boost::program_options::notify( vm );
+
+  bAppendToOutput = false;
+
+  if ( vm.count( "help" ) )
+  {
+    cout << "evaltool - slice-by-slice evaluation of two volume images" << endl;
+    cout << theOptionsDescription << endl;
+    return false;
+  }
+
+  if ( vm.count( "append" ) )
+    bAppendToOutput = true;
+
+  if ( vm.count( "outputfile" ) )
+    sOutputFile = vm["outputfile"].as<string>();
+  else
+    cout << "No outputfile given, output will be written to stdout" << endl;
+
+  if ( vm.count( "inputfile" ) )
+  {
+    theInputFileNamesVec = vm["inputfile"].as<vector<string> >();
+  }
+
+  if ( theInputFileNamesVec.size() != 2 )
+  {
+    cout << "Need exactly two input files to run, aborting..." << endl;
+    return false;
+  }
+
+  return true;
+}
 
 int main(int argc, char *argv[])
 {
-	if ( argc < 3 || argc > 7 )
+  if ( !parseCommandLine( argc, argv ) )
+    return EXIT_FAILURE;
+
+  cerr << "Inputs: <" << theInputFileNamesVec[0] << "><" << theInputFileNamesVec[1] << ">" << endl;
+  cerr << "Output: <" << sOutputFile << ">" << endl;
+  cerr << "Append: " << bAppendToOutput << endl;
+  cerr << "Label: " << uiLabel << endl;
+  
+/*	if ( argc < 3 || argc > 7 )
 	{
 		cout << "evaltool - slice-by-slice evaluation of two volume images" << endl;
 		cout << "command syntax:" << endl;
 		cout << "aipsconvert inputfile1.ext inputfile2.ext outputfile.txt" << endl;
 		return EXIT_SUCCESS;
-	}
-  
-  shared_ptr<CAnalyzeHandler> h1 ( new CAnalyzeHandler );	
+	}*/
+
+  shared_ptr<CAnalyzeHandler> h1 ( new CAnalyzeHandler );
 	shared_ptr<CSimpleDatHandler> h2 ( new CSimpleDatHandler );	
 	shared_ptr<CDataHandler> h3 ( new CDataHandler );
 	
 	getFileServer().addHandler( h1 );
 	getFileServer().addHandler( h2 );
 	getFileServer().addHandler( h3 );
-  
-//	uint force = 0;
-	bool ipset = false;
-	bool ipset2 = false;
-	string input, input2, output;
-	for( int i = 1; i < argc; ++i )
-	{
-		if (!ipset)
-		{
-			input = argv[i]; ipset = true;
-		}
-		else if (!ipset2)
-		{
-			input2 = argv[i]; ipset2 = true;
-		}
-		else
-			output = argv[i];
-	}
-	
-	TDataFile file1 = getFileServer().loadDataSet( input );
-	
-	TImagePtr image1 = static_pointer_cast<TImage>(file1.first);
-	cerr << "Input image 1 loaded: " << image1->getExtent(0) << " x " << image1->getExtent(1) << " x " 
-		<< image1->getExtent(2) << endl;
-	
-	TDataFile file2 = getFileServer().loadDataSet( input2 );
-	TImagePtr image2 = static_pointer_cast<TImage>(file2.first);
-	cerr << "Input image 2 loaded: " << image2->getExtent(0) << " x " << image2->getExtent(1) << " x " 
-		<< image2->getExtent(2) << endl;
-
-	for( TImage::iterator it = image1->begin(); it != image1->end(); ++it )
-	{
-		if ((*it)!=1) (*it)=0;
-	}
-	for( TImage::iterator it = image2->begin(); it != image2->end(); ++it )
-	{
-		if ((*it)!=1) (*it)=0;
-	}
+		
 	CDiscrepancyMeasures eval(0);
-	eval.setInput( image1 );
-	eval.setInput( image2, 1 );
+  CTypedMap* parameters = eval.getParameters();
+  parameters->setUnsignedLong( "Label", uiLabel );
+	eval.setInput( getFileServer().loadDataSet( theInputFileNamesVec[0] ).first );
+	eval.setInput( getFileServer().loadDataSet( theInputFileNamesVec[1] ).first, 1 );
 	eval.apply();
-	CTypedMap* parameters = eval.getParameters();
 	cerr << "DiceCoefficient     " << parameters->getDouble( "DiceCoefficient" ) << endl;
 	cerr << "TanimotoCoefficient " << parameters->getDouble( "TanimotoCoefficient" ) << endl;
 	cerr << "HausdorffDistance   " << parameters->getDouble( "HausdorffDistance" ) << endl;

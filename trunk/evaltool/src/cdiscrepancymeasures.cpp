@@ -29,6 +29,7 @@ CDiscrepancyMeasures::CDiscrepancyMeasures( ulong ulID )
 									 "** Parameters:\n"
 									 "Sigma: Width of gaussian";
 
+  parameters.initUnsignedLong( "Label", 1, 0, 10000000 );
 	parameters.initDouble( "DiceCoefficient", 0.5, 0.0, 100000.0 );
 	parameters.initDouble( "TanimotoCoefficient", 0.5, 0.0, 100000.0 );
 	parameters.initDouble( "HausdorffDistance", 0.5, 0.0, 100000.0 );
@@ -43,7 +44,6 @@ CDiscrepancyMeasures::CDiscrepancyMeasures( ulong ulID )
 	parameters.initUnsignedLong( "FalseNegatives", 0, 0, 10000000 );
   inputsVec[0].portType = CPipelineItem::IOInteger;
 	inputsVec[1].portType = CPipelineItem::IOInteger;
-  //outputsVec[0].portType = CPipelineItem::IOVector;
 }
 
 
@@ -93,12 +93,14 @@ template<typename ImageType> bool CDiscrepancyMeasures::compute() throw()
   ulong ulCombinedArea = 0;
   ulong ulFalsePositives = 0;
   ulong ulFalseNegatives = 0;
+  typename ImageType::TDataType theLabel =
+    static_cast<typename ImageType::TDataType>( parameters.getUnsignedLong( "Label" ) );
   cerr << "Computing area sizes... ";
   typename ImageType::iterator inputIt = inputSPtr->begin();
   typename ImageType::iterator referenceIt = referenceSPtr->begin();
   while( inputIt != inputSPtr->end() )
   {
-  	if ( (*inputIt) > 0 )
+  	if ( (*inputIt) == theLabel )
   	{
   		ulInputRegionSize++;
   		ushort x,y,z;
@@ -112,7 +114,7 @@ template<typename ImageType> bool CDiscrepancyMeasures::compute() throw()
   		}
   		ulCombinedArea++;
   	}
-  	if ( (*referenceIt) > 0 )
+  	if ( (*referenceIt) == theLabel )
   	{
   		ulReferenceRegionSize++;
   		ushort x,y,z;
@@ -124,12 +126,12 @@ template<typename ImageType> bool CDiscrepancyMeasures::compute() throw()
   			aReferenceList.push_back( TPoint3D(x,y,z) );
   			ulReferenceSurface++;
   		}
-  		if ( !( (*inputIt) > 0 ) )
+  		if ( !( (*inputIt) == theLabel ) )
   			ulCombinedArea++;
   	}
-  	if ( (*inputIt) > 0 && (*referenceIt) > 0 ) ulSharedRegionSize++;
-  	if ( (*inputIt) > 0 && !(*referenceIt) > 0 ) ulFalsePositives++;
-  	if ( !(*inputIt) > 0 && (*referenceIt) > 0 ) ulFalseNegatives++;
+  	if ( (*inputIt) == theLabel && (*referenceIt) == theLabel ) ulSharedRegionSize++;
+  	if ( (*inputIt) == theLabel && !(*referenceIt) == theLabel ) ulFalsePositives++;
+  	if ( !(*inputIt) == theLabel && (*referenceIt) == theLabel ) ulFalseNegatives++;
   	++inputIt;
   	++referenceIt;
   }
