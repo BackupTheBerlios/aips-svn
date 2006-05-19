@@ -60,6 +60,14 @@ IF( NOT BOOST_LEXICAL_CAST )
  MESSAGE( SEND_ERROR "boost::lexical_cast<> is mandatory for installation" )
 ENDIF( NOT BOOST_LEXICAL_CAST )
 
+FIND_PATH(BOOST_CSTDINT boost/cstdint.hpp
+  /usr/include
+  /usr/local/include
+        DOC "Directory containing boost/cstdint.hpp")
+IF( NOT BOOST_CSTDINT )
+ MESSAGE( SEND_ERROR "cstdint is mandatory for installation" )
+ENDIF( NOT BOOST_CSTDINT )
+
 FIND_PATH(BOOST_SHARED_PTR boost/shared_ptr.hpp
   /usr/include
   /usr/local/include

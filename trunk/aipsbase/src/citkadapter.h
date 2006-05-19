@@ -3,7 +3,7 @@
  * Project: AIPS                                                        *
  * Description: Adapter class for ITK datasets                          *
  *                                                                      *
- * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
+ * Author: Hendrik Belitz (hbelitz@users.berlios.de)                          *
  *                                                                      *
  * Version: 0.2                                                         *
  * Status : Alpha                                                       *

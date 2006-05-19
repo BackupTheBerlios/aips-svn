@@ -4,7 +4,7 @@
 // Description: 
 //
 //
-// Author: Hendrik Belitz <hendrik@darkon.info>, (C) 2005
+// Author: Hendrik Belitz <hbelitz@users.berlios.de>, (C) 2005
 //
 // Copyright: See COPYING file that comes with this distribution
 //
@@ -40,18 +40,27 @@ TDataSetPtr CITKAdapter::convertToInternal() throw( NullException )
 		throw( NullException() );*/ //TODO GCC3.3 fails
 	
 	if ( typeid( *externalData ) == typeid( itk::Image<short,2> ) )
-		return actualInternalConversion< itk::Image<short,2> >();
-	else if ( typeid( *externalData ) == typeid(itk::Image<TFloatType,2>) )
-		return actualInternalConversion< itk::Image<TFloatType,2> >();
-	else if ( typeid( *externalData ) == typeid( itk::Image<short,3> ) )
-		return actualInternalConversion< itk::Image<short,3> >();
-	else if ( typeid( *externalData ) == typeid(itk::Image<TFloatType,3>) )
-		return actualInternalConversion< itk::Image<TFloatType,3> >();
-	else
-	{
-		cerr << "Data is neither short nor double." << endl;
-		return anImage;
-	}		
+		return actualInternalConversion< itk::Image<int16_t,2> >();
+  else if ( typeid( *externalData ) == typeid( itk::Image<uint8_t,2> ) )
+    return actualInternalConversion< itk::Image<uint8_t,2> >();
+  else if ( typeid( *externalData ) == typeid( itk::Image<int32_t,2> ) )
+    return actualInternalConversion< itk::Image<int32_t,2> >();
+	else if ( typeid( *externalData ) == typeid( itk::Image<float,2> ) )
+		return actualInternalConversion< itk::Image<float,2> >();
+  else if ( typeid( *externalData ) == typeid( itk::Image<double,2> ) )
+    return actualInternalConversion< itk::Image<double,2> >();
+  else if ( typeid( *externalData ) == typeid( itk::Image<int16_t,3> ) )
+    return actualInternalConversion< itk::Image<int16_t,3> >();
+  else if ( typeid( *externalData ) == typeid( itk::Image<uint8_t,3> ) )
+    return actualInternalConversion< itk::Image<uint8_t,3> >();
+  else if ( typeid( *externalData ) == typeid( itk::Image<int32_t,3> ) )
+    return actualInternalConversion< itk::Image<int32_t,3> >();
+  else if ( typeid( *externalData ) == typeid( itk::Image<float,3> ) )
+    return actualInternalConversion< itk::Image<float,3> >();
+  else if ( typeid( *externalData ) == typeid( itk::Image<double,3> ) )
+    return actualInternalConversion< itk::Image<double,3> >();
+	cerr << "Data is neither short nor double." << endl;
+	return anImage;
 }
 
 template<typename itkImageType>
@@ -65,7 +74,8 @@ TDataSetPtr CITKAdapter::actualInternalConversion()
 		dimensions.push_back( theSize[i] );
 	itk::ImageRegionConstIterator<itkImageType> it ( theImage, theRegion );
 	boost::shared_ptr<CTypedData<typename itkImageType::PixelType> > img( 
-		new CTypedData<typename itkImageType::PixelType>( itkImageType::SizeType::GetSizeDimension(), dimensions ) );
+		new CTypedData<typename itkImageType::PixelType>( itkImageType::SizeType::GetSizeDimension(),
+    dimensions ) );
 	typename CTypedData<typename itkImageType::PixelType>::iterator ot = img->begin();
 	for( it.GoToBegin(); !it.IsAtEnd(); ++it, ++ot )
 		*ot = it.Get();			

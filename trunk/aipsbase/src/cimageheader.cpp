@@ -3,7 +3,7 @@
  * Project: AIPS aipsbase library                                       *
  * Description: A header class for image file headers                   *
  *                                                                      *
- * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
+ * Author: Hendrik Belitz (hbelitz@users.berlios.de)                          *
  *                                                                      *
  * Created: 2004-04-27                                                  *
  ************************************************************************

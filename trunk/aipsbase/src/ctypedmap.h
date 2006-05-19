@@ -4,7 +4,7 @@
  * Description: A class to strongly typed information in an             *
  *              associative array                                       *
  *                                                                      *
- * Author: Hendrik Belitz  (h.belitz@fz-juelich.de)                     *
+ * Author: Hendrik Belitz  (hbelitz@users.berlios.de)                         *
  *         Patrick Musmann (p.musmann@fz-juelich.de)                    *
  *                                                                      *
  * Version: 0.13                                                        *

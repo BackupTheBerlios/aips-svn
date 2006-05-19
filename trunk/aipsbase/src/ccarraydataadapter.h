@@ -4,7 +4,7 @@
  * Description:   A data adapter to convert aips datasets into C-style  *
  *                arrays and vice versa                                 *
  *                                                                      *
- * Author: HendrikBelitz <hendrik@darkon.info>                          *
+ * Author: HendrikBelitz <hbelitz@users.berlios.de>                          *
  *                                                                      *
  * Version: 0.4                                                         *
  * Status : Alpha                                                       *

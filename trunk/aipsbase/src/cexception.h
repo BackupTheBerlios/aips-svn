@@ -4,7 +4,7 @@
  * Description: The AIPS run time error handling system                 *
  *              Exception types and classes                             *
  *                                                                      *
- * Author: Hendrik Belitz                                               *
+ * Author: Hendrik Belitz  (hbelitz@users.berlios.de)                         *
  *                                                                      *
  * Version: 0.17                                                        *
  * Status : Beta                                                        *

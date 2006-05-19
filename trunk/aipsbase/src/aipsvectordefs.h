@@ -1,33 +1,25 @@
 /************************************************************************
  * File: aipsvectordefs.h                                               *
- * Project: AIPS                                                        *
+ * Project: aipsbase                                                    *
  * Description: Vector type definitions                                 *
  *                                                                      *
- * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
+ * Author: Hendrik Belitz (hbelitz@users.berlios.de)                          *
  *                                                                      *
  * Version: 0.1                                                         *
  * Status: Beta                                                         *
  * Created: 2005-11-15                                                  *
  * Changed:                                                             *
- *        2005-11-15 Seperated from aipsnumeric.h                       *
+ *          2005-11-15 Seperated from aipsnumeric.h                     *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
  * the Free Software Foundation; either version 2 of the License, or    *
  * (at your option) any later version.                                  *
- ************************************************************************///
-// C++ Interface: aipsvectordefs
-//
-// Description: 
-//
-//
-// Author: Hendrik Belitz <hendrik@darkon.info>, (C) 2005
-//
-// Copyright: See COPYING file that comes with this distribution
-//
-//
+ ************************************************************************/
+ 
 #ifndef AIPSVECTORDEF_H
 #define AIPSVECTORDEF_H
+
 #include <aipsbase_config.h>
 #ifdef USE_BLITZ
 // Blitz includes

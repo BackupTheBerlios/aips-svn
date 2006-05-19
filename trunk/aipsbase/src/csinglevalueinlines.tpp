@@ -3,7 +3,7 @@
  * Project: AIPS                                                        *
  * Description: A dataset representing a single value                   *
  *                                                                      *
- * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
+ * Author: Hendrik Belitz (hbelitz@users.berlios.de)                          *
  *                                                                      *
  * Created: 20.01.04                                                    *
  ************************************************************************

@@ -4,7 +4,7 @@
  * Description: A value type that checks if it has been initialised     *
  *              properly                                                *
  *                                                                      *
- * Author: Hendrik Belitz <hendrik@darkon.info>                         *
+ * Author: Hendrik Belitz <hbelitz@users.berlios.de>                         *
  *                                                                      *
  * Version: 0.3                                                         *
  * Status : Alpha                                                       *
@@ -22,6 +22,7 @@
  * the Free Software Foundation; either version 2 of the License, or    *
  * (at your option) any later version.                                  *
  ************************************************************************/
+ 
 #ifndef AIPSAUTOVALUE_H
 #define AIPSAUTOVALUE_H
 

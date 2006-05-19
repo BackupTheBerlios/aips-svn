@@ -3,7 +3,7 @@
  * Project: AIPS                                                        *
  * Description: A dataset representing an array of a specific type      *
  *                                                                      *
- * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
+ * Author: Hendrik Belitz (hbelitz@users.berlios.de)                          *
  *                                                                      *
  * Version: 0.10                                                        *
  * Status : Beta                                                        *
@@ -39,6 +39,9 @@
  *          2005-11-16 Added CRangeData support. Removed getMinimum     *
  *                      and getMaximum. Added convenience functions     *
  *                      for data range and convenience types            *
+ *          2006-05-18 Added convenience access methods accepting       *
+ *                      TPoint2D and TPoint3D input (get,set,op[])      *
+ *                     Corrected return error of set(...) method        *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -105,6 +108,12 @@ public:
   /// Constant access operator with range checking
   inline const TValue& get( const ushort usX, const ushort usY, const ushort usZ,
     const ushort usW ) const throw(OutOfRangeException);
+  /// Constant access operator with range checking
+  inline const TValue& get( const TPoint2D aPosition )
+    const throw(OutOfRangeException);
+  /// Constant access operator with range checking
+  inline const TValue& get( const TPoint3D aPosition )
+    const throw(OutOfRangeException);
   /// Returns a typed handle to the data array
   inline TValue* getArray( ushort usChannel = 0 )
     throw( OutOfRangeException );
@@ -118,8 +127,14 @@ public:
 		throw();
 /* Mutators */
   /// Access operator with range checking and automatic min/max assignment
-  inline TValue& set( const ushort usX, const ushort usY, const ushort usZ, const ushort usW,
+  inline void set( const ushort usX, const ushort usY, const ushort usZ, const ushort usW,
     const TValue newValue ) throw(OutOfRangeException);
+  /// Access operator with range checking and automatic min/max assignment
+  inline void set( const TPoint2D aPosition, const TValue newValue )
+    throw(OutOfRangeException);
+  /// Access operator with range checking and automatic min/max assignment
+  inline void set( const TPoint3D aPosition, const TValue newValue )
+    throw(OutOfRangeException);
   /// Sets a new minimum value for the field
   inline void setMinimum( const TValue newMinimum )
     throw();
@@ -177,8 +192,16 @@ public:
     throw();
 	/// Operator[] for C-Style array access to the dataset
   TValue& operator[]( const ulong ulIndex ) throw();
+  /// Operator[] for C-Style array access to the dataset using a discrete vector parameter
+  TValue& operator[]( const TPoint2D aPosition ) throw();
+  /// Operator[] for C-Style array access to the dataset using a discrete vector parameter
+  TValue& operator[]( const TPoint3D aPosition ) throw();
   /// Const access operator[] for C-Style array access to the dataset 
   const TValue& operator[]( const ulong ulIndex ) const throw();
+  /// Const access operator[] for C-Style array access to the dataset using a discrete vector parameter
+  const TValue& operator[]( const TPoint2D aPosition ) const throw();
+  /// Const access operator[] for C-Style array access to the dataset using a discrete vector parameter
+  const TValue& operator[]( const TPoint3D aPosition ) const throw();
 /* Iterators */
 	/** An random iterator for CTypedData */
 	template<typename T, typename U > class TypedDataIterator 
@@ -369,9 +392,25 @@ public:
 				+ parentPtr->getExtent(0) * parentPtr->getExtent(1) * sZ
 				+ parentPtr->getExtent(0) * parentPtr->getExtent(1) * parentPtr->getExtent(2) * sW; 
 		}
+    /**
+     * Moves the iterator relative to its actual position
+     * \param aPosition spatial coordiantes of iterator
+     */   
+    void moveRel( const TPoint2D aPosition ) throw()
+    { 
+      positionPtr += aPosition[0] + parentPtr->getExtent(0) * aPosition[1];
+    }
+    /**
+     * Moves the iterator relative to its actual position
+     * \param aPosition spatial coordiantes of iterator
+     */
+    void moveRel( const TPoint3D aPosition ) throw()
+    { 
+      positionPtr += aPosition[0] + parentPtr->getExtent(0) * aPosition[1]
+        + parentPtr->getExtent(0) * parentPtr->getExtent(1) * aPosition[2];
+    }  
 		/**
 		 * Returns the actual iterator position in image coordinates
-		 * \returns the actual iterator position in image coordinates
 		 * \param usX X position
 		 */
 		void getPos( ushort& usX ) const throw()
@@ -380,7 +419,6 @@ public:
 		}
 		/**
 		 * Returns the actual iterator position in image coordinates
-		 * \returns the actual iterator position in image coordinates
 		 * \param usX X position
 		 * \param usY Y position
 		 */
@@ -392,7 +430,6 @@ public:
 		}
 		/**
 		 * Returns the actual iterator position in image coordinates
-		 * \returns the actual iterator position in image coordinates
 		 * \param usX X position
 		 * \param usY Y position
 		 * \param usZ Z position
@@ -408,7 +445,6 @@ public:
 		}
 		/**
 		 * Returns the actual iterator position in image coordinates
-		 * \returns the actual iterator position in image coordinates
 		 * \param usX X position
 		 * \param usY Y position
 		 * \param usZ Z position
@@ -427,6 +463,29 @@ public:
 				* usW )	- ( parentPtr->getExtent(0) * parentPtr->getExtent(1) * usZ ) 
 				- ( parentPtr->getExtent(0) * usY );
 		}
+    /**
+     * Returns the actual iterator position in image coordinates
+     * \param aPosition spatial coordiantes of iterator
+     */
+    void getPos( TPoint2D& aPosition ) const throw()
+    {
+      ptrdiff_t diff = ( positionPtr - parentPtr->begin().positionPtr );
+      aPosition[1] = diff / parentPtr->getExtent(0);
+      aPosition[0] = diff % parentPtr->getExtent(0);
+    }
+    /**
+     * Returns the actual iterator position in image coordinates
+     * \param aPosition spatial coordiantes of iterator
+     */
+    void getPos( TPoint3D& aPosition ) const throw()
+    {
+      ptrdiff_t diff = ( positionPtr - parentPtr->begin().positionPtr );
+      aPosition[2] = diff / ( parentPtr->getExtent(0) * parentPtr->getExtent(1) );
+      aPosition[1] = ( diff % ( parentPtr->getExtent(0) * parentPtr->getExtent(1) ) )
+        / ( parentPtr->getExtent(0) );
+      aPosition[0] = diff - ( parentPtr->getExtent(0) * parentPtr->getExtent(1) * aPosition[2] )
+        - ( parentPtr->getExtent(0) * aPosition[1] );
+    }
 		/**
 		 * Returns a pointer to the iterator parent data structure
 		 * \returns pointer to parent

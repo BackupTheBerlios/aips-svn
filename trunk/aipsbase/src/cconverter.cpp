@@ -3,7 +3,7 @@
  * Project: AIPS                                                        *
  * Description: Base class for all conversion modules                   *
  *                                                                      *
- * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
+ * Author: Hendrik Belitz (hbelitz@users.berlios.de)                          *
  *                                                                      *
  * Created: 28.01.04                                                    *
  ************************************************************************

@@ -4,7 +4,7 @@
  * Description: An observer base class for the implementation of the    *
  *              "Subject/Observer"-pattern                              *
  *                                                                      *
- * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
+ * Author: Hendrik Belitz (hbelitz@users.berlios.de)                          *
  *                                                                      *
  * Created: 2005-03-28                                                  *
  ************************************************************************

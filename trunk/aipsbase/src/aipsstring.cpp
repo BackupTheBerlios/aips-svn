@@ -3,7 +3,7 @@
  * Project: AIPS aipsbase library                                       *
  * Description: Some useful string routines                             *
  *                                                                      *
- * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
+ * Author: Hendrik Belitz (hbelitz@users.berlios.de)                          *
  *                                                                      *
  * Created: 2004-04-28                                                  *
  ************************************************************************

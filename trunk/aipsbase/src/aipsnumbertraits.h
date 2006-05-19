@@ -3,7 +3,7 @@
  * Project: AIPS                                                        *
  * Description: Trait classes for common data types                     *
  *                                                                      *
- * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
+ * Author: Hendrik Belitz (hbelitz@users.berlios.de)                          *
  *                                                                      *
  * Version: 0.3                                                         *
  * Status: Beta                                                         *
@@ -24,8 +24,9 @@
 #define AIPSNUMBERTRAITS_H
 
 // Standard includes 
-#include <stdint.h>
-#include <complex>
+#include <complex> // Complex numbers
+// Boost includes 
+#include <boost/cstdint.hpp> // Primitive types with definitive size
 // AIPS includes 
 #include <aipsvectordefs.h>
 #include <aipsnulltype.h>
@@ -58,8 +59,8 @@ namespace aips {
  * \ingroup datatraits
  * \attention These trait classes no longer represent data sets, but give traits for (alpha)numerical types         
  * directly! Make sure that your code is updated accordingsly: 
- * \code dataTraits<CTypedMap<foo> > \endcode becomes 
- * \code SDataTraits<foo> \endcode or \code SDataTraots<CTypedMap<foo>::TDataType> \endcode.
+ * \code dataTraits<CTypedData<foo> > \endcode becomes
+ * \code SDataTraits<foo> \endcode or \code SDataTraots<CTypedData<foo>::TDataType> \endcode.
  * \todo Tests for specialised and general data traits
  */
 template<typename T, typename TDistance = SDefaultDistFunc<T> > 

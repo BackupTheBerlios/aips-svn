@@ -136,12 +136,12 @@ int main(int argc, char *argv[])
     cout << "FalseNegatives      " << parameters->getUnsignedLong( "FalseNegatives" ) << endl;
     return EXIT_SUCCESS;
   }
-  ofstream* theOutputFile;
+  auto_ptr<ofstream> theOutputFile;
   if ( bAppendToOutput )
-    theOutputFile = new ofstream( sOutputFile.c_str(), ios_base::out );
+    theOutputFile.reset( new ofstream( sOutputFile.c_str(), ios_base::out ) );
   else
   {
-    theOutputFile = new ofstream( sOutputFile.c_str() );
+    theOutputFile.reset( new ofstream( sOutputFile.c_str() ) );
     (*theOutputFile) << "Input image,Reference image,Dice coefficient,Tanimoto coefficient,Hausdorff distance,Mean distance,";
     (*theOutputFile) << "Input region size,Reference region size,Shared region size,Input surface,Reference surface,Combined area,";
     (*theOutputFile) << "False positives,False negatives" << endl;
@@ -161,7 +161,6 @@ int main(int argc, char *argv[])
   (*theOutputFile) << parameters->getUnsignedLong( "FalsePositives" ) << ",";
   (*theOutputFile) << parameters->getUnsignedLong( "FalseNegatives" ) << endl;
   theOutputFile->close();
-  delete theOutputFile;
   
   return EXIT_SUCCESS;
 }

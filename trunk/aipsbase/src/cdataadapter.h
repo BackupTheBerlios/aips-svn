@@ -3,7 +3,7 @@
  * Project: AIPS                                                        *
  * Description: An abstract base class for adapters to external libs    *
  *                                                                      *
- * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
+ * Author: Hendrik Belitz (hbelitz@users.berlios.de)                          *
  *                                                                      *
  * Version: 0.3                                                         *
  * Status : Beta                                                        *

@@ -3,7 +3,7 @@
  * Project: AIPS                                                        *
  * Description: Base class for generic data fields                      *
  *                                                                      *
- * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
+ * Author: Hendrik Belitz (hbelitz@users.berlios.de)                          *
  *                                                                      *
  * Created: 20.01.04                                                    *
  ************************************************************************
@@ -34,12 +34,15 @@ using namespace boost::lambda;
  * \post Origin initialised with \f$ \vec{0} \f$.
  * \post Base element dimension initialised with \f$ \vec{1} \f$.
  */
-CDataSet::CDataSet( const ushort usDimension_, const size_t* extentArr_,
-  const size_t dataDimensionSize_, const std::string &sClassName_, 
+CDataSet::CDataSet( const ushort usDimension_,
+  const size_t* extentArr_,
+  const size_t dataDimensionSize_,
+  const std::string &sClassName_, 
 	const std::string &sClassVersion_,
   const std::string &sDerivedFrom_ ) throw ()
   : CBase( sClassName_, sClassVersion_, sDerivedFrom_ ), usDimension( usDimension_ ),
-  extentVec( usDimension_ + 1 ), baseElementDimensionsVec( usDimension_ ), originVec( usDimension_ ), dataDimensionSize( dataDimensionSize_ )
+  extentVec( usDimension_ + 1 ), baseElementDimensionsVec( usDimension_ ), originVec( usDimension_ ),
+  dataDimensionSize( dataDimensionSize_ )
 {
 FBEGIN;
   for ( ushort i = 0; i < usDimension; i++ )
@@ -78,13 +81,15 @@ FEND;
  * \post Origin initialised with \f$ \vec{0} \f$.
  * \post Base element dimension initialised with \f$ \vec{1} \f$.
  */
-CDataSet::CDataSet( const ushort usDimension_, const vector<size_t> extentVec_,
-  const size_t dataDimensionSize_, const std::string &sClassName_, 
+CDataSet::CDataSet( const ushort usDimension_,
+  const vector<size_t> extentVec_,
+  const size_t dataDimensionSize_,
+  const std::string &sClassName_, 
 	const std::string &sClassVersion_ ,
   const std::string &sDerivedFrom_ ) throw ()
   : CBase( sClassName_, sClassVersion_, sDerivedFrom_ ),
-  usDimension( usDimension_ ), extentVec( extentVec_ ), baseElementDimensionsVec( usDimension_ ), originVec( usDimension_ ),
-  dataDimensionSize( dataDimensionSize_ )  
+  usDimension( usDimension_ ), extentVec( extentVec_ ), baseElementDimensionsVec( usDimension_ ),
+  originVec( usDimension_ ), dataDimensionSize( dataDimensionSize_ )
 {
 FBEGIN;
 	for ( ushort i = 0; i < usDimension; i++ )
@@ -112,8 +117,11 @@ FEND;
  * \post Origin initialised with 0.
  * \post Base element dimension initialised with 1.
  */
-CDataSet::CDataSet( const size_t extent_, const size_t dataDimensionSize_,
-	const std::string &sClassName_, const std::string &sClassVersion_, const std::string &sDerivedFrom_ ) throw()
+CDataSet::CDataSet( const size_t extent_,
+  const size_t dataDimensionSize_,
+	const std::string &sClassName_,
+  const std::string &sClassVersion_,
+  const std::string &sDerivedFrom_ ) throw()
   : CBase( sClassName_, sClassVersion_, sDerivedFrom_ ), usDimension( 1 ), extentVec( 2 ),
   	baseElementDimensionsVec( 1 ), originVec( 1 ), dataDimensionSize( dataDimensionSize_ )
 {

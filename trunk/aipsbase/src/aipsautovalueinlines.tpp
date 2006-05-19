@@ -1,3 +1,19 @@
+/************************************************************************
+ * File: aipsautovalue.h                                                *
+ * Project: AIPS basic library                                          *
+ * Description: A value type that checks if it has been initialised     *
+ *              properly                                                *
+ *                                                                      *
+ * Author: Hendrik Belitz <hbelitz@users.berlios.de>                          *
+ *                                                                      *
+ * Created: 2005-05-17                                                  *
+ ************************************************************************
+ * This program is free software; you can redistribute it and/or modify *
+ * it under the terms of the GNU General Public License as published by *
+ * the Free Software Foundation; either version 2 of the License, or    *
+ * (at your option) any later version.                                  *
+ ************************************************************************/
+
 /** \post object is marked as being uninitialised */
 template <typename TDataType>
 CAutoValue<TDataType>::CAutoValue() : bIsDefined( false )

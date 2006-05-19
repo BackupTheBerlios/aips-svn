@@ -3,7 +3,7 @@
  * Project: AIPS                                                        *
  * Description: A base class for possible pipeline module dialogs       *
  *                                                                      *
- * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
+ * Author: Hendrik Belitz (hbelitz@users.berlios.de)                          *
  *                                                                      *
  * Created: 2004-09-17                                                  *
  ************************************************************************

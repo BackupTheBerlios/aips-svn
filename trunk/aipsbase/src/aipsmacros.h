@@ -4,7 +4,7 @@
  * Description: Common macro definitions for debugging and error        *
  *              reporting purposes                                      *
  *                                                                      *
- * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
+ * Author: Hendrik Belitz (hbelitz@users.berlios.de)                          *
  *                                                                      *
  * Version: 1.0                                                         *
  * Status : Stable                                                      *

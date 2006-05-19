@@ -4,7 +4,7 @@
 // Description: 
 //
 //
-// Author: Hendrik Belitz <hendrik@darkon.info>, (C) 2005
+// Author: Hendrik Belitz <hbelitz@users.berlios.de>, (C) 2005
 //
 // Copyright: See COPYING file that comes with this distribution
 //

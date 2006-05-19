@@ -3,7 +3,7 @@
  * Project: AIPS                                                        *
  * Description: Implementation of aipsnumeric inline functions          *
  *                                                                      *
- * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
+ * Author: Hendrik Belitz (hbelitz@users.berlios.de)                          *
  *                                                                      *
  * Created: 2004-01-21                                                  *
  ************************************************************************

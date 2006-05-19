@@ -3,7 +3,7 @@
  * Project: AIPS                                                        *
  * Description: A dataset representing an array of a specific type      *
  *                                                                      *
- * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
+ * Author: Hendrik Belitz (hbelitz@users.berlios.de)                          *
  *                                                                      *
  * Created: 2004-01-20                                                  *
  ************************************************************************
@@ -23,10 +23,11 @@
  * \param dataDimensionSize_ Dimension of each field entry (for nonscalar fields)
  */
 template<typename TValue>
-CTypedData<TValue>::CTypedData( const ushort usDimension_, const size_t* extentArr_,
+CTypedData<TValue>::CTypedData( const ushort usDimension_,
+  const size_t* extentArr_,
   const size_t dataDimensionSize_ ) throw() 
-	: CDataSet( usDimension_, extentArr_, dataDimensionSize_, "CTypedData", CTYPEDDATA_VERSION, 
-	"CDataSet" )
+	: CDataSet( usDimension_, extentArr_, dataDimensionSize_,
+   "CTypedData", CTYPEDDATA_VERSION, "CDataSet" )
 {
 	// Compute array size and resize internal vector
   arraySize = 1;
@@ -45,9 +46,10 @@ CTypedData<TValue>::CTypedData( const ushort usDimension_, const size_t* extentA
  */
 template<typename TValue>
 CTypedData<TValue>::CTypedData( const ushort usDimension_,
-  const std::vector<size_t> extentVec_, const size_t dataDimensionSize_ ) throw()
-  : CDataSet( usDimension_, extentVec_, dataDimensionSize_, "CTypedData", CTYPEDDATA_VERSION,
-  "CDataSet" )
+  const std::vector<size_t> extentVec_,
+  const size_t dataDimensionSize_ ) throw()
+  : CDataSet( usDimension_, extentVec_, dataDimensionSize_, "CTypedData",
+    CTYPEDDATA_VERSION, "CDataSet" )
 {
 	// Compute array size and resize internal vector
   arraySize = 1;
@@ -164,6 +166,43 @@ const TValue& CTypedData<TValue>::get( const ushort usX, const ushort usY, const
 }
 
 /**
+ * Get operator. This operator is slow but does range checking.
+ * \param aPosition spatial coordinates of the element
+ * \returns value of the indexed element
+ */
+template<typename TValue> inline
+const TValue& CTypedData<TValue>::get( const TPoint2D aPosition )
+  const throw(OutOfRangeException)
+{
+  if ( aPosition[0] < 0 || aPosition[0] > extentVec[0] )
+    throw( OutOfRangeException( SERROR( "Index out of range"), CException::RECOVER, ERR_BADCOORDS ) );
+  else if ( ( this->getDimension < 2 && aPosition[1] != 0 )
+    || aPosition[1] < 0 || aPosition[1] > extentVec[1] )
+    throw( OutOfRangeException( SERROR( "Index out of range"), CException::RECOVER, ERR_BADCOORDS ) );
+  return dataVec[aPosition[0] + aPosition[1] * extentVec[0]];
+}
+
+/**
+ * Get operator. This operator is slow but does range checking.
+ * \param aPosition spatial coordinates of the element
+ * \returns value of the indexed element
+ */
+template<typename TValue> inline
+const TValue& CTypedData<TValue>::get( const TPoint3D aPosition )
+  const throw(OutOfRangeException)
+{
+  if ( aPosition[0] < 0 || aPosition[0] > extentVec[0] )
+    throw( OutOfRangeException( SERROR( "Index out of range"), CException::RECOVER, ERR_BADCOORDS ) );
+  else if ( ( this->getDimension < 2 && aPosition[1] != 0 )
+    || aPosition[1] < 0 || aPosition[1] > extentVec[1] )
+    throw( OutOfRangeException( SERROR( "Index out of range"), CException::RECOVER, ERR_BADCOORDS ) );
+  else if ( ( this->getDimension < 3 && aPosition[2] != 0 )
+    || aPosition[2] < 0 || aPosition[2] > extentVec[2] )
+    throw( OutOfRangeException( SERROR( "Index out of range"), CException::RECOVER, ERR_BADCOORDS ) );
+  return dataVec[aPosition[0] + aPosition[1] * extentVec[0] + aPosition[2] * extentVec[0] * extentVec[1]];
+}
+
+/**
  * \param usChannel data channel to be retrieved ( ignore for scalar data )
  * \returns a typed handle to the data array
  */
@@ -208,10 +247,10 @@ ulong CTypedData<TValue>::getDataSize() const throw()
  * \param usY y-coordinate of element
  * \param usZ z-coordinate of element
  * \param usW w-coordinate of element
- * \returns value of the indexed element
+ * \param newValue value of the indexed element
  */
 template<typename TValue> inline
-TValue& CTypedData<TValue>::set( const ushort usX, const ushort usY, const ushort usZ,
+void CTypedData<TValue>::set( const ushort usX, const ushort usY, const ushort usZ,
 	const ushort usW, const TValue newValue ) throw(OutOfRangeException)
 {
   if ( usX > extentVec[0] || usY > extentVec[1] || usZ > extentVec[2] || usW > extentVec[3] )
@@ -222,12 +261,48 @@ TValue& CTypedData<TValue>::set( const ushort usX, const ushort usY, const ushor
 }
 
 /**
+ * Set operator. This operator is slow but does range checking and will
+ * assign new minimum and maximum values for the field automatically.
+ * \param aPosition spatial coordinates of element
+ * \param newValue value of the indexed element
+ */
+template<typename TValue> inline
+void CTypedData<TValue>::set( const TPoint2D aPosition, const TValue newValue )
+  throw(OutOfRangeException)
+{
+  if ( aPosition[0] < 0 || aPosition[0] > extentVec[0] )
+    throw( OutOfRangeException( SERROR( "Index out of range"), CException::RECOVER, ERR_BADCOORDS ) );
+  else if ( ( this->getDimension < 2 && aPosition[1] != 0 )
+    || aPosition[1] < 0 || aPosition[1] > extentVec[1] )
+    throw( OutOfRangeException( SERROR( "Index out of range"), CException::RECOVER, ERR_BADCOORDS ) );
+  dataVec[aPosition[0] + aPosition[1] * extentVec[0]] = newValue;
+  theDataRange.updateRange( newValue );
+}
+
+/// Access operator with range checking and automatic min/max assignment
+template<typename TValue> inline
+void CTypedData<TValue>::set( const TPoint3D aPosition, const TValue newValue )
+  throw(OutOfRangeException)
+{
+  if ( aPosition[0] < 0 || aPosition[0] > extentVec[0] )
+    throw( OutOfRangeException( SERROR( "Index out of range"), CException::RECOVER, ERR_BADCOORDS ) );
+  else if ( ( this->getDimension < 2 && aPosition[1] != 0 )
+    || aPosition[1] < 0 || aPosition[1] > extentVec[1] )
+    throw( OutOfRangeException( SERROR( "Index out of range"), CException::RECOVER, ERR_BADCOORDS ) );
+  else if ( ( this->getDimension < 3 && aPosition[2] != 0 )
+    || aPosition[2] < 0 || aPosition[2] > extentVec[2] )
+    throw( OutOfRangeException( SERROR( "Index out of range"), CException::RECOVER, ERR_BADCOORDS ) );
+  dataVec[aPosition[0] + aPosition[1] * extentVec[0] + aPosition[2] * extentVec[0] * extentVec[1]]
+    = newValue;
+  theDataRange.updateRange( newValue );
+}
+
+/**
  * \param newMinimum the new Minimum
  */
 template<typename TValue> inline
 void CTypedData<TValue>::setMinimum( const TValue newMinimum ) throw()
 {
-  //theMinimum = SDataTraits<TValue>::toScalarType( newMinimum );
   theDataRange.setMinimum( newMinimum );
 }
 
@@ -237,7 +312,6 @@ void CTypedData<TValue>::setMinimum( const TValue newMinimum ) throw()
 template<typename TValue> inline
 void CTypedData<TValue>::setMaximum( const TValue newMaximum ) throw()
 {
-  //theMaximum = SDataTraits<TValue>::toScalarType( newMaximum );
   theDataRange.setMaximum( newMaximum );
 }
 
@@ -254,10 +328,6 @@ template<typename TValue> inline
 void CTypedData<TValue>::adjustDataRange( const TValue theValue ) throw()
 {
 	theDataRange.updateRange( theValue );
-/*	if ( theValue > theMaximum )
-		theMaximum = theValue;
-	if ( theValue < theMinimum )
-		theMinimum = theValue;		*/
 }
 
 /**
@@ -492,12 +562,42 @@ TValue& CTypedData<TValue>::operator[]( const ulong ulIndex ) throw()
 	return dataVec[ ulIndex ];
 }
 
+/** \param aPosition spatial coordinates of element to retrieve */
+template<typename TValue> inline
+TValue& CTypedData<TValue>::operator[]( const TPoint2D aPosition ) throw()
+{
+  return dataVec[ aPosition[0] + aPosition[1] * extentVec[0] ];
+}
+  
+  /** \param aPosition spatial coordinates of element to retrieve */
+template<typename TValue> inline
+TValue& CTypedData<TValue>::operator[]( const TPoint3D aPosition ) throw()
+{
+  return dataVec[ aPosition[0] + aPosition[1] * extentVec[0]
+    + aPosition[2] * extentVec[0] * extentVec[1] ];
+}
+
 /** \param ulIndex index to retrieve */
 template<typename TValue> inline
 const TValue& CTypedData<TValue>::operator[]( const ulong ulIndex ) const throw()
 {
 	return dataVec[ ulIndex ];
 }		
+
+/** \param ulIndex index to retrieve */
+template<typename TValue> inline
+const TValue& CTypedData<TValue>::operator[]( const TPoint2D aPosition ) const throw()
+{
+  return dataVec[ aPosition[0] + aPosition[1] * extentVec[0] ];
+}   
+
+/** \param ulIndex index to retrieve */
+template<typename TValue> inline
+const TValue& CTypedData<TValue>::operator[]( const TPoint3D aPosition ) const throw()
+{
+  return dataVec[ aPosition[0] + aPosition[1] * extentVec[0]
+    + aPosition[2] * extentVec[0] * extentVec[1] ];
+}   
 
 /*****************
  * Other methods *

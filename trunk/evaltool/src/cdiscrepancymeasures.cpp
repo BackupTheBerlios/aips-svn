@@ -102,13 +102,13 @@ FBEGIN;
   	if ( (*inputIt) == theLabel )
   	{
   		ulInputRegionSize++;
-  		ushort x,y,z;
-  		inputIt.getPos( x,y,z );
-  		if ( !( (*inputSPtr)(x+1,y,z) > 0 && (*inputSPtr)(x-1,y,z) > 0
-  			&& (*inputSPtr)(x,y+1,z) > 0 && (*inputSPtr)(x,y-1,z) > 0
-  			&& (*inputSPtr)(x,y,z+1) > 0 && (*inputSPtr)(x,y,z-1) > 0 ) )
+      TPoint3D p;
+      referenceIt.getPos( p );  
+  		if ( !( (*inputSPtr)( p[0]+1, p[1], p[2] ) > 0 && (*inputSPtr)( p[0]-1, p[1], p[2] ) > 0
+  			&& (*inputSPtr)( p[0], p[1]+1, p[2] ) > 0 && (*inputSPtr)( p[0], p[1]-1, p[2] ) > 0
+  			&& (*inputSPtr)( p[0], p[1], p[2]+1 ) > 0 && (*inputSPtr)( p[0], p[1], p[2]-1 ) > 0 ) )
   		{
-  			anInputList.push_back( TPoint3D(x,y,z) );
+  			anInputList.push_back( p );
   			ulInputSurface++;
   		}
   		ulCombinedArea++;
@@ -116,13 +116,13 @@ FBEGIN;
   	if ( (*referenceIt) == theLabel )
   	{
   		ulReferenceRegionSize++;
-  		ushort x,y,z;
-  		referenceIt.getPos( x,y,z );
-  		if ( !( (*referenceSPtr)(x+1,y,z) > 0 && (*referenceSPtr)(x-1,y,z) > 0
-  			&& (*referenceSPtr)(x,y+1,z) > 0 && (*referenceSPtr)(x,y-1,z) > 0
-  			&& (*referenceSPtr)(x,y,z+1) > 0 && (*referenceSPtr)(x,y,z-1) > 0 ) )
+  		TPoint3D p;
+  		referenceIt.getPos( p );
+  		if ( !( (*referenceSPtr)( p[0]+1, p[1], p[2] ) > 0 && (*referenceSPtr)( p[0]-1, p[1], p[2] ) > 0
+  			&& (*referenceSPtr)( p[0], p[1]+1, p[2] ) > 0 && (*referenceSPtr)( p[0], p[1]-1, p[2] ) > 0
+  			&& (*referenceSPtr)( p[0], p[1], p[2]+1 ) > 0 && (*referenceSPtr)( p[0], p[1], p[2]-1 ) > 0 ) )
   		{
-  			aReferenceList.push_back( TPoint3D(x,y,z) );
+  			aReferenceList.push_back( p );
   			ulReferenceSurface++;
   		}
   		if ( !( (*inputIt) == theLabel ) )

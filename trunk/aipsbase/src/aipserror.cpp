@@ -3,7 +3,7 @@
  * Project: AIPS                                                        *
  * Description: Definition of error codes and error reporting function  *
  *                                                                      *
- * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
+ * Author: Hendrik Belitz (hbelitz@users.berlios.de)                          *
  *                                                                      *
  * Version: 0.1                                                         *
  * Created: 21.01.04                                                    *

@@ -3,7 +3,7 @@
  * Project: AIPS                                                        *
  * Description: Some classes representing events                        *
  *                                                                      *
- * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
+ * Author: Hendrik Belitz (hbelitz@users.berlios.de)                          *
  *                                                                      *
  * Version: 0.4                                                         *
  * Status:  Beta                                                        *

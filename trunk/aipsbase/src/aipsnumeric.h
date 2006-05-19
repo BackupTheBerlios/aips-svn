@@ -3,7 +3,7 @@
  * Project: AIPS                                                        *
  * Description: Some useful numerical constants and simple functions    *
  *                                                                      *
- * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
+ * Author: Hendrik Belitz (hbelitz@users.berlios.de)                          *
  *                                                                      *
  * Version: 0.13                                                        *
  * Status: Beta                                                         *
@@ -42,8 +42,6 @@
 
 #ifndef AIPSNUMERIC_H
 #define AIPSNUMERIC_H
-// System includes
-#include <boost/cstdint.hpp> // Primitive types with definitive size
 
 // Standard library includes
 #include <cmath>    // floor(), sqrt()

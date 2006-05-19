@@ -6,7 +6,7 @@
  *              compiled without Blitz++ support. Otherwise we use      *
  *              Blitz::TinyVector.                                      *
  *                                                                      *
- * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
+ * Author: Hendrik Belitz (hbelitz@users.berlios.de)                          *
  *                                                                      *
  * Version: 0.5                                                         *
  * Created: 2004-01-04                                                  *

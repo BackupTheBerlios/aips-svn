@@ -3,7 +3,7 @@
  * Project: AIPS                                                        *
  * Description: Associative structure for file header information       *
  *                                                                      *
- * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
+ * Author: Hendrik Belitz (hbelitz@users.berlios.de)                          *
  *                                                                      *
  * Created: 16.12.03                                                    *
  ************************************************************************
