@@ -3,7 +3,7 @@
  * Project: AIPS                                                        *
  * Description: Implementation of aipsnumeric inline functions          *
  *                                                                      *
- * Author: Hendrik Belitz (hbelitz@users.berlios.de)                          *
+ * Author: Hendrik Belitz (hbelitz@users.berlios.de)                    *
  *                                                                      *
  * Created: 2004-01-21                                                  *
  ************************************************************************
@@ -94,6 +94,15 @@ inline long abs( const long value ) throw()
   return std::labs( value );
 }
 #endif /* #ifndef __GLIBCPP__ */
+
+/**
+ * \param value number to round
+ * \returns nearest integer of input
+ */
+template<typename T> inline T round( const T value ) throw()
+{
+	return static_cast<T>( static_cast<double>( value ) + 0.5 );
+}
 
 /** 
  * \param value value to check

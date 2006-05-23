@@ -245,8 +245,8 @@ double CDataSet::getOrigin( const ushort usIndex ) const
 /** \returns the number of elements (e.g. pixels, voxels) in the dataset */
 size_t CDataSet::getSize() const throw()
 {
-  size_t dataSize = 0;
-  for_each( extentVec.begin(), extentVec.end(), dataSize += _1 );
+  size_t dataSize = 1;
+  for_each( extentVec.begin(), extentVec.end(), dataSize *= _1 );
   return dataSize;
 }
 

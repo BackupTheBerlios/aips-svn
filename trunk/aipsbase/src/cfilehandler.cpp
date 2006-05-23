@@ -121,7 +121,7 @@ CFileHandler::EDataType CFileHandler::getDataType( const std::string& sHeaderEnt
 			return DFloat32;
 	}
 	throw( NotPresentException(
-		"Given string represents no valid data type", CException::RECOVER, ERR_WRONGKEYTYPE ) );
+		"Given string <"+sHeaderEntry+"> represents no valid data type", CException::RECOVER, ERR_WRONGKEYTYPE ) );
 }
 
 const string CFileHandler::dump() const throw()

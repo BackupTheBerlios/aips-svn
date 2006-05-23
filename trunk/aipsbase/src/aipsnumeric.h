@@ -3,9 +3,9 @@
  * Project: AIPS                                                        *
  * Description: Some useful numerical constants and simple functions    *
  *                                                                      *
- * Author: Hendrik Belitz (hbelitz@users.berlios.de)                          *
+ * Author: Hendrik Belitz (hbelitz@users.berlios.de)                    *
  *                                                                      *
- * Version: 0.13                                                        *
+ * Version: 0.14                                                        *
  * Status: Beta                                                         *
  * Created: 2004-01-16                                                  *
  * Changed:                                                             *
@@ -33,6 +33,7 @@
  *        2005-08-01 Added compile-dependent definition of standard     *
  *                    floating point type                               *
  *        2005-11-15 Moved vector class definitions to aipsvectordefs.h *
+ *        2006-05-23 Added missing implementation of round<>()          *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *

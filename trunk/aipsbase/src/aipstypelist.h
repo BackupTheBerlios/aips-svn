@@ -68,6 +68,9 @@ template<typename Head, typename Tail, unsigned int index> struct TypeAt<TypeLis
 /** Typelist of all supported field types */
 typedef TypeList<TImage, TypeList<TComplexImage, TypeList<TField, TypeList<TField2D, TypeList<TField3D, TypeList<TStringField, NullType> > > > > > datasetTL;
 
+/** Typelist of all scalar integer field types (= integer images) */
+typedef TypeList<TImage, TypeList<TSmallImage, NullType> > intimageTL;
+
 /** Typelist of all scalar field types (= images) */
 typedef TypeList<TImage, TypeList<TField, TypeList<TSmallImage, NullType> > > imageTL;
 
