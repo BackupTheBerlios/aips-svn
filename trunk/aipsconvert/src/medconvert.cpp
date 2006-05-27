@@ -142,20 +142,20 @@ int main(int argc, char *argv[])
 	shared_ptr<CDataHandler> h3 ( new CDataHandler );
 	shared_ptr<CDF3Handler> h4 ( new CDF3Handler );
 //	CADFHandler* h5 = new CADFHandler;
-	shared_ptr<CCommonImageHandler> h6 ( new CCommonImageHandler);
-	shared_ptr<CTRasterHandler> h7 ( new CTRasterHandler);
+//	shared_ptr<CCommonImageHandler> h6 ( new CCommonImageHandler);
+//	shared_ptr<CTRasterHandler> h7 ( new CTRasterHandler);
 	shared_ptr<CVtkHandler> h8 ( new CVtkHandler);
-	shared_ptr<CVInterfileHandler> h9 ( new CVInterfileHandler);
+//	shared_ptr<CVInterfileHandler> h9 ( new CVInterfileHandler);
 	
 	getFileServer().addHandler( h1 );
 	getFileServer().addHandler( h2 );
 	getFileServer().addHandler( h3 );
 	getFileServer().addHandler( h4 );
 // 	getFileServer().addHandler( h5 );
-	getFileServer().addHandler( h6 );
-	getFileServer().addHandler( h7 );
+/*	getFileServer().addHandler( h6 );
+	getFileServer().addHandler( h7 );*/
  	getFileServer().addHandler( h8 );
-	getFileServer().addHandler( h9 );
+// 	getFileServer().addHandler( h9 );
 
 	if (!bCombine )
 	{

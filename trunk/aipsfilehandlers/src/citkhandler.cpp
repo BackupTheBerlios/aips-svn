@@ -69,12 +69,14 @@ FBEGIN;
 		itk::ImageIORegion::IndexType ioStart = ioRegion.GetIndex();
 		uint dims[4] = {0};
 		float spacing[4] = {1.0,1.0,1.0,1.0};
+		float origin[4] = {1.0,1.0,1.0,1.0};
 		for( uint i=0; i < uiDimensions; ++i )
 		{
 			ioStart[i] = 0;
 			ioSize[i] = imageIO->GetDimensions( i );
 			dims[i] = imageIO->GetDimensions( i );
 			spacing[i] = imageIO->GetSpacing( i );
+			origin[i] = imageIO->GetSpacing( i );
 			cerr << "### " << i << " Dim: " << dims[i] << " Spac " << spacing[i] << std::endl;
 		}
 		
@@ -104,8 +106,6 @@ FBEGIN;
 			for( TImage::iterator imageIt = anImage->begin(); imageIt != anImage->end(); ++imageIt )
 			{
 				anImage->adjustDataRange( *imageIt );
-// 				if ( *imageIt > anImage->getDataRange()->getMaximum() ) anImage->getDataRange()->setMaximum( *imageIt );
-// 				if ( *imageIt < anImage->getDataRange()->getMinimum() ) anImage->getDataRange()->setMinimum( *imageIt );
 			}
 			aDataSet = anImage;			
 		}
@@ -121,8 +121,6 @@ FBEGIN;
 			{
 				*fieldIt = *ffieldIt;
 				aField->adjustDataRange( *fieldIt );
-/*				if ( *fieldIt > aField->getDataRange()->getMaximum() ) aField->getDataRange()->setMaximum( *fieldIt );
-				if ( *fieldIt < aField->getDataRange()->getMinimum() ) aField->getDataRange()->setMinimum( *fieldIt );*/
 			}
 			aDataSet = aField;
 		}
@@ -133,8 +131,6 @@ FBEGIN;
 			for( TField::iterator fieldIt = aField->begin(); fieldIt != aField->end(); ++fieldIt )
 			{
 				aField->adjustDataRange( *fieldIt );
-/*				if ( *fieldIt > aField->getDataRange()->getMaximum() ) aField->getDataRange()->setMaximum( *fieldIt );
-				if ( *fieldIt < aField->getDataRange()->getMinimum() ) aField->getDataRange()->setMinimum( *fieldIt );*/
 			}
 			aDataSet = aField;
 		}
@@ -142,6 +138,16 @@ FBEGIN;
 		free( buffer );
 		buffer = NULL;
 		
+		aDataSet->setBaseElementDimension( 0, spacing[0] );
+		aDataSet->setBaseElementDimension( 1, spacing[1] );
+		if ( aDataSet->getDimension() == 3 )
+			aDataSet->setBaseElementDimension( 2, spacing[2] );
+
+		aDataSet->setOrigin( 0, origin[0] );
+		aDataSet->setOrigin( 1, origin[1] );
+		if ( aDataSet->getDimension() == 3 )
+			aDataSet->setOrigin( 2, origin[2] );
+			
     return make_pair( aDataSet, aHeader );
 }
 
@@ -165,55 +171,17 @@ void CITKHandler::save( const string& sFilename, const TDataFile& theData )
 	cerr << dimensionSize[0] << " " << dimensionSize[1] << " " << dimensionSize[2] << endl;        
 			
 	if ( theData.first->getType() == typeid( short ) )
-	{		
-/*    typedef itk::Image<short,3> ImageType;
- 		typedef itk::ImportImageFilter<short,3> ImportFilterType;
- 		TImagePtr image = static_pointer_cast<TImage>( theData.first );
- 		ImportFilterType::Pointer importFilter = ImportFilterType::New();
- 		ImportFilterType::SizeType size;
- 		for( uint i = 0; i < 3; ++i )
- 			size[i] = dimensionSize[i];
- 		ImportFilterType::IndexType start;
- 		start.Fill(0);
- 		ImportFilterType::RegionType region;
- 		region.SetIndex( start );
- 		region.SetSize( size );
- 		importFilter->SetRegion( region );
- 		double origin[3] = {0.0,0.0,0.0};
- 		importFilter->SetOrigin( origin );
- 		double spacing[3] = {1.0,1.0,1.0};
- 		importFilter->SetSpacing( spacing );
-     importFilter->SetImportPointer( image->getArray(), siz, false );*/
-    
+	{		    
     TImagePtr image = static_pointer_cast<TImage>( theData.first );
     if ( image->getDataRange().getMaximum() < 256 )
     {
     	cerr << "Image is byte" << endl;
     	TSmallImagePtr sm( new TSmallImage( image->getDimension(), image->getExtents() ) );
+    	sm->setOrigin( image->getOrigin() );
+    	sm->setBaseElementDimensions( image->getBaseElementDimensions() );
     	TImage::iterator ot = image->begin();
     	for( TSmallImage::iterator it = sm->begin(); it != sm->end(); ++it, ++ot )
     		(*it)=static_cast<uint8_t>( (*ot) );
-/*	    typedef itk::Image<uint8_t,3> ImageType;
-  	  typedef itk::ImageFileWriter<ImageType> FileWriter;
-    	ImageType::Pointer myimage;    	
-    	typedef itk::ImportImageFilter<uint8_t,3> ImportFilterType;
- 		 TImagePtr image = static_pointer_cast<TImage>( theData.first );
- 		 ImportFilterType::Pointer importFilter = ImportFilterType::New();
- 		 ImportFilterType::SizeType size;
- 		 for( uint i = 0; i < 3; ++i )
- 		 	size[i] = dimensionSize[i];
- 		 ImportFilterType::IndexType start;
- 		 start.Fill(0);
- 		 ImportFilterType::RegionType region;
- 		 region.SetIndex( start );
- 		 region.SetSize( size );
- 		 importFilter->SetRegion( region );
- 		 double origin[3] = {0.0,0.0,0.0};
- 		 importFilter->SetOrigin( origin );
- 		 double spacing[3] = {1.0,1.0,1.0};
-	 	 importFilter->SetSpacing( spacing );
-     importFilter->SetImportPointer( sm->getArray(), siz, false );
-	    myimage = importFilter->GetOutput();*/
 	    CITKAdapter myAdapter( sm );
 			typedef itk::Image<uint8_t,3> ImageType;
   	  typedef itk::ImageFileWriter<ImageType> FileWriter;
