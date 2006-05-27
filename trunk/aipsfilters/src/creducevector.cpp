@@ -23,7 +23,7 @@ using namespace boost;
  * Structors *
  *************/
 
-DEFINE_CALL_MACRO( CReduceVector::call, CReduceVector::reduce, vectorfieldTL )
+DEFINE_CALL_MACRO( CReduceVector::call, CReduceVector::reduce, vectorfieldTL );
 
 /**
  * \param ulID unique module ID
@@ -88,7 +88,9 @@ FBEGIN;
 	// Get maximum and minimum of vector field
  	outputSPtr->setMaximum( dMaxNorm );
  	outputSPtr->setMinimum( 0.0 );
-
+	outputSPtr->setOrigin( inputSPtr->getOrigin() );
+	outputSPtr->setBaseElementDimensions( inputSPtr->getBaseElementDimensions() );
+	
  	// Create new field
   TField::iterator outputIterator = outputSPtr->begin();
   for ( typename T::iterator inputIt = inputSPtr->begin();
@@ -97,6 +99,7 @@ FBEGIN;
    	(*outputIterator) = norm(*inputIt);
   }	
   setOutput( outputSPtr );
+  
 FEND;
 	return true;  
 }

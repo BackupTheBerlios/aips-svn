@@ -78,10 +78,12 @@ bool CHistoCompressor::compute() throw()
 	bModuleReady = true;
   deleteOldOutput();
 
-  boost::shared_ptr<ImageType> outputPtr ( new ImageType( theInputSPtr->getDimension(),
+  boost::shared_ptr<ImageType> outputSPtr ( new ImageType( theInputSPtr->getDimension(),
 		theInputSPtr->getExtents(), theInputSPtr->getDataDimension() ) );
-  outputPtr->setMinimum( theInputSPtr->getDataRange().getMinimum() );
-  outputPtr->setMaximum( 0 );
+  outputSPtr->setMinimum( theInputSPtr->getDataRange().getMinimum() );
+  outputSPtr->setMaximum( 0 );
+	outputSPtr->setOrigin( theInputSPtr->getOrigin() );
+	outputSPtr->setBaseElementDimensions( theInputSPtr->getBaseElementDimensions() );
 
   calculateHistogram( theInputSPtr );
   typename ImageType::TDataType theMaxIntensity = ( theInputSPtr->getDataRange().getMaximum() );
@@ -102,10 +104,10 @@ bool CHistoCompressor::compute() throw()
 				usNewGrayValuesVec[i] = usCnt;
 			}
     }
-    outputPtr->adjustDataRange( usCnt );
-    applyNewGrayValues( theInputSPtr, outputPtr, usChannel );
+    outputSPtr->adjustDataRange( usCnt );
+    applyNewGrayValues( theInputSPtr, outputSPtr, usChannel );
   }
-  setOutput( outputPtr );
+  setOutput( outputSPtr );
   return true;
 }
 

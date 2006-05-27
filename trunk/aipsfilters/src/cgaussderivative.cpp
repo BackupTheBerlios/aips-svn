@@ -54,8 +54,8 @@ CGaussDerivative::~CGaussDerivative() throw()
  * Other methods *
  *****************/
 
-DEFINE_CALL_MACRO( CGaussDerivative::call2D, CGaussDerivative::gauss2D, imageTL )
-DEFINE_CALL_MACRO( CGaussDerivative::call3D, CGaussDerivative::gauss3D, imageTL )
+DEFINE_CALL_MACRO( CGaussDerivative::call2D, CGaussDerivative::gauss2D, imageTL );
+DEFINE_CALL_MACRO( CGaussDerivative::call3D, CGaussDerivative::gauss3D, imageTL );
 
 void CGaussDerivative::apply() throw()
 {
@@ -120,7 +120,9 @@ FBEGIN;
 	TField2DPtr outputSPtr ( 
 		new TField2D( 2, inputSPtr->getExtents(), inputSPtr->getDataDimension() ) );	
   outputSPtr->setMaximum( 1.0 );	
-	outputSPtr->setMinimum( -1.0 );	
+	outputSPtr->setMinimum( -1.0 );
+	outputSPtr->setOrigin( inputSPtr->getOrigin() );
+	outputSPtr->setBaseElementDimensions( inputSPtr->getBaseElementDimensions() );
  	(*outputSPtr) = VEC_ZERO2D;
 	
 	int iMaskSize = 0;
@@ -134,9 +136,11 @@ FBEGIN;
 				{
 					TVector2D gradVec ( 0.0, 0.0 );
 					for( short usMaskX = -( iMaskSize / 2 ); usMaskX <= ( iMaskSize / 2 ); ++usMaskX  )
-						gradVec[0] += (*inputSPtr)( x - usMaskX, y, d ) * dGaussMask[ usMaskX + ( iMaskSize / 2 ) ];
+						gradVec[0] += (*inputSPtr)( x - usMaskX, y, d )
+							* dGaussMask[ usMaskX + ( iMaskSize / 2 ) ];
 					for( short usMaskY = -( iMaskSize / 2 ); usMaskY <= ( iMaskSize / 2 ); ++usMaskY  )
-						gradVec[1] += (*inputSPtr)( x, y - usMaskY, d ) * dGaussMask[ usMaskY + ( iMaskSize / 2 ) ];			
+						gradVec[1] += (*inputSPtr)( x, y - usMaskY, d )
+							* dGaussMask[ usMaskY + ( iMaskSize / 2 ) ];			
 					(*outputSPtr)( x, y, d ) = gradVec;
 					dMaxGradient = std::max( dMaxGradient, norm( gradVec ) );
 				}
@@ -164,7 +168,8 @@ bool CGaussDerivative::gauss3D() throw()
 	bModuleReady = true;
 	bRoiSelf = false; // By default, a ROI is given by the user
 	TSmallImagePtr roiSPtr = static_pointer_cast<TSmallImage>( getInput(1) );
-	if ( !roiSPtr || !checkInput<TSmallImage>( roiSPtr, 3, 3 ) || roiSPtr->getDataRange().getMaximum() < 1 )
+	if ( !roiSPtr || !checkInput<TSmallImage>( roiSPtr, 3, 3 )
+		|| roiSPtr->getDataRange().getMaximum() < 1 )
 	{
 		bRoiSelf = true;
 	}
@@ -175,7 +180,9 @@ bool CGaussDerivative::gauss3D() throw()
 	TField3DPtr outputSPtr ( 
 		new TField3D( 3, inputSPtr->getExtents(), inputSPtr->getDataDimension() ) );	
   outputSPtr->setMaximum( 1.0 );	
-	outputSPtr->setMinimum( -1.0 );	
+	outputSPtr->setMinimum( -1.0 );
+	outputSPtr->setOrigin( inputSPtr->getOrigin() );
+	outputSPtr->setBaseElementDimensions( inputSPtr->getBaseElementDimensions() );
  	(*outputSPtr) = VEC_ZERO3D;
 	
 	int iMaskSize = 0;
@@ -190,11 +197,14 @@ bool CGaussDerivative::gauss3D() throw()
 					{
 						TVector3D gradVec ( 0.0, 0.0, 0.0 );
 						for( short usMaskX = -( iMaskSize / 2 ); usMaskX <= ( iMaskSize / 2 ); ++usMaskX  )
-							gradVec[0] += (*inputSPtr)( x - usMaskX, y, z, d ) * dGaussMask[ usMaskX + ( iMaskSize / 2 ) ];
+							gradVec[0] += (*inputSPtr)( x - usMaskX, y, z, d )
+								* dGaussMask[ usMaskX + ( iMaskSize / 2 ) ];
 						for( short usMaskY = -( iMaskSize / 2 ); usMaskY <= ( iMaskSize / 2 ); ++usMaskY  )
-							gradVec[1] += (*inputSPtr)( x, y - usMaskY, z, d ) * dGaussMask[ usMaskY + ( iMaskSize / 2 ) ];			
+							gradVec[1] += (*inputSPtr)( x, y - usMaskY, z, d )
+								* dGaussMask[ usMaskY + ( iMaskSize / 2 ) ];			
 						for( short usMaskZ = -( iMaskSize / 2 ); usMaskZ <= ( iMaskSize / 2 ); ++usMaskZ  )
-							gradVec[2] += (*inputSPtr)( x, y, z - usMaskZ, d ) * dGaussMask[ usMaskZ + ( iMaskSize / 2 ) ];			
+							gradVec[2] += (*inputSPtr)( x, y, z - usMaskZ, d )
+								* dGaussMask[ usMaskZ + ( iMaskSize / 2 ) ];			
 						(*outputSPtr)( x, y, z, d ) = gradVec;
 						dMaxGradient = std::max( dMaxGradient, norm( gradVec ) );
 					}
@@ -207,7 +217,7 @@ bool CGaussDerivative::gauss3D() throw()
 		if ( norm(*outputIt) < numeric_limits<double>::epsilon() )
 			(*outputIt) = 0.0;	
 	}
-  setOutput( outputSPtr );  
+  setOutput( outputSPtr );
 FEND;
 	return true;
 }

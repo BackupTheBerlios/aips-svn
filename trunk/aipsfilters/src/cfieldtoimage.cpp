@@ -21,7 +21,7 @@ using namespace boost;
  * Structors *
  *************/
 
-DEFINE_CALL_MACRO( CFieldToImage::call, CFieldToImage::reduce, imageTL )
+DEFINE_CALL_MACRO( CFieldToImage::call, CFieldToImage::reduce, imageTL );
 
 /**
  * \param ulID unique module ID
@@ -88,7 +88,8 @@ FBEGIN;
 	long lMaxVal = parameters.getLong( "MaximumValue" );
 	if ( lMaxVal < lMinVal )
 	{
-		alog << LWARN << "Illegal parameters. MinimumValue needs to be smaller or equal to MaximumValue." << endl;
+		alog << LWARN
+			<< "Illegal parameters. MinimumValue needs to be smaller or equal to MaximumValue." << endl;
 		return false;
 	}
 	// Determine minimum and maximum conversion
@@ -96,12 +97,16 @@ FBEGIN;
 		/ ( inputSPtr->getDataRange().getMaximum() - inputSPtr->getDataRange().getMinimum() ); 
 	double dInputOffset = inputSPtr->getDataRange().getMinimum() * -1.0;
 	double dOutputOffset = lMinVal;
+
 	// Create output field one
 	TImagePtr output1SPtr( new TImage ( inputSPtr->getDimension(), inputSPtr->getExtents(), 
  		inputSPtr->getDataDimension() ) );
+ 	output1SPtr->setOrigin( inputSPtr->getOrigin() );
+	output1SPtr->setBaseElementDimensions( inputSPtr->getBaseElementDimensions() );
 	// Get maximum and minimum of input field
 	output1SPtr->setMaximum( lMaxVal );
  	output1SPtr->setMinimum( lMinVal );
+	
 	// Create output field two
 	TSmallImagePtr output2SPtr;
 	if ( in( lMinVal, static_cast<long>( numeric_limits<TSmallImage::TDataType>::min() ),	
@@ -111,6 +116,8 @@ FBEGIN;
 	{
 		output2SPtr.reset( new TSmallImage( inputSPtr->getDimension(), inputSPtr->getExtents(), 
  		inputSPtr->getDataDimension() ) );
+ 		output2SPtr->setOrigin( inputSPtr->getOrigin() );
+		output2SPtr->setBaseElementDimensions( inputSPtr->getBaseElementDimensions() );
 		// Get maximum and minimum of input field
 		output2SPtr->setMaximum( lMaxVal );
  		output2SPtr->setMinimum( lMinVal );

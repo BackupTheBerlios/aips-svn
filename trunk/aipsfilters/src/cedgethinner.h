@@ -4,21 +4,22 @@
  * Description: Thins out and homogenieses the given vector field       *
  *              to produce a better edge field                          *
  *                                                                      *
- * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
+ * Author: Hendrik Belitz (hbelitz@users.berlios.de)                    *
  *                                                                      *
- * Version: 0.2                                                         *
- * Status:  Alpha                                                       *
+ * Version: 0.3                                                         *
+ * Status:  Beta                                                        *
  * Created: 04-05-18                                                    *
- * Changed:                                                             *
+ * Changed: 2006-05-24 Added origin and spacing for output              *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
  * the Free Software Foundation; either version 2 of the License, or    *
  * (at your option) any later version.                                  *
  ************************************************************************/
+
 #ifndef CEDGETHINNER_H
 #define CEDGETHINNER_H
-#define CEDGETHINNER_VERSION "0.2"
+#define CEDGETHINNER_VERSION "0.3"
 
 // AIPS includes
 #include <cfilter.h>
@@ -60,10 +61,10 @@ public:
   /// Reimplemented from CPipelineItem
   virtual void apply()
     throw();
-  NEW_INSTANCE( CEdgeThinner )
+  NEW_INSTANCE( CEdgeThinner );
   //}@
 private:
-	DECLARE_CALL_MACRO( call )
+	DECLARE_CALL_MACRO( call );
 	template<typename FieldType> bool suppress() 
   	throw();
 };

@@ -5,12 +5,13 @@
  *                                                                      *
  * Author: Hendrik Belitz (h.belitz@fz-juelich.de)                      *
  *                                                                      *
- * Version: 0.3                                                         *
+ * Version: 0.4                                                         *
  * Status : Beta                                                        *
  * Created: 2005-01-13                                                  *
  * Changed: 2005-11-28 Added support for integer input. Added some      *
  *                     documentation.                                   *
  *          2006-04-04 Support for more data types. Added documentation.*
+ *          2006-05-24 Added output origin and spacing                  *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -19,7 +20,7 @@
  ************************************************************************/
 #ifndef CFIELDTOIMAGE_H
 #define CFIELDTOIMAGE_H
-#define CFIELDTOIMAGE_VERSION "0.3"
+#define CFIELDTOIMAGE_VERSION "0.4"
 
 // AIPS includes
 #include <cconverter.h>
@@ -67,10 +68,10 @@ public:
   /// Reimplemented from CPipelineItem
   virtual void apply()
     throw();
-  NEW_INSTANCE( CFieldToImage )
+  NEW_INSTANCE( CFieldToImage );
   //}@
 private:
-	DECLARE_CALL_MACRO( call )
+	DECLARE_CALL_MACRO( call );
 	template<typename ImageType> bool reduce() 
   	throw();
 };

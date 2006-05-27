@@ -61,10 +61,10 @@ public:
   /// Reimplemented from CPipelineItem  
   virtual void apply() 
 		throw();
-	NEW_INSTANCE( CHysteresis )
+	NEW_INSTANCE( CHysteresis );
 	//@}
 private:
-	DECLARE_CALL_MACRO( call )
+	DECLARE_CALL_MACRO( call );
 	template<typename ImageType> bool hysteresis() 
   	throw();
 };

@@ -70,25 +70,29 @@ FBEGIN;
   	return false;
 	bModuleReady = true;
  	deleteOldOutput();
-  TField2DPtr outputSPtr ( new TField2D( 2, inputSPtr->getExtents(), inputSPtr->getDataDimension() ) );
+  TField2DPtr outputSPtr ( new TField2D( 2, inputSPtr->getExtents(),
+  	inputSPtr->getDataDimension() ) );
 	(*outputSPtr) = VEC_ZERO2D;
-	outputSPtr->setMaximum( 1.0 );
-	outputSPtr->setMinimum( 0.0 );
+	outputSPtr->setOrigin( inputSPtr->getOrigin() );
+	outputSPtr->setBaseElementDimensions( inputSPtr->getBaseElementDimensions() );
+	
 	for( ushort d = 0; d < outputSPtr->getDataDimension(); ++d )
-		for( ushort y = 1; y < (outputSPtr->getExtent(1)-1); ++y )
-			for( ushort x = 1; x < (outputSPtr->getExtent(0)-1); ++x )
+		for( ushort y = 1; y < ( outputSPtr->getExtent(1) - 1 ); ++y )
+			for( ushort x = 1; x < ( outputSPtr->getExtent(0) - 1 ); ++x )
 			{
-				double n = norm( (*inputSPtr)(x,y,d) );
+				double n = norm( (*inputSPtr)( x, y, d ) );
 				if ( n > DBL_EPSILON )
 				{
-					TVector2D dir = (*inputSPtr)(x,y,d) / n;					
-					double l = norm( (*inputSPtr)( static_cast<uint>( round( static_cast<double>( x ) + (dir[0]*sqrt(2.0) ) ) ), 
-						static_cast<uint>( round( static_cast<double>( y ) + (dir[1]*sqrt(2.0) ) ) ),d ) );
+					TVector2D dir = (*inputSPtr)( x, y, d ) / n;					
+					double l = norm( (*inputSPtr)( static_cast<uint>( round( static_cast<double>( x )
+						+ ( dir[0] * sqrt( 2.0 ) ) ) ), static_cast<uint>( round( static_cast<double>( y )
+						+ ( dir[1] * sqrt( 2.0 ) ) ) ), d ) );
 					dir *= -1.0;
-					double r = norm( (*inputSPtr)( static_cast<uint>( round( static_cast<double>( x ) + (dir[0]*sqrt(2.0) ) ) ), 
-						static_cast<uint>( round( static_cast<double>( y ) + (dir[1]*sqrt(2.0) ) ) ),d ) );
+					double r = norm( (*inputSPtr)( static_cast<uint>( round( static_cast<double>( x )
+						+ ( dir[0] * sqrt( 2.0 ) ) ) ), static_cast<uint>( round( static_cast<double>( y )
+						+ ( dir[1] * sqrt( 2.0 ) ) ) ), d ) );
 					if ( n >= l && n >= r )
-						(*outputSPtr)(x,y,d) = (*inputSPtr)(x,y,d);
+						(*outputSPtr)( x, y, d ) = (*inputSPtr)( x, y, d );
 				}
 			}	
 	setOutput( outputSPtr );
@@ -106,16 +110,18 @@ FBEGIN;
   	return false;
 	bModuleReady = true;
  	deleteOldOutput();
-  TField3DPtr outputSPtr ( new TField3D( 3, inputSPtr->getExtents(), inputSPtr->getDataDimension() ) );
+  TField3DPtr outputSPtr ( new TField3D( 3, inputSPtr->getExtents(),
+  	inputSPtr->getDataDimension() ) );
 	(*outputSPtr) = VEC_ZERO3D;
-	outputSPtr->setMaximum( 1.0 );
-	outputSPtr->setMinimum( 0.0 );
+	outputSPtr->setOrigin( inputSPtr->getOrigin() );
+	outputSPtr->setBaseElementDimensions( inputSPtr->getBaseElementDimensions() );
+	
 	for( ushort d = 0; d < outputSPtr->getDataDimension(); ++d )
-		for( ushort z = 1; z < (outputSPtr->getExtent(2)-1); ++z )
-			for( ushort y = 1; y < (outputSPtr->getExtent(1)-1); ++y )
-				for( ushort x = 1; x < (outputSPtr->getExtent(0)-1); ++x )
+		for( ushort z = 1; z < ( outputSPtr->getExtent(2) - 1 ); ++z )
+			for( ushort y = 1; y < ( outputSPtr->getExtent(1) - 1 ); ++y )
+				for( ushort x = 1; x < ( outputSPtr->getExtent(0) - 1 ); ++x )
 				{
-					double n = norm( (*inputSPtr)(x,y,z,d) );
+					double n = norm( (*inputSPtr)( x, y, z, d ) );
 					if ( n > DBL_EPSILON )
 					{
 						TVector3D dir = (*inputSPtr)(x,y,z,d) / n;
@@ -129,7 +135,7 @@ FBEGIN;
 							static_cast<uint>( round( static_cast<double>( y ) + ( dir[1] * sqrt( 3.0 ) ) ) ), 
 							static_cast<uint>( round( static_cast<double>( z ) + ( dir[2] * sqrt( 3.0 ) ) ) ), d ) );
 						if ( n >= l && n >= r )
-							(*outputSPtr)(x,y,z,d) = (*inputSPtr)(x,y,z,d);
+							(*outputSPtr)( x, y, z, d ) = (*inputSPtr)( x, y, z, d );
 					}
 				}	
   setOutput( outputSPtr );
@@ -144,4 +150,4 @@ bool CEdgeThinner::suppress() throw()
 	return false;
 }
 
-DEFINE_CALL_MACRO( CEdgeThinner::call, CEdgeThinner::suppress, vectorfieldTL )
+DEFINE_CALL_MACRO( CEdgeThinner::call, CEdgeThinner::suppress, vectorfieldTL );

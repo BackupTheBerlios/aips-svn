@@ -209,8 +209,9 @@ DBG3( " C1 (" << uiClassOne << ") : Mean " << dClassOneMean << " SD " << dClassO
 		else if ( smoothedHisto[i] < smoothedHisto[i-1] )
 			break;
 	}
-	// Determine next global maximum g2 
-	uint t = g1+parameters.getUnsignedLong("Shift");
+	// Determine next global maximum g2
+/*	if ( g1 == 0 ) g1 = parameters.getUnsignedLong("Shift");*/
+	uint t = g1 + parameters.getUnsignedLong("Shift");
 	while( smoothedHisto[t] <= smoothedHisto[t-1] )
 		++t;
 	uint g2 = t+1;
@@ -242,8 +243,9 @@ DBG3( " C1 (" << uiClassOne << ") : Mean " << dClassOneMean << " SD " << dClassO
 				break;
 		}
 	}
-	
-	cerr << "Threshold values are " << g1 << " and " << g2;
+	if ( g2-g1 > (2 * parameters.getUnsignedLong("Shift")) )
+		g2 = g1 + 2 * parameters.getUnsignedLong("Shift");
+ 	cerr << "Threshold values are " << g1 << " and " << g2;
 	parameters.setUnsignedLong("T1", static_cast<ulong>( g1 * 0.33 ) );
 	parameters.setUnsignedLong("T2",
 		static_cast<ulong>( std::max( g1 * 0.66, g1 + parameters.getDouble("Shift") ) ) );

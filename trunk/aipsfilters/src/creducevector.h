@@ -67,10 +67,10 @@ public:
   /// Reimplemented from CPipelineItem
   virtual void apply()
     throw();
-  NEW_INSTANCE( CReduceVector )  
+  NEW_INSTANCE( CReduceVector );
   //}@
 private:
-	DECLARE_CALL_MACRO( call )
+	DECLARE_CALL_MACRO( call );
 	template<typename T> bool reduce() 
 		throw();
 };

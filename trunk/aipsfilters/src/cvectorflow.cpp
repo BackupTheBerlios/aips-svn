@@ -137,7 +137,7 @@ CPipelineItem* CVectorFlow::newInstance( ulong ulID_ ) const throw()
 
 void CVectorFlow::gvf2D( shared_ptr<TField2D> gradientFieldPtr ) throw()
 {
-  shared_ptr<TField2D> outputPtr ( new TField2D( 2, gradientFieldPtr->getExtents() ) );
+  shared_ptr<TField2D> outputSPtr ( new TField2D( 2, gradientFieldPtr->getExtents() ) );
 
 	// Get the parameters
 	double dDeltaT = parameters.getDouble( "DeltaT" );
@@ -149,7 +149,7 @@ void CVectorFlow::gvf2D( shared_ptr<TField2D> gradientFieldPtr ) throw()
   ushort w = gradientFieldPtr->getExtent(0);
   ushort h = gradientFieldPtr->getExtent(1);
   
-	TField2D& flowt = *outputPtr;
+	TField2D& flowt = *outputSPtr;
   TField2D flowdt( 2, grad.getExtents() );
     
   CTypedData<double> b ( 2, grad.getExtents() );
@@ -187,9 +187,11 @@ void CVectorFlow::gvf2D( shared_ptr<TField2D> gradientFieldPtr ) throw()
 		flowt.swap( flowdt );
     time++;      
   }
-	outputPtr->setMinimum( TVector2D( -1.0, -1.0 ) );
-	outputPtr->setMaximum( TVector2D( 1.0, 1.0 ) );	
-  setOutput( outputPtr );
+	outputSPtr->setMinimum( TVector2D( -1.0, -1.0 ) );
+	outputSPtr->setMaximum( TVector2D( 1.0, 1.0 ) );
+	outputSPtr->setOrigin( grad.getOrigin() );
+	outputSPtr->setBaseElementDimensions( grad.getBaseElementDimensions() );
+  setOutput( outputSPtr );
 }
 
 /**
@@ -198,7 +200,7 @@ void CVectorFlow::gvf2D( shared_ptr<TField2D> gradientFieldPtr ) throw()
  */
 void CVectorFlow::ggvf2D( shared_ptr<TField2D> gradientFieldPtr ) throw()
 {
-  shared_ptr<TField2D> outputPtr ( new TField2D( 2, gradientFieldPtr->getExtents() ) );
+  shared_ptr<TField2D> outputSPtr ( new TField2D( 2, gradientFieldPtr->getExtents() ) );
 
 	// Get the parameters
 	double dDeltaT = parameters.getDouble( "DeltaT" );
@@ -210,7 +212,7 @@ void CVectorFlow::ggvf2D( shared_ptr<TField2D> gradientFieldPtr ) throw()
   TField2D& grad = (*gradientFieldPtr);
   ushort w = grad.getExtent(0);
   ushort h = grad.getExtent(1);
-  TField2D& flowt = *outputPtr;
+  TField2D& flowt = *outputSPtr;
   TField2D flowdt( 2, grad.getExtents() ); 
   CTypedData<double> g ( 2, grad.getExtents() );
   CTypedData<double> hf ( 2, grad.getExtents() );
@@ -257,17 +259,19 @@ void CVectorFlow::ggvf2D( shared_ptr<TField2D> gradientFieldPtr ) throw()
 		flowt.swap( flowdt );  
     time++;     		
   }
-	outputPtr->setMinimum( TVector2D( -1.0, -1.0 ) );
-	outputPtr->setMaximum( TVector2D( 1.0, 1.0 ) );
-	setOutput( outputPtr );
+	outputSPtr->setMinimum( TVector2D( -1.0, -1.0 ) );
+	outputSPtr->setMaximum( TVector2D( 1.0, 1.0 ) );
+	outputSPtr->setOrigin( grad.getOrigin() );
+	outputSPtr->setBaseElementDimensions( grad.getBaseElementDimensions() );
+	setOutput( outputSPtr );
 }
 
 void CVectorFlow::gvf3D( shared_ptr<TField3D> gradientFieldPtr ) throw()
 {
-	shared_ptr<TField3D> outputPtr ( new TField3D( 3, gradientFieldPtr->getExtents() ) );
+	shared_ptr<TField3D> outputSPtr ( new TField3D( 3, gradientFieldPtr->getExtents() ) );
 
   TVector3D maxVec; maxVec[0] = 1.0; maxVec[1] = 1.0;
-  outputPtr->setMaximum( maxVec );
+  outputSPtr->setMaximum( maxVec );
 	
 	// Get the parameters
 	double dDeltaT = parameters.getDouble( "DeltaT" );
@@ -280,7 +284,7 @@ void CVectorFlow::gvf3D( shared_ptr<TField3D> gradientFieldPtr ) throw()
   ushort w = grad.getExtent(0);
   ushort h = grad.getExtent(1);
 	ushort d = grad.getExtent(2);
-  TField3D& flowt = *outputPtr;
+  TField3D& flowt = *outputSPtr;
   TField3D flowdt( 3, grad.getExtents() ); 	
   flowt = grad;
   // Time loop
@@ -319,17 +323,19 @@ void CVectorFlow::gvf3D( shared_ptr<TField3D> gradientFieldPtr ) throw()
 		flowt.swap( flowdt );  
     time++;     
   }  
-	outputPtr->setMinimum( TVector3D( -1.0, -1.0, -1.0 ) );
-	outputPtr->setMaximum( TVector3D( 1.0, 1.0, 1.0 ) );
-	setOutput( outputPtr );  
+	outputSPtr->setMinimum( TVector3D( -1.0, -1.0, -1.0 ) );
+	outputSPtr->setMaximum( TVector3D( 1.0, 1.0, 1.0 ) );
+	outputSPtr->setOrigin( grad.getOrigin() );
+	outputSPtr->setBaseElementDimensions( grad.getBaseElementDimensions() );
+	setOutput( outputSPtr );
 }
 
 void CVectorFlow::ggvf3D( shared_ptr<TField3D> gradientFieldPtr ) throw()
 {
-  shared_ptr<TField3D> outputPtr ( new TField3D( 3, gradientFieldPtr->getExtents() ) );
+  shared_ptr<TField3D> outputSPtr ( new TField3D( 3, gradientFieldPtr->getExtents() ) );
 
   TVector3D maxVec; maxVec[0] = 1.0; maxVec[1] = 1.0;
-  outputPtr->setMaximum( maxVec );
+  outputSPtr->setMaximum( maxVec );
 
 	// Get the parameters
 	double dDeltaT = parameters.getDouble( "DeltaT" );
@@ -342,7 +348,7 @@ void CVectorFlow::ggvf3D( shared_ptr<TField3D> gradientFieldPtr ) throw()
   ushort w = grad.getExtent(0);
   ushort h = grad.getExtent(1);
 	ushort d = grad.getExtent(2);
-  TField3D& flowt = *outputPtr;
+  TField3D& flowt = *outputSPtr;
   TField3D flowdt( 3, grad.getExtents() ); 
   CTypedData<double> g ( 3, grad.getExtents() );
   CTypedData<double> hf ( 3, grad.getExtents() );
@@ -393,9 +399,11 @@ void CVectorFlow::ggvf3D( shared_ptr<TField3D> gradientFieldPtr ) throw()
 		flowt = flowdt;  
     time++;      
   }  
-	outputPtr->setMinimum( TVector3D( -1.0, -1.0, -1.0 ) );
-	outputPtr->setMaximum( TVector3D( 1.0, 1.0, 1.0 ) );	
-	setOutput( outputPtr );
+	outputSPtr->setMinimum( TVector3D( -1.0, -1.0, -1.0 ) );
+	outputSPtr->setMaximum( TVector3D( 1.0, 1.0, 1.0 ) );
+	outputSPtr->setOrigin( grad.getOrigin() );
+	outputSPtr->setBaseElementDimensions( grad.getBaseElementDimensions() );
+	setOutput( outputSPtr );
 }
 
 #ifdef USE_BLITZ
@@ -406,7 +414,7 @@ using namespace blitz;
  */
 void CVectorFlow::gvf2Dblitz( shared_ptr<TField2D> gradientFieldPtr ) throw()
 {
-  shared_ptr<TField2D> outputPtr ( new TField2D( 2, gradientFieldPtr->getExtents() ) );
+  shared_ptr<TField2D> outputSPtr ( new TField2D( 2, gradientFieldPtr->getExtents() ) );
 	
 	// Get the parameters
 	double dDeltaT = parameters.getDouble( "DeltaT" );
@@ -422,7 +430,7 @@ void CVectorFlow::gvf2Dblitz( shared_ptr<TField2D> gradientFieldPtr ) throw()
   Array<double,2> bhf( w, h, AIPSArray<2>() );
   Array<TVector2D, 2> bgradient( grad.getArray(), shape( w, h ),
     neverDeleteData, AIPSArray<2>() );
-  Array<TVector2D, 2> bflowt( outputPtr->getArray(), shape( w, h ), 
+  Array<TVector2D, 2> bflowt( outputSPtr->getArray(), shape( w, h ),
 		neverDeleteData, AIPSArray<2>() ); 
 	bflowt = bgradient;
   Array<TVector2D, 2> bflowdt( w, h, AIPSArray<2>() );
@@ -477,9 +485,11 @@ void CVectorFlow::gvf2Dblitz( shared_ptr<TField2D> gradientFieldPtr ) throw()
 		cycleArrays( bflowt, bflowdt );
     time++;
   }
-	outputPtr->setMinimum( TVector2D( -1.0, -1.0 ) );
-	outputPtr->setMaximum( TVector2D( 1.0, 1.0 ) );			
-  setOutput( outputPtr );
+	outputSPtr->setMinimum( TVector2D( -1.0, -1.0 ) );
+	outputSPtr->setMaximum( TVector2D( 1.0, 1.0 ) );
+	outputSPtr->setOrigin( grad.getOrigin() );
+	outputSPtr->setBaseElementDimensions( grad.getBaseElementDimensions() );
+  setOutput( outputSPtr );
 }
 
 /**
@@ -489,7 +499,7 @@ void CVectorFlow::gvf2Dblitz( shared_ptr<TField2D> gradientFieldPtr ) throw()
 void CVectorFlow::gvf3Dblitz( shared_ptr<TField3D> gradientFieldPtr ) throw()
 {
 FBEGIN;
-	shared_ptr<TField3D> outputPtr ( new TField3D( 3, gradientFieldPtr->getExtents() ) );
+	shared_ptr<TField3D> outputSPtr ( new TField3D( 3, gradientFieldPtr->getExtents() ) );
 
 	// Get the parameters
 	double dDeltaT = parameters.getDouble( "DeltaT" );
@@ -506,7 +516,7 @@ FBEGIN;
   Array<double,3> bhf( w, h, d, AIPSArray<3>() );
   Array<TVector3D, 3> bgradient( grad.getArray(), shape( w, h, d ),
     neverDeleteData, AIPSArray<3>() );
-  Array<TVector3D, 3> bflowt( outputPtr->getArray(), shape( w, h, d ),
+  Array<TVector3D, 3> bflowt( outputSPtr->getArray(), shape( w, h, d ),
     neverDeleteData, AIPSArray<3>() );
 	bflowt = bgradient;
   Array<TVector3D, 3> bflowdt( w, h, d, AIPSArray<3>() );	
@@ -560,10 +570,12 @@ FBEGIN;
 	  time++;
   }
   alog << endl;
-	outputPtr->setMinimum( TVector3D( -1.0, -1.0, -1.0 ) );
-	outputPtr->setMaximum( TVector3D( 1.0, 1.0, 1.0 ) );
+	outputSPtr->setMinimum( TVector3D( -1.0, -1.0, -1.0 ) );
+	outputSPtr->setMaximum( TVector3D( 1.0, 1.0, 1.0 ) );
+	outputSPtr->setOrigin( grad.getOrigin() );
+	outputSPtr->setBaseElementDimensions( grad.getBaseElementDimensions() );
   // Produce some output
-  setOutput( outputPtr );
+  setOutput( outputSPtr );
 FEND;  
 }
 #endif

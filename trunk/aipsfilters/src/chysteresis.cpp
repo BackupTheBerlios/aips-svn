@@ -73,7 +73,10 @@ FBEGIN;
 	shared_ptr<ImageType> outputSPtr ( 
 		new ImageType( inputSPtr->getDimension(), inputSPtr->getExtents(), inputSPtr->getDataDimension() ) );
 	outputSPtr->setDataRange( inputSPtr->getDataRange() );
+	outputSPtr->setOrigin( inputSPtr->getOrigin() );
+	outputSPtr->setBaseElementDimensions( inputSPtr->getBaseElementDimensions() );	
 	(*outputSPtr) = 0;
+	
 	long lLowThres = parameters.getLong( "Low" );
 	long lHighThres = parameters.getLong( "High" );
   if ( inputSPtr->getDimension() == 2 )
@@ -88,13 +91,13 @@ FBEGIN;
 					{
 						ushort nb = 0;
 						if ( (*inputSPtr)(x+1,y,d) > lHighThres ) nb++;
-						if ( (*inputSPtr)(x-1,y,d) > lHighThres ) nb++;
-						if ( (*inputSPtr)(x,y+1,d) > lHighThres ) nb++;
-						if ( (*inputSPtr)(x,y-1,d) > lHighThres ) nb++;
-						if ( (*inputSPtr)(x+1,y+1,d) > lHighThres ) nb++;
-						if ( (*inputSPtr)(x+1,y-1,d) > lHighThres ) nb++;
-						if ( (*inputSPtr)(x-1,y+1,d) > lHighThres ) nb++;
-						if ( (*inputSPtr)(x-1,y-1,d) > lHighThres ) nb++;
+						else if ( (*inputSPtr)(x-1,y,d) > lHighThres ) nb++;
+						else if ( (*inputSPtr)(x,y+1,d) > lHighThres ) nb++;
+						else if ( (*inputSPtr)(x,y-1,d) > lHighThres ) nb++;
+						else if ( (*inputSPtr)(x+1,y+1,d) > lHighThres ) nb++;
+						else if ( (*inputSPtr)(x+1,y-1,d) > lHighThres ) nb++;
+						else if ( (*inputSPtr)(x-1,y+1,d) > lHighThres ) nb++;
+						else if ( (*inputSPtr)(x-1,y-1,d) > lHighThres ) nb++;
 						if ( nb )
 							(*outputSPtr)(x,y,d) = (*inputSPtr)(x,y,d);
 					}
@@ -113,33 +116,31 @@ FBEGIN;
 						{
 							ushort nb = 0;
 							if ( (*inputSPtr)(x+1,y,z,d) > lHighThres ) nb++;
-							if ( (*inputSPtr)(x-1,y,z,d) > lHighThres ) nb++;
-							if ( (*inputSPtr)(x,y+1,z,d) > lHighThres ) nb++;
-							if ( (*inputSPtr)(x,y-1,z,d) > lHighThres ) nb++;
-							if ( (*inputSPtr)(x+1,y+1,z,d) > lHighThres ) nb++;
-							if ( (*inputSPtr)(x+1,y-1,z,d) > lHighThres ) nb++;
-							if ( (*inputSPtr)(x-1,y+1,z,d) > lHighThres ) nb++;
-							if ( (*inputSPtr)(x-1,y-1,z,d) > lHighThres ) nb++;
-						
-							if ( (*inputSPtr)(x,y,z-1,d) > lHighThres ) nb++;
-							if ( (*inputSPtr)(x+1,y,z-1,d) > lHighThres ) nb++;
-							if ( (*inputSPtr)(x-1,y,z-1,d) > lHighThres ) nb++;
-							if ( (*inputSPtr)(x,y+1,z-1,d) > lHighThres ) nb++;
-							if ( (*inputSPtr)(x,y-1,z-1,d) > lHighThres ) nb++;
-							if ( (*inputSPtr)(x+1,y+1,z-1,d) > lHighThres ) nb++;
-							if ( (*inputSPtr)(x+1,y-1,z-1,d) > lHighThres ) nb++;
-							if ( (*inputSPtr)(x-1,y+1,z-1,d) > lHighThres ) nb++;
-							if ( (*inputSPtr)(x-1,y-1,z-1,d) > lHighThres ) nb++;
-						
-							if ( (*inputSPtr)(x,y,z+1,d) > lHighThres ) nb++;
-							if ( (*inputSPtr)(x+1,y,z+1,d) > lHighThres ) nb++;
-							if ( (*inputSPtr)(x-1,y,z+1,d) > lHighThres ) nb++;
-							if ( (*inputSPtr)(x,y+1,z+1,d) > lHighThres ) nb++;
-							if ( (*inputSPtr)(x,y-1,z+1,d) > lHighThres ) nb++;
-							if ( (*inputSPtr)(x+1,y+1,z+1,d) > lHighThres ) nb++;
-							if ( (*inputSPtr)(x+1,y-1,z+1,d) > lHighThres ) nb++;
-							if ( (*inputSPtr)(x-1,y+1,z+1,d) > lHighThres ) nb++;
-							if ( (*inputSPtr)(x-1,y-1,z+1,d) > lHighThres ) nb++;
+							else if ( (*inputSPtr)(x-1,y,z,d) > lHighThres ) nb++;
+							else if ( (*inputSPtr)(x,y+1,z,d) > lHighThres ) nb++;
+							else if ( (*inputSPtr)(x,y-1,z,d) > lHighThres ) nb++;
+							else if ( (*inputSPtr)(x+1,y+1,z,d) > lHighThres ) nb++;
+							else if ( (*inputSPtr)(x+1,y-1,z,d) > lHighThres ) nb++;
+							else if ( (*inputSPtr)(x-1,y+1,z,d) > lHighThres ) nb++;
+							else if ( (*inputSPtr)(x-1,y-1,z,d) > lHighThres ) nb++;
+							else if ( (*inputSPtr)(x,y,z-1,d) > lHighThres ) nb++;
+							else if ( (*inputSPtr)(x+1,y,z-1,d) > lHighThres ) nb++;
+							else if ( (*inputSPtr)(x-1,y,z-1,d) > lHighThres ) nb++;
+							else if ( (*inputSPtr)(x,y+1,z-1,d) > lHighThres ) nb++;
+							else if ( (*inputSPtr)(x,y-1,z-1,d) > lHighThres ) nb++;
+							else if ( (*inputSPtr)(x+1,y+1,z-1,d) > lHighThres ) nb++;
+							else if ( (*inputSPtr)(x+1,y-1,z-1,d) > lHighThres ) nb++;
+							else if ( (*inputSPtr)(x-1,y+1,z-1,d) > lHighThres ) nb++;
+							else if ( (*inputSPtr)(x-1,y-1,z-1,d) > lHighThres ) nb++;						
+							else if ( (*inputSPtr)(x,y,z+1,d) > lHighThres ) nb++;
+							else if ( (*inputSPtr)(x+1,y,z+1,d) > lHighThres ) nb++;
+							else if ( (*inputSPtr)(x-1,y,z+1,d) > lHighThres ) nb++;
+							else if ( (*inputSPtr)(x,y+1,z+1,d) > lHighThres ) nb++;
+							else if ( (*inputSPtr)(x,y-1,z+1,d) > lHighThres ) nb++;
+							else if ( (*inputSPtr)(x+1,y+1,z+1,d) > lHighThres ) nb++;
+							else if ( (*inputSPtr)(x+1,y-1,z+1,d) > lHighThres ) nb++;
+							else if ( (*inputSPtr)(x-1,y+1,z+1,d) > lHighThres ) nb++;
+							else if ( (*inputSPtr)(x-1,y-1,z+1,d) > lHighThres ) nb++;
 						
 							if ( nb )
 								(*outputSPtr)(x,y,z,d) = (*inputSPtr)(x,y,z,d);
