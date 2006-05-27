@@ -78,7 +78,16 @@ TDataSetPtr CITKAdapter::actualInternalConversion()
     dimensions ) );
 	typename CTypedData<typename itkImageType::PixelType>::iterator ot = img->begin();
 	for( it.GoToBegin(); !it.IsAtEnd(); ++it, ++ot )
-		*ot = it.Get();			
+		*ot = it.Get();
+	// Set origin and spacing
+	typename itkImageType::PointType theOrigin = theImage->GetOrigin();
+	typename itkImageType::SpacingType theSpacing = theImage->GetSpacing();
+	img->setOrigin( theOrigin[0], 0 );
+	img->setOrigin( theOrigin[1], 1 );
+	img->setOrigin( theOrigin[2], 2 );
+	img->setBaseElementDimension( theSpacing[0], 0 );
+	img->setBaseElementDimension( theSpacing[1], 1 );
+	img->setBaseElementDimension( theSpacing[2], 2 );
 	return img;
 }
 
