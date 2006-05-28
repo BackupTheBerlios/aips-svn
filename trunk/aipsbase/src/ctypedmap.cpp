@@ -282,7 +282,7 @@ void CTypedMap::setBool( const std::string& sKey, const bool bValue ) throw()
  *************/
  
 /**
- * \param aHeader header object to assign from
+ * \param aTypedMap header object to assign from
  */
 CTypedMap& CTypedMap::operator=( const CTypedMap& aTypedMap ) throw()
 {

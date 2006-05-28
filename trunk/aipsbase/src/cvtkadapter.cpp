@@ -306,7 +306,7 @@ DBG3("Converting to short");
     double* array = new double[dataSize];
     //memcpy( array, shortSet->getArray(), dataSize );
     TImage::iterator it = shortSet->begin();
-    for( int k = 0; k < dataSize; ++k, ++it )
+    for( uint k = 0; k < dataSize; ++k, ++it )
     {
     	array[k] = static_cast<double>(*it);
     }

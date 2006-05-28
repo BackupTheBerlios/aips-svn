@@ -13,6 +13,7 @@
 using namespace std;
 using namespace aips;
 using namespace boost;
+using namespace boost::lambda;
 
 /**
  * Constructor
@@ -85,9 +86,7 @@ void CGrayLevelTransformation::compute( boost::shared_ptr<ImageType> aSourceSPtr
 	imageEndIt += ( theImageSize * ( usChannel + 1 ) );
   typename ImageType::iterator jt = anOutputSPtr->begin();
 	jt += ( theImageSize * usChannel );
-  
+
   for ( typename ImageType::iterator it = imageBeginIt; it != imageEndIt; ++it, ++jt )
-  {
     *jt = usNewGrayValuesVec[(*it)];
-  }
 }

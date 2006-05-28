@@ -101,7 +101,7 @@ DBG2( "Removing " << anObserverPtr->getClassName() << " from subscriber list of 
 
 /**
  * The observer is removed for every interest he registered with
- * \param anEvent event to deploy to all registered observers with the appropiate interest
+ * \param anEventSPtr event to deploy to all registered observers with the appropiate interest
  * \throws NullException if given event is NULL
  */
 void CSubject::notify( boost::shared_ptr<CEvent> anEventSPtr ) throw( NullException )

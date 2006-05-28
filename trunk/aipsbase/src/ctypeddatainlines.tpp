@@ -569,7 +569,7 @@ TValue& CTypedData<TValue>::operator[]( const TPoint2D aPosition ) throw()
   return dataVec[ aPosition[0] + aPosition[1] * extentVec[0] ];
 }
   
-  /** \param aPosition spatial coordinates of element to retrieve */
+/** \param aPosition spatial coordinates of element to retrieve */
 template<typename TValue> inline
 TValue& CTypedData<TValue>::operator[]( const TPoint3D aPosition ) throw()
 {
@@ -584,14 +584,14 @@ const TValue& CTypedData<TValue>::operator[]( const ulong ulIndex ) const throw(
 	return dataVec[ ulIndex ];
 }		
 
-/** \param ulIndex index to retrieve */
+/** \param aPosition spatial coordinates of element to retrieve */
 template<typename TValue> inline
 const TValue& CTypedData<TValue>::operator[]( const TPoint2D aPosition ) const throw()
 {
   return dataVec[ aPosition[0] + aPosition[1] * extentVec[0] ];
 }   
 
-/** \param ulIndex index to retrieve */
+/** \param aPosition spatial coordinates of element to retrieve */
 template<typename TValue> inline
 const TValue& CTypedData<TValue>::operator[]( const TPoint3D aPosition ) const throw()
 {

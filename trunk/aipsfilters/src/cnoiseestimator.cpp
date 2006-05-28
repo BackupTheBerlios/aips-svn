@@ -93,10 +93,9 @@ bool CNoiseEstimator::compute() throw()
   double dVariance = 0.0;
   vector<typename ImageType::TDataType> valueVec;
 
-  // Suche Startpunkt. Gehe von Superior abwärts,
+  // Suche Startpunkt. Gehe von Superior abwï¿½ts,
   // bis eine Schicht gefunden wird, in der keine Nullen stehen.
-  // Selbiges ist danach für y und x zu tun
-
+  // Selbiges ist danach fr y und x zu tun
   uint uiStartZ = theInputSPtr->getExtent(2);
   for( uint z = theInputSPtr->getExtent( 2 ); z > theInputSPtr->getExtent( 2 ) / 2; --z )
 		for( uint y = 0; y < theInputSPtr->getExtent( 1 ) / 2; ++y )
@@ -126,14 +125,10 @@ bool CNoiseEstimator::compute() throw()
 
 	for_each( valueVec.begin(), valueVec.end(),	dMean +=  _1 );
 	dMean /= static_cast<double>( valueVec.size() );
-	for_each( valueVec.begin(), valueVec.end(),	dVariance += ( _1 - dMean )*( _1 - dMean ) );
+	for_each( valueVec.begin(), valueVec.end(),	dVariance += ( _1 - dMean ) * ( _1 - dMean ) );
   dVariance /= static_cast<double>( valueVec.size() );
   dVariance = sqrt( dVariance );
 
-/*  for ( vector<typename ImageType::TDataType>::iterator it = values.begin(); it != values.end(); ++it )
-  	dMean += static_cast<double>( *it );*/
-/*  for ( vector<short>::iterator it = values.begin(); it != values.end(); ++it )
-  	variance += (static_cast<double>(*it) - mean)*(static_cast<double>(*it) - mean);*/
 	parameters.setDouble("Mean", dMean);
 	parameters.setDouble("Variance", dVariance);
 

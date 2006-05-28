@@ -24,6 +24,9 @@
 #define CGRAYLEVELTRANSFORMATION_H
 #define CGRAYLEVELTRANSFORMATION_VERSION "0.4"
 
+// Standard includes
+#include <boost/bind.hpp>
+
 // AIPS includes
 #include "cfilter.h"
 #include "aipsnumeric.h"

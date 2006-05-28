@@ -82,12 +82,12 @@ TDataSetPtr CITKAdapter::actualInternalConversion()
 	// Set origin and spacing
 	typename itkImageType::PointType theOrigin = theImage->GetOrigin();
 	typename itkImageType::SpacingType theSpacing = theImage->GetSpacing();
-	img->setOrigin( theOrigin[0], 0 );
-	img->setOrigin( theOrigin[1], 1 );
-	img->setOrigin( theOrigin[2], 2 );
-	img->setBaseElementDimension( theSpacing[0], 0 );
-	img->setBaseElementDimension( theSpacing[1], 1 );
-	img->setBaseElementDimension( theSpacing[2], 2 );
+	img->setOrigin( 0, theOrigin[0] );
+	img->setOrigin( 1, theOrigin[1] );
+	img->setOrigin( 2, theOrigin[2] );
+	img->setBaseElementDimension( 0, theSpacing[0] );
+	img->setBaseElementDimension( 1, theSpacing[1] );
+	img->setBaseElementDimension( 2, theSpacing[2] );
 	return img;
 }
 

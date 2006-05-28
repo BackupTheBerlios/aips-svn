@@ -161,6 +161,7 @@ void CImageHeader::setVoxelType( const std::string& sVoxelType ) throw()
  * \param dX x-coordinate of origin
  * \param dY y-coordinate of origin
  * \param dZ z-coordinate of origin
+ * \param dT t-coordinate of origin
  */
 void CImageHeader::setOrigin( double dX, double dY, double dZ, double dT ) throw()
 {
@@ -177,6 +178,7 @@ void CImageHeader::setOrigin( double dX, double dY, double dZ, double dT ) throw
  * \param dX x-extent of a voxel
  * \param dY y-extent of a voxel
  * \param dZ z-extent of a voxel
+ * \param dT t-extent of a voxel
  */
 void CImageHeader::setVoxelDimensions( double dX, double dY, double dZ, double dT ) throw()
 {

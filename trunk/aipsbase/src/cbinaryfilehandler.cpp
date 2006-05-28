@@ -144,7 +144,7 @@ FEND;
 
 /**
  * Template specialization for 3D vector fields
- * \param theSourceDataSPtr pointer to source dataset
+ * \param theTargetDataSPtr pointer to source dataset
  * \param theFile output stream (file needs to be already opened)
  * \param bFileEndianess true == data is big endian, false == little endian (intel)
  * \param theVoxelSize size of one voxel (in bytes)

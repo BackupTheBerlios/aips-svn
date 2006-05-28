@@ -393,7 +393,7 @@ bool CPipelineItem::isOutputCached() const throw()
 	return bCacheOutputs;
 }
 
-/** \param cacheOutput true == cache output, false == delete output after first readout */
+/** \param bCacheOutputs_ true == cache output, false == delete output after first readout */
 void CPipelineItem::cacheOutput( bool bCacheOutputs_ ) throw()
 {
 	bCacheOutputs = bCacheOutputs_;
