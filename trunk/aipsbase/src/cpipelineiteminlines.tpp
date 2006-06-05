@@ -161,27 +161,27 @@ inline bool CPipelineItem::checkInput( T inputPtr, ushort usMinDim,
 {
 	if ( !inputPtr )
 	{
-		alog << LWARN << "Input set error: <No input>" << std::endl; 
+DBG1( LWARN << "Input set error: <No input>" );
 		return false;
 	}	
 	if ( inputPtr->getType() != typeid( typename T::element_type::TDataType ) )
 	{
-		alog << LWARN << "Input set error: <Type mismatch> - " << typeid(inputPtr->getType()).name() << " <> " << 
-			typeid( typename T::element_type::TDataType ).name() << std::endl;
+DBG1( "Input set error: <Type mismatch> - " << typeid(inputPtr->getType()).name() << " <> " <<
+typeid( typename T::element_type::TDataType ).name() );
 		return false;
 	}	
 	if ( ( usMinDim && inputPtr->getDimension() < usMinDim ) 
 		|| ( usMaxDim && inputPtr->getDimension() > usMaxDim ) )
 	{
-		alog << LWARN << "Input data has wrong dimension " << inputPtr->getDimension() << ". Legal range is "
-			<< usMinDim << " - " << usMaxDim << std::endl; 
+DBG1( LWARN << "Input data has wrong dimension " << inputPtr->getDimension() << ". Legal range is "
+<< usMinDim << " - " << usMaxDim );
 		return false;
 	}
 	if ( ( usMinDataDim && inputPtr->getDataDimension() < usMinDataDim )
 		|| ( usMaxDataDim && inputPtr->getDataDimension() > usMaxDataDim ) )
 	{
-		alog << LWARN << "Input data has wrong data dimension " << inputPtr->getDataDimension() << ". Legal range is "
-			<< usMinDataDim << " - " << usMaxDataDim << std::endl; 
+DBG1( LWARN << "Input data has wrong data dimension " << inputPtr->getDataDimension() << ". Legal range is "
+<< usMinDataDim << " - " << usMaxDataDim );
 		return false;
 	}
 	return true;

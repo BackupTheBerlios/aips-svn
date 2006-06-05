@@ -12,6 +12,7 @@
 #ifndef CITKHANDLER_H
 #define CITKHANDLER_H
 
+#include <aipsbase_config.h>
 #include <aipsfilehandlers_config.h>
 #ifdef HAVE_ITK
 #include <cbinaryfilehandler.h>

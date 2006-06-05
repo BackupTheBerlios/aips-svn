@@ -163,6 +163,7 @@ int main(int argc, char *argv[])
 	try
 	{	
 		TDataFile file = getFileServer().loadDataSet( input );
+  cerr << "input read" << endl;  
 		if ( file.second->isDefined("FileEndianess") )
 		{
 			bBigEndian = file.second->getBool("FileEndianess");
@@ -222,6 +223,7 @@ int main(int argc, char *argv[])
 			file.first = out;
 		}
 		getFileServer().saveDataSet( output, file );
+  cerr << "output written" << endl;  
 	}
 	catch ( std::exception& e )
 	{

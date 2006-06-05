@@ -39,6 +39,9 @@
  *        2005-07-07 Added new IO types                                 *
  *                   Added runtime type checking for io ports           *
  *        2006-04-04 Added some convenience macros (type lists, newInst *
+ *        2006-06-03 Made deleteOldOutput() public                      *
+ *                   Made checkInput<>() only outputting debug info     *
+ *                    instead of warnings.                              *
  ************************************************************************
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -303,7 +306,6 @@ public:
 	/// Sets the module dialog
 	void setModuleDialog( const boost::shared_ptr<CModuleDialog> newItemDialog )
 		throw();	
-protected:
   /// Deletes an output port
   void deleteOldOutput( ushort usOutputNumber = 0 )
     throw( OutOfRangeException );

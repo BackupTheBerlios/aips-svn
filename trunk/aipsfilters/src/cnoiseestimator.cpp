@@ -92,12 +92,14 @@ bool CNoiseEstimator::compute() throw()
   double dMean = 0.0;
   double dVariance = 0.0;
   vector<typename ImageType::TDataType> valueVec;
-
+cerr << theInputSPtr->getExtent(0) << endl;
+cerr << theInputSPtr->getExtent(1) << endl;
+cerr << theInputSPtr->getExtent(2) << endl;
   // Suche Startpunkt. Gehe von Superior abw�ts,
   // bis eine Schicht gefunden wird, in der keine Nullen stehen.
   // Selbiges ist danach fr y und x zu tun
-  uint uiStartZ = theInputSPtr->getExtent(2);
-  for( uint z = theInputSPtr->getExtent( 2 ); z > theInputSPtr->getExtent( 2 ) / 2; --z )
+  uint uiStartZ = theInputSPtr->getExtent(2)-1;
+  for( uint z = theInputSPtr->getExtent( 2 )-1; z > theInputSPtr->getExtent( 2 ) / 2; --z )
 		for( uint y = 0; y < theInputSPtr->getExtent( 1 ) / 2; ++y )
 			for( uint x = 0; x < theInputSPtr->getExtent( 0 ) / 2; ++x )
 				if ( (*theInputSPtr)( x, y, z ) != 0 )
@@ -112,17 +114,15 @@ bool CNoiseEstimator::compute() throw()
 				{
 					uiStartY = y;
 					uiStartX = x;
-					x = theInputSPtr->getExtent(0);
-					y = theInputSPtr->getExtent(1);
+					x = theInputSPtr->getExtent(0)-1;
+					y = theInputSPtr->getExtent(1)-1;
 				}
-  
   for( uint z = uiStartZ; z > uiStartZ - uiBoxSize; --z )
 		for( uint y = uiStartY; y < uiStartY + uiBoxSize; ++y )
 			for( uint x = uiStartX; x < uiStartX + uiBoxSize; ++x )
 		{
 			valueVec.push_back( (*theInputSPtr)( x, y, z ) );
 		}
-
 	for_each( valueVec.begin(), valueVec.end(),	dMean +=  _1 );
 	dMean /= static_cast<double>( valueVec.size() );
 	for_each( valueVec.begin(), valueVec.end(),	dVariance += ( _1 - dMean ) * ( _1 - dMean ) );

@@ -295,7 +295,11 @@ vtkImageData* CVTKAdapter::convertToExternal() throw( NullException )
   {
 DBG3("Converting to double");
     TFieldPtr floatSet = static_pointer_cast<TField>( internalDataSPtr );
+#ifdef USE_DOUBLE
     vtkDoubleArray* fArray = vtkDoubleArray::New();
+#else
+    vtkFloatArray* fArray = vtkFloatArray::New();
+#endif    
     fArray->SetArray( floatSet->getArray(), dataSize, 1 );
     p->SetScalars( fArray );
   }

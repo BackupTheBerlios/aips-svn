@@ -224,11 +224,19 @@ void CITKHandler::save( const string& sFilename, const TDataFile& theData )
 			}
 		}
 	}
+#ifdef USE_DOUBLE
 	else if( theData.first->getType() == typeid( double ) )
 	{
 		typedef itk::Image<double,3> ImageType;
 		typedef itk::ImportImageFilter<double,3> ImportFilterType;
+#else
+  else if( theData.first->getType() == typeid( float ) )
+  {
+    typedef itk::Image<float,3> ImageType;
+    typedef itk::ImportImageFilter<float,3> ImportFilterType;
+#endif    
 		typedef itk::ImageFileWriter<ImageType> FileWriter;
+    
 		FileWriter::Pointer writer = FileWriter::New();
 		TFieldPtr image = static_pointer_cast<TField>( theData.first );
 		ImportFilterType::Pointer importFilter = ImportFilterType::New();
