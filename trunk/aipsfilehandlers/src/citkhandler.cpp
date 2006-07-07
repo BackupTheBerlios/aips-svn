@@ -29,6 +29,18 @@ CITKHandler::CITKHandler() throw()
   supportedFileTypesVec.push_back("png");
   supportedFileTypesVec.push_back("hdr");
   supportedFileTypesVec.push_back("HDR");
+  supportedFileTypesVec.push_back("bmp");
+  supportedFileTypesVec.push_back("BMP");
+  supportedFileTypesVec.push_back("jpeg");
+  supportedFileTypesVec.push_back("JPEG");
+  supportedFileTypesVec.push_back("jpg");
+  supportedFileTypesVec.push_back("JPG");
+  supportedFileTypesVec.push_back("pnm");
+  supportedFileTypesVec.push_back("PNM");
+  supportedFileTypesVec.push_back("tif");
+  supportedFileTypesVec.push_back("TIF");
+  supportedFileTypesVec.push_back("tiff");
+  supportedFileTypesVec.push_back("TIFF");
 }
 
 CITKHandler::~CITKHandler() throw()

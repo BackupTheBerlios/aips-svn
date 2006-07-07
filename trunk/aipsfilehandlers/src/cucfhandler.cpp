@@ -73,7 +73,7 @@ void CUcfHandler::save( const std::string& sFilename, const TDataFile& theData )
   theFile << "<xrange=>" << endl << "-0.500000 " << static_cast<double>(h->getExtents()[0])-0.5 << endl;
   theFile << "<yrange=>" << endl << "-0.500000 " << static_cast<double>(h->getExtents()[1])-0.5 << endl;
   theFile << "<zrange=>" << endl << "-0.500000 0.500000" << endl;
-  theFile << "<levels>" << endl << "4" << endl << "<level number=>" << endl << "0.000000" << endl;
+  theFile << "<levels>" << endl << "1" << endl << "<level number=>" << endl << "0.000000" << endl;
   theFile << "<point_num=>" << endl << pointList->getExtent(0) << endl << "<contour_data=>" << endl;
   for( uint i = 0; i < pointList->getExtent(0); ++i )
   	theFile << (*pointList)(i)[0] << " " << (*pointList)(i)[1] << " 0.000000" << endl;

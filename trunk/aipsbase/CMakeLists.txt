@@ -304,3 +304,60 @@ INCLUDE( ${CMAKE_ROOT}/Modules/FindDoxygen.cmake)
 ENDIF(BUILD_DOC)
 
 SUBDIRS( src )
+
+SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "AIPSBASE library")
+SET(CPACK_PACKAGE_VENDOR "Hendrik Belitz")
+#SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README")
+SET(CPACK_PACKAGE_VERSION_MAJOR "0")
+SET(CPACK_PACKAGE_VERSION_MINOR "9")
+SET(CPACK_PACKAGE_VERSION_PATCH "9")
+#SET(CPACK_PACKAGE_EXECUTABLES "segmentation" "segmentation")
+SET(CPACK_IGNORE_FILES 
+"/html/" 
+"/latex/"
+"/xml/"
+"/CMakeFiles/"
+"/CMakeTmp/"
+"/_CPack_Packages/"
+".*\\\\.kdev.*"
+".*\\\\.tar\\\\.gz$"
+"^CPack.*"
+"~$"
+"CMakeCache.txt"
+"CMakeOutput.log"
+"^cmake_.*"
+"\\\\.cmake$"
+"\\\\.tag$"
+"Makefile"
+"/CVS/"
+".*\\\\.so"
+"install_manifest"
+"/\\\\.svn/"
+"\\\\\\\\.#"
+"/#")
+SET(CPACK_SOURCE_STRIP_FILES "aipsbaseUseFile.cmake" )
+SET(CPACK_SOURCE_IGNORE_FILES 
+"/html/" 
+"/latex/"
+"/xml/"
+"/aipsbase.dir/"
+"/CMakeFiles/"
+"/CMakeTmp/"
+"/_CPack_Packages/"
+".*\\\\.kdev.*"
+".*\\\\.tar\\\\.gz$"
+"^CPack.*"
+"^cmake_.*"
+#"\\\\.cmake$"
+"\\\\.tag$"
+"Makefile"
+"~$"
+"CMakeCache.txt"
+"CMakeOutput.log"
+"/CVS/"
+".*\\\\.so"
+"install_manifest"
+"/\\\\.svn/"
+"\\\\\\\\.#"
+"/#")
+INCLUDE(CPack)

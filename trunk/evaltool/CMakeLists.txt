@@ -39,3 +39,12 @@ LINK_DIRECTORIES( -L/usr/local/lib/vtk -L/usr/X11R6/lib )
 SET( DEBUG_LEVEL 0 CACHE STRING "Level of debugging output (This is either 0 (no output) or 1,2,3)")
 
 SUBDIRS( src )
+SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "evaltool - evaluation metrics for quantitative assessment of ip algorithms")
+SET(CPACK_PACKAGE_VENDOR "Forschungszentrum Jülich")
+#SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README")
+SET(CPACK_PACKAGE_VERSION_MAJOR "0")
+SET(CPACK_PACKAGE_VERSION_MINOR "9")
+SET(CPACK_PACKAGE_VERSION_PATCH "1")
+SET(CPACK_PACKAGE_EXECUTABLES "evaltool" "evaltool")
+INCLUDE(CPack)
+

@@ -2,22 +2,23 @@
  *   Copyright (C) 2006 by Hendrik Belitz                                  *
  *   hbelitz@users.berlios.de                                              *
  *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+/*! \mainpage evaltool - computing discrepancy metrics for images
+ *
+ * evaltool - computes evaluation metrics for two given voxel images
+ *
+ * Evaltool is directly called from the command prompt:
+ *
+ * <code>evaltool <i>file1 file2</i> [-o outfile] [-a] [-l labelvalue] [-h]</code>
+ *
+ * You must call evaltool with two image file names. The output file is optional and
+ * defaults to stdout. With [-a], you tell evaltool to append to an existing file instead
+ * of overwriting it. [-l] defines the label of the objects to compare and defaults to 1.
+ * [-h] displays a help message.
+ */
+ 
+// Standard library includes
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -25,26 +26,70 @@
 #include <cstdlib>
 #include <cstring>
 
+// Boost standard library includes
 #include <boost/shared_ptr.hpp>
 #include <boost/program_options.hpp>
 
+// AIPS includes
 #include <cdatafileserver.h>
 #include <canalyzehandler.h>
+#include <citkhandler.h>
 #include <csimpledathandler.h>
 #include <cdatahandler.h>
 #include <ctypedmap.h>
+
+// Local includes
 #include "cdiscrepancymeasures.h"
+#include "checklic.h"
 
 using namespace std;
 using namespace aips;
 using namespace boost;
 using namespace boost::program_options;
 
-bool bAppendToOutput;
-uint uiLabel;
-string sOutputFile;
-vector<string> theInputFileNamesVec;
+bool bAppendToOutput; ///< Append to old output or create a new one
+uint uiLabel; ///< Intensity label to analyze
+string sOutputFile; ///< File name of output
+vector<string> theInputFileNamesVec; ///< Input file names
 
+void license()
+{
+	licInfo* lic = readLicenseFile( getenv("MBS_LICENSE") );
+  if( lic == NULL )
+  {
+  	cerr << "Cannot find license file!" << endl;
+  	exit(-1);
+  }
+  /* Check for valid license key */
+  int ret = validateLicenseInfo( lic );
+  switch( ret )
+  {
+                case LIC_OK:
+                        cerr << "License is valid\n" << endl; break;
+                case LIC_EXPIRED:
+                        cerr << "License has expired\n" << endl; break;
+                case LIC_WRONGUSER:
+                        cerr << "Invalid user for license\n" << endl; break;
+                case LIC_WRONGHOST:
+                        cerr << "Invalid host for license\n" << endl; break;
+                case LIC_WRONGHOSTID:
+                        cerr << "Invalid hostid for license\n" << endl; break;
+                case LIC_WRONGDOMAIN:
+                        cerr << "Invalid domain for license\n" << endl; break;
+                case LIC_KEYINVALID:
+                        cerr << "Invalid key for license\n" << endl; break;
+                default:
+                        printf("Unknown error\n"); break;
+  }
+  if ( ret != 0 )
+  	exit( EXIT_FAILURE );
+}
+
+/**
+ * Parses the command line to extract and set all parameters
+ * \param argc Number of arguments (from main() )
+ * \param argv Argument list (from main() )
+ */
 bool parseCommandLine( int argc, char *argv[] )
 {
   boost::program_options::options_description theOptionsDescription( "Valid options" );
@@ -102,24 +147,37 @@ bool parseCommandLine( int argc, char *argv[] )
 
 int main(int argc, char *argv[])
 {
+	// Check license
+	license();
+	
+	// Check command line. If something went wrong, exit
   if ( !parseCommandLine( argc, argv ) )
     return EXIT_FAILURE;
 
-  shared_ptr<CAnalyzeHandler> h1 ( new CAnalyzeHandler );
+	// Initialize file handling routines
+  shared_ptr<CITKHandler> h1 ( new CITKHandler );
 	shared_ptr<CSimpleDatHandler> h2 ( new CSimpleDatHandler );	
 	shared_ptr<CDataHandler> h3 ( new CDataHandler );
+	shared_ptr<CAnalyzeHandler> h4 ( new CAnalyzeHandler );
 	
 	getFileServer().addHandler( h1 );
 	getFileServer().addHandler( h2 );
 	getFileServer().addHandler( h3 );
-		
+	getFileServer().addHandler( h4 );
+
+	// Initialize computation
 	CDiscrepancyMeasures eval(0);
   CTypedMap* parameters = eval.getParameters();
+
+  // Set parameters and input data, start computation  
   parameters->setUnsignedLong( "Label", uiLabel );
-	eval.setInput( getFileServer().loadDataSet( theInputFileNamesVec[0] ).first );
-	eval.setInput( getFileServer().loadDataSet( theInputFileNamesVec[1] ).first, 1 );
+  TDataSetPtr image = getFileServer().loadDataSet( theInputFileNamesVec[0] ).first;
+  TDataSetPtr reference = getFileServer().loadDataSet( theInputFileNamesVec[1] ).first;
+	eval.setInput( image );
+	eval.setInput( reference, 1 );
 	eval.apply();
-  
+
+  // No output file given, output to stdout
   if ( sOutputFile == "" )
   {
   	cout << "DiceCoefficient     " << parameters->getDouble( "DiceCoefficient" ) << endl;
@@ -136,15 +194,19 @@ int main(int argc, char *argv[])
     cout << "FalseNegatives      " << parameters->getUnsignedLong( "FalseNegatives" ) << endl;
     return EXIT_SUCCESS;
   }
+
+  // Output to file
   auto_ptr<ofstream> theOutputFile;
   if ( bAppendToOutput )
     theOutputFile.reset( new ofstream( sOutputFile.c_str(), ios_base::out ) );
   else
   {
     theOutputFile.reset( new ofstream( sOutputFile.c_str() ) );
-    (*theOutputFile) << "Input image,Reference image,Dice coefficient,Tanimoto coefficient,Hausdorff distance,Mean distance,";
-    (*theOutputFile) << "Input region size,Reference region size,Shared region size,Input surface,Reference surface,Combined area,";
-    (*theOutputFile) << "False positives,False negatives" << endl;
+    (*theOutputFile) << "Input image,Reference image,Dice coefficient,Tanimoto coefficient,"
+    								 << "Hausdorff distance,Mean distance,"
+    								 << "Input region size,Reference region size,Shared region size,"
+    								 << "Input surface,Reference surface,Combined area,"
+    								 << "False positives,False negatives" << endl;
   }
     
   (*theOutputFile) << theInputFileNamesVec[0] << "," << theInputFileNamesVec[1] << ",";

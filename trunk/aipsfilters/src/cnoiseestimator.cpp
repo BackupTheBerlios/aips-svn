@@ -99,17 +99,20 @@ cerr << theInputSPtr->getExtent(2) << endl;
   // bis eine Schicht gefunden wird, in der keine Nullen stehen.
   // Selbiges ist danach fr y und x zu tun
   uint uiStartZ = theInputSPtr->getExtent(2)-1;
-  for( uint z = theInputSPtr->getExtent( 2 )-1; z > theInputSPtr->getExtent( 2 ) / 2; --z )
-		for( uint y = 0; y < theInputSPtr->getExtent( 1 ) / 2; ++y )
-			for( uint x = 0; x < theInputSPtr->getExtent( 0 ) / 2; ++x )
+  for( uint z = theInputSPtr->getExtent( 2 )-1; z > uiBoxSize; --z )
+  {
+		for( uint y = 0; y < theInputSPtr->getExtent( 1 ) - uiBoxSize; ++y )
+			for( uint x = 0; x < theInputSPtr->getExtent( 0 ) - uiBoxSize; ++x )
 				if ( (*theInputSPtr)( x, y, z ) != 0 )
 				{
 					uiStartZ = z;
-					z = 1;
+					z = uiBoxSize;
 				}
+		cerr << z << endl;
+	}
 	uint uiStartY = 0; uint uiStartX = 0;
-	for( uint y = 0; y < theInputSPtr->getExtent( 1 ) / 2; ++y )
-		for( uint x = 0; x < theInputSPtr->getExtent( 0 ) / 2; ++x )
+	for( uint y = 0; y < theInputSPtr->getExtent( 1 ) - uiBoxSize; ++y )
+		for( uint x = 0; x < theInputSPtr->getExtent( 0 ) - uiBoxSize; ++x )
 				if ( (*theInputSPtr)( x, y, uiStartZ ) != 0 )
 				{
 					uiStartY = y;
@@ -123,14 +126,17 @@ cerr << theInputSPtr->getExtent(2) << endl;
 		{
 			valueVec.push_back( (*theInputSPtr)( x, y, z ) );
 		}
+
+cerr << "Starting at " << uiStartX << ";" << uiStartZ << ";" << uiStartZ << ";" << endl;
+		
 	for_each( valueVec.begin(), valueVec.end(),	dMean +=  _1 );
 	dMean /= static_cast<double>( valueVec.size() );
 	for_each( valueVec.begin(), valueVec.end(),	dVariance += ( _1 - dMean ) * ( _1 - dMean ) );
   dVariance /= static_cast<double>( valueVec.size() );
   dVariance = sqrt( dVariance );
 
-	parameters.setDouble("Mean", dMean);
-	parameters.setDouble("Variance", dVariance);
+	parameters.setDouble("Mean", dMean/sqrt(static_cast<double>(theInputSPtr->getDataRange().getMaximum())));
+	parameters.setDouble("Variance", dVariance/sqrt(static_cast<double>(theInputSPtr->getDataRange().getMaximum())));
 
 DBG3(  "Absolute: Mean " << dMean << " Variance " << dVariance << endl
 << "Relative: Mean " << dMean/static_cast<double>(theInputSPtr->getDataRange().getMaximum())

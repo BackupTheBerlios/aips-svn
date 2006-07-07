@@ -77,25 +77,23 @@ DBG2("Resetting memory pool");
   loadData( aDataSet, theFile, dataType, bFileEndianess );
 DBG("About to flip");
 	// We need to flip the z axis since dat files are saved Superior->Inferior
-// 	if ( dimensionSize[2] > 1 )
-// 	{
-// 		TImagePtr flippedImage( new TImage( aDataSet->getDimension(), aDataSet->getExtents() ) );
-// 		flippedImage->setDataRange( aDataSet->getDataRange() );
-// // 		flippedImage->setMaximum( aDataSet->getMaximum() );
-// // 		flippedImage->setMinimum( aDataSet->getMinimum() );
-// 		for( ushort z = 0; z < dimensionSize[2]; ++z )
-// 			for( ushort y = 0; y < dimensionSize[1]; ++y )
-// 				for( ushort x = 0; x < dimensionSize[0]; ++x )
-// 					(*flippedImage)( x, y, dimensionSize[2] - 1 - z ) = (*aDataSet)( x, y, z );
-// DBG("Flipped");
-// FEND;
-// 		return make_pair( flippedImage, aHeader );
-// 	}
-// 	else
-// 	{
+	if ( dimensionSize[2] > 1 )
+	{
+		TImagePtr flippedImage( new TImage( aDataSet->getDimension(), aDataSet->getExtents() ) );
+		flippedImage->setDataRange( aDataSet->getDataRange() );
+		for( ushort z = 0; z < dimensionSize[2]; ++z )
+			for( ushort y = 0; y < dimensionSize[1]; ++y )
+				for( ushort x = 0; x < dimensionSize[0]; ++x )
+					(*flippedImage)( dimensionSize[0] - 1 -  x, dimensionSize[1] - 1 - y, dimensionSize[2] - 1 - z ) = (*aDataSet)( x, y, z );
+DBG("Flipped");
+FEND;
+		return make_pair( flippedImage, aHeader );
+	}
+	else
+	{
 FEND;	
   	return make_pair( aDataSet, aHeader );
-// 	}
+	}
 }
 
 /**
@@ -143,16 +141,16 @@ cerr << "E" << endl;
 		dataType = DUInt16;
 	// Do not forget to flip our inferior->superior data to superior->inferior
 cerr << "F" << endl;
-// 	if ( aDataSet->getDimension() == 3 )
-// 	{
-// 		TImagePtr flippedImage( new TImage( aDataSet->getDimension(), aDataSet->getExtents() ) );
-// 		for( ushort z = 0; z < aDataSet->getExtent(2); ++z )
-// 			for( ushort y = 0; y < aDataSet->getExtent(1); ++y )
-// 				for( ushort x = 0; x < aDataSet->getExtent(0); ++x )
-// 					(*flippedImage)( x, aDataSet->getExtent(1) - 1 - y, aDataSet->getExtent(2) - 1 - z ) = (*aDataSet)( x, y, z );
-// 		saveData( flippedImage, theFile, dataType, aHeader.getEndianess() );
-// 	}
-//  	else
+	if ( aDataSet->getDimension() == 3 )
+	{
+		TImagePtr flippedImage( new TImage( aDataSet->getDimension(), aDataSet->getExtents() ) );
+		for( ushort z = 0; z < aDataSet->getExtent(2); ++z )
+			for( ushort y = 0; y < aDataSet->getExtent(1); ++y )
+				for( ushort x = 0; x < aDataSet->getExtent(0); ++x )
+					(*flippedImage)( aDataSet->getExtent(1) - 1 - x, aDataSet->getExtent(1) - 1 - y, aDataSet->getExtent(2) - 1 - z ) = (*aDataSet)( x, y, z );
+		saveData( flippedImage, theFile, dataType, aHeader.getEndianess() );
+	}
+ 	else
 		saveData( aDataSet, theFile, dataType, aHeader.getEndianess() );
 cerr << "G" << endl;
   theFile.close();
