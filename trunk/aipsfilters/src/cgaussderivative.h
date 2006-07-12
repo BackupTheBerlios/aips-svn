@@ -26,8 +26,6 @@
 // AIPS includes
 #include <cfilter.h>
 
-// library includes
-#include "libid.h"
 
 using namespace aips;
   

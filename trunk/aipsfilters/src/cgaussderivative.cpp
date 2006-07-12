@@ -28,7 +28,7 @@ using namespace boost;
 CGaussDerivative::CGaussDerivative( ulong ulID ) throw()
 : CFilter( ulID, "Gauss gradient", 2, 1, "CGaussDerivative", CGAUSSDERIVATIVE_VERSION, "CFilter" ) 
 {
-  setModuleID( sLibID );
+  //setModuleID( sLibID );
   
   sDocumentation = "Creates a gradient field from the input image via a gaussian derivative\n"
                    "** Input ports:\n"

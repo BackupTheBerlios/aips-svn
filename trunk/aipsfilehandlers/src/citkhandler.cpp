@@ -109,9 +109,7 @@ FBEGIN;
 		
 		// Now we must take this buffer and convert it into a CTypedData<> structure
 		
-		if ( typeid( char ) == imageIO->GetComponentTypeInfo() || typeid( unsigned char ) == imageIO->GetComponentTypeInfo() ||
-			typeid( short ) == imageIO->GetComponentTypeInfo() || typeid( ushort ) == imageIO->GetComponentTypeInfo() ||
-			typeid( long ) == imageIO->GetComponentTypeInfo() || typeid( ulong ) == imageIO->GetComponentTypeInfo() )
+		if ( typeid( short ) == imageIO->GetComponentTypeInfo() )
 		{
 			TImagePtr anImage( new TImage( uiDimensions, dims, dataDimension ) );
 			memcpy( anImage->getVoidArray(), buffer, imageIO->GetImageSizeInBytes() );
@@ -121,6 +119,36 @@ FBEGIN;
 			}
 			aDataSet = anImage;			
 		}
+    else if( typeid( unsigned char ) == imageIO->GetComponentTypeInfo() )
+    {
+      shared_ptr<CTypedData<unsigned char> > 
+        aFField( new CTypedData<unsigned char>( uiDimensions, dims, dataDimension ) );
+      memcpy( aFField->getVoidArray(), buffer, imageIO->GetImageSizeInBytes() );
+      CTypedData<unsigned char>::iterator ffieldIt = aFField->begin();
+      TImagePtr aField( new TImage( uiDimensions, dims, dataDimension ) );
+      for( TImage::iterator fieldIt = aField->begin(); fieldIt != aField->end();
+        ++fieldIt, ++ffieldIt )
+      {
+        *fieldIt = *ffieldIt;
+        aField->adjustDataRange( *fieldIt );
+      }
+      aDataSet = aField;
+    }
+    else if( typeid( int8_t ) == imageIO->GetComponentTypeInfo() )
+    {
+      shared_ptr<CTypedData<int8_t> >
+        aFField( new CTypedData<int8_t>( uiDimensions, dims, dataDimension ) );
+      memcpy( aFField->getVoidArray(), buffer, imageIO->GetImageSizeInBytes() );
+      CTypedData<int8_t>::iterator ffieldIt = aFField->begin();
+      TImagePtr aField( new TImage( uiDimensions, dims, dataDimension ) );
+      for( TImage::iterator fieldIt = aField->begin(); fieldIt != aField->end();
+        ++fieldIt, ++ffieldIt )
+      {
+        *fieldIt = *ffieldIt;
+        aField->adjustDataRange( *fieldIt );
+      }
+      aDataSet = aField;
+    }
 		else if( typeid( float ) == imageIO->GetComponentTypeInfo() )
 		{
 			shared_ptr<CTypedData<float> > 
@@ -178,43 +206,40 @@ void CITKHandler::save( const string& sFilename, const TDataFile& theData )
   if( theData.first->getDimension() > 2 )
       dimensionSize[2] = theData.first->getExtent(2);
   else
-      dimensionSize[2] = 1;
-	size_t siz = dimensionSize[0] * dimensionSize[1] * dimensionSize[2];
-	cerr << dimensionSize[0] << " " << dimensionSize[1] << " " << dimensionSize[2] << endl;        
-			
+      dimensionSize[2] = 1;			
 	if ( theData.first->getType() == typeid( short ) )
 	{		    
     TImagePtr image = static_pointer_cast<TImage>( theData.first );
-    if ( image->getDataRange().getMaximum() < 256 )
-    {
-    	cerr << "Image is byte" << endl;
-    	TSmallImagePtr sm( new TSmallImage( image->getDimension(), image->getExtents() ) );
-    	sm->setOrigin( image->getOrigin() );
-    	sm->setBaseElementDimensions( image->getBaseElementDimensions() );
-    	TImage::iterator ot = image->begin();
-    	for( TSmallImage::iterator it = sm->begin(); it != sm->end(); ++it, ++ot )
-    		(*it)=static_cast<uint8_t>( (*ot) );
-	    CITKAdapter myAdapter( sm );
-			typedef itk::Image<uint8_t,3> ImageType;
-  	  typedef itk::ImageFileWriter<ImageType> FileWriter;
-    	ImageType::Pointer myimage;
-	    myimage = myAdapter.convertToExternal<ImageType>();
-	    FileWriter::Pointer writer = FileWriter::New();
-			writer->SetFileName( sFilename.c_str() );
-  		writer->SetInput( myimage );
-			try
-			{
-				writer->Update();
-			}
-			catch( itk::ExceptionObject& err )
-			{
-				cout << err << endl;
-				throw( FileException( 
-					"CITKHandler - Unknown image format in dataset. Image was not saved" ) );
-			}
-		}
-    else
-    {
+//     if ( image->getDataRange().getMaximum() < 256 )
+//     {
+//     	cerr << "Image is byte" << endl;
+//     	TSmallImagePtr sm( new TSmallImage( image->getDimension(), image->getExtents() ) );
+//     	sm->setOrigin( image->getOrigin() );
+//     	sm->setBaseElementDimensions( image->getBaseElementDimensions() );
+//     	TImage::iterator ot = image->begin();
+//     	for( TSmallImage::iterator it = sm->begin(); it != sm->end(); ++it, ++ot )
+//     		(*it)=static_cast<uint8_t>( (*ot) );
+// 	    CITKAdapter myAdapter( sm );
+// 			typedef itk::Image<uint8_t,3> ImageType;
+//   	  typedef itk::ImageFileWriter<ImageType> FileWriter;
+//     	ImageType::Pointer myimage;
+// 	    myimage = myAdapter.convertToExternal<ImageType>();
+// 	    FileWriter::Pointer writer = FileWriter::New();
+// 			writer->SetFileName( sFilename.c_str() );
+//   		writer->SetInput( myimage );
+// 			try
+// 			{
+// 				writer->Update();
+// 			}
+// 			catch( itk::ExceptionObject& err )
+// 			{
+// 				cout << err << endl;
+// 				throw( FileException( 
+// 					"CITKHandler - Unknown image format in dataset. Image was not saved" ) );
+// 			}
+// 		}
+//     else
+//     {
 	    CITKAdapter myAdapter( image );
 			typedef itk::Image<short,3> ImageType;
   	  typedef itk::ImageFileWriter<ImageType> FileWriter;
@@ -234,7 +259,7 @@ void CITKHandler::save( const string& sFilename, const TDataFile& theData )
 				throw( FileException( 
 					"CITKHandler - Unknown image format in dataset. Image was not saved" ) );
 			}
-		}
+//		}
 	}
 #ifdef USE_DOUBLE
 	else if( theData.first->getType() == typeid( double ) )
@@ -266,7 +291,7 @@ void CITKHandler::save( const string& sFilename, const TDataFile& theData )
 		importFilter->SetOrigin( origin );
 		double spacing[3] = {1.0,1.0,1.0};
 		importFilter->SetSpacing( spacing );
-		importFilter->SetImportPointer( image->getArray(), siz, false );
+		importFilter->SetImportPointer( image->getArray(), image->getSize(), false );
 		writer->SetFileName( sFilename.c_str() );
 		writer->SetInput( importFilter->GetOutput() );
 		try
@@ -280,6 +305,43 @@ void CITKHandler::save( const string& sFilename, const TDataFile& theData )
 				"CITKHandler - Unknown image format in dataset. Image was not saved" ) );
 		}
 	}
+ else if( theData.first->getType() == typeid( uint8_t ) )
+ {
+    typedef itk::Image<uint8_t,3> ImageType;
+    typedef itk::ImportImageFilter<uint8_t,3> ImportFilterType;
+    typedef itk::ImageFileWriter<ImageType> FileWriter;
+    
+    FileWriter::Pointer writer = FileWriter::New();
+    TSmallImagePtr image = static_pointer_cast<TSmallImage>( theData.first );
+    ImportFilterType::Pointer importFilter = ImportFilterType::New();
+    ImportFilterType::SizeType size;
+    for( uint i = 0; i < 3; ++i )
+      size[i] = dimensionSize[i];
+    ImportFilterType::IndexType start;
+    start.Fill(0);
+    ImportFilterType::RegionType region;
+    region.SetIndex( start );
+    region.SetSize( size );
+    importFilter->SetRegion( region );
+    /* FIXME Origin and Spacing are not imported */
+    double origin[3] = {0.0,0.0,0.0};
+    importFilter->SetOrigin( origin );
+    double spacing[3] = {1.0,1.0,1.0};
+    importFilter->SetSpacing( spacing );
+    importFilter->SetImportPointer( image->getArray(), image->getSize(), false );
+    writer->SetFileName( sFilename.c_str() );
+    writer->SetInput( importFilter->GetOutput() );
+    try
+    {
+      writer->Update();
+    }
+    catch( itk::ExceptionObject& err )
+    {
+      cout << err << endl;
+      throw( FileException( 
+        "CITKHandler - Unknown image format in dataset. Image was not saved" ) );
+    }
+  } 
 	else
 	{
 		alog << "Unknown datatype. Nothing saved" << endl;
