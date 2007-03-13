@@ -73,7 +73,7 @@ public:
 	NEW_INSTANCE( CNoiseEstimator );
 //@}
 private:
-	DECLARE_CALL_MACRO( CNoiseEstimator::call );
+	DECLARE_CALL_MACRO( call );
 	template<typename ImageType>
 	bool compute() throw();
 };

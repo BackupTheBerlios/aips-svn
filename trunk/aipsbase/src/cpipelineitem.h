@@ -98,7 +98,7 @@ template<> void CALL<0>() throw()\
 }
 
 /** Macro to define the newInstance function conveniently in derived classes */
-#define NEW_INSTANCE( CLASS ) virtual CPipelineItem* CLASS::newInstance( ulong ulID = 0 ) const throw()\
+#define NEW_INSTANCE( CLASS ) virtual CPipelineItem* newInstance( ulong ulID = 0 ) const throw()\
 {\
   return new CLASS( ulID );\
 }

@@ -5,6 +5,6 @@
 #cmakedefine USE_ITK
 #cmakedefine USE_VTK
 #cmakedefine USE_MAGICK
-#cmakedefine vtkFloatingPointType float
+/*#cmakedefine vtkFloatingPointType float*/
 #cmakedefine DEBUG_MODE
 #cmakedefine BENCHMARK
