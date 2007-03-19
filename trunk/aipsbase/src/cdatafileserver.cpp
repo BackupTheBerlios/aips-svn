@@ -211,7 +211,7 @@ CDataFileServer& aips::getFileServer() throw()
  * \returns the handler adressed by uiIndex_
  * \throws OutOfRangeException if uiIndex_ is too large
  */
-boost::shared_ptr<CFileHandler> CDataFileServer::getHandler( uint uiIndex_ )
+boost::shared_ptr<CFileHandler> CDataFileServer::getHandler( unsigned int uiIndex_ )
 		throw( OutOfRangeException )
 {
 	if ( uiIndex_ > getNumberOfRegisteredHandlers() )
@@ -220,7 +220,7 @@ boost::shared_ptr<CFileHandler> CDataFileServer::getHandler( uint uiIndex_ )
 }
 	
 /** \return the number of registered file handlers */
-uint CDataFileServer::getNumberOfRegisteredHandlers() throw()
+unsigned int CDataFileServer::getNumberOfRegisteredHandlers() throw()
 {
 	return fileHandlerSPtrVec.size();
 }

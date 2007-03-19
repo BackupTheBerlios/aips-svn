@@ -26,8 +26,8 @@ using namespace aips;
  * \param sClassVersion_ version number of the class (type information)
  * \param sDerivedFrom_ name of the classes this class is derived from (type information)
  */
-CFilter::CFilter(  ulong ulID_, const string &sName_,
-  const ushort usNoOfInputs, const ushort usNoOfOutputs,
+CFilter::CFilter(  unsigned long ulID_, const string &sName_,
+  const unsigned short usNoOfInputs, const unsigned short usNoOfOutputs,
 	const string &sClassName_, const string &sClassVersion_, const string &sDerivedFrom_ )
   throw() : CPipelineItem ( ulID_, usNoOfInputs, usNoOfOutputs,
 		sClassName_, sClassVersion_, sDerivedFrom_ )
@@ -35,9 +35,9 @@ CFilter::CFilter(  ulong ulID_, const string &sName_,
   setModuleName( sName_ );
   setType( ITypeFilter );
   
-  for( uint i = 0; i < usNoOfInputs; ++i )
+  for( unsigned int i = 0; i < usNoOfInputs; ++i )
   	inputsVec[i].portType = IOInteger;
-  for( uint i = 0; i < usNoOfOutputs; ++i )
+  for( unsigned int i = 0; i < usNoOfOutputs; ++i )
   	outputsVec[0].portType = IOInteger;
 }
 

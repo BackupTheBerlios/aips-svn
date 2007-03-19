@@ -196,13 +196,13 @@ void CDataSetRegion::resetRegion( const size_t* extentsArr_, const size_t* origi
 const std::string CDataSetRegion::dump() const throw()
 {
   ostringstream os;
-  ushort usDimension = extentsVec.size();
+  unsigned short usDimension = extentsVec.size();
   os << "- Dimension " << usDimension << endl;
   os << "- Extents ";
-  for ( uint i = 0; i < usDimension; ++i )
+  for ( unsigned int i = 0; i < usDimension; ++i )
     os << extentsVec[i] << " ";
   os << endl << "- Origin ";
-  for ( uint i = 0; i < usDimension; ++i )
+  for ( unsigned int i = 0; i < usDimension; ++i )
     os << originVec[i] << " ";
   os << endl;
 

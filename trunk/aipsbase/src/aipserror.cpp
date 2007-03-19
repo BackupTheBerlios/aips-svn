@@ -49,7 +49,7 @@ string aips::functionString ( const char* sFunction, bool bEnter, const char* sE
  * \param sErrorMsg descriptive error message
  * \returns Pretty-printed error string
  */
-std::string shortErrorString ( uint uiLine, const char* sErrorMsg ) 
+std::string shortErrorString ( unsigned int uiLine, const char* sErrorMsg ) 
 	throw()
 {
   ostringstream os;
@@ -68,7 +68,7 @@ std::string shortErrorString ( uint uiLine, const char* sErrorMsg )
  * \param sErrorMsg descriptive error message
  * \returns Pretty-printed error string
  */
-string aips::errorString ( const char* sFile, uint uiLine,
+string aips::errorString ( const char* sFile, unsigned int uiLine,
   const char* sFunction, const char* sErrorMsg ) throw()
 {
   ostringstream os;

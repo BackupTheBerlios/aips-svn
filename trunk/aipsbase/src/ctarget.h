@@ -48,7 +48,8 @@ private:
 public:
 /* Structors */
   /// Constructor. 
-  CTarget( ulong ulID, ushort usNoOfInputs = 1, const std::string &sClassName_ = "CTarget",
+  CTarget( unsigned long ulID, unsigned short usNoOfInputs = 1, 
+    const std::string &sClassName_ = "CTarget",
 		const std::string &sClassVersion_ = CTARGET_VERSION, 
 		const std::string &sDerivedFrom_ = "CPipelineItem" )
     throw();

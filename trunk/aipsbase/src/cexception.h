@@ -4,7 +4,7 @@
  * Description: The AIPS run time error handling system                 *
  *              Exception types and classes                             *
  *                                                                      *
- * Author: Hendrik Belitz  (hbelitz@users.berlios.de)                         *
+ * Author: Hendrik Belitz  (hbelitz@users.berlios.de)                   *
  *                                                                      *
  * Version: 0.17                                                        *
  * Status : Beta                                                        *
@@ -55,6 +55,7 @@
 #include <exception> 
 #include <stdexcept>
 #include <iostream>
+#include <string>
 
 // System includes
 #include <sys/types.h> 
@@ -86,14 +87,14 @@ public:
 /** \name Structors */
   //@{
   /// Constructor
-  CException ( std::string sError_ = "Generic AIPS Exception",
-    TExceptionType theExceptionType_ = UNKNOWN, uint uiErrorNumber_ = 100, 
+  CException( std::string sError_ = "Generic AIPS Exception",
+    TExceptionType theExceptionType_ = UNKNOWN, unsigned int uiErrorNumber_ = 100, 
 		const std::string &sClassName_ = "CException", 
 		const std::string &sClassVersion_ = CEXCEPTION_VERSION, 
 		const std::string &sDerivedFrom_ = "std::exception, CBase" )
     throw();
   /// Copy constructor
-  CException ( const CException& otherException,
+  CException( const CException& otherException,
 		const std::string &sClassName_ = "CException", 
 		const std::string &sClassVersion_ = CEXCEPTION_VERSION, 
 		const std::string &sDerivedFrom_ = "std::exception, CBase"  )
@@ -111,7 +112,7 @@ public:
 /** \name Accessors */
   //@{
   /// Returns the error code 
-  uint getErrorNumber() const
+  unsigned int getErrorNumber() const
     throw(); 
   /// Returns the type of the exception
   TExceptionType getExceptionType() const
@@ -129,7 +130,7 @@ public:
 private:
   std::string sErrorString;        ///< Error string returned by what()
   TExceptionType theExceptionType; ///< Type of Exception
-  uint uiErrorNumber;              ///< Error code
+  unsigned int uiErrorNumber;              ///< Error code
 };
 
 /** \brief Class for initialization exceptions */
@@ -138,7 +139,7 @@ class BadInitException : public CException
 public:
 	/// Constructor
   BadInitException ( std::string sError_ = "System could not be initialized",
-    TExceptionType theExceptionType_ = RECOVER, uint uiErrorNumber_ = 500 ) throw();
+    TExceptionType theExceptionType_ = RECOVER, unsigned int uiErrorNumber_ = 500 ) throw();
 	/// Copy constructor
   BadInitException( const BadInitException& otherException ) 
 		throw();
@@ -153,7 +154,7 @@ class OutOfRangeException : public CException
 public:
 	/// Constructor
   OutOfRangeException ( std::string sError_ = "Parameter is out of range",
-    TExceptionType theExceptionType_ = RECOVER, uint uiErrorNumber_ = 400 ) throw();    
+    TExceptionType theExceptionType_ = RECOVER, unsigned int uiErrorNumber_ = 400 ) throw();    
 	/// Copy constructor
   OutOfRangeException( const OutOfRangeException& otherException ) 
 		throw();
@@ -168,7 +169,7 @@ class FileException : public CException
 public:
 	/// Constructor
   FileException( std::string sError_ = "Generic file error",
-    TExceptionType theExceptionType_ = RECOVER, uint uiErrorNumber_ = 200 ) throw();
+    TExceptionType theExceptionType_ = RECOVER, unsigned int uiErrorNumber_ = 200 ) throw();
 	/// Copy constructor
   FileException( const FileException& otherException ) 
 		throw();
@@ -183,7 +184,7 @@ class PlugInException : public CException
 public:
 	/// Constructor
   PlugInException( std::string sError_ = "Error on registering plugins",
-    TExceptionType theExceptionType_ = FATAL, uint uiErrorNumber_ = 700 ) throw();
+    TExceptionType theExceptionType_ = FATAL, unsigned int uiErrorNumber_ = 700 ) throw();
 	/// Copy constructor
   PlugInException( const PlugInException& otherException ) 
 		throw();
@@ -198,7 +199,7 @@ class NotPresentException : public CException
 public:
 	/// Constructor
   NotPresentException( std::string sError_ = "Tried to access NULL reference member",
-    TExceptionType theExceptionType_ = RECOVER, uint uiErrorNumber_ = 600 ) throw();
+    TExceptionType theExceptionType_ = RECOVER, unsigned int uiErrorNumber_ = 600 ) throw();
 	/// Copy constructor
   NotPresentException( const NotPresentException& otherException ) 
 		throw();
@@ -213,7 +214,7 @@ class NullException : public CException
 public:
 	/// Constructor
   NullException( std::string sError_ = "Got NULL pointer! SEGFAULT feared...",
-    TExceptionType theExceptionType_ = FATAL, uint uiErrorNumber_ = 300 ) throw();
+    TExceptionType theExceptionType_ = FATAL, unsigned int uiErrorNumber_ = 300 ) throw();
 	/// Copy constructor
   NullException( const NullException& otherException ) 
 		throw();
@@ -228,7 +229,7 @@ class RunTimeTypeException : public CException
 public:
 	/// Constructor
   RunTimeTypeException( std::string sError_ = "Runtime type error",
-    TExceptionType theExceptionType_ = FATAL, uint uiErrorNumber_ = 800 ) throw();
+    TExceptionType theExceptionType_ = FATAL, unsigned int uiErrorNumber_ = 800 ) throw();
 	/// Copy constructor
   RunTimeTypeException( const RunTimeTypeException& otherException )
 		throw();

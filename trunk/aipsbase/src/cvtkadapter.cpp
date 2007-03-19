@@ -150,11 +150,11 @@ DBG3( "Data type is int" );
   	  }
   	  break;
 		case VTK_UNSIGNED_INT:
-DBG3( "Data type is uint" );
+DBG3( "Data type is unsigned int" );
 			if ( 1 )
 			{
-	    vtkUnsignedIntArray* myUIntArray = static_cast<vtkUnsignedIntArray*>( p->GetScalars() );
-  	  aDataSet = this->convertVTKImage<TField, vtkUnsignedIntArray>( myUIntArray, dimensionSize );
+	    vtkUnsignedIntArray* myunsigned intArray = static_cast<vtkUnsignedIntArray*>( p->GetScalars() );
+  	  aDataSet = this->convertVTKImage<TField, vtkUnsignedIntArray>( myunsigned intArray, dimensionSize );
   	  }
   	  break;
 		case VTK_LONG:
@@ -166,11 +166,11 @@ DBG3( "Data type is long" );
   	  }
   	  break;
 		case VTK_UNSIGNED_LONG:
-DBG3( "Data type is ulong" );
+DBG3( "Data type is unsigned long" );
 			if ( 1 )
 			{
-	    vtkUnsignedLongArray* myULongArray = static_cast<vtkUnsignedLongArray*>( p->GetScalars() );
-  	  aDataSet = this->convertVTKImage<TField, vtkUnsignedLongArray>( myULongArray, dimensionSize );
+	    vtkUnsignedLongArray* myunsigned longArray = static_cast<vtkUnsignedLongArray*>( p->GetScalars() );
+  	  aDataSet = this->convertVTKImage<TField, vtkUnsignedLongArray>( myunsigned longArray, dimensionSize );
   	  }
   	  break;
 		case VTK_FLOAT:
@@ -240,13 +240,13 @@ vtkImageData* CVTKAdapter::convertToExternal() throw( NullException )
     throw( NullException( "No pointer to internal data set" ) );
     
   // Determine dimension size
-  uint uiDataDimensionality = internalDataSPtr->getDimension();
+  unsigned int uiDataDimensionality = internalDataSPtr->getDimension();
   if ( uiDataDimensionality > 3 )
   	alog << LWARN << "Can only convert 1D to 3D images to vtkImageData!" << endl;
   	
   vector<size_t> dimensionSize( 3 );
   size_t dataSize = 1; 
-  for( uint i = 0; i < internalDataSPtr->getDimension(); ++i )
+  for( unsigned int i = 0; i < internalDataSPtr->getDimension(); ++i )
   {
   	dimensionSize[i] = internalDataSPtr->getExtent(i);	
   	dataSize *= dimensionSize[i];
@@ -310,7 +310,7 @@ DBG3("Converting to short");
     double* array = new double[dataSize];
     //memcpy( array, shortSet->getArray(), dataSize );
     TImage::iterator it = shortSet->begin();
-    for( uint k = 0; k < dataSize; ++k, ++it )
+    for( unsigned int k = 0; k < dataSize; ++k, ++it )
     {
     	array[k] = static_cast<double>(*it);
     }

@@ -58,7 +58,7 @@ void CCArrayDataAdapter::setExternalData( short* sImagePtr, size_t dimension,
 	externalShortDataPtr = sImagePtr;	
 	externalDoubleDataPtr = NULL;
 	dataExtents.clear();
-	for( ushort i = 0; i < dimension; i++ )
+	for( unsigned short i = 0; i < dimension; i++ )
 		dataExtents.push_back( extents[i] );
 }
 
@@ -76,7 +76,7 @@ void CCArrayDataAdapter::setExternalData( double* dFieldPtr, size_t dimension,
 	externalDoubleDataPtr = dFieldPtr;
 	externalShortDataPtr = NULL;
 	dataExtents.clear();
-	for( ushort i = 0; i < dimension; i++ )
+	for( unsigned short i = 0; i < dimension; i++ )
 		dataExtents.push_back( extents[i] );
 }
 
@@ -142,12 +142,12 @@ FBEGIN;
 		TImagePtr imagePtr = static_pointer_cast<TImage>( internalDataSPtr );
 		if ( imagePtr )
 		{
-			uint maxZ = 1;
+			unsigned int maxZ = 1;
 			if ( imagePtr->getDimension() == 3 ) 
 				maxZ = imagePtr->getExtent( 2 );
-		 	for( uint z = 0; z < maxZ; ++z )
-			 	for( uint y = 0; y < imagePtr->getExtent( 1 ); ++y )
-					for( uint x = 0; x < imagePtr->getExtent( 0 ); ++x )
+		 	for( unsigned int z = 0; z < maxZ; ++z )
+			 	for( unsigned int y = 0; y < imagePtr->getExtent( 1 ); ++y )
+					for( unsigned int x = 0; x < imagePtr->getExtent( 0 ); ++x )
 						if ( bSwapYAxis )
 							dataPtr[ x + y * imagePtr->getExtent( 0 ) 
 								+ z * imagePtr->getExtent( 0 ) * imagePtr->getExtent( 1 )]
@@ -163,11 +163,11 @@ FBEGIN;
 	  TFieldPtr fieldPtr = static_pointer_cast<TField>( internalDataSPtr );
 		if ( fieldPtr )
 		{
-		 	uint maxZ = 1;		 	
+		 	unsigned int maxZ = 1;		 	
 			if ( fieldPtr->getDimension() == 3 ) maxZ = fieldPtr->getExtent( 2 );
-				for( uint z = 0; z < maxZ; ++z )
-			 		for( uint y = 0; y < fieldPtr->getExtent( 1 ); ++y )
-						for( uint x = 0; x < fieldPtr->getExtent( 0 ); ++x )
+				for( unsigned int z = 0; z < maxZ; ++z )
+			 		for( unsigned int y = 0; y < fieldPtr->getExtent( 1 ); ++y )
+						for( unsigned int x = 0; x < fieldPtr->getExtent( 0 ); ++x )
 							if ( bSwapYAxis )
 								dataPtr[x + y * fieldPtr->getExtent( 0 ) + z * fieldPtr->getExtent( 0 ) 
 									* fieldPtr->getExtent( 1 )]
@@ -193,12 +193,12 @@ TDataSetPtr CCArrayDataAdapter::actualBackConversion( T* inputPtr )
 {	
 FBEGIN;
 	shared_ptr<U> theField( new U( dataExtents.size(), dataExtents ) );
-	uint maxZ = 1;
+	unsigned int maxZ = 1;
 	if ( theField->getDimension() == 3 ) 
 		maxZ = theField->getExtent( 2 );
- 	for( uint z = 0; z < maxZ; ++z )
-	 	for( uint y = 0; y < theField->getExtent( 1 ); ++y )
-			for( uint x = 0; x < theField->getExtent( 0 ); ++x )
+ 	for( unsigned int z = 0; z < maxZ; ++z )
+	 	for( unsigned int y = 0; y < theField->getExtent( 1 ); ++y )
+			for( unsigned int x = 0; x < theField->getExtent( 0 ); ++x )
 				if ( bSwapYAxis )
 					(*theField)( x, theField->getExtent( 1 ) - 1 - y, z ) = 
 						static_cast<typename U::TDataType>(	inputPtr[ x + y * theField->getExtent( 0 ) 

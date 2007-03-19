@@ -60,10 +60,10 @@ namespace aips {
 
 // Some symbolic constants for dimension access
 
-const ushort DATAWIDTH  = 0; ///< First dimension of a data set
-const ushort DATAHEIGHT = 1; ///< Second dimension of a data set
-const ushort DATADEPTH  = 2; ///< Third dimension of a data set
-const ushort DATATIME   = 3; ///< Fourth dimension of a data set
+const unsigned short DATAWIDTH  = 0; ///< First dimension of a data set
+const unsigned short DATAHEIGHT = 1; ///< Second dimension of a data set
+const unsigned short DATADEPTH  = 2; ///< Third dimension of a data set
+const unsigned short DATATIME   = 3; ///< Fourth dimension of a data set
 
 /**
  * \brief An abstract base class for generic data fields.
@@ -84,12 +84,12 @@ public:
 /** \name Structors */
   //@{
   /// Constructor
-  CDataSet( const ushort usDimension_, const size_t* extentArr_,
+  CDataSet( const unsigned short usDimension_, const size_t* extentArr_,
     const size_t dataDimensionSize_ = 1, const std::string &sClassName_ = "CDataSet", 
 		const std::string &sClassVersion_ = CDATASET_VERSION,
     const std::string &sDerivedFrom_ = "CBase") throw();
   /// Constructor (2nd argument overloaded)
-  CDataSet( const ushort usDimension_, const std::vector<size_t> extentVec_,
+  CDataSet( const unsigned short usDimension_, const std::vector<size_t> extentVec_,
     const size_t dataDimensionSize_ = 1, const std::string &sClassName_ = "CDataSet",
 		const std::string &sClassVersion_ = CDATASET_VERSION,
     const std::string &sDerivedFrom_ = "CBase") throw();
@@ -111,13 +111,13 @@ public:
   virtual const std::type_info& getType() const
     throw() =0;
   /// Returns the Dimension of the data set
-  ushort getDimension() const
+  unsigned short getDimension() const
     throw();
   /// Returns the data dimension of each field entry of the data set
   size_t getDataDimension() const
     throw();
   /// Returns the extent of the given dimension
-  size_t getExtent( const ushort usIndex = 0 ) const
+  size_t getExtent( const unsigned short usIndex = 0 ) const
     throw( OutOfRangeException );
   /// Get the array extents
   const std::vector<size_t> getExtents() const
@@ -129,13 +129,13 @@ public:
   std::vector<double> getBaseElementDimensions() const
   	throw();
   /// Get one dimension of the base element
-  double getBaseElementDimension( const ushort usIndex ) const
+  double getBaseElementDimension( const unsigned short usIndex ) const
   	throw( OutOfRangeException );
   /// Get the origin of the data set
   std::vector<double> getOrigin() const
     throw();
   /// Get a coordinate of the origin of the data set
-  double getOrigin( const ushort usIndex ) const
+  double getOrigin( const unsigned short usIndex ) const
     throw( OutOfRangeException );
   /// Get the number of elements in the data set
   size_t getSize() const
@@ -144,7 +144,7 @@ public:
 /** \name Mutators */
   //@{
   /// Set a specific base element dimension
-	void setBaseElementDimension( const ushort usIndex, const double dValue )
+	void setBaseElementDimension( const unsigned short usIndex, const double dValue )
 		throw( OutOfRangeException );
   /// Set all base element dimensions (vector version)
 	void setBaseElementDimensions( const std::vector<double> dimensionsVec_ )
@@ -153,7 +153,7 @@ public:
   void setBaseElementDimensions( const double* dimensionsArr_ )
     throw();
   /// Set a specific origin coordinate
-  void setOrigin( const ushort usIndex, const double dValue )
+  void setOrigin( const unsigned short usIndex, const double dValue )
     throw( OutOfRangeException );
   /// Set all origin coordinates (vector version)
   void setOrigin( const std::vector<double> originVec_ )
@@ -175,7 +175,7 @@ public:
     throw();
   //@}
 protected:
-  ushort usDimension;            ///< Dimension of the data set
+  unsigned short usDimension;            ///< Dimension of the data set
   std::vector<size_t> extentVec; ///< Size of each dimension
   std::vector<double> baseElementDimensionsVec; ///< Size of one base element
   std::vector<double> originVec; ///< Size of one base element

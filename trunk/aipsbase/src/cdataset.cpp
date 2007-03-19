@@ -34,7 +34,7 @@ using namespace boost::lambda;
  * \post Origin initialised with \f$ \vec{0} \f$.
  * \post Base element dimension initialised with \f$ \vec{1} \f$.
  */
-CDataSet::CDataSet( const ushort usDimension_,
+CDataSet::CDataSet( const unsigned short usDimension_,
   const size_t* extentArr_,
   const size_t dataDimensionSize_,
   const std::string &sClassName_, 
@@ -45,7 +45,7 @@ CDataSet::CDataSet( const ushort usDimension_,
   dataDimensionSize( dataDimensionSize_ )
 {
 FBEGIN;
-  for ( ushort i = 0; i < usDimension; i++ )
+  for ( unsigned short i = 0; i < usDimension; i++ )
   {
     extentVec[i] = extentArr_[i];
     baseElementDimensionsVec[i] = 1.0;
@@ -57,13 +57,13 @@ FBEGIN;
     alog << LINFO << "Creating instance " << static_cast<void*>( this ) << " of class CDataSet" << endl;
     alog << "- Dimension " << usDimension << endl;
     alog << "- Extents ";
-    for ( uint i = 0; i < usDimension; ++i )
+    for ( unsigned int i = 0; i < usDimension; ++i )
       alog << extentVec[i] << " ";
     alog << endl << "- Origin ";
-    for ( uint i = 0; i < usDimension; ++i )
+    for ( unsigned int i = 0; i < usDimension; ++i )
       alog << originVec[i] << " ";
     alog << endl << "- Origin ";
-    for ( uint i = 0; i < usDimension; ++i )
+    for ( unsigned int i = 0; i < usDimension; ++i )
       alog << baseElementDimensionsVec[i] << " ";
     alog << endl << "- Data dimension " << dataDimensionSize << endl;    
   }
@@ -81,7 +81,7 @@ FEND;
  * \post Origin initialised with \f$ \vec{0} \f$.
  * \post Base element dimension initialised with \f$ \vec{1} \f$.
  */
-CDataSet::CDataSet( const ushort usDimension_,
+CDataSet::CDataSet( const unsigned short usDimension_,
   const vector<size_t> extentVec_,
   const size_t dataDimensionSize_,
   const std::string &sClassName_, 
@@ -92,7 +92,7 @@ CDataSet::CDataSet( const ushort usDimension_,
   originVec( usDimension_ ), dataDimensionSize( dataDimensionSize_ )
 {
 FBEGIN;
-	for ( ushort i = 0; i < usDimension; i++ )
+	for ( unsigned short i = 0; i < usDimension; i++ )
   {
     baseElementDimensionsVec[i] = 1.0;
     originVec[i] = 0.0;
@@ -174,7 +174,7 @@ FEND;
  *************/
 
 /** \returns the Dimension of the data set */
-ushort CDataSet::getDimension() const throw()
+unsigned short CDataSet::getDimension() const throw()
 {
   return usDimension;
 }
@@ -190,7 +190,7 @@ size_t CDataSet::getDataDimension() const throw()
  * \param usIndex dimensional index with valid values from [0..(dim-1)]. Defaults to 0.
  * \throws OutOfRangeException if usIndex is greater than dataset dimension minus one
  */
-size_t CDataSet::getExtent( const ushort usIndex ) const
+size_t CDataSet::getExtent( const unsigned short usIndex ) const
   throw( OutOfRangeException )
 {
   if ( usIndex > ( usDimension - 1 ) )
@@ -215,7 +215,7 @@ std::vector<double> CDataSet::getBaseElementDimensions() const throw()
  * \returns value of the requested dimension
  * \throws OutOfRangeException if usIndex is greater than dataset dimension minus one
  */
-double CDataSet::getBaseElementDimension( const ushort usIndex ) const
+double CDataSet::getBaseElementDimension( const unsigned short usIndex ) const
   throw( OutOfRangeException )
 {
   if ( usIndex > ( usDimension - 1 ) )
@@ -234,7 +234,7 @@ std::vector<double> CDataSet::getOrigin() const throw()
  * \returns origin coordinate of the requested dimension
  * \throws OutOfRangeException if usIndex is greater than dataset dimension minus one
  */
-double CDataSet::getOrigin( const ushort usIndex ) const
+double CDataSet::getOrigin( const unsigned short usIndex ) const
   throw( OutOfRangeException )
 {
   if ( usIndex > ( usDimension - 1 ) )
@@ -260,7 +260,8 @@ size_t CDataSet::getSize() const throw()
  * \throws OutOfRangeException if usIndex is greater than dataset dimension minus one
  * \post given base element dimension was updated
  */
-void CDataSet::setBaseElementDimension( const ushort usIndex, const double dValue ) throw( OutOfRangeException )
+void CDataSet::setBaseElementDimension( const unsigned short usIndex, const double dValue ) 
+  throw( OutOfRangeException )
 {
   if ( usIndex > ( usDimension - 1 ) )
     throw( OutOfRangeException( SERROR("Index out of range"), CException::RECOVER, ERR_BADDIMENSION ) );
@@ -272,7 +273,8 @@ void CDataSet::setBaseElementDimension( const ushort usIndex, const double dValu
  * \throws OutOfRangeException if vector of updated dimensions has the wrong size
  * \post base element dimensions were updated
  */
-void CDataSet::setBaseElementDimensions( const std::vector<double> dimensionsVec_ ) throw( OutOfRangeException )
+void CDataSet::setBaseElementDimensions( const std::vector<double> dimensionsVec_ ) 
+  throw( OutOfRangeException )
 {
   if ( dimensionsVec_.size() != baseElementDimensionsVec.size() )
     throw( OutOfRangeException( SERROR("Dimension vector has wrong number of elements"),
@@ -287,7 +289,7 @@ void CDataSet::setBaseElementDimensions( const std::vector<double> dimensionsVec
  */
 void CDataSet::setBaseElementDimensions( const double* dimensionsArr_ ) throw()
 {
-  for( uint i = 0; i < usDimension; ++i )
+  for( unsigned int i = 0; i < usDimension; ++i )
     baseElementDimensionsVec[i] = dimensionsArr_[i];
 }
 
@@ -297,7 +299,7 @@ void CDataSet::setBaseElementDimensions( const double* dimensionsArr_ ) throw()
  * \throws OutOfRangeException if usIndex is greater than dataset dimension minus one
  * \post origin coordinate was updated
  */
-void CDataSet::setOrigin( const ushort usIndex, const double dValue ) throw( OutOfRangeException )
+void CDataSet::setOrigin( const unsigned short usIndex, const double dValue ) throw( OutOfRangeException )
 {
   if ( usIndex > ( usDimension - 1 ) )
     throw( OutOfRangeException( SERROR("Index out of range"), CException::RECOVER, ERR_BADDIMENSION ) );
@@ -324,7 +326,7 @@ void CDataSet::setOrigin( const std::vector<double> originVec_ ) throw( OutOfRan
  */
 void CDataSet::setOrigin( const double* originVec_ ) throw()
 {
-  for( uint i = 0; i < usDimension; ++i )
+  for( unsigned int i = 0; i < usDimension; ++i )
     originVec[i] = originVec_[i];
 }
 
@@ -364,13 +366,13 @@ const string CDataSet::dump() const throw()
   
   os << "- Dimension " << usDimension << endl;
   os << "- Extents ";
-  for ( uint i = 0; i < usDimension; ++i )
+  for ( unsigned int i = 0; i < usDimension; ++i )
     os << extentVec[i] << " ";
   os << endl << "- Origin ";
-  for ( uint i = 0; i < usDimension; ++i )
+  for ( unsigned int i = 0; i < usDimension; ++i )
     os << originVec[i] << " ";
   os << endl << "- Base element dimension ";
-  for ( uint i = 0; i < usDimension; ++i )
+  for ( unsigned int i = 0; i < usDimension; ++i )
     os << baseElementDimensionsVec[i] << " ";
   os << endl << "- Data dimension " << dataDimensionSize << endl;
 

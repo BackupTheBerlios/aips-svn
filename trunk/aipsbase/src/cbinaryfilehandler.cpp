@@ -261,22 +261,22 @@ DBG( "Reading into dataset with dimensions " << theTargetDataAPtr->getExtent(0)
     switch( theVoxelType )
 		{
     	case DInt8:
-      	loadSpecificType<TImage, int8_t>( imageAPtr, theFile, bFileEndianess, theVoxelSize );
+      	loadSpecificType<TImage, boost::int8_t>( imageAPtr, theFile, bFileEndianess, theVoxelSize );
         break;
       case DInt16:
-      	loadSpecificType<TImage, int16_t>( imageAPtr, theFile, bFileEndianess, theVoxelSize );
+      	loadSpecificType<TImage, boost::int16_t>( imageAPtr, theFile, bFileEndianess, theVoxelSize );
         break;
       case DInt32:
-      	loadSpecificType<TImage, int32_t>( imageAPtr, theFile, bFileEndianess, theVoxelSize );
+      	loadSpecificType<TImage, boost::int32_t>( imageAPtr, theFile, bFileEndianess, theVoxelSize );
         break;
       case DUInt8:
-      	loadSpecificType<TImage, uint8_t>( imageAPtr, theFile, bFileEndianess, theVoxelSize );
+      	loadSpecificType<TImage, boost::uint8_t>( imageAPtr, theFile, bFileEndianess, theVoxelSize );
         break;
       case DUInt16:
-      	loadSpecificType<TImage, uint16_t>( imageAPtr, theFile, bFileEndianess, theVoxelSize );
+      	loadSpecificType<TImage, boost::uint16_t>( imageAPtr, theFile, bFileEndianess, theVoxelSize );
         break;
       case DUInt32:
-      	loadSpecificType<TImage, uint32_t>( imageAPtr, theFile, bFileEndianess, theVoxelSize );
+        loadSpecificType<TImage, boost::uint32_t>( imageAPtr, theFile, bFileEndianess, theVoxelSize );
         break;
       case DFloat16:
       	loadSpecificType<TImage, float>( imageAPtr, theFile, bFileEndianess, theVoxelSize );
@@ -297,22 +297,22 @@ DBG( "Reading into dataset with dimensions " << theTargetDataAPtr->getExtent(0)
 		switch( theVoxelType )
     {
     	case DInt8:
-      	loadSpecificType<TField, int8_t>( fieldAPtr, theFile, bFileEndianess, theVoxelSize );
+      	loadSpecificType<TField, boost::int8_t>( fieldAPtr, theFile, bFileEndianess, theVoxelSize );
         break;
       case DInt16:
-      	loadSpecificType<TField, int16_t>( fieldAPtr, theFile, bFileEndianess, theVoxelSize );
+      	loadSpecificType<TField, boost::int16_t>( fieldAPtr, theFile, bFileEndianess, theVoxelSize );
         break;
       case DInt32:
-      	loadSpecificType<TField, int32_t>( fieldAPtr, theFile, bFileEndianess, theVoxelSize );
+      	loadSpecificType<TField, boost::int32_t>( fieldAPtr, theFile, bFileEndianess, theVoxelSize );
       	break;
       case DUInt8:
-      	loadSpecificType<TField, uint8_t>( fieldAPtr, theFile, bFileEndianess, theVoxelSize );
+      	loadSpecificType<TField, boost::uint8_t>( fieldAPtr, theFile, bFileEndianess, theVoxelSize );
         break;
       case DUInt16:
-      	loadSpecificType<TField, uint16_t>( fieldAPtr, theFile, bFileEndianess, theVoxelSize );
+      	loadSpecificType<TField, boost::uint16_t>( fieldAPtr, theFile, bFileEndianess, theVoxelSize );
         break;
       case DUInt32:
-      	loadSpecificType<TField, uint32_t>( fieldAPtr, theFile, bFileEndianess, theVoxelSize );
+      	loadSpecificType<TField, boost::uint32_t>( fieldAPtr, theFile, bFileEndianess, theVoxelSize );
         break;
       case DFloat16:
       	loadSpecificType<TField, float>( fieldAPtr, theFile, bFileEndianess, theVoxelSize );
@@ -372,22 +372,22 @@ void CBinaryFileHandler::saveData( TDataSetPtr theSourceDataAPtr, ostream& theFi
         saveSpecificType<TField, long double>( fieldAPtr, theFile, bFileEndianess, theVoxelSize );
         break;
       case DInt8:
-        saveSpecificType<TField, int8_t>( fieldAPtr, theFile, bFileEndianess, theVoxelSize );
+        saveSpecificType<TField, boost::int8_t>( fieldAPtr, theFile, bFileEndianess, theVoxelSize );
         break;
       case DInt16:
-        saveSpecificType<TField, int16_t>( fieldAPtr, theFile, bFileEndianess, theVoxelSize );
+        saveSpecificType<TField, boost::int16_t>( fieldAPtr, theFile, bFileEndianess, theVoxelSize );
         break;
       case DInt32:
-        saveSpecificType<TField, int32_t>( fieldAPtr, theFile, bFileEndianess, theVoxelSize );
+        saveSpecificType<TField, boost::int32_t>( fieldAPtr, theFile, bFileEndianess, theVoxelSize );
         break;
       case DUInt8:
-        saveSpecificType<TField, uint8_t>( fieldAPtr, theFile, bFileEndianess, theVoxelSize );
+        saveSpecificType<TField, boost::uint8_t>( fieldAPtr, theFile, bFileEndianess, theVoxelSize );
         break;
       case DUInt16:
-        saveSpecificType<TField, uint16_t>( fieldAPtr, theFile, bFileEndianess, theVoxelSize );
+        saveSpecificType<TField, boost::uint16_t>( fieldAPtr, theFile, bFileEndianess, theVoxelSize );
         break;
       case DUInt32:
-        saveSpecificType<TField, uint32_t>( fieldAPtr, theFile, bFileEndianess, theVoxelSize );
+        saveSpecificType<TField, boost::uint32_t>( fieldAPtr, theFile, bFileEndianess, theVoxelSize );
         break;
     }
 	}
@@ -409,22 +409,22 @@ void CBinaryFileHandler::saveData( TDataSetPtr theSourceDataAPtr, ostream& theFi
         saveSpecificType<TImage, long double>( imageAPtr, theFile, bFileEndianess, theVoxelSize );
         break;
       case DInt8:
-        saveSpecificType<TImage, int8_t>( imageAPtr, theFile, bFileEndianess, theVoxelSize );
+        saveSpecificType<TImage, boost::int8_t>( imageAPtr, theFile, bFileEndianess, theVoxelSize );
         break;
       case DInt16:
-        saveSpecificType<TImage, int16_t>( imageAPtr, theFile, bFileEndianess, theVoxelSize );
+        saveSpecificType<TImage, boost::int16_t>( imageAPtr, theFile, bFileEndianess, theVoxelSize );
         break;
       case DInt32:
-        saveSpecificType<TImage, int32_t>( imageAPtr, theFile, bFileEndianess, theVoxelSize );
+        saveSpecificType<TImage, boost::int32_t>( imageAPtr, theFile, bFileEndianess, theVoxelSize );
         break;
       case DUInt8:
-        saveSpecificType<TImage, uint8_t>( imageAPtr, theFile, bFileEndianess, theVoxelSize );
+        saveSpecificType<TImage, boost::uint8_t>( imageAPtr, theFile, bFileEndianess, theVoxelSize );
         break;
       case DUInt16:
-        saveSpecificType<TImage, uint16_t>( imageAPtr, theFile, bFileEndianess, theVoxelSize );
+        saveSpecificType<TImage, boost::uint16_t>( imageAPtr, theFile, bFileEndianess, theVoxelSize );
         break;
       case DUInt32:
-      	saveSpecificType<TImage, uint32_t>( imageAPtr, theFile, bFileEndianess, theVoxelSize );
+      	saveSpecificType<TImage, boost::uint32_t>( imageAPtr, theFile, bFileEndianess, theVoxelSize );
         break;
     }
 	}

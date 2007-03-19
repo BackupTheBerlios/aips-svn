@@ -23,7 +23,7 @@ using boost::shared_ptr;
  * CSubject::SObserverListEntry                                                                     *
  ****************************************************************************************************/
 
-CSubject::SObserverListEntry::SObserverListEntry( CObserver* anObserverPtr_,	uint uiInterestType_ )
+CSubject::SObserverListEntry::SObserverListEntry( CObserver* anObserverPtr_,	unsigned int uiInterestType_ )
 	throw()	: anObserverPtr( anObserverPtr_ ), uiInterestType( uiInterestType_ )
 {
 }
@@ -74,7 +74,7 @@ CSubject::~CSubject() throw()
  * \param uiInterestType interest type to register
  * \throws NullException if given observer pointer is NULL
  */
-void CSubject::attachObserver( CObserver* const anObserverPtr, uint uiInterestType ) throw( NullException )
+void CSubject::attachObserver( CObserver* const anObserverPtr, unsigned int uiInterestType ) throw( NullException )
 {
 	if ( anObserverPtr == NULL )
 		throw( NullException( SERROR("Observer is NULL"), CException::RECOVER, ERR_CALLERNULL ) );

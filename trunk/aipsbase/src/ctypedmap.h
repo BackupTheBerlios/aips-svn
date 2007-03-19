@@ -21,7 +21,7 @@
  *                      by P. Musmann                                   *
  *                     Added hasKeyValue() and getKeyType()             *
  *                     Added exceptions and type safety for accessors   *
- *                     Added accessors for bool and ulong               *
+ *                     Added accessors for bool and unsigned long               *
  *                     Added load and save methods                      *
  *                     Updated documentation                            *
  *          2004-04-29 Renamed class to CTypedMap                       *
@@ -96,8 +96,8 @@ public:
   /// Returns the long value stored under the given key
   long getLong( const std::string& sKey ) const
     throw( NotPresentException );
-	/// Returns the ulong value stored under the given key
-  ulong getUnsignedLong( const std::string& sKey ) const
+	/// Returns the unsigned long value stored under the given key
+  unsigned long getUnsignedLong( const std::string& sKey ) const
     throw( NotPresentException );
 	/// Returns the bool value stored under the given key
   bool getBool( const std::string& sKey ) const
@@ -124,8 +124,8 @@ public:
   /// Sets the value for the given key to a new long value
   void setLong( const std::string& sKey, const long lValue )
     throw();
-  /// Sets the value for the given key to a new ulong value
-  void setUnsignedLong( const std::string& sKey, const ulong ulValue )
+  /// Sets the value for the given key to a new unsigned long value
+  void setUnsignedLong( const std::string& sKey, const unsigned long ulValue )
     throw();	
   /// Sets the value for the given key to a new bool value
   void setBool( const std::string& sKey, const bool bValue )

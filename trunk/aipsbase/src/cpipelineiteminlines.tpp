@@ -22,7 +22,7 @@
 /**
  * \returns Fanin of item
  */
-inline ushort CPipelineItem::getFanIn() const throw()
+inline unsigned short CPipelineItem::getFanIn() const throw()
 {
   return usFanIn;
 }
@@ -30,7 +30,7 @@ inline ushort CPipelineItem::getFanIn() const throw()
 /**
  * \returns Fanout of item
  */
-inline ushort CPipelineItem::getFanOut() const throw()
+inline unsigned short CPipelineItem::getFanOut() const throw()
 {
   return usFanOut;
 }
@@ -52,7 +52,7 @@ inline const std::string CPipelineItem::getDocumentation() const throw()
 /**
  * \returns the unique processing id of the item
  */
-inline ulong CPipelineItem::getID() const throw()
+inline unsigned long CPipelineItem::getID() const throw()
 {
   return ulID;
 }
@@ -60,7 +60,7 @@ inline ulong CPipelineItem::getID() const throw()
 /**
  * \returns the numerical represantation of the item type
  */
-inline ushort CPipelineItem::getType() const throw()
+inline unsigned short CPipelineItem::getType() const throw()
 {
   return itemType;
 }
@@ -95,7 +95,7 @@ inline void CPipelineItem::setModuleName( const std::string &sNewName ) throw()
 /**
  * \param itemType_ the item type
  */
-inline void CPipelineItem::setType( const ushort itemType_ ) throw()
+inline void CPipelineItem::setType( const unsigned short itemType_ ) throw()
 {
   itemType = itemType_;
 }
@@ -117,7 +117,8 @@ inline void CPipelineItem::setModuleID( const std::string sLibID ) throw()
  * \param uiPort input port number
  * \returns Input port data set type
  */
-inline CPipelineItem::EIOTypes CPipelineItem::getInputType( uint uiPort ) const throw( OutOfRangeException )
+inline CPipelineItem::EIOTypes CPipelineItem::getInputType( unsigned int uiPort ) 
+  const throw( OutOfRangeException )
 {
 	if ( uiPort > usFanIn )
 		throw( OutOfRangeException( SERROR("Input port number too high"), CException::FATAL, ERR_RANGE ) );
@@ -128,7 +129,7 @@ inline CPipelineItem::EIOTypes CPipelineItem::getInputType( uint uiPort ) const 
  * \param uiPort output port number
  * \returns Output port data set type
  */
-inline CPipelineItem::EIOTypes CPipelineItem::getOutputType( uint uiPort ) const throw( OutOfRangeException )
+inline CPipelineItem::EIOTypes CPipelineItem::getOutputType( unsigned int uiPort ) const throw( OutOfRangeException )
 {
 	if ( uiPort > usFanOut )
 		throw( OutOfRangeException( SERROR("Output port number too high"), CException::FATAL, ERR_RANGE ) );
@@ -156,8 +157,8 @@ inline bool CPipelineItem::isReady() const throw()
  * \param usMaxDataDim Maximum required data dimension for dataset ( 0 == no maximum required )
  */
 template<typename U, typename T> 
-inline bool CPipelineItem::checkInput( T inputPtr, ushort usMinDim, 
-	ushort usMaxDim, ushort usMinDataDim, ushort usMaxDataDim ) throw()
+inline bool CPipelineItem::checkInput( T inputPtr, unsigned short usMinDim, 
+	unsigned short usMaxDim, unsigned short usMinDataDim, unsigned short usMaxDataDim ) throw()
 {
 	if ( !inputPtr )
 	{

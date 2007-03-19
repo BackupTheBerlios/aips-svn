@@ -40,7 +40,7 @@ private:
 public:
 /* Structors */
   /// Constructor
-  CConverter( ulong ulID, ushort usFanIn = 1, ushort usFanOut = 1, 
+  CConverter( unsigned long ulID, unsigned short usFanIn = 1, unsigned short usFanOut = 1, 
 		const std::string &sClassName_ = "CConverter", const std::string &sClassVersion_ = "0.1.1", 
 		const std::string &sDerivedFrom_ = "CPipelineItem" ) throw();
   /// Destructor

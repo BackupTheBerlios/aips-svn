@@ -41,8 +41,8 @@ TDataSetPtr CITKAdapter::convertToInternal() throw( NullException )
 	
 	if ( typeid( *externalData ) == typeid( itk::Image<short,2> ) )
 		return actualInternalConversion< itk::Image<int16_t,2> >();
-  else if ( typeid( *externalData ) == typeid( itk::Image<uint8_t,2> ) )
-    return actualInternalConversion< itk::Image<uint8_t,2> >();
+  else if ( typeid( *externalData ) == typeid( itk::Image<unsigned int8_t,2> ) )
+    return actualInternalConversion< itk::Image<unsigned int8_t,2> >();
   else if ( typeid( *externalData ) == typeid( itk::Image<int32_t,2> ) )
     return actualInternalConversion< itk::Image<int32_t,2> >();
 	else if ( typeid( *externalData ) == typeid( itk::Image<float,2> ) )
@@ -51,8 +51,8 @@ TDataSetPtr CITKAdapter::convertToInternal() throw( NullException )
     return actualInternalConversion< itk::Image<double,2> >();
   else if ( typeid( *externalData ) == typeid( itk::Image<int16_t,3> ) )
     return actualInternalConversion< itk::Image<int16_t,3> >();
-  else if ( typeid( *externalData ) == typeid( itk::Image<uint8_t,3> ) )
-    return actualInternalConversion< itk::Image<uint8_t,3> >();
+  else if ( typeid( *externalData ) == typeid( itk::Image<unsigned int8_t,3> ) )
+    return actualInternalConversion< itk::Image<unsigned int8_t,3> >();
   else if ( typeid( *externalData ) == typeid( itk::Image<int32_t,3> ) )
     return actualInternalConversion< itk::Image<int32_t,3> >();
   else if ( typeid( *externalData ) == typeid( itk::Image<float,3> ) )
@@ -70,7 +70,7 @@ TDataSetPtr CITKAdapter::actualInternalConversion()
 	typename itkImageType::RegionType theRegion = theImage->GetLargestPossibleRegion();
 	typename itkImageType::SizeType theSize = theRegion.GetSize();
 	std::vector<size_t> dimensions;
-	for( uint i = 0; i < itkImageType::SizeType::GetSizeDimension(); ++i )
+	for( unsigned int i = 0; i < itkImageType::SizeType::GetSizeDimension(); ++i )
 		dimensions.push_back( theSize[i] );
 	itk::ImageRegionConstIterator<itkImageType> it ( theImage, theRegion );
 	boost::shared_ptr<CTypedData<typename itkImageType::PixelType> > img( 

@@ -25,7 +25,7 @@ CImageHeader::CImageHeader() throw() : CTypedMap()
 {
 	// Initialize a minimum of header entries
 	setBool( "FileEndianess", false );
-	setString( "VoxelType", "uint8" );
+	setString( "VoxelType", "unsigned int8" );
 	setUnsignedLong( "ExtentX", 1 );
 	setDouble( "OriginX", 0.0 );
 	setDouble( "VoxelDimensionX", 1.0 );
@@ -150,7 +150,7 @@ void CImageHeader::setEndianess( bool bEndianess ) throw()
 	
 /**
  * \param sVoxelType voxel data type. 
- * This could be either "Intx", "UIntx" with x=8,16,32 or "Floaty" with y=16,32,64
+ * This could be either "Intx", "unsigned intx" with x=8,16,32 or "Floaty" with y=16,32,64
  */
 void CImageHeader::setVoxelType( const std::string& sVoxelType ) throw()
 {

@@ -70,7 +70,8 @@ public:
 /** \name Structors */
   //@{
   /// Constructor
-  CBase( const std::string &sClassName_ = "CBase", const std::string &sClassVersion_ = CBASE_VERSION,
+// CHANGE Added explicit keyword and removed first default string to eliminate warning in VS2005 (HB 2007-03-19)
+  explicit CBase( const std::string &sClassName_, const std::string &sClassVersion_ = CBASE_VERSION,
     const std::string &sDerivedFrom_ = "-" ) throw();
   /// Destructor. Pure virtual to generate an abstract base class
   virtual ~CBase() 

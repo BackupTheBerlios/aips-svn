@@ -80,7 +80,7 @@ public:
 /** \name Accessors */
   //@{
 	/// Returns the given handler
-	boost::shared_ptr<CFileHandler> getHandler( uint uiIndex_ )
+	boost::shared_ptr<CFileHandler> getHandler( unsigned int uiIndex_ )
 		throw( OutOfRangeException );
   //@}  
 /** \name Other Methods */
@@ -92,7 +92,7 @@ public:
 	void removeHandler( boost::shared_ptr<CFileHandler> handlerSPtr )
 		throw( NullException );
 	/// Returns the number of registered file handlers
-	uint getNumberOfRegisteredHandlers()
+	unsigned int getNumberOfRegisteredHandlers()
 		throw();
   /// Loads a data set. The correct file handler will be determined automatically
   TDataFile loadDataSet( const std::string& sFilename ) const

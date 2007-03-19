@@ -26,12 +26,12 @@ using namespace aips;
  * \param sDerivedFrom_ name of the classes this class is derived from (type information)
  * The type of the all input ports is set to IOOther by default
  */
-CTarget::CTarget( ulong ulID, ushort usNoOfInputs, const std::string &sClassName_, 
+CTarget::CTarget( unsigned long ulID, unsigned short usNoOfInputs, const std::string &sClassName_, 
 		const std::string &sClassVersion_, const std::string &sDerivedFrom_ ) throw()
   : CPipelineItem( ulID, usNoOfInputs, 0, sClassName_, sClassVersion_, sDerivedFrom_  )
 {
   setType( ITypeTarget );
-  for( uint i = 0; i < usNoOfInputs; ++i )
+  for( unsigned int i = 0; i < usNoOfInputs; ++i )
   	inputsVec[i].portType = IOOther;
 }
 

@@ -88,7 +88,7 @@ double CTypedMap::getDouble( const std::string& sKey ) const throw( NotPresentEx
  * \param sKey key string
  * \return long value of key
  * \throws NotPresentException if the supplied key wasn't found in the map
- * \throws NotPresentException if the key value wasn't ulong or bool
+ * \throws NotPresentException if the key value wasn't unsigned long or bool
  */
 long CTypedMap::getLong( const std::string& sKey ) const throw( NotPresentException )
 {
@@ -107,18 +107,18 @@ long CTypedMap::getLong( const std::string& sKey ) const throw( NotPresentExcept
 }
 
 /**
- * Returns the ulong value stored under the given key
+ * Returns the unsigned long value stored under the given key
  * \param sKey key string
- * \return ulong value of key
+ * \return unsigned long value of key
  * \throws NotPresentException if the supplied key wasn't found in the map
- * \throws NotPresentException if the key value wasn't ulong or bool
+ * \throws NotPresentException if the key value wasn't unsigned long or bool
  */
-ulong CTypedMap::getUnsignedLong( const std::string& sKey ) const throw( NotPresentException )
+unsigned long CTypedMap::getUnsignedLong( const std::string& sKey ) const throw( NotPresentException )
 {
 	if ( isDefined( sKey ) )
 	{
 	  istringstream is ( valueMap.find(sKey)->second );
-  	ulong ulValue;
+  	unsigned long ulValue;
 		char sign;
 	  is >> sign >> ulValue;
 		if ( sign != 'u' && sign != 'b' )
@@ -170,7 +170,7 @@ const std::type_info& CTypedMap::getValueType( const std::string& sKey ) const
 			case 'd':
 				return typeid( double );
 			case 'u':
-				return typeid( ulong );
+				return typeid( unsigned long );
 			case 'l':
 				return typeid( long );
 			case 'b':
@@ -249,11 +249,11 @@ void CTypedMap::setLong( const std::string& sKey, const long lValue ) throw()
  * \param sKey key to use
  * \param ulValue value to store
  */
-void CTypedMap::setUnsignedLong( const std::string& sKey, const ulong ulValue ) throw()
+void CTypedMap::setUnsignedLong( const std::string& sKey, const unsigned long ulValue ) throw()
 {
 	if ( !isDefined( sKey ) )
 		keyVec.push_back( sKey );
-  else if ( getValueType( sKey ) != typeid( ulong ) )
+  else if ( getValueType( sKey ) != typeid( unsigned long ) )
     alog << LWARN << "Type change for key <" << sKey << ">. New type is unsigned long, old type was "
       << getValueType( sKey ).name() << endl;    
   ostringstream os;
@@ -369,7 +369,7 @@ void CTypedMap::writeXMLFile( const string sFilename, const string sDescription 
 				file << "string</type>\n <value>" << getString( *it );
 			else if ( getValueType( *it ) == typeid( double ) )
 				file << "double</type>\n <value>" << getDouble( *it );
-			else if ( getValueType( *it ) == typeid( ulong ) )
+			else if ( getValueType( *it ) == typeid( unsigned long ) )
 				file << "unsigned long</type>\n <value>" << getUnsignedLong( *it );
 			else if ( getValueType( *it ) == typeid( long ) )
 				file << "long</type>\n <value>" << getLong( *it );
@@ -404,7 +404,7 @@ void CTypedMap::readXMLFile( const std::string sFilename )	throw( FileException 
     xmlpp::TextReader reader( sFilename.c_str() );
 		bool bLegalMap = false;
 		bool bInsideEntry = false;
-		uint uiReadEntry = 0;
+		unsigned int uiReadEntry = 0;
 		SEntry entry;
     while(reader.read())
     {
@@ -451,7 +451,7 @@ void CTypedMap::readXMLFile( const std::string sFilename )	throw( FileException 
       			else if ( entry.type[0] == 'l' )
       				setLong( entry.key, lexical_cast<long>( entry.value ) );
       			else if ( entry.type[0] == 'u' )
-      				setUnsignedLong( entry.key, lexical_cast<ulong>( entry.value ) );
+      				setUnsignedLong( entry.key, lexical_cast<unsigned long>( entry.value ) );
       			else if ( entry.type[0] == 'b' )
       				setBool( entry.key, lexical_cast<bool>( entry.value ) );
       		}
@@ -540,6 +540,10 @@ void CTypedMap::readXMLFile( const std::string sFilename )	throw( FileException 
     throw( FileException( SERROR( e.what() ), CException::RECOVER, ERR_FILEACCESS ) );
   }
   #else
+#ifdef WIN32
+#pragma warning Compiling without XML++. CTypedMap will not be able to read XML dumps
+#else
   #warning Compiling without XML++. CTypedMap will not be able to read XML dumps
+#endif
   #endif  
 }

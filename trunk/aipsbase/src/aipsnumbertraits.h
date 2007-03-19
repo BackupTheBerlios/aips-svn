@@ -82,10 +82,10 @@ struct SDataTraits
  * Specialised from SDataTraits.
  */
 template<typename TDistance>
-struct SDataTraits<uint8_t, TDistance>
+struct SDataTraits<boost::uint8_t, TDistance>
 {
-	typedef uint8_t TDataType; 
-	typedef int16_t TIncreasedRangeType;
+  typedef boost::uint8_t TDataType; 
+	typedef boost::int16_t TIncreasedRangeType;
 	typedef TDistance TDistanceType;
 	static const TDataType ONE(){ return 1; }
 	static const TDataType ZERO(){ return 0; }
@@ -101,10 +101,10 @@ struct SDataTraits<uint8_t, TDistance>
  * Specialised from SDataTraits.
  */
 template<typename TDistance>
-struct SDataTraits<int8_t, TDistance>
+struct SDataTraits<boost::int8_t, TDistance>
 {
-	typedef int8_t TDataType; 
-	typedef int16_t TIncreasedRangeType;
+	typedef boost::int8_t TDataType; 
+	typedef boost::int16_t TIncreasedRangeType;
 	typedef TDistance TDistanceType;
 	static const TDataType ONE(){ return 1; }
 	static const TDataType ZERO(){ return 0; }
@@ -120,10 +120,10 @@ struct SDataTraits<int8_t, TDistance>
  * Specialised from SDataTraits.
  */
 template<typename TDistance>
-struct SDataTraits<int16_t, TDistance>
+struct SDataTraits<boost::int16_t, TDistance>
 {
-	typedef int16_t TDataType; 
-	typedef int32_t TIncreasedRangeType;
+	typedef boost::int16_t TDataType; 
+	typedef boost::int32_t TIncreasedRangeType;
 	typedef TDistance TDistanceType;
 	static const TDataType ONE(){ return 1; }
 	static const TDataType ZERO(){ return 0; }
@@ -139,10 +139,10 @@ struct SDataTraits<int16_t, TDistance>
  * Specialised from SDataTraits.
  */
 template<typename TDistance>
-struct SDataTraits<int32_t, TDistance >
+struct SDataTraits<boost::int32_t, TDistance >
 {
-	typedef int32_t TDataType; 
-	typedef int32_t TIncreasedRangeType;
+	typedef boost::int32_t TDataType; 
+	typedef boost::int32_t TIncreasedRangeType;
 	typedef TDistance TDistanceType;
 	static const TDataType ONE(){ return 1; }
 	static const TDataType ZERO(){ return 0; }

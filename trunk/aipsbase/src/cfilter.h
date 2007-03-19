@@ -53,8 +53,8 @@ class CFilter : public CPipelineItem
 public:
 /* Structors */
   /// Constructor
-  CFilter( ulong ulID_, const std::string &sName_ = "Generic filter",
-    const ushort usNoOfInputs = 1, const ushort usNoOfOutputs = 1,
+  CFilter( unsigned long ulID_, const std::string &sName_ = "Generic filter",
+    const unsigned short usNoOfInputs = 1, const unsigned short usNoOfOutputs = 1,
 		const std::string &sClassName_ = "CFilter", const std::string &sClassVersion_ = "0.11", 
 		const std::string &sDerivedFrom_ = "CPipelineItem" )
     throw();

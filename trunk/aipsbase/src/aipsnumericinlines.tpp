@@ -18,8 +18,8 @@
  */
 template<typename T> inline void swapEndianess( T& value ) throw()
 {
-  uint8_t* itBegin = static_cast<uint8_t*>( static_cast<void*>( &value ) );
-  uint8_t* itEnd = itBegin + sizeof( value );
+  boost::uint8_t* itBegin = static_cast<uint8_t*>( static_cast<void*>( &value ) );
+  boost::uint8_t* itEnd = itBegin + sizeof( value );
   std::reverse( itBegin, itEnd );
 }
 
@@ -29,10 +29,10 @@ template<typename T> inline void swapEndianess( T& value ) throw()
  */
 inline void swapEndianess( TVector2D& value ) throw()
 {
-  uint8_t* itBegin = static_cast<uint8_t*>( static_cast<void*>( &value[0] ) );
-  uint8_t* itEnd = itBegin + sizeof( value[0] );
+  boost::uint8_t* itBegin = static_cast<boost::uint8_t*>( static_cast<void*>( &value[0] ) );
+  boost::uint8_t* itEnd = itBegin + sizeof( value[0] );
   std::reverse( itBegin, itEnd );
-  itBegin = static_cast<uint8_t*>( static_cast<void*>( &value[1] ) );
+  itBegin = static_cast<boost::uint8_t*>( static_cast<void*>( &value[1] ) );
   itEnd = itBegin + sizeof( value[1] );
   std::reverse( itBegin, itEnd );	
 }
@@ -43,13 +43,13 @@ inline void swapEndianess( TVector2D& value ) throw()
  */
 inline void swapEndianess( TVector3D& value ) throw()
 {
-  uint8_t* itBegin = static_cast<uint8_t*>( static_cast<void*>( &value[0] ) );
-  uint8_t* itEnd = itBegin + sizeof( value[0] );
+  boost::uint8_t* itBegin = static_cast<boost::uint8_t*>( static_cast<void*>( &value[0] ) );
+  boost::uint8_t* itEnd = itBegin + sizeof( value[0] );
   std::reverse( itBegin, itEnd );
-  itBegin = static_cast<uint8_t*>( static_cast<void*>( &value[1] ) );
+  itBegin = static_cast<boost::uint8_t*>( static_cast<void*>( &value[1] ) );
   itEnd = itBegin + sizeof( value[1] );
   std::reverse( itBegin, itEnd );	
-  itBegin = static_cast<uint8_t*>( static_cast<void*>( &value[2] ) );
+  itBegin = static_cast<boost::uint8_t*>( static_cast<void*>( &value[2] ) );
   itEnd = itBegin + sizeof( value[2] );
   std::reverse( itBegin, itEnd );	
 }

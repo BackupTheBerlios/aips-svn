@@ -98,7 +98,7 @@ template<> void CALL<0>() throw()\
 }
 
 /** Macro to define the newInstance function conveniently in derived classes */
-#define NEW_INSTANCE( CLASS ) virtual CPipelineItem* newInstance( ulong ulID = 0 ) const throw()\
+#define NEW_INSTANCE( CLASS ) virtual CPipelineItem* newInstance( unsigned long ulID = 0 ) const throw()\
 {\
   return new CLASS( ulID );\
 }
@@ -147,9 +147,9 @@ protected:
 		/// Method for easy initialisation of a long parameter
 		void initLong( const std::string& sParamName, const long lParamDef,
       const long lParamMin, const long lParamMax ) throw();
-		/// Method for easy initialisation of a ulong parameter
-		void initUnsignedLong( const std::string& sParamName, const ulong ulParamDef,
-      const ulong ulParamMin, const ulong ulParamMax ) throw();
+		/// Method for easy initialisation of a unsigned long parameter
+		void initUnsignedLong( const std::string& sParamName, const unsigned long ulParamDef,
+      const unsigned long ulParamMin, const unsigned long ulParamMax ) throw();
 		/// Method for easy initialisation of a double parameter
 		void initDouble( const std::string& sParamName, const double dParamDef,
       const double dParamMin, const double dParamMax ) throw();
@@ -175,7 +175,7 @@ protected:
   struct SConnection
   {
   	boost::weak_ptr<CPipelineItem> outputItem;
-  	uint outputPort; // Imported port
+  	unsigned int outputPort; // Imported port
   	SConnection() : outputPort(0)  { outputItem.reset(); }
   };
 private:
@@ -186,7 +186,8 @@ private:
 public:
 /* Structors */
   /// Constructor
-  CPipelineItem( ulong ulID_, ushort usFanIn_, ushort usFanOut_, const std::string &sClassName_, 
+  CPipelineItem( unsigned long ulID_, unsigned short usFanIn_, 
+    unsigned short usFanOut_, const std::string &sClassName_, 
 		const std::string &sClassVersion_, const std::string &sDerivedFrom_ )
     throw();
   /// Destructor 
@@ -194,10 +195,10 @@ public:
     throw();    
 /* Accessors */  
   /// Returns the fanin of the item
-  ushort getFanIn() const
+  unsigned short getFanIn() const
     throw();
   /// Returns the fanout of the item
-  ushort getFanOut() const
+  unsigned short getFanOut() const
     throw();
   /// Return the module name
   const std::string getModuleName() const
@@ -206,10 +207,10 @@ public:
   const std::string getDocumentation() const 
 		throw();
   /// Get the item ID
-  ulong getID() const
+  unsigned long getID() const
     throw();
   /// Get the item type
-  ushort getType() const
+  unsigned short getType() const
     throw();
   /// Returns the number of filter parameters = size of the parameter array
   size_t getNoOfParameters() const
@@ -225,36 +226,36 @@ public:
   void setModuleName( const std::string &sNewName )
     throw();
   /// Set the item type
-  void setType( const ushort itemType_ )
+  void setType( const unsigned short itemType_ )
     throw();    
   /// Sets the module ID
   void setModuleID( const std::string sModuleID )
     throw();
 /* Dataset IO functions */
   /// Return the input dataset
-  TDataSetPtr getInput( ushort usInputNumber = 0 ) const
+  TDataSetPtr getInput( unsigned short usInputNumber = 0 ) const
     throw( OutOfRangeException );
   /// Return the output dataset
-  TDataSetPtr getOutput( ushort usOutputNumber = 0 ) const
+  TDataSetPtr getOutput( unsigned short usOutputNumber = 0 ) const
     throw( OutOfRangeException );
   /// Set the input dataset
-  void setInput( TDataSetPtr anInputPtr, ushort usInputNumber = 0 )
+  void setInput( TDataSetPtr anInputPtr, unsigned short usInputNumber = 0 )
     throw( OutOfRangeException );
   /// Set the output dataset
-  void setOutput( TDataSetPtr anOutputPtr, ushort usOutputNumber = 0 )
+  void setOutput( TDataSetPtr anOutputPtr, unsigned short usOutputNumber = 0 )
     throw( OutOfRangeException );
   /// Get the dataset type of an input port
-  EIOTypes getInputType( uint uiPort ) const
+  EIOTypes getInputType( unsigned int uiPort ) const
     throw( OutOfRangeException );
   /// Get the dataset type of an output port
-  EIOTypes getOutputType( uint uiPort ) const
+  EIOTypes getOutputType( unsigned int uiPort ) const
     throw( OutOfRangeException );
 /* Graph edge access methods  */
   /// Add conncection
-  void addConnection( TPipelineItemPtr anInputPtr, uint uiLocalPort = 0, uint uiImportedPort = 0 )
+  void addConnection( TPipelineItemPtr anInputPtr, unsigned int uiLocalPort = 0, unsigned int uiImportedPort = 0 )
     throw( OutOfRangeException, RunTimeTypeException, NullException );
   /// Delete connection
-  void deleteConnection( uint uiLocalPort )
+  void deleteConnection( unsigned int uiLocalPort )
     throw( OutOfRangeException );
 /* Other methods */
   /**
@@ -293,10 +294,10 @@ public:
 	 * is not an abstract class.
    * \returns a new instance (not a copy!) of the item
    */
-  virtual CPipelineItem* newInstance( ulong ulID = 0 ) const
+  virtual CPipelineItem* newInstance( unsigned long ulID = 0 ) const
     throw() =0;
 	/// Checks one input pointer for existence and correctness
-	template<typename U, typename T> bool checkInput( T inputPtr, ushort usMinDim = 0, ushort usMaxDim = 0, ushort usMinDataDim = 0, ushort usMaxDataDim = 0) throw();
+	template<typename U, typename T> bool checkInput( T inputPtr, unsigned short usMinDim = 0, unsigned short usMaxDim = 0, unsigned short usMinDataDim = 0, unsigned short usMaxDataDim = 0) throw();
 	bool isOutputCached() const throw();
 	void cacheOutput( bool bCacheOutputs_ = true ) throw();
 /* Dialog member functions */
@@ -307,7 +308,7 @@ public:
 	void setModuleDialog( const boost::shared_ptr<CModuleDialog> newItemDialog )
 		throw();	
   /// Deletes an output port
-  void deleteOldOutput( ushort usOutputNumber = 0 )
+  void deleteOldOutput( unsigned short usOutputNumber = 0 )
     throw( OutOfRangeException );
 protected:
   std::vector<SIPort> inputsVec;     	 ///< Input dataset
@@ -316,17 +317,17 @@ protected:
   std::string sModuleID;               ///< Unique module ID
   std::string sDocumentation;          ///< Module documentation
 	bool bModuleReady;
-	ulong ownTimeStamp; ///< Timestamp
+	unsigned long ownTimeStamp; ///< Timestamp
 private:
 	bool bCacheOutputs; ///< Should we cache our outputs or delete them after read-out?
 	int iDepth;                                 ///< Marker for graph traversal	
-  ulong ulID;                                   ///< Unique processing ID
-  ushort itemType;                              ///< Item type 
-  ushort usFanIn;                               ///< Item fanin
-  ushort usFanOut;                              ///< Item fanout
+  unsigned long ulID;                                   ///< Unique processing ID
+  unsigned short itemType;                              ///< Item type 
+  unsigned short usFanIn;                               ///< Item fanin
+  unsigned short usFanOut;                              ///< Item fanout
   std::string sName;                            ///< Name of the pipeline module 
   std::vector<SConnection> connectionsPtrVec;   ///< Input connections of the module
-  std::vector<ulong> connectionsTimeStampsVec; ///< Time stamps of all connections
+  std::vector<unsigned long> connectionsTimeStampsVec; ///< Time stamps of all connections
   boost::shared_ptr<CModuleDialog> itemDialog;  ///< Item dialog
 	bool bRecompute; ///< Do we enforce a recomputation of all outputs?
   

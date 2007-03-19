@@ -23,7 +23,7 @@
  * \param dataDimensionSize_ Dimension of each field entry (for nonscalar fields)
  */
 template<typename TValue>
-CTypedData<TValue>::CTypedData( const ushort usDimension_,
+CTypedData<TValue>::CTypedData( const unsigned short usDimension_,
   const size_t* extentArr_,
   const size_t dataDimensionSize_ ) throw() 
 	: CDataSet( usDimension_, extentArr_, dataDimensionSize_,
@@ -31,7 +31,7 @@ CTypedData<TValue>::CTypedData( const ushort usDimension_,
 {
 	// Compute array size and resize internal vector
   arraySize = 1;
-  for ( ushort i = 0; i < usDimension; i++ )
+  for ( unsigned short i = 0; i < usDimension; i++ )
     arraySize *= extentVec[i];
   arraySize *= dataDimensionSize;
   dataVec.resize( arraySize );
@@ -45,7 +45,7 @@ CTypedData<TValue>::CTypedData( const ushort usDimension_,
  * \param dataDimensionSize_ Dimension of each field entry (for nonscalar fields)
  */
 template<typename TValue>
-CTypedData<TValue>::CTypedData( const ushort usDimension_,
+CTypedData<TValue>::CTypedData( const unsigned short usDimension_,
   const std::vector<size_t> extentVec_,
   const size_t dataDimensionSize_ ) throw()
   : CDataSet( usDimension_, extentVec_, dataDimensionSize_, "CTypedData",
@@ -53,7 +53,7 @@ CTypedData<TValue>::CTypedData( const ushort usDimension_,
 {
 	// Compute array size and resize internal vector
   arraySize = 1;
-  for ( ushort i = 0; i < usDimension; i++ )
+  for ( unsigned short i = 0; i < usDimension; i++ )
     arraySize *= extentVec[i];
   arraySize *= dataDimensionSize;
   dataVec.resize( arraySize );
@@ -129,7 +129,7 @@ template<typename TValue> inline
 CTypedData<TValue>& CTypedData<TValue>::operator=
   ( const TValue newDefault ) throw()
 {
-  for ( ulong i = 0; i < arraySize; i++ )
+  for ( unsigned long i = 0; i < arraySize; i++ )
   {
     dataVec[i] = newDefault;
   }  
@@ -156,8 +156,8 @@ const std::type_info& CTypedData<TValue>::getType() const throw()
  * \returns value of the indexed element
  */
 template<typename TValue> inline
-const TValue& CTypedData<TValue>::get( const ushort usX, const ushort usY, const ushort usZ,
-	const ushort usW ) const throw(OutOfRangeException)
+const TValue& CTypedData<TValue>::get( const unsigned short usX, const unsigned short usY, const unsigned short usZ,
+	const unsigned short usW ) const throw(OutOfRangeException)
 {
   if ( usX > extentVec[0] || usY > extentVec[1] || usZ > extentVec[2] || usW > extentVec[3] )
     throw( OutOfRangeException( SERROR( "Index out of range"), CException::RECOVER, ERR_BADCOORDS ) );
@@ -207,7 +207,7 @@ const TValue& CTypedData<TValue>::get( const TPoint3D aPosition )
  * \returns a typed handle to the data array
  */
 template<typename TValue> inline
-TValue* CTypedData<TValue>::getArray( ushort usChannel ) throw( OutOfRangeException )
+TValue* CTypedData<TValue>::getArray( unsigned short usChannel ) throw( OutOfRangeException )
 {
   if ( usChannel >= dataDimensionSize )
     throw( OutOfRangeException( SERROR("Data dimension out of range"),
@@ -224,14 +224,14 @@ void* CTypedData<TValue>::getVoidArray() throw()
 
 /** \returns the size of the internal Array (no. of elements) */
 template<typename TValue> inline
-ulong CTypedData<TValue>::getArraySize() const throw()
+unsigned long CTypedData<TValue>::getArraySize() const throw()
 {
   return arraySize;
 }
 
 /** \returns the size of the data block (in bytes) */
 template<typename TValue> inline
-ulong CTypedData<TValue>::getDataSize() const throw()
+unsigned long CTypedData<TValue>::getDataSize() const throw()
 {
 	return arraySize * sizeof( TValue );
 }
@@ -250,8 +250,8 @@ ulong CTypedData<TValue>::getDataSize() const throw()
  * \param newValue value of the indexed element
  */
 template<typename TValue> inline
-void CTypedData<TValue>::set( const ushort usX, const ushort usY, const ushort usZ,
-	const ushort usW, const TValue newValue ) throw(OutOfRangeException)
+void CTypedData<TValue>::set( const unsigned short usX, const unsigned short usY, const unsigned short usZ,
+	const unsigned short usW, const TValue newValue ) throw(OutOfRangeException)
 {
   if ( usX > extentVec[0] || usY > extentVec[1] || usZ > extentVec[2] || usW > extentVec[3] )
     throw( OutOfRangeException( SERROR( "Index out of range"), CException::RECOVER, ERR_BADCOORDS ) );
@@ -339,28 +339,28 @@ void CTypedData<TValue>::resize( const size_t* extentArr_, const EDataAlign
 	alignment ) throw()
 {
 	size_t newArraySize = 1;
-  for ( ushort i = 0; i < usDimension; i++ )
+  for ( unsigned short i = 0; i < usDimension; i++ )
     newArraySize *= extentArr_[i];
   newArraySize *= dataDimensionSize;	
   std::vector<TValue> newDataVec( arraySize );
 	size_t maxExtent[usDimension];
 	for( size_t dims = 0; dims < dataDimensionSize; ++dims )
 	{
-		for ( ushort d = 0; d < usDimension; d++ )	
+		for ( unsigned short d = 0; d < usDimension; d++ )	
 		{
 			maxExtent[d] = std::min( extentArr_[d], extentVec[d] );
 		}
-		ushort maxW = 1;		
+		unsigned short maxW = 1;		
 		if ( usDimension > 3 ) maxW = maxExtent[3];
-		ushort maxZ = 1;		
+		unsigned short maxZ = 1;		
 		if ( usDimension > 2 ) maxW = maxExtent[2];
-		ushort maxY = 1;		
+		unsigned short maxY = 1;		
 		if ( usDimension > 1 ) maxW = maxExtent[1];
-		ushort maxX = maxExtent[0];		
-		for( ushort w = 0; w < maxW; ++w )
-		 for( ushort z = 0; z < maxZ; ++z )
-		  for( ushort y = 0; y < maxY; ++y )
-		   for( ushort x = 0; x < maxX; ++x )
+		unsigned short maxX = maxExtent[0];		
+		for( unsigned short w = 0; w < maxW; ++w )
+		 for( unsigned short z = 0; z < maxZ; ++z )
+		  for( unsigned short y = 0; y < maxY; ++y )
+		   for( unsigned short x = 0; x < maxX; ++x )
 			   newDataVec[ x + maxX * y + ( maxX * maxY ) * z + ( maxX * maxY * maxZ ) * w] 
 				 	= dataVec[ x + maxX * y + ( maxX * maxY ) * z + ( maxX * maxY * maxZ ) * w];
 	}
@@ -376,28 +376,28 @@ void CTypedData<TValue>::resize( const std::vector<size_t> extentVec_,
 	const EDataAlign alignment )	throw()
 {
 	size_t newArraySize = 1;
-  for ( ushort i = 0; i < usDimension; i++ )
+  for ( unsigned short i = 0; i < usDimension; i++ )
     newArraySize *= extentVec_[i];
   newArraySize *= dataDimensionSize;	
   std::vector<TValue> newDataVec( arraySize );
 	size_t maxExtent[usDimension];
 	for( size_t dims = 0; dims < dataDimensionSize; ++dims )
 	{
-		for ( ushort d = 0; d < usDimension; d++ )	
+		for ( unsigned short d = 0; d < usDimension; d++ )	
 		{
 			maxExtent[d] = std::min( extentVec_[d], extentVec[d] );
 		}
-		ushort maxW = 1;		
+		unsigned short maxW = 1;		
 		if ( usDimension > 3 ) maxW = maxExtent[3];
-		ushort maxZ = 1;		
+		unsigned short maxZ = 1;		
 		if ( usDimension > 2 ) maxW = maxExtent[2];
-		ushort maxY = 1;		
+		unsigned short maxY = 1;		
 		if ( usDimension > 1 ) maxW = maxExtent[1];
-		ushort maxX = maxExtent[0];		
-		for( ushort w = 0; w < maxW; ++w )
-		 for( ushort z = 0; z < maxZ; ++z )
-		  for( ushort y = 0; y < maxY; ++y )
-		   for( ushort x = 0; x < maxX; ++x )
+		unsigned short maxX = maxExtent[0];		
+		for( unsigned short w = 0; w < maxW; ++w )
+		 for( unsigned short z = 0; z < maxZ; ++z )
+		  for( unsigned short y = 0; y < maxY; ++y )
+		   for( unsigned short x = 0; x < maxX; ++x )
 			   newDataVec[ x + maxX * y + ( maxX * maxY ) * z + ( maxX * maxY * maxZ ) * w] 
 				 	= dataVec[ x + maxX * y + ( maxX * maxY ) * z + ( maxX * maxY * maxZ ) * w];
 	}
@@ -412,8 +412,8 @@ void CTypedData<TValue>::increaseDataDimension( const size_t addToDataDimension 
 {
 	if ( addToDataDimension == 0 ) 
 		return;
-	ulong dimensionSize = 1;
-	for( uint i = 0; i < usDimension; ++i )
+	unsigned long dimensionSize = 1;
+	for( unsigned int i = 0; i < usDimension; ++i )
 		dimensionSize *= getExtent( i );
 	dataDimensionSize += addToDataDimension;
 	dataVec.resize( dimensionSize * dataDimensionSize );
@@ -429,8 +429,8 @@ void CTypedData<TValue>::decreaseDataDimension( const size_t subFromDataDimensio
 	
 	if ( subFromDataDimension == 0 ) 
 		return;
-	ulong dimensionSize = 1;
-	for( uint i = 0; i < usDimension; ++i )
+	unsigned long dimensionSize = 1;
+	for( unsigned int i = 0; i < usDimension; ++i )
 		dimensionSize *= getExtent( i );
 	dataDimensionSize -= subFromDataDimension;	
 	std::vector<TValue> newDataVec( dimensionSize * dataDimensionSize );
@@ -454,7 +454,7 @@ void CTypedData<TValue>::decreaseDataDimension( const size_t subFromDataDimensio
  * \returns a reference to the indexed element
  */
 template<typename TValue> inline
-TValue& CTypedData<TValue>::operator()( const ushort usX ) throw()
+TValue& CTypedData<TValue>::operator()( const unsigned short usX ) throw()
 {
   return dataVec[usX];
 }
@@ -466,7 +466,7 @@ TValue& CTypedData<TValue>::operator()( const ushort usX ) throw()
  * \returns a reference to the indexed element
  */
 template<typename TValue> inline
-TValue& CTypedData<TValue>::operator()( const ushort usX, const ushort usY ) throw()
+TValue& CTypedData<TValue>::operator()( const unsigned short usX, const unsigned short usY ) throw()
 {
   return dataVec[usX + usY * extentVec[0]];
 }
@@ -479,8 +479,8 @@ TValue& CTypedData<TValue>::operator()( const ushort usX, const ushort usY ) thr
  * \returns a reference to the indexed element
  */
 template<typename TValue> inline
-TValue& CTypedData<TValue>::operator()( const ushort usX, const ushort usY,
-	const ushort usZ ) throw()
+TValue& CTypedData<TValue>::operator()( const unsigned short usX, const unsigned short usY,
+	const unsigned short usZ ) throw()
 {
   return dataVec[usX + usY * extentVec[0] + usZ * extentVec[0] * extentVec[1]];
 }
@@ -494,8 +494,8 @@ TValue& CTypedData<TValue>::operator()( const ushort usX, const ushort usY,
  * \returns a reference to the indexed element
  */
 template<typename TValue> inline
-TValue& CTypedData<TValue>::operator()( const ushort usX, const ushort usY,
-	const ushort usZ, const ushort usW ) throw()
+TValue& CTypedData<TValue>::operator()( const unsigned short usX, const unsigned short usY,
+	const unsigned short usZ, const unsigned short usW ) throw()
 {
   return dataVec[usX + usY * extentVec[0] + usZ * extentVec[0] * extentVec[1]
     + usW * extentVec[0] * extentVec[1] * extentVec[2]];
@@ -507,7 +507,7 @@ TValue& CTypedData<TValue>::operator()( const ushort usX, const ushort usY,
  * \returns a reference to the indexed element
  */
 template<typename TValue> inline
-const TValue& CTypedData<TValue>::operator()( const ushort usX ) const throw()
+const TValue& CTypedData<TValue>::operator()( const unsigned short usX ) const throw()
 {
   return dataVec[usX];
 }
@@ -519,7 +519,7 @@ const TValue& CTypedData<TValue>::operator()( const ushort usX ) const throw()
  * \returns a reference to the indexed element
  */
 template<typename TValue> inline
-const TValue& CTypedData<TValue>::operator()( const ushort usX, const ushort usY )
+const TValue& CTypedData<TValue>::operator()( const unsigned short usX, const unsigned short usY )
 	const throw()
 {
   return dataVec[usX + usY * extentVec[0]];
@@ -533,8 +533,8 @@ const TValue& CTypedData<TValue>::operator()( const ushort usX, const ushort usY
  * \returns a reference to the indexed element
  */
 template<typename TValue> inline
-const TValue& CTypedData<TValue>::operator()( const ushort usX, const ushort usY,
-	const ushort usZ ) const throw()
+const TValue& CTypedData<TValue>::operator()( const unsigned short usX, const unsigned short usY,
+	const unsigned short usZ ) const throw()
 {
   return dataVec[usX + usY * extentVec[0] + usZ * extentVec[0] * extentVec[1]];
 }
@@ -548,8 +548,8 @@ const TValue& CTypedData<TValue>::operator()( const ushort usX, const ushort usY
  * \returns a reference to the indexed element
  */
 template<typename TValue> inline
-const TValue& CTypedData<TValue>::operator()( const ushort usX, const ushort usY,
-	const ushort usZ, const ushort usW ) const throw()
+const TValue& CTypedData<TValue>::operator()( const unsigned short usX, const unsigned short usY,
+	const unsigned short usZ, const unsigned short usW ) const throw()
 {
   return dataVec[usX + usY * extentVec[0] + usZ * extentVec[0] * extentVec[1]
     + usW * extentVec[0] * extentVec[1] * extentVec[2]];
@@ -557,7 +557,7 @@ const TValue& CTypedData<TValue>::operator()( const ushort usX, const ushort usY
 
 /** \param ulIndex index to retrieve */
 template<typename TValue> inline
-TValue& CTypedData<TValue>::operator[]( const ulong ulIndex ) throw()
+TValue& CTypedData<TValue>::operator[]( const unsigned long ulIndex ) throw()
 {
 	return dataVec[ ulIndex ];
 }
@@ -579,7 +579,7 @@ TValue& CTypedData<TValue>::operator[]( const TPoint3D aPosition ) throw()
 
 /** \param ulIndex index to retrieve */
 template<typename TValue> inline
-const TValue& CTypedData<TValue>::operator[]( const ulong ulIndex ) const throw()
+const TValue& CTypedData<TValue>::operator[]( const unsigned long ulIndex ) const throw()
 {
 	return dataVec[ ulIndex ];
 }		
@@ -668,7 +668,7 @@ typename CTypedData<TValue>::reverse_iterator CTypedData<TValue>::rend() throw()
  * \param usX position in 1D - dataset
  */
 template<typename TValue> inline
-typename CTypedData<TValue>::iterator CTypedData<TValue>::moveTo( const ushort usX ) throw()
+typename CTypedData<TValue>::iterator CTypedData<TValue>::moveTo( const unsigned short usX ) throw()
 {
 	return iterator( &dataVec[usX], this );
 }
@@ -679,8 +679,8 @@ typename CTypedData<TValue>::iterator CTypedData<TValue>::moveTo( const ushort u
  * \param usY position in 1D - dataset
  */
 template<typename TValue> inline
-typename CTypedData<TValue>::iterator CTypedData<TValue>::moveTo( const ushort usX,
-	const ushort usY ) throw()
+typename CTypedData<TValue>::iterator CTypedData<TValue>::moveTo( const unsigned short usX,
+	const unsigned short usY ) throw()
 {
 	return iterator( &dataVec[usX+usY*extentVec[0]], this );
 }
@@ -692,8 +692,8 @@ typename CTypedData<TValue>::iterator CTypedData<TValue>::moveTo( const ushort u
  * \param usZ position in 1D - dataset
  */
 template<typename TValue> inline
-typename CTypedData<TValue>::iterator CTypedData<TValue>::moveTo( const ushort usX,
-	const ushort usY,	const ushort usZ ) throw()
+typename CTypedData<TValue>::iterator CTypedData<TValue>::moveTo( const unsigned short usX,
+	const unsigned short usY,	const unsigned short usZ ) throw()
 {
 	return iterator( &dataVec[usX+usY*extentVec[0]+usZ*extentVec[0]*extentVec[1]], this );
 }
@@ -706,8 +706,8 @@ typename CTypedData<TValue>::iterator CTypedData<TValue>::moveTo( const ushort u
  * \param usW position in 1D - dataset
  */
 template<typename TValue> inline
-typename CTypedData<TValue>::iterator CTypedData<TValue>::moveTo( const ushort usX,
-	const ushort usY,	const ushort usZ, const ushort usW ) throw()
+typename CTypedData<TValue>::iterator CTypedData<TValue>::moveTo( const unsigned short usX,
+	const unsigned short usY,	const unsigned short usZ, const unsigned short usW ) throw()
 {
 	return iterator( &dataVec[usX+usY*extentVec[0]+usZ*extentVec[0]*extentVec[1]
 		+usW*extentVec[0]*extentVec[1]*extentVec[2]], this );

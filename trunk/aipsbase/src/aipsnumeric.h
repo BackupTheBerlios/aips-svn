@@ -86,7 +86,7 @@ public:
  *******************/
 
 /// A single signed integer value for pipeline usage
-typedef CSingleValue<int32_t> TInteger; 
+typedef CSingleValue<boost::int32_t> TInteger; 
 /// A single double value for pipeline usage
 typedef CSingleValue<TFloatType> TDouble;
 /// A single complex value for pipeline usage
@@ -94,9 +94,9 @@ typedef CSingleValue<std::complex<TFloatType> > TComplex;
 /// A single string value for pipeline usage
 typedef CSingleValue<std::string> TSingleString;
 /// A scalar unsigned byte field for pipeline usage (8 bit unsigned)
-typedef CTypedData<uint8_t> TSmallImage;
+typedef CTypedData<boost::uint8_t> TSmallImage;
 /// A scalar integer field for pipeline usage (16 bit signed)
-typedef CTypedData<int16_t> TImage;
+typedef CTypedData<boost::int16_t> TImage;
 /// A scalar floating point field for pipeline usage
 typedef CTypedData<TFloatType> TField;
 /// A complex field for pipeline usage

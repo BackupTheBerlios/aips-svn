@@ -81,10 +81,10 @@ public:
 	enum EDataAlign { DataAlignFront = 0, DataAlignCenter, DataAlignBack };
 /* Structors */
   /// Constructor
-  CTypedData( const ushort usDimension_, const size_t* extendArr_,
+  CTypedData( const unsigned short usDimension_, const size_t* extendArr_,
     const size_t dataDimensionSize_ = 1) throw();
   /// Constructor
-  CTypedData( const ushort usDimension_, const std::vector<size_t> extendVec_,
+  CTypedData( const unsigned short usDimension_, const std::vector<size_t> extendVec_,
     const size_t dataDimensionSize_ = 1) throw();
   /// Constructor
   CTypedData( const size_t extent_, const size_t dataDimensionSize_ = 1) throw();
@@ -106,8 +106,8 @@ public:
   virtual const std::type_info& getType() const
     throw();
   /// Constant access operator with range checking
-  inline const TValue& get( const ushort usX, const ushort usY, const ushort usZ,
-    const ushort usW ) const throw(OutOfRangeException);
+  inline const TValue& get( const unsigned short usX, const unsigned short usY, const unsigned short usZ,
+    const unsigned short usW ) const throw(OutOfRangeException);
   /// Constant access operator with range checking
   inline const TValue& get( const TPoint2D aPosition )
     const throw(OutOfRangeException);
@@ -115,19 +115,19 @@ public:
   inline const TValue& get( const TPoint3D aPosition )
     const throw(OutOfRangeException);
   /// Returns a typed handle to the data array
-  inline TValue* getArray( ushort usChannel = 0 )
+  inline TValue* getArray( unsigned short usChannel = 0 )
     throw( OutOfRangeException );
   /// Returns a void handle to the data array
   virtual void* getVoidArray() throw();
   /// Returns the size of the internal Array (no. of elements)
-  inline ulong getArraySize() const
+  inline unsigned long getArraySize() const
     throw();
 	/// Returns the size of the data block (in bytes)
-	inline ulong getDataSize() const
+	inline unsigned long getDataSize() const
 		throw();
 /* Mutators */
   /// Access operator with range checking and automatic min/max assignment
-  inline void set( const ushort usX, const ushort usY, const ushort usZ, const ushort usW,
+  inline void set( const unsigned short usX, const unsigned short usY, const unsigned short usZ, const unsigned short usW,
     const TValue newValue ) throw(OutOfRangeException);
   /// Access operator with range checking and automatic min/max assignment
   inline void set( const TPoint2D aPosition, const TValue newValue )
@@ -166,38 +166,38 @@ public:
 		throw();
 /* Access operators */
   /// Access operator without range checking (1D)
-  inline TValue& operator()( const ushort usX )
+  inline TValue& operator()( const unsigned short usX )
     throw();
   /// Access operator without range checking (2D)
-  inline TValue& operator()( const ushort usX, const ushort usY )
+  inline TValue& operator()( const unsigned short usX, const unsigned short usY )
     throw();
   /// Access operator without range checking (3D)
-  inline TValue& operator()( const ushort usX, const ushort usY, const ushort usZ )
+  inline TValue& operator()( const unsigned short usX, const unsigned short usY, const unsigned short usZ )
     throw();
   /// Access operator without range checking (4D)
-  inline TValue& operator()( const ushort usX, const ushort usY, const ushort usZ,
-    const ushort usW ) throw();
+  inline TValue& operator()( const unsigned short usX, const unsigned short usY, const unsigned short usZ,
+    const unsigned short usW ) throw();
   /// Constant access operator without range checking (1D)
-  inline const TValue& operator()( const ushort usX ) const
+  inline const TValue& operator()( const unsigned short usX ) const
     throw();
   /// Constant access operator without range checking (2D)
-  inline const TValue& operator()( const ushort usX, const ushort usY ) const
+  inline const TValue& operator()( const unsigned short usX, const unsigned short usY ) const
     throw();
   /// Constant access operator without range checking (3D)
-  inline const TValue& operator()( const ushort usX, const ushort usY, const ushort usZ )
+  inline const TValue& operator()( const unsigned short usX, const unsigned short usY, const unsigned short usZ )
     const throw();
   /// Constant access operator without range checking (4D)
-  inline const TValue& operator()( const ushort usX, const ushort usY,
-    const ushort usZ, const ushort usW ) const
+  inline const TValue& operator()( const unsigned short usX, const unsigned short usY,
+    const unsigned short usZ, const unsigned short usW ) const
     throw();
 	/// Operator[] for C-Style array access to the dataset
-  TValue& operator[]( const ulong ulIndex ) throw();
+  TValue& operator[]( const unsigned long ulIndex ) throw();
   /// Operator[] for C-Style array access to the dataset using a discrete vector parameter
   TValue& operator[]( const TPoint2D aPosition ) throw();
   /// Operator[] for C-Style array access to the dataset using a discrete vector parameter
   TValue& operator[]( const TPoint3D aPosition ) throw();
   /// Const access operator[] for C-Style array access to the dataset 
-  const TValue& operator[]( const ulong ulIndex ) const throw();
+  const TValue& operator[]( const unsigned long ulIndex ) const throw();
   /// Const access operator[] for C-Style array access to the dataset using a discrete vector parameter
   const TValue& operator[]( const TPoint2D aPosition ) const throw();
   /// Const access operator[] for C-Style array access to the dataset using a discrete vector parameter
@@ -413,7 +413,7 @@ public:
 		 * Returns the actual iterator position in image coordinates
 		 * \param usX X position
 		 */
-		void getPos( ushort& usX ) const throw()
+		void getPos( unsigned short& usX ) const throw()
 		{ 
 			usX = ( positionPtr - parentPtr->begin().pos ); 
 		}
@@ -422,7 +422,7 @@ public:
 		 * \param usX X position
 		 * \param usY Y position
 		 */
-		void getPos( ushort& usX, ushort& usY ) const throw()
+		void getPos( unsigned short& usX, unsigned short& usY ) const throw()
 		{ 
 			ptrdiff_t diff = ( positionPtr - parentPtr->begin().positionPtr );
 			usY = diff / parentPtr->getExtent(0);
@@ -434,7 +434,7 @@ public:
 		 * \param usY Y position
 		 * \param usZ Z position
 		 */
-		void getPos( ushort& usX, ushort& usY, ushort& usZ ) const throw()
+		void getPos( unsigned short& usX, unsigned short& usY, unsigned short& usZ ) const throw()
 		{
 			ptrdiff_t diff = ( positionPtr - parentPtr->begin().positionPtr );
 			usZ = diff / ( parentPtr->getExtent(0) * parentPtr->getExtent(1) );
@@ -450,7 +450,7 @@ public:
 		 * \param usZ Z position
 		 * \param usW W position
 		 */
-		void getPos( ushort& usX, ushort& usY, ushort& usZ, ushort& usW ) const throw()
+		void getPos( unsigned short& usX, unsigned short& usY, unsigned short& usZ, unsigned short& usW ) const throw()
 		{
 			ptrdiff_t diff = ( positionPtr - parentPtr->begin().positionPtr );
 			usW = diff / ( parentPtr->getExtent(0) * parentPtr->getExtent(1) * parentPtr->getExtent(2) );
@@ -520,13 +520,13 @@ public:
   /// Returns reverse_iterator for end of array
   reverse_iterator rend() throw();	
 	/// Returns an iterator to the given position 
-	iterator moveTo( const ushort usX ) throw();
+	iterator moveTo( const unsigned short usX ) throw();
 	/// Returns an iterator to the given position 
-	iterator moveTo( const ushort usX, const ushort usY ) throw();
+	iterator moveTo( const unsigned short usX, const unsigned short usY ) throw();
 	/// Returns an iterator to the given position 
-	iterator moveTo( const ushort usX, const ushort usY, const ushort usZ ) throw();
+	iterator moveTo( const unsigned short usX, const unsigned short usY, const unsigned short usZ ) throw();
 	/// Returns an iterator to the given position 
-	iterator moveTo( const ushort usX, const ushort usY, const ushort usZ, const ushort usW ) throw();
+	iterator moveTo( const unsigned short usX, const unsigned short usY, const unsigned short usZ, const unsigned short usW ) throw();
   
 /* Other Methods */
   /// Reimplemented from CDataSet

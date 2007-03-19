@@ -58,7 +58,8 @@ private:
 public:
 /* Structors */
   /// Constructor.
-  CSource( ulong ulID, ushort usNoOfOutputs = 1, const std::string &sClassName_ = "CSource",
+  CSource( unsigned long ulID, unsigned short usNoOfOutputs = 1, 
+    const std::string &sClassName_ = "CSource",
 		const std::string &sClassVersion_ = CSOURCE_VERSION, 
 		const std::string &sDerivedFrom_ = "CPipelineItem" )
     throw();

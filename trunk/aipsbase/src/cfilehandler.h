@@ -95,7 +95,7 @@ public:
 protected:
 /** \enum EDataType Voxel datatype enumeration */
 	enum EDataType { DUInt8 = 1, DUInt16 = 2, DUInt32 = 4, DInt8 = 11, DInt16 = 12 , DInt32 = 14, 
-		DFloat16 = 20+sizeof(float), DFloat32 = 20+sizeof(double), DFloat64 = 20+sizeof(long double) };	
+		DFloat16 = 20+sizeof(float), DFloat32 = 20+sizeof(double), DFloat64 = 20+sizeof(long double)+1 };	
 /* Other methods */
 	/// Converts a header map entry into an EDataType
 	EDataType getDataType( const std::string& sHeaderEntry ) const 

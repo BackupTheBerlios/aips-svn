@@ -60,7 +60,7 @@ public:
 /** \name Structors */
   //@{
 	/// Constructor
-  CEvent( CSubject* generator_, uint uiEventType_, const std::string& className_ = "CEvent",
+  CEvent( CSubject* generator_, unsigned int uiEventType_, const std::string& className_ = "CEvent",
 		const std::string& classVersion_ = AIPSCEVENT_VERSION,
     const std::string& derivedFrom_ = "CBase" ) throw( NullException );
 	/// Copy constructor
@@ -82,7 +82,7 @@ public:
 	CSubject* getGenerator() const
 		throw();
 	/// Returns the type id of this event
-	uint getType() const
+	unsigned int getType() const
 		throw();
   //@}  
 /** \name Other methods */
@@ -93,7 +93,7 @@ public:
   //@}
 private:
 	CSubject* generator; ///< Generator subject of the event
-	uint uiEventType;    ///< Type identifier of the actual event
+	unsigned int uiEventType;    ///< Type identifier of the actual event
 };
 
 typedef boost::shared_ptr<CEvent> TEventPtr;
@@ -167,7 +167,7 @@ public:
 /** \name  Structors */
   //@{
 	/// Constructor
-	CProgressStartEvent( CSubject* generator_, uint uiMaxProgress_ )
+	CProgressStartEvent( CSubject* generator_, unsigned int uiMaxProgress_ )
 		throw( NullException );
 	/// Copy constructor
 	CProgressStartEvent( const CProgressStartEvent& anEvent )
@@ -184,7 +184,7 @@ public:
 /** \name  Accessors */
   //@{
 	/// Returns the maximum number for progression  	
-	uint getMaxProgress() const
+	unsigned int getMaxProgress() const
    throw();
   //@}
 /** \name  Other methods */
@@ -194,7 +194,7 @@ public:
     throw();
   //@}
 private:
-	uint uiMaxProgress; ///< The maximum number for progression
+	unsigned int uiMaxProgress; ///< The maximum number for progression
 };
 
 /**
@@ -230,7 +230,7 @@ public:
 /** \name  Structors */
   //@{
 	/// Constructor
-  CProgressEvent( CSubject* generator_, uint uiValue_ )
+  CProgressEvent( CSubject* generator_, unsigned int uiValue_ )
   	throw( NullException );
 	/// Copy constructor
 	CProgressEvent( const CProgressEvent& anEvent )
@@ -248,7 +248,7 @@ public:
 /** \name  Accessors */
   //@{
 	/// Returns the actual progression value
-	uint getValue() const
+	unsigned int getValue() const
    throw();
   //@} 
 /** \name  Other methods */
@@ -258,7 +258,7 @@ public:
     throw();
   //@}
 private:
-	uint uiValue; ///< The actual progression value
+	unsigned int uiValue; ///< The actual progression value
 };
 #endif
 

@@ -25,7 +25,8 @@ using namespace aips;
  * \param sClassVersion_ version number of the class (type information)
  * \param sDerivedFrom_ name of the classes this class is derived from (type information)
  */
-CConverter::CConverter( ulong ulID, ushort usFanIn, ushort usFanOut, const std::string &sClassName_, 
+CConverter::CConverter( unsigned long ulID, unsigned short usFanIn, 
+    unsigned short usFanOut, const std::string &sClassName_, 
 		const std::string &sClassVersion_, const std::string &sDerivedFrom_ )
   throw() : CPipelineItem ( ulID, usFanIn, usFanOut, sClassName_, sClassVersion_, sDerivedFrom_ )
 {

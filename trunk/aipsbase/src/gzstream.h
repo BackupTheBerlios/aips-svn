@@ -32,7 +32,11 @@
 // standard C++ with new header file names and std:: namespace
 #include <iostream>
 #include <fstream>
+#ifdef WIN32
+#include <itk_zlib.h>
+#else
 #include <zlib.h>
+#endif
 
 namespace gz {
 

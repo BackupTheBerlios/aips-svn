@@ -25,14 +25,14 @@ using namespace aips;
  * \param sDerivedFrom_ name of the classes this class is derived from (type information)
  * The output ports are set to IOInteger type by default
  */
-CSource::CSource(  ulong ulID, ushort usNoOfOutputs, const string &sClassName_, 
+CSource::CSource( unsigned long ulID, unsigned short usNoOfOutputs, const string &sClassName_, 
 		const string &sClassVersion_, const string &sDerivedFrom_ ) throw()
   : CPipelineItem ( ulID, 0, usNoOfOutputs, sClassName_, sClassVersion_, sDerivedFrom_ )
 {
   setModuleName( "CSource" );
   setType( CPipelineItem::ITypeSource );
 
-	for( uint i = 0; i < usNoOfOutputs; ++i )
+	for( unsigned int i = 0; i < usNoOfOutputs; ++i )
 		outputsVec[i].portType = CPipelineItem::IOInteger;
 }
 

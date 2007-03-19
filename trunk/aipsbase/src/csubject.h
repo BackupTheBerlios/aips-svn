@@ -56,7 +56,7 @@ public:
 	CSubject operator=( const CSubject& );
 /* Other methods */  	
   /// Attaches an observer to the observer list
-	void attachObserver( CObserver* const anObserverPtr, uint uiInterestType )
+	void attachObserver( CObserver* const anObserverPtr, unsigned int uiInterestType )
 		throw( NullException );
 	/// Removes an observer to the observer list
 	void detachObserver( CObserver* const anObserverPtr )
@@ -69,10 +69,10 @@ private:
 	struct SObserverListEntry
 	{
 		/// Constructor
-		SObserverListEntry( CObserver* anObserverPtr_,	uint uiInterestType_ ) throw();
+		SObserverListEntry( CObserver* anObserverPtr_,	unsigned int uiInterestType_ ) throw();
 		/* Data members */		
 		CObserver* const anObserverPtr; ///< Registered observer
-		uint uiInterestType;         ///< Type identifier for observed interest
+		unsigned int uiInterestType;         ///< Type identifier for observed interest
 	};
 	/// Binary predicate functor to enable searching for specific observers in a list
 	struct CheckIdentityFunctor : public std::binary_function<SObserverListEntry, CObserver*, bool>

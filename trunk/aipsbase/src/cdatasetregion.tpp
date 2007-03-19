@@ -18,7 +18,7 @@
  * \returns Position of origin for the given index
  * \throws OutOfRangeException if given index is out of range
  */
-inline size_t CDataSetRegion::getOrigin( ushort usOriginIndex ) throw( OutOfRangeException )
+inline size_t CDataSetRegion::getOrigin( unsigned short usOriginIndex ) throw( OutOfRangeException )
 { 
 	if ( usOriginIndex > originVec.size() ) 
 		throw( OutOfRangeException( SERROR("dimensionSize too big"), CException::RECOVER, ERR_BADDIMENSION ) );
@@ -31,7 +31,7 @@ inline size_t CDataSetRegion::getOrigin( ushort usOriginIndex ) throw( OutOfRang
  * \returns Region extent for the given index
  * \throws OutOfRangeException if given index is out of range
  */ 
-inline size_t CDataSetRegion::getExtent( ushort usExtentIndex ) throw( OutOfRangeException )
+inline size_t CDataSetRegion::getExtent( unsigned short usExtentIndex ) throw( OutOfRangeException )
 { 
 	if ( usExtentIndex > extentsVec.size() ) 
 		throw( OutOfRangeException( SERROR("dimensionSize too big"), CException::RECOVER, ERR_BADDIMENSION ) );

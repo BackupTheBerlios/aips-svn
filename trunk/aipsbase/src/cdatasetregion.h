@@ -58,13 +58,13 @@ public:
 /** \name Accessors */
   //@{
   /// Get origin position
-  size_t getOrigin( ushort usOriginIndex ) 
+  size_t getOrigin( unsigned short usOriginIndex ) 
     throw( OutOfRangeException );
   /// \overload
   std::vector<size_t> getOrigin() 
     throw();
   /// Get region extents
-  size_t getExtent( ushort usExtentIndex ) 
+  size_t getExtent( unsigned short usExtentIndex ) 
     throw( OutOfRangeException );
   /// \overload
   std::vector<size_t> getExtents() 

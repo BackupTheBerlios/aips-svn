@@ -35,7 +35,7 @@ using boost::lexical_cast;
  * \throws NullException if generator_ is NULL since each event needs a generator
  * \post All members are initialised properly
  */
-CEvent::CEvent( CSubject* generator_, uint uiEventType_, const string& className_, const string& classVersion_,
+CEvent::CEvent( CSubject* generator_, unsigned int uiEventType_, const string& className_, const string& classVersion_,
 	const string& derivedFrom_ ) throw( NullException )
  : CBase( className_, classVersion_, derivedFrom_ ), generator( generator_ ), uiEventType( uiEventType_ )
 {
@@ -93,7 +93,7 @@ CSubject* CEvent::getGenerator() const throw()
 }
 
 /** \returns the type identifier of the actual event */
-uint CEvent::getType() const throw()
+unsigned int CEvent::getType() const throw()
 {
 	return uiEventType;
 }
@@ -107,7 +107,7 @@ uint CEvent::getType() const throw()
  */
 const std::string CEvent::dump() const throw()
 {
-	return "Generator " + lexical_cast<string>( ulong(generator) )+ ", event type " +lexical_cast<string>( uiEventType )
+	return "Generator " + lexical_cast<string>( unsigned long(generator) )+ ", event type " +lexical_cast<string>( uiEventType )
 		+ "\n" + CBase::dump();
 }
 
@@ -227,7 +227,7 @@ CDataChangedEvent::~CDataChangedEvent() throw()
  * \param uiMaxProgress_ maximum number of progress steps
  * \throws NullException if generator_ is NULL since each event needs a generator
  */
-CProgressStartEvent::CProgressStartEvent( CSubject* generator_, uint uiMaxProgress_ ) throw( NullException )
+CProgressStartEvent::CProgressStartEvent( CSubject* generator_, unsigned int uiMaxProgress_ ) throw( NullException )
 	: CEvent( generator_, EProgressStartEvent, "CProgressStartEvent", AIPSCEVENT_VERSION, "CEvent" ),
     uiMaxProgress( uiMaxProgress_ )
 {
@@ -265,7 +265,7 @@ CProgressStartEvent CProgressStartEvent::operator=( const CProgressStartEvent& a
  *************/
 
 /** \returns the actual maximum progress value */
-uint CProgressStartEvent::getMaxProgress() const throw()
+unsigned int CProgressStartEvent::getMaxProgress() const throw()
 {
 	return uiMaxProgress;
 }
@@ -326,7 +326,7 @@ CProgressResetEvent::~CProgressResetEvent() throw()
  * \param uiValue_ actual progress number
  * \throws NullException if generator_ is NULL since each event needs a generator
  */
-CProgressEvent::CProgressEvent( CSubject* generator_, uint uiValue_ ) throw( NullException )
+CProgressEvent::CProgressEvent( CSubject* generator_, unsigned int uiValue_ ) throw( NullException )
 	: CEvent( generator_, EProgressEvent, "CProgressEvent", AIPSCEVENT_VERSION, "CEvent" ), uiValue( uiValue_ )
 {
 	if( generator_ == NULL )
@@ -361,7 +361,7 @@ CProgressEvent CProgressEvent::operator=( const CProgressEvent& anEvent )	throw(
  *************/
 
 /** \returns the actual progress value */
-uint CProgressEvent::getValue() const throw()
+unsigned int CProgressEvent::getValue() const throw()
 {
 	return uiValue;
 }

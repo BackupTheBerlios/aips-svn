@@ -48,7 +48,7 @@ void CPipelineItem::CParameterMap::initLong( const std::string& sParamName,
  * \param ulParamMax maximum value of parameter
  */
 void CPipelineItem::CParameterMap::initUnsignedLong( const std::string& sParamName, 
-	const ulong ulParamDef, const ulong ulParamMin, const ulong ulParamMax ) throw()
+	const unsigned long ulParamDef, const unsigned long ulParamMin, const unsigned long ulParamMax ) throw()
 {
 	setUnsignedLong( sParamName, ulParamDef );
 	setUnsignedLong( sParamName+"_Default", ulParamDef );
@@ -124,7 +124,8 @@ bool CPipelineItem::itemCompareFunctor::operator() ( CPipelineItem* a, CPipeline
  * <li> build module dialog (if applicable)
  * </ul>
  */
-CPipelineItem::CPipelineItem( ulong ulID_, ushort usFIn_, ushort usFOut_, const string &sClassName_, 
+CPipelineItem::CPipelineItem( unsigned long ulID_, unsigned short usFIn_, 
+    unsigned short usFOut_, const string &sClassName_, 
 		const string &sClassVersion_, const string &sDerivedFrom_ ) throw()
   : CSubject( sClassName_, sClassVersion_, sDerivedFrom_ ),
   sModuleID(""), sDocumentation("No documentation available"), bModuleReady( false ), ownTimeStamp ( 0 ), bCacheOutputs( true ),iDepth( -1 ), ulID( ulID_ ), usFanIn( usFIn_ ), usFanOut( usFOut_ ), connectionsPtrVec( usFanIn ),
@@ -162,7 +163,7 @@ CPipelineItem::~CPipelineItem() throw()
  * \param usInputNumber requested input port
  * \returns dataset belonging to the given input port
  */
-TDataSetPtr CPipelineItem::getInput( ushort usInputNumber ) const throw( OutOfRangeException )
+TDataSetPtr CPipelineItem::getInput( unsigned short usInputNumber ) const throw( OutOfRangeException )
 {
   if ( usInputNumber >= usFanIn )
     throw( OutOfRangeException( SERROR("Input port number too large"), CException::FATAL, ERR_RANGE ) );
@@ -173,7 +174,7 @@ TDataSetPtr CPipelineItem::getInput( ushort usInputNumber ) const throw( OutOfRa
  * \param usOutputNumber requested output port
  * \returns dataset belonging to the given output port
  */
-TDataSetPtr CPipelineItem::getOutput( ushort usOutputNumber ) const throw( OutOfRangeException )
+TDataSetPtr CPipelineItem::getOutput( unsigned short usOutputNumber ) const throw( OutOfRangeException )
 {
   if ( usOutputNumber >= usFanOut )
     throw( OutOfRangeException( SERROR("Output port number too large"), CException::FATAL, ERR_RANGE ) );
@@ -185,7 +186,7 @@ TDataSetPtr CPipelineItem::getOutput( ushort usOutputNumber ) const throw( OutOf
  * \param usInputNumber port number the dataset should be send to
  * \exception NullException if given parameter is NULL
  */
-void CPipelineItem::setInput( TDataSetPtr anInputPtr, ushort usInputNumber ) throw( OutOfRangeException )
+void CPipelineItem::setInput( TDataSetPtr anInputPtr, unsigned short usInputNumber ) throw( OutOfRangeException )
 {
   if ( usInputNumber >= usFanIn )
 	  throw( OutOfRangeException( SERROR("Input port number too large"), CException::FATAL, ERR_RANGE ) );
@@ -198,7 +199,7 @@ void CPipelineItem::setInput( TDataSetPtr anInputPtr, ushort usInputNumber ) thr
  * \param usOutputNumber port number the dataset should be send to 
  * \exception NullException if given parameter is NULL
  */
-void CPipelineItem::setOutput( TDataSetPtr anOutputPtr, ushort usOutputNumber ) throw( OutOfRangeException )
+void CPipelineItem::setOutput( TDataSetPtr anOutputPtr, unsigned short usOutputNumber ) throw( OutOfRangeException )
 {
   if ( usOutputNumber >= usFanOut )
 	  throw( OutOfRangeException( SERROR("Output port number too large"), CException::FATAL, ERR_RANGE ) );
@@ -250,7 +251,7 @@ DBG1( "+++ CPipelineItem::update " << sName );
 	allItemsSet.insert( this );
 	if ( iDepth_ > iDepth )
 		iDepth = iDepth_;
-	for( uint i = 0; i < connectionsPtrVec.size(); ++i )
+	for( unsigned int i = 0; i < connectionsPtrVec.size(); ++i )
 		if ( TPipelineItemPtr tmpPtr = connectionsPtrVec[i].outputItem.lock() )
 			tmpPtr->update( iDepth + 1 );
 	if ( iDepth_ == 0 )
@@ -265,7 +266,7 @@ DS( "--- CPipelineItem::update " << sName );
 /**
  * \param usPortNumber number of output port to delete
  */
-void CPipelineItem::deleteOldOutput( ushort usPortNumber ) throw( OutOfRangeException )
+void CPipelineItem::deleteOldOutput( unsigned short usPortNumber ) throw( OutOfRangeException )
 {
 	if ( usPortNumber >= usFanOut )
 		throw( OutOfRangeException( "Output port number too high", CException::FATAL, ERR_RANGE ) );
@@ -282,7 +283,7 @@ DBG1( "+++ CPipelineItem::execute" << sName );
 	bool bUpdate = false;
 	if ( !bRecompute && ownTimeStamp != 0 )
 	{
-		for( uint i = 0; i < connectionsPtrVec.size(); ++i )
+		for( unsigned int i = 0; i < connectionsPtrVec.size(); ++i )
 		{
 			if ( TPipelineItemPtr tmpPtr = connectionsPtrVec[i].outputItem.lock() )
 				if ( tmpPtr->ownTimeStamp != connectionsTimeStampsVec[i] )
@@ -298,7 +299,7 @@ DS("Upd: " << bUpdate);
 	if ( bUpdate )
 	{
 DS( "Updating " << ulID << " ... " );
-		for( uint i = 0; i < connectionsPtrVec.size(); ++i )
+		for( unsigned int i = 0; i < connectionsPtrVec.size(); ++i )
 		{
 			if ( TPipelineItemPtr tmpPtr = connectionsPtrVec[i].outputItem.lock() )			
 			{
@@ -307,7 +308,7 @@ DS( "Updating " << ulID << " ... " );
 			}
 		}
 		this->apply();
-		for( uint i = 0; i < connectionsPtrVec.size(); ++i )
+		for( unsigned int i = 0; i < connectionsPtrVec.size(); ++i )
 		{
 			if ( TPipelineItemPtr tmpPtr = connectionsPtrVec[i].outputItem.lock() )
 			{
@@ -355,7 +356,7 @@ DS( "--- CPipelineItem::iterate " );
  * \param uiImportedPort number of imported output port
  * \throws OutOfRangeException if input or output port numbers are too large
  */
-void CPipelineItem::addConnection( TPipelineItemPtr anInputPtr, uint uiLocalPort, uint uiImportedPort )
+void CPipelineItem::addConnection( TPipelineItemPtr anInputPtr, unsigned int uiLocalPort, unsigned int uiImportedPort )
 	throw( OutOfRangeException, RunTimeTypeException, NullException )
 {
 	if ( uiLocalPort > usFanIn )
@@ -379,7 +380,7 @@ DS( "Connecting output " << uiImportedPort << " of " << anInputPtr->ulID
  * \param uiLocalPort port connection to delete
  * \throws OutOfRangeException if port number is too large
  */
-void CPipelineItem::deleteConnection( uint uiLocalPort ) throw( OutOfRangeException )
+void CPipelineItem::deleteConnection( unsigned int uiLocalPort ) throw( OutOfRangeException )
 {
 	if ( uiLocalPort > usFanIn )
 		throw( OutOfRangeException( SERROR("Port number too large"), CException::FATAL, ERR_RANGE ) );
@@ -402,7 +403,7 @@ void CPipelineItem::cacheOutput( bool bCacheOutputs_ ) throw()
 void CPipelineItem::clearCache() throw()
 {
 	if ( !bCacheOutputs )
-		for( uint i = 0; i < outputsVec.size(); ++i )
+		for( unsigned int i = 0; i < outputsVec.size(); ++i )
 		{
 			DBG3( "-- Clearing data of " << this->ulID << " " << outputsVec[i].portData.use_count() );
 			outputsVec[i].portData.reset();

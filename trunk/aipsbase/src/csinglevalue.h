@@ -82,16 +82,16 @@ public:
     throw();
 /* Operators (access) */		
   /// Access operator for data members. This won't make any range checking!
-  inline valueType& operator()( const ushort usIndex = 0 )
+  inline valueType& operator()( const unsigned short usIndex = 0 )
     throw();
   /// Const version of the access operator
-  inline const valueType& operator()( const ushort usIndex = 0 ) const
+  inline const valueType& operator()( const unsigned short usIndex = 0 ) const
     throw();
   /// Access operator for data members. This does range checking.
-  inline valueType& at( ushort usIndex = 0 )
+  inline valueType& at( unsigned short usIndex = 0 )
     throw( OutOfRangeException );
   /// Const version of access operator for data members. This does range checking.
-  inline const valueType& at( ushort usIndex = 0 ) const
+  inline const valueType& at( unsigned short usIndex = 0 ) const
     throw( OutOfRangeException );
 /* Other Methods */
   /// Produces an information string about the actual object.

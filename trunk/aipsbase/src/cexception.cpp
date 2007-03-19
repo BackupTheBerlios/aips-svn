@@ -37,7 +37,7 @@ using namespace aips;
  * \post All members are initialised properly
  * The constructor automatically prepends an error type to the given error string.
  */
-CException::CException( string sError_, TExceptionType theExceptionType_, uint uiErrorNumber_,
+CException::CException( string sError_, TExceptionType theExceptionType_, unsigned int uiErrorNumber_,
 	const string &sClassName_, const string &sClassVersion_, const string &sDerivedFrom_ )
   throw() : CBase( sClassName_, sClassVersion_, sDerivedFrom_ ),
   sErrorString( sError_ ), theExceptionType( theExceptionType_ ), uiErrorNumber( uiErrorNumber_ )
@@ -122,7 +122,7 @@ const char* CException::what() const throw()
  * Returns an error code to further specify the type of the exception
  * \returns the error code 
  */
-uint CException::getErrorNumber() const throw()
+unsigned int CException::getErrorNumber() const throw()
 {
   return uiErrorNumber;
 }
@@ -150,7 +150,7 @@ const string CException::dump() const throw()
  ********************/
 
 BadInitException::BadInitException ( std::string sError_, TExceptionType theExceptionType_,
-	uint uiErrorNumber_ ) throw()
+	unsigned int uiErrorNumber_ ) throw()
   : CException ( sError_, theExceptionType_, uiErrorNumber_, "BadInitException", "0.4", "CException" )
 { 
 }
@@ -171,7 +171,7 @@ BadInitException::~BadInitException () throw()
  ***********************/
  
 OutOfRangeException::OutOfRangeException ( std::string sError_, TExceptionType theExceptionType_,
-	uint uiErrorNumber_ ) throw()
+	unsigned int uiErrorNumber_ ) throw()
   : CException ( sError_, theExceptionType_, uiErrorNumber_, "OutOfRangeException", "0.4", "CException" )
 { 
 }
@@ -192,7 +192,7 @@ OutOfRangeException::~OutOfRangeException () throw()
  *****************/
  
 FileException::FileException( std::string sError_, TExceptionType theExceptionType_, 
-	uint uiErrorNumber_ ) throw()
+	unsigned int uiErrorNumber_ ) throw()
 	: CException ( sError_, theExceptionType_, uiErrorNumber_, "FileException", "0.4", "CException" )
 { 
 }
@@ -213,7 +213,7 @@ FileException::~FileException() throw()
  *******************/
  
 PlugInException::PlugInException( std::string sError_, TExceptionType theExceptionType_,
-	uint uiErrorNumber_ ) throw()
+	unsigned int uiErrorNumber_ ) throw()
   : CException ( sError_, theExceptionType_, uiErrorNumber_, "PlugInException", "0.4", "CException" )
 {
 
@@ -235,7 +235,7 @@ PlugInException::~PlugInException() throw()
  ***********************/
  
 NotPresentException::NotPresentException( std::string sError_, TExceptionType theExceptionType_,
-	uint uiErrorNumber_ ) throw()
+	unsigned int uiErrorNumber_ ) throw()
   : CException ( sError_, theExceptionType_, uiErrorNumber_, "NotPresentException", "0.4", "CException" )
 { 
 }
@@ -256,7 +256,7 @@ NotPresentException::~NotPresentException() throw()
  *****************/
  
 NullException::NullException( std::string sError_, TExceptionType theExceptionType_, 
-	uint uiErrorNumber_ ) throw()
+	unsigned int uiErrorNumber_ ) throw()
   : CException ( sError_, theExceptionType_, uiErrorNumber_, "NullException", "0.4", "CException" )
 { 
 }
@@ -277,7 +277,7 @@ NullException::~NullException() throw()
  ************************/
 
 RunTimeTypeException::RunTimeTypeException( std::string sError_, TExceptionType theExceptionType_,
-	uint uiErrorNumber_ ) throw()
+	unsigned int uiErrorNumber_ ) throw()
   : CException ( sError_, theExceptionType_, uiErrorNumber_, "RunTimeTypeException", "0.4", "CException" )
 { 
 }

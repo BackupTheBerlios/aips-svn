@@ -106,7 +106,7 @@ template<typename valueType> inline valueType* CSingleValue<valueType>::getArray
  * \param usIndex Index of member (only use if CSingleValue is a vector!)
  */
 template<typename valueType> inline valueType& CSingleValue<valueType>::operator()
-  ( const ushort usIndex ) throw()
+  ( const unsigned short usIndex ) throw()
 {
   return valueVec[usIndex];
 }
@@ -115,7 +115,7 @@ template<typename valueType> inline valueType& CSingleValue<valueType>::operator
  * \param usIndex Index of member (only use if CSingleValue is a vector!)
  */
 template<typename valueType> inline const valueType& CSingleValue<valueType>::operator()
-  ( const ushort usIndex ) const throw()
+  ( const unsigned short usIndex ) const throw()
 {
   return valueVec[usIndex];
 }
@@ -125,7 +125,7 @@ template<typename valueType> inline const valueType& CSingleValue<valueType>::op
  * \exception OutOfRangeException if usIndex is greater than dataDimensionSize
  */
 template<typename valueType> inline valueType& CSingleValue<valueType>::at
-  ( const ushort usIndex ) throw( OutOfRangeException )
+  ( const unsigned short usIndex ) throw( OutOfRangeException )
 {
   if ( usIndex > ( dataDimensionSize - 1 ) )
     throw( OutOfRangeException( SERROR("Index out of range"), ERR_BADDIMENSION, 
@@ -138,7 +138,7 @@ template<typename valueType> inline valueType& CSingleValue<valueType>::at
  * \exception OutOfRangeException if usIndex is greater than dataDimensionSize
  */
 template<typename valueType> inline const valueType& CSingleValue<valueType>::at
-  ( const ushort usIndex ) const throw( OutOfRangeException )
+  ( const unsigned short usIndex ) const throw( OutOfRangeException )
 {
   if ( usIndex > ( dataDimensionSize - 1 ) )
     throw( OutOfRangeException( SERROR("Index out of range"), ERR_BADDIMENSION, 
