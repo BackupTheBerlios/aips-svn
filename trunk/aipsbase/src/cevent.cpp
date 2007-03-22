@@ -107,7 +107,8 @@ unsigned int CEvent::getType() const throw()
  */
 const std::string CEvent::dump() const throw()
 {
-	return "Generator " + lexical_cast<string>( unsigned long(generator) )+ ", event type " +lexical_cast<string>( uiEventType )
+	return "Generator " + lexical_cast<string>( static_cast<void*>( generator ) )
+		+ ", event type " +lexical_cast<string>( uiEventType )
 		+ "\n" + CBase::dump();
 }
 

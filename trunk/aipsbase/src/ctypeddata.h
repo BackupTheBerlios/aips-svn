@@ -146,23 +146,23 @@ public:
     throw();
   /// Adjust range so that the given value lies definitely in data range
   inline void adjustDataRange( const TValue theValue )
-    throw();  
+    throw();
   inline bool isInDataRange( const TValue theValue )
   	throw()
   {
   	return theDataRange.isInRange( theValue );
   }
 	/// Resizes the data set. This won't change the array dimension nor the data dimension
-	inline void resize( const size_t* extendArr_, const EDataAlign alignment = DataAlignFront ) 
+	inline void resize( const size_t* extendArr_, const EDataAlign alignment = DataAlignFront )
 		throw();
 	/// Resizes the data set. This won't change the array dimension nor the data dimension
   inline void resize( const std::vector<size_t> extendVec_,
 		const EDataAlign alignment = DataAlignFront )	throw();
 	/// Increases the data dimension by the given amount
-	inline void increaseDataDimension( const size_t addToDataDimension ) 
+	inline void increaseDataDimension( const size_t addToDataDimension )
 		throw();
 	/// Decreases the data dimension by the given amount
-	inline void decreaseDataDimension( const size_t subFromDataDimension ) 
+	inline void decreaseDataDimension( const size_t subFromDataDimension )
 		throw();
 /* Access operators */
   /// Access operator without range checking (1D)
@@ -196,7 +196,7 @@ public:
   TValue& operator[]( const TPoint2D aPosition ) throw();
   /// Operator[] for C-Style array access to the dataset using a discrete vector parameter
   TValue& operator[]( const TPoint3D aPosition ) throw();
-  /// Const access operator[] for C-Style array access to the dataset 
+  /// Const access operator[] for C-Style array access to the dataset
   const TValue& operator[]( const unsigned long ulIndex ) const throw();
   /// Const access operator[] for C-Style array access to the dataset using a discrete vector parameter
   const TValue& operator[]( const TPoint2D aPosition ) const throw();
@@ -204,151 +204,151 @@ public:
   const TValue& operator[]( const TPoint3D aPosition ) const throw();
 /* Iterators */
 	/** An random iterator for CTypedData */
-	template<typename T, typename U > class TypedDataIterator 
+	template<typename T, typename U > class TypedDataIterator
 		: public std::iterator<std::random_access_iterator_tag, T, U>
 	{
 	public:
 	/* Structors */
-		/** 
-		 * Constructor for internal usage 
+		/**
+		 * Constructor for internal usage
 		 * \param initialPositionPtr element to point to
 		 * \param parentPtr_ data structure of iterator
 		 */
 		TypedDataIterator( T* initialPositionPtr, CTypedData<T>* parentPtr_ ) throw()
-		{ 
-			positionPtr = initialPositionPtr; 
-			parentPtr = parentPtr_; 
+		{
+			positionPtr = initialPositionPtr;
+			parentPtr = parentPtr_;
 		}
 		/** Constructor */
 		TypedDataIterator() throw()
-		{ 
-			positionPtr = NULL; 
-			parentPtr = NULL; 
+		{
+			positionPtr = NULL;
+			parentPtr = NULL;
 		}
 		/** Destructor */
 		~TypedDataIterator() throw()
 		{
 		}
-		/** 
-		 * Copy constructor 
+		/**
+		 * Copy constructor
 		 * \param otherIterator iterator to copy from
 		 */
 		TypedDataIterator( const TypedDataIterator& otherIterator ) throw()
-		{ 
-			positionPtr = otherIterator.positionPtr; 
-			parentPtr = otherIterator.parentPtr; 
+		{
+			positionPtr = otherIterator.positionPtr;
+			parentPtr = otherIterator.parentPtr;
 		}
 	/* Operators / Assignment and pointer-like behaviour */
-		/** 
-		 * Assignment operator 
+		/**
+		 * Assignment operator
  		 * \param otherIterator iterator to copy from
 		 */
 		TypedDataIterator& operator=( const TypedDataIterator& otherIterator ) throw()
-		{ 
+		{
 			if ( &otherIterator == this )
 				return *this;
-			positionPtr = otherIterator.positionPtr; 
-			parentPtr = otherIterator.parentPtr; 
-			return *this; 
+			positionPtr = otherIterator.positionPtr;
+			parentPtr = otherIterator.parentPtr;
+			return *this;
 		}
 		/** Derefercing operator */
 		T& operator*() throw()
-		{ 
-			return (*positionPtr); 
+		{
+			return (*positionPtr);
 		}
 		/** Member operator */
 		T* operator->() throw()
-		{ 
-			return positionPtr; 
+		{
+			return positionPtr;
 		}
 	/* Operators / Comparison */
-		/** 
-		 * Equality operator 
+		/**
+		 * Equality operator
 		 * \param otherIterator iterator to compare with
 		 */
 		bool operator==( const TypedDataIterator<T,U>& otherIterator ) throw()
-		{ 
-			return (positionPtr == otherIterator.positionPtr); 
+		{
+			return (positionPtr == otherIterator.positionPtr);
 		}
-		/** 
-		 * Non-Equality operator 
+		/**
+		 * Non-Equality operator
 		 * \param otherIterator iterator to compare with
 		 */
 		bool operator!=( const TypedDataIterator<T,U>& otherIterator ) throw()
-		{ 
-			return (positionPtr != otherIterator.positionPtr); 
+		{
+			return (positionPtr != otherIterator.positionPtr);
 		}
-		/** 
-		 * Less than operator 
+		/**
+		 * Less than operator
 		 * \param otherIterator iterator to compare with
 		 */
 		bool operator<( const TypedDataIterator<T,U>& otherIterator ) throw()
-		{ 
-			return (positionPtr < otherIterator.positionPtr); 
+		{
+			return (positionPtr < otherIterator.positionPtr);
 		}
-		/** 
-		 * Greater than operator 
+		/**
+		 * Greater than operator
 		 * \param otherIterator iterator to compare with
 		 */
 		bool operator>( const TypedDataIterator<T,U>& otherIterator ) throw()
-		{ 
-			return (positionPtr > otherIterator.positionPtr); 
+		{
+			return (positionPtr > otherIterator.positionPtr);
 		}
-		/** 
-		 * Less or equal than operator 
+		/**
+		 * Less or equal than operator
 		 * \param otherIterator iterator to compare with
 		 */
 		bool operator<=( const TypedDataIterator<T,U>& otherIterator ) throw()
-		{ 
-			return (positionPtr <= otherIterator.positionPtr); 
+		{
+			return (positionPtr <= otherIterator.positionPtr);
 		}
-		/** 
-		 * Greater or equal than operator 
+		/**
+		 * Greater or equal than operator
 		 * \param otherIterator iterator to compare with
 		 */
 		bool operator>=( const TypedDataIterator<T,U>& otherIterator ) throw()
-		{ 
-			return (positionPtr >= otherIterator.positionPtr); 
+		{
+			return (positionPtr >= otherIterator.positionPtr);
 		}
 	/* Operators to mimic pointer arithmetic */
 		/** Increment operator (prefix) */
 		TypedDataIterator<T,U>& operator++() throw()
-		{ 
-			++positionPtr; 
-			return *this; 
+		{
+			++positionPtr;
+			return *this;
 		}
 		/** Increment operator (postfix) */
 		TypedDataIterator<T,U> operator++( int ) throw()
-		{ 
-			return TypedDataIterator<T,U>( positionPtr++, parentPtr ); 
+		{
+			return TypedDataIterator<T,U>( positionPtr++, parentPtr );
 		}
 		/** Decrement operator (prefix) */
 		TypedDataIterator<T,U>& operator--() throw()
-		{ 
-			--positionPtr; 
-			return *this; 
+		{
+			--positionPtr;
+			return *this;
 		}
 		/** Decrement operator (postfix) */
 		TypedDataIterator<T,U> operator--( int ) throw()
-		{ 
-			return TypedDataIterator<T,U>( positionPtr--, parentPtr ); 
+		{
+			return TypedDataIterator<T,U>( positionPtr--, parentPtr );
 		}
-		/** 
-		 * Operator += 
+		/**
+		 * Operator +=
 		 * \param distance number of steps to move
 		 */
 		TypedDataIterator<T,U>& operator+=( ptrdiff_t distance ) throw()
-		{ 
-			positionPtr += distance; 
+		{
+			positionPtr += distance;
 			return *this;
 		}
-		/** 
-		 * Operator -= 
+		/**
+		 * Operator -=
 		 * \param distance number of steps to move
-		 */		
+		 */
 		TypedDataIterator<T,U>& operator-=( ptrdiff_t distance ) throw()
-		{ 
-			positionPtr -= distance; 
+		{
+			positionPtr -= distance;
 			return *this;
 		}
 		/**
@@ -356,17 +356,17 @@ public:
 		 * \param sX steps to move in X direction
 		 */
 		void moveRel( const short sX ) throw()
-		{ 
-			positionPtr += sX; 
+		{
+			positionPtr += sX;
 		}
 		/**
 		 * Moves the iterator relative to its actual position
 		 * \param sX steps to move in X direction
 		 * \param sY steps to move in Y direction
-		 */		
+		 */
 		void moveRel( const short sX, const short sY ) throw()
-		{ 
-			positionPtr += sX + parentPtr->getExtent(0) * sY; 
+		{
+			positionPtr += sX + parentPtr->getExtent(0) * sY;
 		}
 		/**
 		 * Moves the iterator relative to its actual position
@@ -375,9 +375,9 @@ public:
 		 * \param sZ steps to move in Z direction
 		 */
 		void moveRel( const short sX, const short sY,	const short sZ ) throw()
-		{ 
-			positionPtr += sX + parentPtr->getExtent(0) * sY 
-				+ parentPtr->getExtent(0) * parentPtr->getExtent(1) * sZ; 
+		{
+			positionPtr += sX + parentPtr->getExtent(0) * sY
+				+ parentPtr->getExtent(0) * parentPtr->getExtent(1) * sZ;
 		}
 		/**
 		 * Moves the iterator relative to its actual position
@@ -387,17 +387,17 @@ public:
 		 * \param sW steps to move in W direction
 		 */
 		void moveRel( const short sX, const short sY,	const short sZ, const short sW ) throw()
-		{ 
-			positionPtr += sX + parentPtr->getExtent(0) * sY 
+		{
+			positionPtr += sX + parentPtr->getExtent(0) * sY
 				+ parentPtr->getExtent(0) * parentPtr->getExtent(1) * sZ
-				+ parentPtr->getExtent(0) * parentPtr->getExtent(1) * parentPtr->getExtent(2) * sW; 
+				+ parentPtr->getExtent(0) * parentPtr->getExtent(1) * parentPtr->getExtent(2) * sW;
 		}
     /**
      * Moves the iterator relative to its actual position
      * \param aPosition spatial coordiantes of iterator
-     */   
+     */
     void moveRel( const TPoint2D aPosition ) throw()
-    { 
+    {
       positionPtr += aPosition[0] + parentPtr->getExtent(0) * aPosition[1];
     }
     /**
@@ -405,17 +405,17 @@ public:
      * \param aPosition spatial coordiantes of iterator
      */
     void moveRel( const TPoint3D aPosition ) throw()
-    { 
+    {
       positionPtr += aPosition[0] + parentPtr->getExtent(0) * aPosition[1]
         + parentPtr->getExtent(0) * parentPtr->getExtent(1) * aPosition[2];
-    }  
+    }
 		/**
 		 * Returns the actual iterator position in image coordinates
 		 * \param usX X position
 		 */
 		void getPos( unsigned short& usX ) const throw()
-		{ 
-			usX = ( positionPtr - parentPtr->begin().pos ); 
+		{
+			usX = ( positionPtr - parentPtr->begin().pos );
 		}
 		/**
 		 * Returns the actual iterator position in image coordinates
@@ -423,10 +423,10 @@ public:
 		 * \param usY Y position
 		 */
 		void getPos( unsigned short& usX, unsigned short& usY ) const throw()
-		{ 
+		{
 			ptrdiff_t diff = ( positionPtr - parentPtr->begin().positionPtr );
 			usY = diff / parentPtr->getExtent(0);
-			usX = diff % parentPtr->getExtent(0); 
+			usX = diff % parentPtr->getExtent(0);
 		}
 		/**
 		 * Returns the actual iterator position in image coordinates
@@ -438,7 +438,7 @@ public:
 		{
 			ptrdiff_t diff = ( positionPtr - parentPtr->begin().positionPtr );
 			usZ = diff / ( parentPtr->getExtent(0) * parentPtr->getExtent(1) );
-			usY = ( diff % ( parentPtr->getExtent(0) * parentPtr->getExtent(1) ) ) 
+			usY = ( diff % ( parentPtr->getExtent(0) * parentPtr->getExtent(1) ) )
 				/ ( parentPtr->getExtent(0) );
 			usX = diff - ( parentPtr->getExtent(0) * parentPtr->getExtent(1) * usZ )
 				- ( parentPtr->getExtent(0) * usY );
@@ -456,11 +456,11 @@ public:
 			usW = diff / ( parentPtr->getExtent(0) * parentPtr->getExtent(1) * parentPtr->getExtent(2) );
 			usZ = ( diff % ( parentPtr->getExtent(0) * parentPtr->getExtent(1) * parentPtr->getExtent(2) ) )
 				/ ( parentPtr->getExtent(0) * parentPtr->getExtent(1) ) ;
-			usY = ( diff - ( parentPtr->getExtent(0) * parentPtr->getExtent(1) * parentPtr->getExtent(2) 
-				* usW )	- ( parentPtr->getExtent(0) * parentPtr->getExtent(1) * usZ ) ) 
+			usY = ( diff - ( parentPtr->getExtent(0) * parentPtr->getExtent(1) * parentPtr->getExtent(2)
+				* usW )	- ( parentPtr->getExtent(0) * parentPtr->getExtent(1) * usZ ) )
 				/ parentPtr->getExtent(0);
-			usX = diff - ( parentPtr->getExtent(0) * parentPtr->getExtent(1) * parentPtr->getExtent(2) 
-				* usW )	- ( parentPtr->getExtent(0) * parentPtr->getExtent(1) * usZ ) 
+			usX = diff - ( parentPtr->getExtent(0) * parentPtr->getExtent(1) * parentPtr->getExtent(2)
+				* usW )	- ( parentPtr->getExtent(0) * parentPtr->getExtent(1) * usZ )
 				- ( parentPtr->getExtent(0) * usY );
 		}
     /**
@@ -491,20 +491,20 @@ public:
 		 * \returns pointer to parent
 		 */
 		CTypedData<T>* getParent() throw()
-		{ 
-			return parentPtr; 
+		{
+			return parentPtr;
 		}
 /// Move the TypedDataIterator forward by an specific amount
 	TypedDataIterator<T,U> operator+( ptrdiff_t amount ){ TypedDataIterator<T,U> t; t += amount; return t; }
 
 /// Move the TypedDataIterator backward by an specific amount
 	TypedDataIterator<T,U> operator-( ptrdiff_t amount ){ TypedDataIterator<T,U> t; t -= amount; return t; }
-		
+
 	private:
 		U positionPtr; 					///< Pointer to actual position
 		CTypedData<T>* parentPtr; ///< Pointer to parent CTypedData
 	};
-	
+
 	/* Iterator definitions */
 	/// Normal iterator
 	typedef TypedDataIterator<TValue, TValue*> iterator;
@@ -518,16 +518,16 @@ public:
   /// Returns reverse_iterator for begin of array
   reverse_iterator rbegin() throw();
   /// Returns reverse_iterator for end of array
-  reverse_iterator rend() throw();	
-	/// Returns an iterator to the given position 
+  reverse_iterator rend() throw();
+	/// Returns an iterator to the given position
 	iterator moveTo( const unsigned short usX ) throw();
-	/// Returns an iterator to the given position 
+	/// Returns an iterator to the given position
 	iterator moveTo( const unsigned short usX, const unsigned short usY ) throw();
-	/// Returns an iterator to the given position 
+	/// Returns an iterator to the given position
 	iterator moveTo( const unsigned short usX, const unsigned short usY, const unsigned short usZ ) throw();
-	/// Returns an iterator to the given position 
+	/// Returns an iterator to the given position
 	iterator moveTo( const unsigned short usX, const unsigned short usY, const unsigned short usZ, const unsigned short usW ) throw();
-  
+
 /* Other Methods */
   /// Reimplemented from CDataSet
   virtual const std::string dump() const
@@ -537,15 +537,13 @@ public:
 		throw();
 	CDataRange<TValue,SDataTraits<TValue>::isScalar> getDataRange() const { return theDataRange; }
 	void setDataRange( const CDataRange<TValue,SDataTraits<TValue>::isScalar>& aDataRange)
-	{ 
+	{
 		theDataRange = aDataRange;
 	}
 private:
   size_t arraySize;               ///< Size of the data array (no. of elements)
   std::vector<TValue> dataVec; ///< The data array
-//  scalarType theMinimum; ///< Dataset minimum value
-//  scalarType theMaximum; ///< Dataset maximum value
-  CDataRange<TValue,SDataTraits<TValue>::isScalar> theDataRange;
+  CDataRange<TValue, SDataTraits<TValue>::isScalar> theDataRange;
 };
 
 

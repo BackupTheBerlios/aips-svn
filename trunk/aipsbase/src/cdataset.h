@@ -38,6 +38,7 @@
  * the Free Software Foundation; either version 2 of the License, or    *
  * (at your option) any later version.                                  *
  ************************************************************************/
+
 #ifndef CDATASET_H
 #define CDATASET_H
 
@@ -48,7 +49,7 @@
 #include <sstream>
 
 // Boost includes
-#include <boost/lexical_cast.hpp> 
+#include <boost/lexical_cast.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/lambda/lambda.hpp>
 
@@ -85,7 +86,7 @@ public:
   //@{
   /// Constructor
   CDataSet( const unsigned short usDimension_, const size_t* extentArr_,
-    const size_t dataDimensionSize_ = 1, const std::string &sClassName_ = "CDataSet", 
+    const size_t dataDimensionSize_ = 1, const std::string &sClassName_ = "CDataSet",
 		const std::string &sClassVersion_ = CDATASET_VERSION,
     const std::string &sDerivedFrom_ = "CBase") throw();
   /// Constructor (2nd argument overloaded)
@@ -97,7 +98,7 @@ public:
   CDataSet( const size_t extent_, const size_t dataDimensionSize_ = 1,
   	const std::string &sClassName_ = "CDataSet",
 		const std::string &sClassVersion_ = CDATASET_VERSION,
-    const std::string &sDerivedFrom_ = "CBase") throw();   
+    const std::string &sDerivedFrom_ = "CBase") throw();
   /// Copy Constructor
   CDataSet( const CDataSet& aDataSet )
     throw();
@@ -164,7 +165,7 @@ public:
   //@}
 /** \name Assignment operators */
   //@{
-  /// Assignment operator for data sets    
+  /// Assignment operator for data sets
   CDataSet& operator=( CDataSet& aDataSet )
     throw();
   //@}

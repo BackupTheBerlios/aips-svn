@@ -73,13 +73,13 @@ class CPipelineItem;
 
 typedef boost::shared_ptr<CPipelineItem> TPipelineItemPtr;
 
-/** 
- * Macro for typelist calling scheme - declaration in .h-file 
+/**
+ * Macro for typelist calling scheme - declaration in .h-file
  * \param CALL name of resulting call function
  */
 #define DECLARE_CALL_MACRO( CALL ) template<unsigned int index> void CALL() throw();
 
-/** 
+/**
  * Macro for typelist calling scheme - definition in .cpp-file
  * \param CALL name of resulting call function
  * \param FUNCTION template function to call
@@ -116,7 +116,7 @@ public:
                            	ITypeStub = 5,      ///< Item type stub (scripting or external processes)
                            	ITypeUser = 6 };    ///< Item type user (anything else)
   /**
-   * IO port data types. 
+   * IO port data types.
    * A simple hierarchy is obtained through the numerical values of the type
    * members. As you will notice, each parent is a divisor of all derived
    * values. E.g. IO2DFloat is a child of IOFloat (15%3==0) which is a
@@ -154,11 +154,11 @@ protected:
 		void initDouble( const std::string& sParamName, const double dParamDef,
       const double dParamMin, const double dParamMax ) throw();
 		/// Method for easy initialisation of a bool parameter
-		void initBool( const std::string& sParamName, const bool bParamDef ) 
+		void initBool( const std::string& sParamName, const bool bParamDef )
 			throw();
 		/// Method for easy initialisation of a string parameter
 		void initString( const std::string& sParamName, const std::string& sParamDef )
-      throw();		
+      throw();
 	};
   /** Port structure */
   struct SIPort
@@ -188,12 +188,12 @@ public:
   /// Constructor
   CPipelineItem( unsigned long ulID_, unsigned short usFanIn_, 
     unsigned short usFanOut_, const std::string &sClassName_, 
-		const std::string &sClassVersion_, const std::string &sDerivedFrom_ )
+    const std::string &sClassVersion_, const std::string &sDerivedFrom_ )
     throw();
-  /// Destructor 
+  /// Destructor
   virtual ~CPipelineItem()
-    throw();    
-/* Accessors */  
+    throw();
+/* Accessors */
   /// Returns the fanin of the item
   unsigned short getFanIn() const
     throw();
@@ -204,7 +204,7 @@ public:
   const std::string getModuleName() const
     throw();
   /// Returns the module documentation
-  const std::string getDocumentation() const 
+  const std::string getDocumentation() const
 		throw();
   /// Get the item ID
   unsigned long getID() const
@@ -216,7 +216,7 @@ public:
   size_t getNoOfParameters() const
     throw();
 	/// Returns a handle to the map containing all parameters
-	CTypedMap* getParameters() 
+	CTypedMap* getParameters()
 		throw();
   /// Returns a unique module id
   const std::string getModuleID() const
@@ -227,7 +227,7 @@ public:
     throw();
   /// Set the item type
   void setType( const unsigned short itemType_ )
-    throw();    
+    throw();
   /// Sets the module ID
   void setModuleID( const std::string sModuleID )
     throw();
@@ -272,7 +272,7 @@ public:
 	 * <li> Set the output ports ( via setOutput() )</li>
    * <li> Update all internal parameters ( read out all parameters and dialog inputs )</li>
    * <li> Process ( this is where your algorithms will reside )</li>
-   * <li> Update all internal parameters ( update dialog and parameter array )</li>   
+   * <li> Update all internal parameters ( update dialog and parameter array )</li>
 	 * </ol>
    */
   virtual void apply() throw() =0;
@@ -281,7 +281,7 @@ public:
 		throw();
 	/// Enforce the recomputation of the modules outputs
 	void forceRecomputation()
-		throw();	
+		throw();
   /// Update function to get the most actual data from the pipeline
   void update( int iDepth_ = 0 )
   	throw();
@@ -290,7 +290,7 @@ public:
     throw();
   /**
    * Returns a new instance of the class.
-   * Each child of CPipelineItem MUST overwrite this if it 
+   * Each child of CPipelineItem MUST overwrite this if it
 	 * is not an abstract class.
    * \returns a new instance (not a copy!) of the item
    */
@@ -306,7 +306,7 @@ public:
 		throw();
 	/// Sets the module dialog
 	void setModuleDialog( const boost::shared_ptr<CModuleDialog> newItemDialog )
-		throw();	
+		throw();
   /// Deletes an output port
   void deleteOldOutput( unsigned short usOutputNumber = 0 )
     throw( OutOfRangeException );
@@ -320,34 +320,34 @@ protected:
 	unsigned long ownTimeStamp; ///< Timestamp
 private:
 	bool bCacheOutputs; ///< Should we cache our outputs or delete them after read-out?
-	int iDepth;                                 ///< Marker for graph traversal	
+	int iDepth;                                 ///< Marker for graph traversal
   unsigned long ulID;                                   ///< Unique processing ID
   unsigned short itemType;                              ///< Item type 
   unsigned short usFanIn;                               ///< Item fanin
   unsigned short usFanOut;                              ///< Item fanout
-  std::string sName;                            ///< Name of the pipeline module 
+  std::string sName;                            ///< Name of the pipeline module
   std::vector<SConnection> connectionsPtrVec;   ///< Input connections of the module
   std::vector<unsigned long> connectionsTimeStampsVec; ///< Time stamps of all connections
   boost::shared_ptr<CModuleDialog> itemDialog;  ///< Item dialog
 	bool bRecompute; ///< Do we enforce a recomputation of all outputs?
-  
+
   struct itemCompareFunctor ///< Functor to compare two pipeline items
 	{
 		bool operator() ( CPipelineItem* a, CPipelineItem* b ) throw();
 	};
-  
+
 	static std::set<CPipelineItem*> allItemsSet; ///< All items of the pipeline we're actually working on
-  
+
 	static std::priority_queue<CPipelineItem*, std::vector<CPipelineItem*>, itemCompareFunctor>
 		itemsPriQueue; ///< Priority queue to execute all pipeline items in correct order
-private:	
+private:
 	/// Actually execute the pipeline item
   void execute() throw();
   /// Clear all outputs
   void clearCache() throw();
   // Static members
   /// Iterate through pipeline hierarchy
-  static void iterate() throw();  	
+  static void iterate() throw();
 };
 
 #include "cpipelineiteminlines.tpp"

@@ -153,8 +153,8 @@ DBG3( "Data type is int" );
 DBG3( "Data type is unsigned int" );
 			if ( 1 )
 			{
-	    vtkUnsignedIntArray* myunsigned intArray = static_cast<vtkUnsignedIntArray*>( p->GetScalars() );
-  	  aDataSet = this->convertVTKImage<TField, vtkUnsignedIntArray>( myunsigned intArray, dimensionSize );
+	    vtkUnsignedIntArray* myUIntArray = static_cast<vtkUnsignedIntArray*>( p->GetScalars() );
+  	  aDataSet = this->convertVTKImage<TField, vtkUnsignedIntArray>( myUIntArray, dimensionSize );
   	  }
   	  break;
 		case VTK_LONG:
@@ -169,8 +169,8 @@ DBG3( "Data type is long" );
 DBG3( "Data type is unsigned long" );
 			if ( 1 )
 			{
-	    vtkUnsignedLongArray* myunsigned longArray = static_cast<vtkUnsignedLongArray*>( p->GetScalars() );
-  	  aDataSet = this->convertVTKImage<TField, vtkUnsignedLongArray>( myunsigned longArray, dimensionSize );
+	    vtkUnsignedLongArray* myULongArray = static_cast<vtkUnsignedLongArray*>( p->GetScalars() );
+  	  aDataSet = this->convertVTKImage<TField, vtkUnsignedLongArray>( myULongArray, dimensionSize );
   	  }
   	  break;
 		case VTK_FLOAT:

@@ -37,7 +37,7 @@ using namespace boost::lambda;
 CDataSet::CDataSet( const unsigned short usDimension_,
   const size_t* extentArr_,
   const size_t dataDimensionSize_,
-  const std::string &sClassName_, 
+  const std::string &sClassName_,
 	const std::string &sClassVersion_,
   const std::string &sDerivedFrom_ ) throw ()
   : CBase( sClassName_, sClassVersion_, sDerivedFrom_ ), usDimension( usDimension_ ),
@@ -65,9 +65,9 @@ FBEGIN;
     alog << endl << "- Origin ";
     for ( unsigned int i = 0; i < usDimension; ++i )
       alog << baseElementDimensionsVec[i] << " ";
-    alog << endl << "- Data dimension " << dataDimensionSize << endl;    
+    alog << endl << "- Data dimension " << dataDimensionSize << endl;
   }
-FEND;  
+FEND;
 }
 
 /**
@@ -84,7 +84,7 @@ FEND;
 CDataSet::CDataSet( const unsigned short usDimension_,
   const vector<size_t> extentVec_,
   const size_t dataDimensionSize_,
-  const std::string &sClassName_, 
+  const std::string &sClassName_,
 	const std::string &sClassVersion_ ,
   const std::string &sDerivedFrom_ ) throw ()
   : CBase( sClassName_, sClassVersion_, sDerivedFrom_ ),
@@ -143,7 +143,7 @@ FEND;
  * \post All member variables are initialised with the copied values.
  */
 CDataSet::CDataSet( const CDataSet& aDataSet ) throw()
-  : CBase( "CDataSet", "0.4", "CBase" )
+  : CBase( "CDataSet", CDATASET_VERSION, "CBase" )
 {
 FBEGIN;
   usDimension = aDataSet.usDimension;
@@ -166,7 +166,7 @@ FBEGIN;
     alog << LINFO << "Destroying instance " << static_cast<void*>( this ) << " of class CDataSet" << endl;
   extentVec.clear();
   baseElementDimensionsVec.clear();
-FEND;  
+FEND;
 }
 
 /*************
@@ -333,16 +333,16 @@ void CDataSet::setOrigin( const double* originVec_ ) throw()
 /**************************
  * Operators (Assignment) *
  **************************/
- 
+
 /**
  * \param aDataSet data set to be assigned
  * \post All values were initialised with the new values
  */
 CDataSet& CDataSet::operator=( CDataSet& aDataSet ) throw()
-{  
+{
   if ( &aDataSet == this )
     return *this;
-      
+
   usDimension = aDataSet.usDimension;
   extentVec = aDataSet.extentVec;
   dataDimensionSize = aDataSet.dataDimensionSize;
@@ -350,10 +350,10 @@ CDataSet& CDataSet::operator=( CDataSet& aDataSet ) throw()
 
   if ( isVerbose() )
     alog << LINFO << dump() << endl;
-  return *this;  
+  return *this;
 }
 
-/***************** 
+/*****************
  * Other Methods *
  *****************/
 
@@ -363,7 +363,7 @@ CDataSet& CDataSet::operator=( CDataSet& aDataSet ) throw()
 const string CDataSet::dump() const throw()
 {
   ostringstream os;
-  
+
   os << "- Dimension " << usDimension << endl;
   os << "- Extents ";
   for ( unsigned int i = 0; i < usDimension; ++i )

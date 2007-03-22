@@ -409,7 +409,7 @@ void CTypedMap::readXMLFile( const std::string sFilename )	throw( FileException 
     while(reader.read())
     {
       int depth = reader.get_depth();
-			cerr << "On depth "<< depth << endl;
+//			cerr << "On depth "<< depth << endl;
       if ( depth != 0 && !bLegalMap )
       {
       	throw( FileException( "Invalid XML document structure" ) );
