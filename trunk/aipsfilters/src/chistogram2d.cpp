@@ -17,6 +17,7 @@
 #include "chistogram2d.h"
 #include <iostream>
 #include <fstream>
+
 using namespace std;
 using namespace boost;
 using namespace boost::lambda;
@@ -26,7 +27,7 @@ namespace aips {
  * Structors *
  *************/
 
-/** TODO AUfräumen! */
+/** TODO AUfrï¿½men! */
 
 /** \param ulID unique module ID */
 CHistogram2D::CHistogram2D( ulong ulID ) throw()
@@ -34,7 +35,7 @@ CHistogram2D::CHistogram2D( ulong ulID ) throw()
 	"CHistogram2D", CHISTOGRAM2D_VERSION, "CFilter" )
 {
   setModuleID( sLibID );
-  
+
   sDocumentation = "Determines a 2D histogram based on the image intensity and gradient\n"
                    "** Input ports:\n"
                    "0: A scalar multidimensional, multichannel data set (the intensity image)\n"
@@ -50,21 +51,21 @@ CHistogram2D::CHistogram2D( ulong ulID ) throw()
 
 	parameters.initUnsignedLong( "Class1", 2, 0, 65535 ); // 3
 	parameters.initUnsignedLong( "Class2", 3, 0, 65535 ); // 4
-	parameters.initDouble( "HistoSmooth", 0.25, 0.0, 100.0 );
+	parameters.initDouble( "HistoSmooth", 0.5, 0.0, 100.0 );
 	parameters.initUnsignedLong( "Shift", 2, 1, 65535 );
-	parameters.initUnsignedLong( "T1", 1, 0, 65535 ); 
-	parameters.initUnsignedLong( "T2", 2, 0, 65535 ); 
-                   
+	parameters.initUnsignedLong( "T1", 1, 0, 65535 );
+	parameters.initUnsignedLong( "T2", 2, 0, 65535 );
+
   inputsVec[0].portType = CPipelineItem::IOInteger;
   inputsVec[1].portType = CPipelineItem::IOInteger;
   inputsVec[2].portType = CPipelineItem::IOFloat;
   outputsVec[0].portType = CPipelineItem::IOInteger;
-                   
+
 }
 
 CHistogram2D::~CHistogram2D() throw()
 {
-	
+
 }
 
 /*****************
@@ -72,7 +73,7 @@ CHistogram2D::~CHistogram2D() throw()
  *****************/
 
 DEFINE_CALL_MACRO( CHistogram2D::call, CHistogram2D::compute, imageTL );
- 
+
 void CHistogram2D::apply () throw()
 {
 BENCHSTART;
@@ -85,7 +86,7 @@ FBEGIN;
     alog << LWARN << SERROR("Input type is no 2D or 3D integer image!") << endl;
     return;
   }
-FEND;  
+FEND;
 BENCHSTOP;
 }
 
@@ -98,8 +99,8 @@ bool CHistogram2D::compute() throw()
   ImagePtr classPtr = static_pointer_cast<ImageType>( getInput(1) );
   ImagePtr gradientPtr = static_pointer_cast<ImageType>( getInput(2) );
   if ( !checkInput<ImageType>( imagePtr, 2, 3 )
-  	|| !checkInput<ImageType>( imagePtr, 2, 3 )
-  	|| !checkInput<ImageType>( imagePtr, 2, 3 ) )
+  	|| !checkInput<ImageType>( classPtr, 2, 3 )
+  	|| !checkInput<ImageType>( gradientPtr, 2, 3 ) )
   {
     return false;
   }
@@ -115,6 +116,7 @@ bool CHistogram2D::compute() throw()
 
   uint uiClassOne = parameters.getUnsignedLong( "Class1" );
   uint uiClassTwo = parameters.getUnsignedLong( "Class2" );
+  cerr << uiClassOne << " " << uiClassTwo << endl;
 	// Calculate intensity mean and variance of the selected classes
 	typename ImageType::iterator classIt = classPtr->begin();
 	typename ImageType::iterator imageIt = imagePtr->begin();
@@ -127,7 +129,7 @@ bool CHistogram2D::compute() throw()
 		++classIt;
 		++imageIt;
 	}
-	
+
   for_each( classOneValuesVec.begin(), classOneValuesVec.end(), dClassOneMean += _1 );
   dClassOneMean /= static_cast<double>( classOneValuesVec.size() );
   for_each( classOneValuesVec.begin(), classOneValuesVec.end(),
@@ -141,16 +143,16 @@ bool CHistogram2D::compute() throw()
   	dClassTwoVariance += ( _1 - dClassTwoMean ) * ( _1 - dClassTwoMean ) );
   dClassTwoVariance /= static_cast<double>( classTwoValuesVec.size() );
   dClassTwoVariance = sqrt( dClassTwoVariance );
-  
-DBG3( " C1 (" << uiClassOne << ") : Mean " << dClassOneMean << " SD " << dClassOneVariance << endl
-<< " C2 (" << uiClassTwo << ") : Mean " << dClassTwoMean << " SD " << dClassTwoVariance );
+
+cerr << " C1 (" << uiClassOne << ") : Mean " << dClassOneMean << " SD " << dClassOneVariance << endl
+<< " C2 (" << uiClassTwo << ") : Mean " << dClassTwoMean << " SD " << dClassTwoVariance << endl;
 
 	int rangeMin, rangeMax;
 	rangeMin = static_cast<int>(
 		std::min( dClassOneMean - dClassOneVariance, dClassTwoMean - dClassTwoVariance ) );
 	rangeMax = static_cast<int>(
 		std::max( dClassOneMean - dClassOneVariance, dClassTwoMean - dClassTwoVariance ) );
-	
+
 	ImagePtr tmp( new ImageType( *gradientPtr ) );
 	classIt = imagePtr->begin();
 	imageIt = tmp->begin();
@@ -165,6 +167,7 @@ DBG3( " C1 (" << uiClassOne << ") : Mean " << dClassOneMean << " SD " << dClassO
 	// Do a gaussian smoothing on the histogram
 	// Compute gaussian mask
 	double dSigma = parameters.getDouble( "HistoSmooth" );
+cerr << "HistoSmooth " << dSigma << endl;
 	int iMaskSize = static_cast<uint>( floor( 6.0 * dSigma + 0.5 ) );
 	vector<double> dGaussMask;
 	for( int i = -( iMaskSize / 2 ); i <= ( iMaskSize / 2 ); ++i )
@@ -174,33 +177,37 @@ DBG3( " C1 (" << uiClassOne << ") : Mean " << dClassOneMean << " SD " << dClassO
 		dGaussMask.push_back( dExponential );
 	}
 
+cerr << "Mask size " << iMaskSize << endl;
+
 	// Shift histogram to attend smoothing
 	vector<double> shiftedHisto;
 	for( int i = 0; i < iMaskSize/2; ++i )
 		shiftedHisto.push_back(0.0);
-	for( uint i = 1; i < theHistogramVec[0].size(); ++i )
+	for( uint i = 0; i < theHistogramVec[0].size(); ++i )
 	{
 		shiftedHisto.push_back( theHistogramVec[0][i] );
 	}
 	for( int i = 0; i <= iMaskSize/2; ++i )
 		shiftedHisto.push_back(0.0);
-	vector<double> smoothedHisto( theHistogramVec[0].size() );
-	for( uint i = iMaskSize/2+1; i < shiftedHisto.size() - iMaskSize/2; ++i )
+   const uint uiShift = iMaskSize/2;
+	vector<double> smoothedHisto( shiftedHisto.size() + uiShift);
+
+	for( uint i = uiShift+1; i < shiftedHisto.size() - uiShift; ++i )
 	{
 		double smoothed = 0.0;
-		for( int j = -iMaskSize/2; j <= iMaskSize/2; ++j )
+		for( int j = -(uiShift+1); j <= uiShift; ++j )
 		{
-			smoothed += shiftedHisto[i+j]*dGaussMask[j+(iMaskSize/2)];
+			smoothed += shiftedHisto[i+j]*dGaussMask[j+uiShift+1];
 		}
-		smoothedHisto[i-(iMaskSize/2+1)] = smoothed;
+		smoothedHisto[i] = smoothed;
 	}
-	
+   smoothedHisto = shiftedHisto;
 	// Smooth
 	// Reshift histogram
 	// Determine the global maximum g1
 	uint g1 = 0;
 	double gv1 = 0.0;
-	for( uint i = 3; i < smoothedHisto.size(); ++i )
+	for( uint i = uiShift+1; i < smoothedHisto.size(); ++i )
 	{
 		if ( smoothedHisto[i] >= smoothedHisto[i-1] && smoothedHisto[i] >= gv1 )
 		{
@@ -245,16 +252,30 @@ DBG3( " C1 (" << uiClassOne << ") : Mean " << dClassOneMean << " SD " << dClassO
 	}
 	if ( g2-g1 > (2 * parameters.getUnsignedLong("Shift")) )
 		g2 = g1 + 2 * parameters.getUnsignedLong("Shift");
+   g1--;
+   g2--;
  	cerr << "Threshold values are " << g1 << " and " << g2;
-	parameters.setUnsignedLong("T1", static_cast<ulong>( g1 * 0.33 ) );
+	parameters.setUnsignedLong("T1", static_cast<ulong>( g1 * 0.33)-1 );
 	parameters.setUnsignedLong("T2",
-		static_cast<ulong>( std::max( g1 * 0.66, g1 + parameters.getDouble("Shift") ) ) );
-// 	ofstream file( "/home/belitz/histogram.data" );
-// 	for( uint i = 0; i <= smoothedHisto.size(); ++i )
-// 	{
-// 		file << i << " " << smoothedHisto[i] << endl;
-// 	}
-// 	file.close();
+		static_cast<ulong>( std::max( g1 * 0.66, g1 + parameters.getDouble("Shift") + 1) ) - 1 );
+ofstream file( "/home/hendrik/orig_histogram.data" );
+	for( uint i = 0; i <= theHistogramVec[0].size(); ++i )
+	{
+		file << i << " " << theHistogramVec[0][i] << endl;
+	}
+	file.close();
+ofstream file2( "/home/hendrik/shifted_histogram.data" );
+	for( uint i = 0; i <= shiftedHisto.size(); ++i )
+	{
+		file2 << i << " " << shiftedHisto[i] << endl;
+	}
+	file2.close();
+ofstream file3( "/home/hendrik/smoothed_histogram.data" );
+	for( uint i = 0; i <= smoothedHisto.size(); ++i )
+	{
+		file3 << i << " " << smoothedHisto[i] << endl;
+	}
+	file3.close();
 	return true;
 }
 
