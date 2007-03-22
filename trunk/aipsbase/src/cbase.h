@@ -40,7 +40,7 @@
 
 #define CBASE_VERSION "0.14"
 
-// Include aipsbase_config.h 
+// Include aipsbase_config.h
 #include "aipsbase_config.h"
 
 // AIPS includes
@@ -52,12 +52,13 @@ namespace aips {
 /**
  * \brief A class for easy runtime version checking.
  *
- * This class should is an abstract base class 
- * of all bigger AIPS-classes (with the exception of all policy and trait classes which are not
- * involved in the main class hierarchy. CVector also isn't a child of CBase for efficiency
- * purposes). You cannot instantiate any objects of this class since the destructor is pure virtual.
+ * This class should is an abstract base class
+ * of all bigger AIPS-classes (with the exception of all policy and trait
+ * classes which are not involved in the main class hierarchy. CVector also
+ * isn't a child of CBase for efficiency purposes). You cannot instantiate
+ * any objects of this class since the destructor is pure virtual.
  */
-class CBase 
+class CBase
 {
 private:
   /// Standard constructor
@@ -74,7 +75,7 @@ public:
   explicit CBase( const std::string &sClassName_, const std::string &sClassVersion_ = CBASE_VERSION,
     const std::string &sDerivedFrom_ = "-" ) throw();
   /// Destructor. Pure virtual to generate an abstract base class
-  virtual ~CBase() 
+  virtual ~CBase()
     throw() = 0;
   //@}
 /** \name Accessors */
@@ -90,7 +91,7 @@ public:
     throw();
   /// Return current verbosity setting
   bool isVerbose()
-    throw();  
+    throw();
   //@}
 /** \name Mutators */
   //@{
@@ -103,10 +104,11 @@ public:
   /// Turn off verbose output
   void turnVerbosityOff()
     throw();
-  //@}    
+  //@}
 /** \name Other Methods */
   //@{
-  /// Produces an information string about the actual object. This is mainly meant for debugging purposes
+  /// Produces an information string about the actual object.
+  /// This is mainly meant for debugging purposes.
   virtual const std::string dump() const
     throw();
   //@}
