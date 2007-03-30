@@ -27,7 +27,7 @@ template<typename T> inline T round( const T value ) throw()
  * \param aVector vector to compute norm from
  * \return Norm of given vector
  */
-template<typename T> inline double norm( const T& aVector )
+template<typename T> inline typename T::T_numtype norm( const T& aVector )
 {
   return sqrt( dot( aVector, aVector ) );
 }
@@ -40,7 +40,7 @@ template<typename T> inline double norm( const T& aVector )
  * \param aVector vector to compute norm from
  * \return Norm^2 of given vector
  */
-template<typename T> inline double quadNorm( const T& aVector ) throw()
+template<typename T> inline typename T::T_numtype quadNorm( const T& aVector ) throw()
 {
   return dot( aVector, aVector );
 }

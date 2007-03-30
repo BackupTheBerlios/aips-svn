@@ -95,6 +95,8 @@ inline long abs( const long value ) throw()
 }
 #endif /* #ifndef __GLIBCPP__ */
 
+#ifndef WIN32
+
 /**
  * \param value number to round
  * \returns nearest integer of input
@@ -103,6 +105,8 @@ template<typename T> inline T round( const T value ) throw()
 {
 	return static_cast<T>( static_cast<double>( value ) + 0.5 );
 }
+
+#endif WIN32
 
 /** 
  * \param value value to check

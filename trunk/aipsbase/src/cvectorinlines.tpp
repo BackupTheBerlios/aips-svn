@@ -3,7 +3,7 @@
  * Project: AIPS                                                        *
  * Description: A class for the representation of mathematical vectors  *
  *                                                                      *
- * Author: Hendrik Belitz (hbelitz@users.berlios.de)                          *
+ * Author: Hendrik Belitz (hbelitz@users.berlios.de)                    *
  *                                                                      *
  * Created: 2004-01-20                                                  *
  ************************************************************************
@@ -17,13 +17,17 @@
  * Structors *
  *************/
  
+namespace aips 
+{
+
+
 /**
  * \param dX first component
  * \param dY second component
  * \param dZ third component
  */
-template<typename DataType, ushort dimension> inline
-CVector<DataType, dimension>::CVector ( double dX, double dY, double dZ ) throw()
+template<typename DataType, unsigned short dimension> inline
+CVector<DataType,dimension>::CVector ( DataType dX, DataType dY, DataType dZ ) throw()
 {
   theData[0] = dX;
   if ( 1 < dimension ) 
@@ -32,19 +36,20 @@ CVector<DataType, dimension>::CVector ( double dX, double dY, double dZ ) throw(
 		theData[2] = dZ;
 }
 
+
 /**
  * Copy constructor
  * \param aVector Vector to be copied
  */
-template<typename DataType, ushort dimension> inline 
-CVector<DataType, dimension>::CVector( const CVector& aVector ) throw()
+template<typename DataType, unsigned short dimension> inline
+CVector<DataType, dimension>::CVector( const CVector<DataType, dimension>& aVector ) throw()
 {
   for ( int i = 0; i < dimension; i++ )
     theData[i] = aVector.theData[i];
 }
 
 /** Destructor */
-template<typename DataType, ushort dimension> inline 
+template<typename DataType, unsigned short dimension> inline 
 CVector<DataType, dimension>::~CVector() throw()
 {
 }
@@ -57,7 +62,7 @@ CVector<DataType, dimension>::~CVector() throw()
  * \param aVector Vector2D to get values from
  * \return reference to assignment target
  */
-template<typename DataType, ushort dimension> inline 
+template<typename DataType, unsigned short dimension> inline
 CVector<DataType, dimension>& CVector<DataType, dimension>::operator=
   ( const CVector<DataType, dimension>& aVector ) throw()
 {
@@ -72,7 +77,7 @@ CVector<DataType, dimension>& CVector<DataType, dimension>::operator=
  * \param aScalar Value to assign to all vector components
  * \return reference to assignment target
  */
-template<typename DataType, ushort dimension> inline
+template<typename DataType, unsigned short dimension> inline
 	CVector<DataType, dimension>& CVector<DataType, dimension>::operator=( const DataType aScalar )
 	throw()
 {
@@ -89,8 +94,8 @@ template<typename DataType, ushort dimension> inline
  * \param usIndex access index, should be 0 or 1
  * \return value at given index
  */
-template<typename DataType, ushort dimension> inline 
-	double& CVector<DataType, dimension>::operator[]( const ushort usIndex ) throw()
+template<typename DataType, unsigned short dimension> inline
+	DataType& CVector<DataType, dimension>::operator[]( const unsigned short usIndex ) throw()
 {
   return theData[usIndex];
 }
@@ -99,8 +104,8 @@ template<typename DataType, ushort dimension> inline
  * \param usIndex access index, should be 0 or 1
  * \return value at given index
  */
-template<typename DataType, ushort dimension> inline 
-	const double CVector<DataType, dimension>::operator[]( const ushort usIndex ) const throw()
+template<typename DataType, unsigned short dimension> inline
+	const DataType CVector<DataType, dimension>::operator[]( const unsigned short usIndex ) const throw()
 {
   return theData[usIndex];
 }
@@ -112,7 +117,7 @@ template<typename DataType, ushort dimension> inline
 /**
  * \param aScalar number to multiply with
  */
-template<typename DataType, ushort dimension> inline
+template<typename DataType, unsigned short dimension> inline
   CVector<DataType, dimension>& CVector<DataType, dimension>::operator*=( const DataType aScalar )
 	throw()  
 {
@@ -124,7 +129,7 @@ template<typename DataType, ushort dimension> inline
 /**
  * \param aScalar number to divide by
  */
-template<typename DataType, ushort dimension> inline 
+template<typename DataType, unsigned short dimension> inline
   CVector<DataType, dimension>& CVector<DataType, dimension>::operator/=( const DataType aScalar )
 	throw()  
 {
@@ -136,7 +141,7 @@ template<typename DataType, ushort dimension> inline
 /**
  * \param aVector vector to add
  */
-template<typename DataType, ushort dimension> inline
+template<typename DataType, unsigned short dimension> inline
   CVector<DataType, dimension>& CVector<DataType, dimension>::operator+=
 	( const CVector<DataType, dimension>& aVector ) throw()
 {
@@ -148,7 +153,7 @@ template<typename DataType, ushort dimension> inline
 /**
  * \param aVector vector to add
  */
-template<typename DataType, ushort dimension> inline
+template<typename DataType, unsigned short dimension> inline
   CVector<DataType, dimension>& CVector<DataType, dimension>::operator-=
 	( const	CVector<DataType, dimension>& aVector ) throw()
 {
@@ -164,7 +169,7 @@ template<typename DataType, ushort dimension> inline
 /**
  * \returns the data type of the stored elements
  */
-template<typename DataType, ushort dimension> inline 
+template<typename DataType, unsigned short dimension> inline
 	const std::type_info& CVector<DataType, dimension>::getType() const	throw()
 {
 	return typeid( theData[0] );
@@ -179,7 +184,7 @@ template<typename DataType, ushort dimension> inline
  * \param bVector second vector to add
  * \return sum of the two vectors
  */
-template<typename DataType, ushort dimension> inline 
+template<typename DataType, unsigned short dimension> inline
 	CVector<DataType, dimension> operator+( const CVector<DataType, dimension>& aVector, 
 	const CVector<DataType, dimension>& bVector ) throw()
 {
@@ -194,7 +199,7 @@ template<typename DataType, ushort dimension> inline
  * \param bVector second vector to substract
  * \return difference of the two vectors
  */
-template<typename DataType, ushort dimension> inline 
+template<typename DataType, unsigned short dimension> inline
 	CVector<DataType, dimension> operator-( const CVector<DataType, dimension>& aVector, 
 	const CVector<DataType, dimension>& bVector ) throw()
 {
@@ -210,7 +215,7 @@ template<typename DataType, ushort dimension> inline
  * \param aScalar scalar to multiply
  * \return aVector * aScalar
  */
-template<typename DataType, ushort dimension> inline 
+template<typename DataType, unsigned short dimension> inline
 	CVector<DataType, dimension> operator*( const CVector<DataType, dimension>& aVector, 
 	const DataType aScalar ) throw()
 {
@@ -225,7 +230,7 @@ template<typename DataType, ushort dimension> inline
  * \param aScalar divisor
  * \return aVector / aScalar
  */
-template<typename DataType, ushort dimension> inline 
+template<typename DataType, unsigned short dimension> inline
 	CVector<DataType, dimension> operator/( const CVector<DataType, dimension>& aVector, 
 	const DataType aScalar ) throw()
 {
@@ -240,7 +245,7 @@ template<typename DataType, ushort dimension> inline
  * \param aVector vector to multiply
  * \return aVector * aScalar
  */
-template<typename DataType, ushort dimension> inline 
+template<typename DataType, unsigned short dimension> inline
 	CVector<DataType, dimension> operator*( const DataType aScalar, 
 	const CVector<DataType, dimension>& aVector ) throw()
 {
@@ -253,7 +258,7 @@ template<typename DataType, ushort dimension> inline
 /**
  * \param aVector vector to compare with
  */
-template<typename DataType, ushort dimension> inline 
+template<typename DataType, unsigned short dimension> inline
 	bool CVector<DataType, dimension>::operator==( CVector<DataType, dimension>& aVector ) 
 	const throw()
 {
@@ -269,8 +274,8 @@ template<typename DataType, ushort dimension> inline
  * \param leftVector first Vector for product
  * \param rightVector second Vector for product
  */
-template<typename DataType, ushort dimension> inline DataType 
-	dot( const CVector<DataType, dimension>& leftVector, 
+template<typename DataType, unsigned short dimension> inline 
+	DataType dot( const CVector<DataType, dimension>& leftVector, 
 	const CVector<DataType, dimension>& rightVector ) throw()
 {
   DataType result = 0;
@@ -278,3 +283,5 @@ template<typename DataType, ushort dimension> inline DataType
     result += leftVector[i] * rightVector[i];
   return result;
 }
+
+} // namespace aips

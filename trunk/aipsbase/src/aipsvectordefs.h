@@ -53,12 +53,12 @@ typedef CVector<int,2>    		TPoint2D;  ///< Typedef for discrete 2D point
 typedef CVector<int,3>	   		TPoint3D;  ///< Typedef for discrete 3D point
 
 /// Norm function for data types with defined dot() function
-template<typename T> inline double norm( const T& aVector ) 
+template<typename T> inline typename T::T_numtype norm( const T& aVector ) 
 	throw();
 #endif
 	
 /// Quadratic norm function for data types with defined dot() function.
-template<typename T> inline double quadNorm( const T& aVector ) 
+template<typename T> inline typename T::T_numtype quadNorm( const T& aVector ) 
 	throw();
 	
 /// Outer product for 3D vectors

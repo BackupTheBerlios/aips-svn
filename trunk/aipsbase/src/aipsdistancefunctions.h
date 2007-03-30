@@ -125,7 +125,7 @@ struct SDefaultDistFunc<TVector2D>
 {	
 	static TVector2D::T_numtype distance( const TVector2D& a, const TVector2D& b )
 	{
-		return ( norm( a - b )  );
+		return ( norm<TVector2D>( a - b )  );
 	}
 	static TVector2D::T_numtype distanceFromZero( const TVector2D& a )
 	{

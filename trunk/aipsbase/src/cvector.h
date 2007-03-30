@@ -1,3 +1,7 @@
+#ifdef WIN32
+#pragma once
+#endif
+
 /************************************************************************
  * File: cvector.h                                                      *
  * Project: AIPS                                                        *
@@ -6,7 +10,7 @@
  *              compiled without Blitz++ support. Otherwise we use      *
  *              Blitz::TinyVector.                                      *
  *                                                                      *
- * Author: Hendrik Belitz (hbelitz@users.berlios.de)                          *
+ * Author: Hendrik Belitz (hbelitz@users.berlios.de)                    *
  *                                                                      *
  * Version: 0.5                                                         *
  * Created: 2004-01-04                                                  *
@@ -39,14 +43,14 @@ namespace aips
  * A class for the representation of mathematical vectors.
  * Only used if compiled without Blitz++ support
  */
-template<typename DataType, ushort dimension> class CVector
+template<typename DataType, unsigned short dimension> 
+class CVector
 {
 public:
 	typedef DataType T_numtype; //< Data type of the actual CVector. Inserted for compability with Blitz++
 /* Structors */
   /// Constructor
-  CVector( double dX = 0.0, double dY = 0.0, double dZ = 0.0 ) 
-		throw();
+  CVector( DataType dX = 0.0, DataType dY = 0.0, DataType dZ = 0.0 ) throw();
   /// Copy constructor
   CVector( const CVector<DataType, dimension>& aVector ) 
 		throw();
@@ -74,9 +78,9 @@ public:
 		throw();
 /* Operators/Access */
   /// Access operator without range checking
-  double& operator[]( const ushort usIndex ) throw();
+  DataType& operator[]( const unsigned short usIndex ) throw();
   /// Const access operator without range checking
-  const double operator[]( const ushort usIndex ) const throw();
+  const DataType operator[]( const unsigned short usIndex ) const throw();
 /* Operators/Identity */
   /// Operator== to check for equality of two vectors
   bool operator==( CVector<DataType, dimension>& aVector ) const throw();
@@ -90,34 +94,40 @@ private:
 
 /* Arithmetic operations for CVector */
 /// Addition of two vectors
-template<typename DataType, int dimension> inline 
+template<typename DataType, unsigned short  dimension> inline 
 CVector<DataType, dimension> operator+
   ( const CVector<DataType, dimension>& aVector, const CVector<DataType, dimension>& bVector )
 	throw();
 /// Difference of two vectors
-template<typename DataType, int dimension> inline 
+template<typename DataType, unsigned short  dimension> inline 
 CVector<DataType, dimension> operator-
   ( const CVector<DataType, dimension>& aVector, const CVector<DataType,dimension>& bVector ) 
 	throw();
 /// Multiplication of vector and scalar
-template<typename DataType, int dimension> inline 
+template<typename DataType, unsigned short  dimension> inline 
 CVector<DataType, dimension> operator*
   ( const CVector<DataType, dimension>& aVector, const DataType aScalar ) 
 	throw();
 /// Division of vector and scalar
-template<typename DataType, int dimension> inline 
+template<typename DataType, unsigned short  dimension> inline 
 CVector<DataType, dimension> operator/
   ( const CVector<DataType, dimension>& aVector, const DataType aScalar ) 
 	throw();
 /// Multiplication of scalar and vector
-template<typename DataType, int dimension> inline 
+template<typename DataType, unsigned short  dimension> inline 
 CVector<DataType, dimension> operator*
   ( const DataType aScalar, const CVector<DataType, dimension>& aVector ) 
 	throw();
 
+/// Scalar product of two vectors
+template<typename DataType, unsigned short dimension> inline 
+DataType dot( const CVector<DataType, dimension>& leftVector, 
+	const CVector<DataType, dimension>& rightVector ) throw();
+
+} // namespace aips
+
 /* Inline implementation of the above functions */
 #include "cvectorinlines.tpp"
 
-}
-#endif
-#endif
+#endif // USE_BLITZ
+#endif // CVECTOR_H
