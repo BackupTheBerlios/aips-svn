@@ -9,6 +9,7 @@ INCLUDE(${CMAKE_ROOT}/Modules/CMakeTestCXXCompiler.cmake)
 INCLUDE(${CMAKE_ROOT}/Modules/TestForSTDNamespace.cmake)
 # Include FindZLIB, since we need this for the GZStream class
 INCLUDE(${CMAKE_ROOT}/Modules/FindZLIB.cmake)
+INCLUDE(${CMAKE_ROOT}/Modules/FindBoost.cmake)
 
 # Always give as much information as possible when compiling
 ADD_DEFINITIONS(-Wall)
@@ -51,75 +52,13 @@ IF(aipsbase_USE_IM)
 ENDIF(aipsbase_USE_IM)
 #endof Magick++ search
 
-#BEGIN Checking for components of the boost libarries
-FIND_PATH(BOOST_LEXICAL_CAST boost/lexical_cast.hpp
-  /usr/include
-  /usr/local/include
-        DOC "Directory containing boost/lexical_cast.hpp")
-IF( NOT BOOST_LEXICAL_CAST )
- MESSAGE( SEND_ERROR "boost::lexical_cast<> is mandatory for installation" )
-ENDIF( NOT BOOST_LEXICAL_CAST )
+IF( NOT Boost_FOUND )
+ MESSAGE( SEND_ERROR "BOOST is mandatory for compilation" )
+ENDIF( NOT Boost_FOUND )
 
-FIND_PATH(BOOST_CSTDINT boost/cstdint.hpp
-  /usr/include
-  /usr/local/include
-        DOC "Directory containing boost/cstdint.hpp")
-IF( NOT BOOST_CSTDINT )
- MESSAGE( SEND_ERROR "cstdint is mandatory for installation" )
-ENDIF( NOT BOOST_CSTDINT )
+INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIRS} )
+#LINK_LIBRARIES(  )
 
-FIND_PATH(BOOST_SHARED_PTR boost/shared_ptr.hpp
-  /usr/include
-  /usr/local/include
-        DOC "Directory containing boost/shared_ptr.hpp")
-IF( NOT BOOST_SHARED_PTR )
- MESSAGE( SEND_ERROR "boost::shared_ptr<> is mandatory for installation" )
-ENDIF( NOT BOOST_SHARED_PTR )
-
-FIND_PATH(BOOST_WEAK_PTR boost/weak_ptr.hpp
-  /usr/include
-  /usr/local/include
-        DOC "Directory containing boost/weak_ptr.hpp")
-IF( NOT BOOST_WEAK_PTR )
- MESSAGE( SEND_ERROR "boost::weak_ptr<> is mandatory for installation" )
-ENDIF( NOT BOOST_WEAK_PTR )
-
-FIND_PATH(BOOST_TIMER boost/timer.hpp
-  /usr/include
-  /usr/local/include
-        DOC "Directory containing boost/timer.hpp")
-IF( NOT BOOST_TIMER )
- MESSAGE( SEND_ERROR "boost::timer is mandatory for installation" )
-ENDIF( NOT BOOST_TIMER )
-
-FIND_PATH(BOOST_OPTIONAL boost/optional/optional.hpp
-  /usr/include
-  /usr/local/include
-        DOC "Directory containing boost/optional/optional.hpp")
-IF( NOT BOOST_OPTIONAL )
- MESSAGE( SEND_ERROR "boost::optional<> is mandatory for installation" )
-ENDIF( NOT BOOST_OPTIONAL )
-
-FIND_PATH(BOOST_LAMBDA boost/lambda/lambda.hpp
-  /usr/include
-  /usr/local/include
-        DOC "Directory containing boost/lambda/lambda.hpp")
-IF( NOT BOOST_LAMBDA )
- MESSAGE( SEND_ERROR "boost::lambda is mandatory for installation" )
-ENDIF( NOT BOOST_LAMBDA )
-
-FIND_PATH(BOOST_STATIC_ASSERT boost/static_assert.hpp
-  /usr/include
-  /usr/local/include
-        DOC "Directory containing boost/static_assert.hpp")
-IF( NOT BOOST_STATIC_ASSERT )
- MESSAGE( SEND_ERROR "BOOST_STATIC_ASSERT is mandatory for installation" )
-ENDIF( NOT BOOST_STATIC_ASSERT )
-
-INCLUDE_DIRECTORIES( ${BOOST_LEXICAL_CAST} ${BOOST_SHARED_PTR} ${BOOST_WEAK_PTR} ${BOOST_TIMER} ${BOOST_OPTIONAL}
-${BOOST_STATIC_ASSERT} )
-SET( AIPSBASE_EXTRA_INCLUDES ${BOOST_LEXICAL_CAST} ${BOOST_SHARED_PTR} ${BOOST_WEAK_PTR} ${BOOST_TIMER} ${BOOST_OPTIONAL} ${BOOST_STATIC_ASSERT} )
-#END Checking for components of the boost libarries
 
 #BEGIN Look for blitz++ library and includes
 IF(USE_BLITZ)

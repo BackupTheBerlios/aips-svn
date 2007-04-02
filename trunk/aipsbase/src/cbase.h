@@ -64,7 +64,7 @@ private:
   /// Standard constructor
   CBase();
   /// Copy constructor
-  CBase( const CBase& );
+  CBase( const CBase& other );
   /// Assignment operator
   CBase& operator=( const CBase& );
 public:

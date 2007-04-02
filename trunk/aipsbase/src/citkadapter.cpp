@@ -40,21 +40,21 @@ TDataSetPtr CITKAdapter::convertToInternal() throw( NullException )
 		throw( NullException() );*/ //TODO GCC3.3 fails
 	
 	if ( typeid( *externalData ) == typeid( itk::Image<short,2> ) )
-		return actualInternalConversion< itk::Image<int16_t,2> >();
-  else if ( typeid( *externalData ) == typeid( itk::Image<unsigned int8_t,2> ) )
-    return actualInternalConversion< itk::Image<unsigned int8_t,2> >();
-  else if ( typeid( *externalData ) == typeid( itk::Image<int32_t,2> ) )
-    return actualInternalConversion< itk::Image<int32_t,2> >();
+		return actualInternalConversion< itk::Image<boost::int16_t,2> >();
+  else if ( typeid( *externalData ) == typeid( itk::Image<boost::uint8_t,2> ) )
+    return actualInternalConversion< itk::Image<boost::uint8_t,2> >();
+  else if ( typeid( *externalData ) == typeid( itk::Image<boost::int32_t,2> ) )
+    return actualInternalConversion< itk::Image<boost::int32_t,2> >();
 	else if ( typeid( *externalData ) == typeid( itk::Image<float,2> ) )
 		return actualInternalConversion< itk::Image<float,2> >();
   else if ( typeid( *externalData ) == typeid( itk::Image<double,2> ) )
     return actualInternalConversion< itk::Image<double,2> >();
-  else if ( typeid( *externalData ) == typeid( itk::Image<int16_t,3> ) )
-    return actualInternalConversion< itk::Image<int16_t,3> >();
-  else if ( typeid( *externalData ) == typeid( itk::Image<unsigned int8_t,3> ) )
-    return actualInternalConversion< itk::Image<unsigned int8_t,3> >();
-  else if ( typeid( *externalData ) == typeid( itk::Image<int32_t,3> ) )
-    return actualInternalConversion< itk::Image<int32_t,3> >();
+  else if ( typeid( *externalData ) == typeid( itk::Image<boost::int16_t,3> ) )
+    return actualInternalConversion< itk::Image<boost::int16_t,3> >();
+  else if ( typeid( *externalData ) == typeid( itk::Image<boost::uint8_t,3> ) )
+    return actualInternalConversion< itk::Image<boost::uint8_t,3> >();
+  else if ( typeid( *externalData ) == typeid( itk::Image<boost::int32_t,3> ) )
+    return actualInternalConversion< itk::Image<boost::int32_t,3> >();
   else if ( typeid( *externalData ) == typeid( itk::Image<float,3> ) )
     return actualInternalConversion< itk::Image<float,3> >();
   else if ( typeid( *externalData ) == typeid( itk::Image<double,3> ) )

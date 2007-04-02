@@ -41,6 +41,12 @@ CBase::CBase( const string &sClassName_, const string &sClassVersion_,
 {
 }
 
+CBase::CBase( const CBase& other )
+	: sClassName( other.sClassName ), sClassVersion( other.sClassVersion ),
+	  sDerivedFrom( other.sDerivedFrom ), bVerbose( other.bVerbose )
+{
+}
+
 CBase::~CBase() throw()
 {
 }
